@@ -1,0 +1,420 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
+using ZennoLab.CommandCenter;
+using Global.ZennoExtensions;
+using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Enums.Logger;
+using Yandex.Zen.Core.Enums.Extensions;
+using Yandex.Zen.Core.Tools.Extensions;
+using Yandex.Zen.Core.Tools.Macros;
+using Yandex.Zen.Core.Enums.WalkingProfile;
+using Yandex.Zen.Core.ServicesCommonComponents;
+
+namespace Yandex.Zen.Core.Services
+{
+    public class WalkingProfile : ServiceComponents
+    {
+        private static readonly object _locker = new object();
+
+        private readonly ProfileWalkingMode _walkingMode;
+        private readonly SourceSearchKeysTypeEnum _sourceSearchKeysType;
+        private readonly InstanceSettings.BusySettings _individualStateBusy;
+        private readonly bool _individualStateBusyEnabled;
+        private SaveProfileMode _saveMode;
+
+        /// <summary>
+        /// Конструктор для скрипта (настройка лога).
+        /// </summary>
+        public WalkingProfile()
+        {
+            // Нагуливание профилей - Конвертация режима обработки профилей
+            var statusProfileWalkingMode = new Dictionary<string, ProfileWalkingMode>()
+            {
+                {"Нагуливать новые профиля", ProfileWalkingMode.WalkingNewProfile},
+                {"Нагуливать имеющиеся профиля", ProfileWalkingMode.WalkingOldProfile}
+            }
+            .TryGetValue(zenno.Variables["cfgModeWalkingProfile"].Value, out _walkingMode);
+
+            if (!statusProfileWalkingMode)
+            {
+                Logger.Write($"Не удалось определить режим нагуливания профилей", LoggerType.Warning, false, true, true, LogColor.Yellow);
+                return;
+            }
+
+            // Нагуливание профилей - Конвертация источника ключевиков
+            var statusSourceSearchKeysType = new Dictionary<string, SourceSearchKeysTypeEnum>()
+                {
+                    {"Ключевики из файла", SourceSearchKeysTypeEnum.FromFile},
+                    {"Ключевики из настроек", SourceSearchKeysTypeEnum.FromSettings}
+                }
+            .TryGetValue(zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
+
+            if (!statusSourceSearchKeysType)
+            {
+                Logger.Write($"Не удалось определить источник ключевиков", LoggerType.Warning, false, true, true, LogColor.Yellow);
+                return;
+            }
+
+            // Индивидуальные настройки инстанса
+            var individualSettings = zenno.Variables["cfgIndividualSettingsForWalkingProfiles"].Value;
+
+            if (individualSettings.Contains("Индивидуальные настройки инстанса"))
+            {
+                var otherSettings = InstanceSettings.OtherSettings.ExtractOtherSettingsFromVariable(zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
+
+                InstanceSettings.OtherSettings.SetOtherSettings(otherSettings);
+            }
+
+            // Индивидуальные настройки состояния занятости
+            _individualStateBusyEnabled = individualSettings.Contains("Индивидуальные настройки состояния занятости на сайтах");
+
+            if (_individualStateBusyEnabled)
+                _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
+        }
+
+        /// <summary>
+        /// Старт работы скрипта.
+        /// </summary>
+        public void Start()
+        {
+            var searchServices = new List<SearchServiceEnum>();
+
+            var minSizeProfile = int.Parse(zenno.Variables["cfgMinSizeProfile"].Value);
+            var numbKeyUse = zenno.Variables["cfgNumbKeyUse"].Value;
+            var numbSearchPagesView = zenno.Variables["cfgNumbSearchPagesView"].Value;
+            var searchServicesToUse = zenno.Variables["cfgSearchServicesToUse"].Value;
+            var addCountryProfileToProfileName = bool.Parse(zenno.Variables["cfgAddCountryProfileToProfileName"].Value);
+            
+            switch (zenno.Variables["cfgSaveProfileModeForWalkingProfile"].Value)
+            {
+                default:
+                case "Сохранять профиль после обработки каждого сайта":
+                    _saveMode = SaveProfileMode.SaveAfterEverySite;
+                    break;
+                case "Сохранять профиль только по завершению всей работы":
+                    _saveMode = SaveProfileMode.SaveOnTaskCompletion;
+                    break;
+                case "Сохранять профиль после обработки каждой поисковой системы":
+                    _saveMode = SaveProfileMode.SaveAfterEverySearchSystem;
+                    break;
+            }
+
+            if (string.IsNullOrWhiteSpace(searchServicesToUse))
+            {
+                Logger.Write($"Не выбрано ни одной поисковой системы для нагуливания профилей", LoggerType.Warning, false, true, true, LogColor.Yellow);
+                return;
+            }
+
+            instance.UseFullMouseEmulation = false;
+
+            if (!Program.ProfilesDirectory.Exists) Program.ProfilesDirectory.Create();
+
+            long oldSize = 0, newSize = 0;
+
+            lock (_locker)
+            {
+                switch (_walkingMode)
+                {
+                    case ProfileWalkingMode.WalkingNewProfile:
+                        var countryProfile = addCountryProfileToProfileName ? $"   {zenno.Profile.Country}" : "";
+
+                        ProfileInfo = new FileInfo($@"{Program.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+
+                        Program.ResourcesMode.Add(ProfileInfo.FullName);
+                        Program.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
+
+                        Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
+                        Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
+
+                        break;
+                    case ProfileWalkingMode.WalkingOldProfile:
+                        var profiles = Program.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+
+                        if (profiles.Count == 0)
+                        {
+                            Logger.Write($"[Нагуливать имеющиеся профиля]\tПрофиля в папке отсутствуют", LoggerType.Info, false, false, true, LogColor.Violet);
+                            return;
+                        }
+
+                        profiles = profiles.Where(x => (x.Length / 1024) < minSizeProfile).ToList();
+
+                        while (true)
+                        {
+                            if (profiles.Count == 0)
+                            {
+                                Logger.Write($"[Нагуливать имеющиеся профиля]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНет профилей которым требуется нагулка", LoggerType.Info, false, false, true, LogColor.Violet);
+                                Program.ResetExecutionCounter(zenno);
+                                return;
+                            }
+
+                            var profile = profiles.First();
+
+                            if (!Program.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
+                            {
+                                Program.ResourcesMode.Add(profile.FullName);
+                                Program.ResourcesAllThreadsInWork.Add(profile.FullName);
+                                
+                                ProfileInfo = profile;
+                                oldSize = ProfileInfo.Length / 1024;
+
+                                break;
+                            }
+                            else profiles.RemoveAt(0);
+                        }
+
+                        zenno.Profile.Load(ProfileInfo.FullName, true);
+
+                        Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
+                        Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
+
+                        break;
+                }
+                Thread.Sleep(50);
+            }
+
+            // Добавляем поисковые сисемы по которым гулять
+            if (searchServicesToUse.Contains("google.com")) searchServices.Add(SearchServiceEnum.Google);
+            if (searchServicesToUse.Contains("rambler.ru")) searchServices.Add(SearchServiceEnum.Rambler);
+            if (searchServicesToUse.Contains("yandex.ru")) searchServices.Add(SearchServiceEnum.YandexRu);
+            if (searchServicesToUse.Contains("yandex.com")) searchServices.Add(SearchServiceEnum.YandexCom);
+
+            // Идем гулять
+            searchServices.ForEach(service =>
+            {
+                GoWalkingByService(service, GetKeysForSearchService(_sourceSearchKeysType), numbKeyUse.ExtractNumber(), numbSearchPagesView.ExtractNumber());
+
+                // Сохранять профиль по завершению обработки поисковой системы
+                if (_saveMode == SaveProfileMode.SaveAfterEverySearchSystem)
+                {
+                    ProfileWorker.SaveProfile(true);
+                    Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки поисковой системы: {service}", LoggerType.Info, false, false, true, LogColor.Blue);
+                }
+            });
+
+            // Сохранять профиль по завершению задачи
+            if (_saveMode == SaveProfileMode.SaveOnTaskCompletion)
+            {
+                ProfileWorker.SaveProfile(true);
+               Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля по завершению задачи", LoggerType.Info, false, false, true, LogColor.Blue);
+            }
+
+            ProfileInfo.Refresh();
+            newSize = ProfileInfo.Length / 1024;
+
+            switch (_walkingMode)
+            {
+                case ProfileWalkingMode.WalkingNewProfile:                    
+                   Logger.Write($"[Размер профиля: {newSize} KB]\tУспешное завершение нагуливания профиля", LoggerType.Info, false, false, true, LogColor.Green);
+                    break;
+                case ProfileWalkingMode.WalkingOldProfile:
+                   Logger.Write($"[Размер профиля: {newSize} KB]\t[Увеличение за догулку: +{newSize - oldSize} КБ]\tУспешное завершение нагуливания профиля", LoggerType.Info, false, false, true, LogColor.Green);
+                    break;
+            }
+
+            //ClearThreadResource();
+        }
+
+        /// <summary>
+        /// Получение ключевиков для поисковых запросов.
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetKeysForSearchService(SourceSearchKeysTypeEnum sourceSearchKeysType)
+        {
+            var searchKeys = new List<string>();
+
+            switch (sourceSearchKeysType)
+            {
+                case SourceSearchKeysTypeEnum.FromSettings:
+                    searchKeys = zenno.Variables["cfgSettingsSearchKeys"].Value.Split(new[] { Environment.NewLine}, StringSplitOptions.None).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    break;
+                case SourceSearchKeysTypeEnum.FromFile:
+                    searchKeys = zenno.Lists["ListSearchKeys"].Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    break;
+            }
+
+            if (searchKeys.Count == 0)
+            {
+                var textLog = $"[Источник ключевиков: {sourceSearchKeysType}]\tНе найдено ни одного ключевика";
+                Logger.Write(textLog, LoggerType.Warning, false, false, true, LogColor.Yellow);
+                throw new Exception(textLog);
+            }
+
+            searchKeys.Shuffle();
+            return searchKeys;
+        }
+
+        /// <summary>
+        /// Переход к нагуливанию по заданному сервису.
+        /// </summary>
+        /// <param name="searchService"></param>
+        /// <param name="searchKeys"></param>
+        /// <param name="numbKeyUse"></param>
+        /// <param name="numbSearchPagesView"></param>
+        private void GoWalkingByService(SearchServiceEnum searchService, List<string> searchKeys, int numbKeyUse, int numbSearchPagesView)
+        {
+            new Dictionary<SearchServiceEnum, string>
+            {
+                {SearchServiceEnum.Google, "https://www.google.com/" },
+                {SearchServiceEnum.Rambler, "https://www.rambler.ru/" },
+                {SearchServiceEnum.YandexRu, "https://yandex.ru/" },
+                {SearchServiceEnum.YandexCom, "https://yandex.com/" }
+            }
+            .TryGetValue(searchService, out string url);
+
+            new Dictionary<SearchServiceEnum, string>
+            {
+                { SearchServiceEnum.Google, "//div[@jscontroller!='']/input[@aria-label!='']" },
+                { SearchServiceEnum.Rambler, "//form[@action!='']/input[@name='query']" },
+                { SearchServiceEnum.YandexRu, "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]" },
+                { SearchServiceEnum.YandexCom, "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]" }
+            }
+            .TryGetValue(searchService, out string xpathFieldSearch);
+
+            new Dictionary<SearchServiceEnum, string>
+            {
+                { SearchServiceEnum.Google, "//a[@href!='']/h3[text()!='']" },
+                { SearchServiceEnum.Rambler, "//h2[contains(@class, 'item')]/a[@href!='']" },
+                { SearchServiceEnum.YandexRu, "//li[@class='serp-item']/descendant::h2/a[@href!='']" },
+                { SearchServiceEnum.YandexCom, "//li[@class='serp-item']/descendant::h2/a[@href!='']" }
+            }
+            .TryGetValue(searchService, out string xpathItemsPage);
+
+            new Dictionary<SearchServiceEnum, string>
+            {
+                { SearchServiceEnum.Google, "//tr/descendant::td/span[@class!='']/../following-sibling::td/a[@href!='']" },
+                { SearchServiceEnum.Rambler, "//span[contains(@class, 'Paging')]/following-sibling::a[@href!='']" },
+                { SearchServiceEnum.YandexRu, "//span[contains(@class, 'pager')]/following-sibling::a[@href!='']" },
+                { SearchServiceEnum.YandexCom, "//span[contains(@class, 'pager')]/following-sibling::a[@href!='']" }
+            }
+            .TryGetValue(searchService, out string xpathNextPage);
+
+            Logger.Write($"Переход к нагуливанию", LoggerType.Info, false, false, false, LogColor.Blue);
+
+            var counterKey = 0;
+
+            while (true)
+            {
+                if (++counterKey > numbKeyUse) return;
+
+                var counterPage = 0;
+
+                // Проверка наличия ключей
+                if (searchKeys.Count == 0)
+                {
+                   Logger.Write($"[Service: {searchService}]\tЗакончились ключи для сервиса", LoggerType.Warning, false, false, true, LogColor.Yellow);
+                    return;
+                }
+
+                // Закрываем все не нужные вкладки
+                if (instance.AllTabs.Count() != 0) instance.AllTabs.ToList().ForEach(x => x.Close());
+
+                // Переходим к поисковой системе
+                instance.ActiveTab.Navigate(url, HttpMacros.GetRandomReferenceLink(), true);
+
+                var heFieldSearch = instance.FuncGetFirstHe(xpathFieldSearch, "Поле - Поиск", false, false);
+
+                if (!heFieldSearch.IsNullOrVoid())
+                {
+                   Logger.Write($"[Service: {searchService}]\tУспешная загрузка сервиса", LoggerType.Info, false, false, true);
+                }
+                else continue;
+
+                var key = searchKeys.GetLine(LineOptions.RandomWithRemoved);
+
+                heFieldSearch.SetValue(instance.ActiveTab, key, LevelEmulation.SuperEmulation, rnd.Next(150, 500), false, false, true, rnd.Next(150, 500));
+
+                if (instance.ActiveTab.IsBusy) instance.ActiveTab.WaitDownloading();
+
+                while (true)
+                {
+                    var heReCaptcha = instance.ActiveTab.FindElementByXPath("//input[@id='recaptcha-token' and @value!='']", 0);
+
+                    if (!heReCaptcha.IsNullOrVoid())
+                    {
+                       Logger.Write($"[Service: {searchService}]\tОбнаружена reCaptcha", LoggerType.Info, false, false, true, LogColor.Yellow);
+                        return;
+                    }
+
+                    if (++counterPage > numbSearchPagesView) break;
+
+                    // Переход по страницам поисковой системы
+                    if (counterPage != 1)
+                    {
+                        var heNextPage = instance.FuncGetFirstHe(xpathNextPage, "", false, false);
+
+                        if (heNextPage.IsNullOrVoid()) break;
+
+                        heNextPage.Click(instance.ActiveTab);
+                    }
+
+                    // Переход по элементам страницы (по сайтам)
+                    var numbItems = instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
+
+                    if (numbItems == 0) break;
+
+                    var sourceUrl = instance.ActiveTab.URL;
+
+                    for (int i = 0; i < numbItems; i++)
+                    {
+                        // Установка времени ожидания загрузки страницы
+                        instance.ActiveTab.NavigateTimeout = 15;
+
+                        // Индивидуальное состояние занятости
+                        if (_individualStateBusyEnabled) InstanceSettings.BusySettings.SetBusySettings(_individualStateBusy);
+
+                        instance.ActiveTab.FindElementByXPath(xpathItemsPage, i).Click(instance.ActiveTab);
+
+                       Logger.Write($"[Service: {searchService}]\t[Page: {counterPage} | Item: {i + 1}]\t[{counterKey}][Key: {key}]\tОбработка URL:  {instance.ActiveTab.URL}", LoggerType.Info, false, false, true);
+
+                        var openSourceTab = false;
+                        var scrollIterations = int.Parse(zenno.Variables["cfgNumbScrollIterations"].Value);
+
+                        // Скроллинг страницы 
+                        while (scrollIterations-- > 0)
+                        {
+                            instance.ActiveTab.FullEmulationMouseWheel(0, 750);
+                            Thread.Sleep(rnd.Next(100, 150));
+                        }
+
+                        var referrer = instance.ActiveTab.URL;
+
+                        // Закрытие ненужных вкладок
+                        instance.AllTabs.ToList().ForEach(x => {
+                            if (x.URL == sourceUrl) { openSourceTab = true; } else x.Close();
+                        });
+
+                        // Состояние занятости по умолчанию
+                        if (_individualStateBusyEnabled)
+                            InstanceSettings.BusySettings.SetDefaultBusySettings();
+
+                        // Установка времени ожидания загрузки страницы
+                        instance.ActiveTab.NavigateTimeout = 120;
+
+                        // Открытие исходной вкладки
+                        if (!openSourceTab)
+                        {
+                            instance.ActiveTab.Navigate(sourceUrl, referrer, true);
+                            numbItems = instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
+                        }
+
+                        // Сохранение профиля после каждого сайта
+                        if (_saveMode == SaveProfileMode.SaveAfterEverySite)
+                        {
+                            ProfileWorker.SaveProfile(true);
+                           Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки сайта", LoggerType.Info, false, false, true, LogColor.Blue);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
