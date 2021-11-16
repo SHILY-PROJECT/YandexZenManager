@@ -41,7 +41,7 @@ namespace Yandex.Zen.Core.Services
                 {"Нагуливать новые профиля", ProfileWalkingMode.WalkingNewProfile},
                 {"Нагуливать имеющиеся профиля", ProfileWalkingMode.WalkingOldProfile}
             }
-            .TryGetValue(zenno.Variables["cfgModeWalkingProfile"].Value, out _walkingMode);
+            .TryGetValue(Zenno.Variables["cfgModeWalkingProfile"].Value, out _walkingMode);
 
             if (!statusProfileWalkingMode)
             {
@@ -55,7 +55,7 @@ namespace Yandex.Zen.Core.Services
                     {"Ключевики из файла", SourceSearchKeysTypeEnum.FromFile},
                     {"Ключевики из настроек", SourceSearchKeysTypeEnum.FromSettings}
                 }
-            .TryGetValue(zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
+            .TryGetValue(Zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
 
             if (!statusSourceSearchKeysType)
             {
@@ -64,11 +64,11 @@ namespace Yandex.Zen.Core.Services
             }
 
             // Индивидуальные настройки инстанса
-            var individualSettings = zenno.Variables["cfgIndividualSettingsForWalkingProfiles"].Value;
+            var individualSettings = Zenno.Variables["cfgIndividualSettingsForWalkingProfiles"].Value;
 
             if (individualSettings.Contains("Индивидуальные настройки инстанса"))
             {
-                var otherSettings = InstanceSettings.OtherSettings.ExtractOtherSettingsFromVariable(zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
+                var otherSettings = InstanceSettings.OtherSettings.ExtractOtherSettingsFromVariable(Zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
 
                 InstanceSettings.OtherSettings.SetOtherSettings(otherSettings);
             }
@@ -77,7 +77,7 @@ namespace Yandex.Zen.Core.Services
             _individualStateBusyEnabled = individualSettings.Contains("Индивидуальные настройки состояния занятости на сайтах");
 
             if (_individualStateBusyEnabled)
-                _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
+                _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
         }
 
         /// <summary>
@@ -87,13 +87,13 @@ namespace Yandex.Zen.Core.Services
         {
             var searchServices = new List<SearchServiceEnum>();
 
-            var minSizeProfile = int.Parse(zenno.Variables["cfgMinSizeProfile"].Value);
-            var numbKeyUse = zenno.Variables["cfgNumbKeyUse"].Value;
-            var numbSearchPagesView = zenno.Variables["cfgNumbSearchPagesView"].Value;
-            var searchServicesToUse = zenno.Variables["cfgSearchServicesToUse"].Value;
-            var addCountryProfileToProfileName = bool.Parse(zenno.Variables["cfgAddCountryProfileToProfileName"].Value);
+            var minSizeProfile = int.Parse(Zenno.Variables["cfgMinSizeProfile"].Value);
+            var numbKeyUse = Zenno.Variables["cfgNumbKeyUse"].Value;
+            var numbSearchPagesView = Zenno.Variables["cfgNumbSearchPagesView"].Value;
+            var searchServicesToUse = Zenno.Variables["cfgSearchServicesToUse"].Value;
+            var addCountryProfileToProfileName = bool.Parse(Zenno.Variables["cfgAddCountryProfileToProfileName"].Value);
             
-            switch (zenno.Variables["cfgSaveProfileModeForWalkingProfile"].Value)
+            switch (Zenno.Variables["cfgSaveProfileModeForWalkingProfile"].Value)
             {
                 default:
                 case "Сохранять профиль после обработки каждого сайта":
@@ -113,7 +113,7 @@ namespace Yandex.Zen.Core.Services
                 return;
             }
 
-            instance.UseFullMouseEmulation = false;
+            Instance.UseFullMouseEmulation = false;
 
             if (!Program.ProfilesDirectory.Exists) Program.ProfilesDirectory.Create();
 
@@ -124,12 +124,12 @@ namespace Yandex.Zen.Core.Services
                 switch (_walkingMode)
                 {
                     case ProfileWalkingMode.WalkingNewProfile:
-                        var countryProfile = addCountryProfileToProfileName ? $"   {zenno.Profile.Country}" : "";
+                        var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
                         ProfileInfo = new FileInfo($@"{Program.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
-                        Program.ResourcesMode.Add(ProfileInfo.FullName);
-                        Program.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
+                        Program.CurrentObjectCache.Add(ProfileInfo.FullName);
+                        Program.ObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
 
                         Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
@@ -151,16 +151,16 @@ namespace Yandex.Zen.Core.Services
                             if (profiles.Count == 0)
                             {
                                 Logger.Write($"[Нагуливать имеющиеся профиля]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНет профилей которым требуется нагулка", LoggerType.Info, false, false, true, LogColor.Violet);
-                                Program.ResetExecutionCounter(zenno);
+                                Program.ResetExecutionCounter(Zenno);
                                 return;
                             }
 
                             var profile = profiles.First();
 
-                            if (!Program.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
+                            if (!Program.ObjectsOfAllThreadsInWork.Any(x => x == profile.FullName))
                             {
-                                Program.ResourcesMode.Add(profile.FullName);
-                                Program.ResourcesAllThreadsInWork.Add(profile.FullName);
+                                Program.CurrentObjectCache.Add(profile.FullName);
+                                Program.ObjectsOfAllThreadsInWork.Add(profile.FullName);
                                 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;
@@ -170,7 +170,7 @@ namespace Yandex.Zen.Core.Services
                             else profiles.RemoveAt(0);
                         }
 
-                        zenno.Profile.Load(ProfileInfo.FullName, true);
+                        Zenno.Profile.Load(ProfileInfo.FullName, true);
 
                         Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
                         Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
@@ -233,10 +233,10 @@ namespace Yandex.Zen.Core.Services
             switch (sourceSearchKeysType)
             {
                 case SourceSearchKeysTypeEnum.FromSettings:
-                    searchKeys = zenno.Variables["cfgSettingsSearchKeys"].Value.Split(new[] { Environment.NewLine}, StringSplitOptions.None).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    searchKeys = Zenno.Variables["cfgSettingsSearchKeys"].Value.Split(new[] { Environment.NewLine}, StringSplitOptions.None).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                     break;
                 case SourceSearchKeysTypeEnum.FromFile:
-                    searchKeys = zenno.Lists["ListSearchKeys"].Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                    searchKeys = Zenno.Lists["ListSearchKeys"].Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                     break;
             }
 
@@ -314,12 +314,12 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Закрываем все не нужные вкладки
-                if (instance.AllTabs.Count() != 0) instance.AllTabs.ToList().ForEach(x => x.Close());
+                if (Instance.AllTabs.Count() != 0) Instance.AllTabs.ToList().ForEach(x => x.Close());
 
                 // Переходим к поисковой системе
-                instance.ActiveTab.Navigate(url, HttpMacros.GetRandomReferenceLink(), true);
+                Instance.ActiveTab.Navigate(url, HttpMacros.GetRandomReferenceLink(), true);
 
-                var heFieldSearch = instance.FuncGetFirstHe(xpathFieldSearch, "Поле - Поиск", false, false);
+                var heFieldSearch = Instance.FuncGetFirstHe(xpathFieldSearch, "Поле - Поиск", false, false);
 
                 if (!heFieldSearch.IsNullOrVoid())
                 {
@@ -329,13 +329,13 @@ namespace Yandex.Zen.Core.Services
 
                 var key = searchKeys.GetLine(LineOptions.RandomWithRemoved);
 
-                heFieldSearch.SetValue(instance.ActiveTab, key, LevelEmulation.SuperEmulation, rnd.Next(150, 500), false, false, true, rnd.Next(150, 500));
+                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, false, true, Rnd.Next(150, 500));
 
-                if (instance.ActiveTab.IsBusy) instance.ActiveTab.WaitDownloading();
+                if (Instance.ActiveTab.IsBusy) Instance.ActiveTab.WaitDownloading();
 
                 while (true)
                 {
-                    var heReCaptcha = instance.ActiveTab.FindElementByXPath("//input[@id='recaptcha-token' and @value!='']", 0);
+                    var heReCaptcha = Instance.ActiveTab.FindElementByXPath("//input[@id='recaptcha-token' and @value!='']", 0);
 
                     if (!heReCaptcha.IsNullOrVoid())
                     {
@@ -348,46 +348,46 @@ namespace Yandex.Zen.Core.Services
                     // Переход по страницам поисковой системы
                     if (counterPage != 1)
                     {
-                        var heNextPage = instance.FuncGetFirstHe(xpathNextPage, "", false, false);
+                        var heNextPage = Instance.FuncGetFirstHe(xpathNextPage, "", false, false);
 
                         if (heNextPage.IsNullOrVoid()) break;
 
-                        heNextPage.Click(instance.ActiveTab);
+                        heNextPage.Click(Instance.ActiveTab);
                     }
 
                     // Переход по элементам страницы (по сайтам)
-                    var numbItems = instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
+                    var numbItems = Instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
 
                     if (numbItems == 0) break;
 
-                    var sourceUrl = instance.ActiveTab.URL;
+                    var sourceUrl = Instance.ActiveTab.URL;
 
                     for (int i = 0; i < numbItems; i++)
                     {
                         // Установка времени ожидания загрузки страницы
-                        instance.ActiveTab.NavigateTimeout = 15;
+                        Instance.ActiveTab.NavigateTimeout = 15;
 
                         // Индивидуальное состояние занятости
                         if (_individualStateBusyEnabled) InstanceSettings.BusySettings.SetBusySettings(_individualStateBusy);
 
-                        instance.ActiveTab.FindElementByXPath(xpathItemsPage, i).Click(instance.ActiveTab);
+                        Instance.ActiveTab.FindElementByXPath(xpathItemsPage, i).Click(Instance.ActiveTab);
 
-                       Logger.Write($"[Service: {searchService}]\t[Page: {counterPage} | Item: {i + 1}]\t[{counterKey}][Key: {key}]\tОбработка URL:  {instance.ActiveTab.URL}", LoggerType.Info, false, false, true);
+                       Logger.Write($"[Service: {searchService}]\t[Page: {counterPage} | Item: {i + 1}]\t[{counterKey}][Key: {key}]\tОбработка URL:  {Instance.ActiveTab.URL}", LoggerType.Info, false, false, true);
 
                         var openSourceTab = false;
-                        var scrollIterations = int.Parse(zenno.Variables["cfgNumbScrollIterations"].Value);
+                        var scrollIterations = int.Parse(Zenno.Variables["cfgNumbScrollIterations"].Value);
 
                         // Скроллинг страницы 
                         while (scrollIterations-- > 0)
                         {
-                            instance.ActiveTab.FullEmulationMouseWheel(0, 750);
-                            Thread.Sleep(rnd.Next(100, 150));
+                            Instance.ActiveTab.FullEmulationMouseWheel(0, 750);
+                            Thread.Sleep(Rnd.Next(100, 150));
                         }
 
-                        var referrer = instance.ActiveTab.URL;
+                        var referrer = Instance.ActiveTab.URL;
 
                         // Закрытие ненужных вкладок
-                        instance.AllTabs.ToList().ForEach(x => {
+                        Instance.AllTabs.ToList().ForEach(x => {
                             if (x.URL == sourceUrl) { openSourceTab = true; } else x.Close();
                         });
 
@@ -396,13 +396,13 @@ namespace Yandex.Zen.Core.Services
                             InstanceSettings.BusySettings.SetDefaultBusySettings();
 
                         // Установка времени ожидания загрузки страницы
-                        instance.ActiveTab.NavigateTimeout = 120;
+                        Instance.ActiveTab.NavigateTimeout = 120;
 
                         // Открытие исходной вкладки
                         if (!openSourceTab)
                         {
-                            instance.ActiveTab.Navigate(sourceUrl, referrer, true);
-                            numbItems = instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
+                            Instance.ActiveTab.Navigate(sourceUrl, referrer, true);
+                            numbItems = Instance.ActiveTab.FindElementsByXPath(xpathItemsPage).Count;
                         }
 
                         // Сохранение профиля после каждого сайта

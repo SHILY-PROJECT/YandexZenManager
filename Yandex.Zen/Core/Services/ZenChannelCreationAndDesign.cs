@@ -54,17 +54,17 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public ZenChannelCreationAndDesign()
         {
-            AccountsTable = zenno.Tables["AccountsForCreateZenChannel"];
+            AccountsTable = Zenno.Tables["AccountsForCreateZenChannel"];
 
             if (AccountsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"Таблица с аккаунтами/донорами пуста");
+                Program.StopTemplate(Zenno, $"Таблица с аккаунтами/донорами пуста");
                 return;
             }
 
             SetSettingsMode();
 
-            switch (zenno.Variables["cfgStartPageCreateChannelZen"].Value)
+            switch (Zenno.Variables["cfgStartPageCreateChannelZen"].Value)
             {
                 case "Создание канала через zen.yandex/media":
                     _startPageCreateChannelZen = StartPageCreateChannelEnum.ZenYandexMedia;
@@ -77,14 +77,14 @@ namespace Yandex.Zen.Core.Services
                     return;
             }
 
-            TableGeneralAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileAccounts"].Value));
-            TableModeAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileAccountsForCreateZenChannel"].Value));
+            TableGeneralAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileAccounts"].Value));
+            TableModeAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"].Value));
             TableGeneralAndTableModeIsSame = TableGeneralAccountFile.FullName.ToLower() == TableModeAccountFile.FullName.ToLower();
 
-            BindingPhoneToAccountIfRequaid = zenno.Variables["cfgBindingPhoneIfRequiredForCreateZenChannel"].Value.Contains("Привязывать номер");
-            _skipWalkingOnZenIfWalked = zenno.Variables["cfgSkipWalkingOnZenForCreateZenChannel"].Value.Contains("Пропустить гуляне по zen.yandex, если уже гулял");
-            _goWalkingZenBeforeCreateChannel = zenno.Variables["cfgWalkToZenBeforeCreateChannel"].Value.Contains("Перед регой идти погулять на zen.yandex");
-            _modifyButtonYandexZenMediaIfProxyUsa = bool.Parse(zenno.Variables["cfgModifyYandexZenMediaIfProxyUsa"].Value);
+            BindingPhoneToAccountIfRequaid = Zenno.Variables["cfgBindingPhoneIfRequiredForCreateZenChannel"].Value.Contains("Привязывать номер");
+            _skipWalkingOnZenIfWalked = Zenno.Variables["cfgSkipWalkingOnZenForCreateZenChannel"].Value.Contains("Пропустить гуляне по zen.yandex, если уже гулял");
+            _goWalkingZenBeforeCreateChannel = Zenno.Variables["cfgWalkToZenBeforeCreateChannel"].Value.Contains("Перед регой идти погулять на zen.yandex");
+            _modifyButtonYandexZenMediaIfProxyUsa = bool.Parse(Zenno.Variables["cfgModifyYandexZenMediaIfProxyUsa"].Value);
 
             lock (_locker) _launchIsAllowed = ResourceHandler();
         }
@@ -168,14 +168,14 @@ namespace Yandex.Zen.Core.Services
                     return false;
                 }
 
-                instance.ActiveTab.Navigate(url, true);
+                Instance.ActiveTab.Navigate(url, true);
                 AcceptingPrivacyPolicyCookie();
 
                 if (_startPageCreateChannelZen == StartPageCreateChannelEnum.ZenYandexMedia)
                 {
                     try
                     {
-                        var heHrefZen = instance.FuncGetFirstHe(xpathHrefZen, true, true, 5);
+                        var heHrefZen = Instance.FuncGetFirstHe(xpathHrefZen, true, true, 5);
 
                         // Модифицируем ссылку кнопки ru на com
                         if (_modifyButtonYandexZenMediaIfProxyUsa && Domain == "com")
@@ -191,7 +191,7 @@ namespace Yandex.Zen.Core.Services
                             }
                         }
 
-                        heHrefZen.FindChildByXPath(xpathChildButtonCreateZen[0], 0).Click(instance.ActiveTab, rnd.Next(150, 500));
+                        heHrefZen.FindChildByXPath(xpathChildButtonCreateZen[0], 0).Click(Instance.ActiveTab, Rnd.Next(150, 500));
                     }
                     catch { continue; }
                 }
@@ -199,23 +199,23 @@ namespace Yandex.Zen.Core.Services
                 // Поиск элементов страницы авторизации, либо авторизованного профиля
                 for (int i = 0; i < 5; i++)
                 {
-                    if (!instance.FuncGetFirstHe(xpathLoginFormAuth, false, false, 2).IsNullOrVoid() || !instance.FuncGetFirstHe(xpathAuthAccountList, false, false, 2).IsNullOrVoid())
+                    if (!Instance.FuncGetFirstHe(xpathLoginFormAuth, false, false, 2).IsNullOrVoid() || !Instance.FuncGetFirstHe(xpathAuthAccountList, false, false, 2).IsNullOrVoid())
                     {
                         Logger.Write($"Переход к авторизации", LoggerType.Info, true, false, true);
 
                         startPageIsOpen = true;
                         break;
                     }
-                    else if (!instance.FuncGetFirstHe(xpathSettingsChannel, false, false, 2).IsNullOrVoid() || instance.ActiveTab.URL.Contains("profile/editor/id"))
+                    else if (!Instance.FuncGetFirstHe(xpathSettingsChannel, false, false, 2).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("profile/editor/id"))
                     {
                         Logger.Write($"Кабинет канала открыт", LoggerType.Info, true, false, true);
 
                         // Клик по окну приветствия (начать прямо сейчас)
-                        var heButtonStartNow = instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
+                        var heButtonStartNow = Instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
 
                         if (!heButtonStartNow.IsNullOrVoid())
                         {
-                            heButtonStartNow.Click(instance.ActiveTab, rnd.Next(2000, 3000));
+                            heButtonStartNow.Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
                             Logger.Write($"[Доп.действия]\tКлик - Начать прямо сейчас", LoggerType.Info, true, false, true);
                         }
 
@@ -235,11 +235,11 @@ namespace Yandex.Zen.Core.Services
             if (authorizationIsGood)
             {
                 // Клик по окну приветствия (начать прямо сейчас)
-                var heButtonStartNow = instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
+                var heButtonStartNow = Instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
 
                 if (!heButtonStartNow.IsNullOrVoid())
                 {
-                    heButtonStartNow.Click(instance.ActiveTab, rnd.Next(2000, 3000));
+                    heButtonStartNow.Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
                     Logger.Write($"[Доп.действия]\tКлик - Начать прямо сейчас", LoggerType.Info, true, false, true);
                 }
 
@@ -257,7 +257,7 @@ namespace Yandex.Zen.Core.Services
         private bool SaveCreatedChannel()
         {
             // Сохранение результата в таблицы
-            var currentUrl = instance.ActiveTab.URL;
+            var currentUrl = Instance.ActiveTab.URL;
             var id = Regex.Match(currentUrl, @"(?<=/profile/editor/id/).*$").Value;
             var domain = Regex.Match(currentUrl, @"(?<=zen\.yandex\.).*?(?=/profile/)").Value;
 
@@ -266,7 +266,7 @@ namespace Yandex.Zen.Core.Services
                 Logger.Write($"Не найден идентификатор канала: {currentUrl}", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
-                    instance.ActiveTab.URL,
+                    Instance.ActiveTab.URL,
                     $"Не найден идентификатор канала...",
                     string.Empty
                 });
@@ -383,8 +383,8 @@ namespace Yandex.Zen.Core.Services
             var xpathButtonConfirmSmsCode = new[] { "//form[contains(@class, 'phone-validate')]/descendant::div[contains(@class, 'button') and contains(@class, 'phone')]/descendant::button[contains(@type, 'submit')]", "Кнопка - Подтвердить введенный код" };
             var xpathCheckmark = new[] { "//form[contains(@class, 'phone-validate')]/descendant::div[contains(@class, 'phone-validate') and contains(@class, 'checkmark')]", "Галка - Номер привязан" };
 
-            var heFieldPhone = instance.FuncGetFirstHe(xpathFieldPhone, false, true);
-            var heButtonSubmit = instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
+            var heFieldPhone = Instance.FuncGetFirstHe(xpathFieldPhone, false, true);
+            var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
 
             // Проверка наличия элемента
             if (heFieldPhone.IsNullOrVoid())
@@ -392,7 +392,7 @@ namespace Yandex.Zen.Core.Services
                 Logger.Write($"Не найдено поле для указания телефона", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
-                    instance.ActiveTab.URL,
+                    Instance.ActiveTab.URL,
                     $"Не найдено поле для указания телефона",
                     xpathFieldPhone.XPathToStandardView(),
                     string.Empty
@@ -420,16 +420,16 @@ namespace Yandex.Zen.Core.Services
             else if (!string.IsNullOrWhiteSpace(Phone))
             {
                 // Лайтовая установка телефона, если к аккаунту привязан уже номер
-                heFieldPhone.SetValue(instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                heButtonSubmit.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 // Проверка наличия checkmark
-                if (instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
+                if (Instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Не найден checkmark подтверждающий, что номер привязался", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден checkmark подтверждающий, что номер привязался",
                         xpathCheckmark.XPathToStandardView(),
                         string.Empty
@@ -469,18 +469,18 @@ namespace Yandex.Zen.Core.Services
                 var phoneLog = $"[Sms service dll: {Program.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                 // Ввод номера телефона и отправка sms кода
-                heFieldPhone.SetValue(instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                heButtonSubmit.Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                 // Получение кнопки для повторной отправки sms кода
-                var heButtonReSendCode = instance.FuncGetFirstHe(xpathButtonReSendCode, false, true);
+                var heButtonReSendCode = Instance.FuncGetFirstHe(xpathButtonReSendCode, false, true);
 
                 if (heButtonReSendCode.IsNullOrVoid())
                 {
                     Logger.Write($"Не найдена кнопка для повторной отправки sms кода", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдена кнопка для повторной отправки sms кода",
                         xpathFieldPhone.XPathToStandardView(),
                         string.Empty
@@ -500,8 +500,8 @@ namespace Yandex.Zen.Core.Services
                 Logger.Write($"{phoneLog}Код успешно получен: {sms_code}", LoggerType.Info, true, false, true, LogColor.Blue);
 
                 // Получение элементов для ввода sms кода
-                var heFieldSmsCode = instance.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
-                var heButtonConfirmSmsCode = instance.FuncGetFirstHe(xpathButtonConfirmSmsCode, false, true);
+                var heFieldSmsCode = Instance.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
+                var heButtonConfirmSmsCode = Instance.FuncGetFirstHe(xpathButtonConfirmSmsCode, false, true);
 
                 // Проверка наличия элементов для ввода sms кода
                 if (new[] { heFieldSmsCode, heButtonConfirmSmsCode }.Any(x => x.IsNullOrVoid()))
@@ -515,7 +515,7 @@ namespace Yandex.Zen.Core.Services
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдены элементы для подтверждения sms кода",
                         string.Join(Environment.NewLine, heElements),
                         string.Empty
@@ -525,16 +525,16 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Ввод sms кода
-                heFieldSmsCode.SetValue(instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, rnd.Next(1000, 1500));
-                heButtonConfirmSmsCode.Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                heFieldSmsCode.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                heButtonConfirmSmsCode.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                 // Проверка наличия checkmark
-                if (instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
+                if (Instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Не найден checkmark подтверждающий, что номер привязался", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден checkmark подтверждающий, что номер привязался",
                         xpathCheckmark.XPathToStandardView(),
                         string.Empty
@@ -583,7 +583,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось установить описание канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось установить описание канала",
                         string.Empty
                     });
@@ -591,7 +591,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение элементов для изменения изображения канала
-                var heMenuAvatar = instance.FuncGetFirstHe(xpathMenuAvatar, false, true, 5);
+                var heMenuAvatar = Instance.FuncGetFirstHe(xpathMenuAvatar, false, true, 5);
                 var heElementForCheck = heMenuAvatar.FindChildByXPath(xpathElementForCheck[0], 0);
                 var heButtonChangeImage = heMenuAvatar.FindChildByXPath(xpathButtonChangeImage[0], 0);
 
@@ -608,7 +608,7 @@ namespace Yandex.Zen.Core.Services
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден какой-то элемент для изменения изображения канала...",
                         string.Join(Environment.NewLine, heElements),
                         string.Empty
@@ -619,8 +619,8 @@ namespace Yandex.Zen.Core.Services
 
                 if (!heElementForCheck.GetAttribute("style").Contains("avatar"))
                 {
-                    instance.SetFilesForUpload(AvatarInfo, true);
-                    heButtonChangeImage.Click(instance.ActiveTab, rnd.Next(10000, 12000));
+                    Instance.SetFilesForUpload(AvatarInfo, true);
+                    heButtonChangeImage.Click(Instance.ActiveTab, Rnd.Next(10000, 12000));
                     setted = true;
                 }
                 else
@@ -657,7 +657,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось изменить название канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось изменить название канала",
                         string.Empty
                     });
@@ -665,7 +665,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение поля с описанием канала
-                var heFieldChannelName = instance.FuncGetFirstHe(xpathFieldChannelName, false, true, 5);
+                var heFieldChannelName = Instance.FuncGetFirstHe(xpathFieldChannelName, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heFieldChannelName.IsNullOrVoid())
@@ -673,7 +673,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдено поле с названием канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдено поле с названием канала",
                         xpathFieldChannelName.XPathToStandardView(),
                         string.Empty
@@ -688,7 +688,7 @@ namespace Yandex.Zen.Core.Services
                     var counterBackspaceIterations = default(int);
 
                     // Клик по форме для фокусировки
-                    heFieldChannelName.Click(instance.ActiveTab, rnd.Next(1000, 2000));
+                    heFieldChannelName.Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
 
                     while (true)
                     {
@@ -697,7 +697,7 @@ namespace Yandex.Zen.Core.Services
                             Logger.Write($"Превышено количество попыток удаления старого названия канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                             Logger.ErrorAnalysis(true, true, true, new List<string>
                             {
-                                instance.ActiveTab.URL,
+                                Instance.ActiveTab.URL,
                                 $"Превышено количество попыток удаления старого названия канала",
                                 string.Empty
                             });
@@ -712,21 +712,21 @@ namespace Yandex.Zen.Core.Services
                         // Кликаем по полю, если количество букв не изменилось
                         if (length == position)
                         {
-                            heFieldChannelName.Click(instance.ActiveTab, rnd.Next(500, 1000), false);
+                            heFieldChannelName.Click(Instance.ActiveTab, Rnd.Next(500, 1000), false);
                         }
                         else position = length;
 
                         // Проверяем фокусировку на поле
-                        if (!heFieldChannelName.ParentElement.GetAttribute("class").Contains("focused")) heFieldChannelName.Click(instance.ActiveTab, rnd.Next(1000, 2000));
+                        if (!heFieldChannelName.ParentElement.GetAttribute("class").Contains("focused")) heFieldChannelName.Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
 
                         // Удаление символов
-                        instance.ActiveTab.KeyEvent("Back", "press", "");
+                        Instance.ActiveTab.KeyEvent("Back", "press", "");
 
                         Thread.Sleep(new Random().Next(20, 150));
                     }
 
                     // Заполнение поля
-                    heFieldChannelName.SetValue(instance.ActiveTab, ChannelName, LevelEmulation.SuperEmulation, rnd.Next(1000, 2000));
+                    heFieldChannelName.SetValue(Instance.ActiveTab, ChannelName, LevelEmulation.SuperEmulation, Rnd.Next(1000, 2000));
 
                     setted = true;
                 }
@@ -763,7 +763,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось установить описание канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось установить описание канала",
                         string.Empty
                     });
@@ -771,7 +771,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение поля с описанием канала
-                var heFieldDescription = instance.FuncGetFirstHe(xpathFieldDescription, false, true, 5);
+                var heFieldDescription = Instance.FuncGetFirstHe(xpathFieldDescription, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heFieldDescription.IsNullOrVoid())
@@ -779,7 +779,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдено поле с описанием канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдено поле с описанием канала",
                         xpathFieldDescription.XPathToStandardView(),
                         string.Empty
@@ -789,7 +789,7 @@ namespace Yandex.Zen.Core.Services
 
                 if (string.IsNullOrWhiteSpace(heFieldDescription.GetAttribute("innerhtml")))
                 {
-                    heFieldDescription.SetValue(instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, rnd.Next(1000, 2000));
+                    heFieldDescription.SetValue(Instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, Rnd.Next(1000, 2000));
                     setted = true;
                 }
                 else
@@ -830,7 +830,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось установить ссылку на соц.сеть", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось установить ссылку на соц.сеть",
                         string.Empty
                     });
@@ -838,7 +838,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение поля с описанием канала
-                var heSocialLinkElement = instance.FuncGetFirstHe(xpathSocialLinkElement, false, true, 5);
+                var heSocialLinkElement = Instance.FuncGetFirstHe(xpathSocialLinkElement, false, true, 5);
                 var heButtonAddSocialLink = heSocialLinkElement.FindChildByXPath(xpathButtonAddSocialLink[0], 0);
                 var heFieldItemSocialLink = heSocialLinkElement.FindChildByXPath(xpathFieldItemSocialLink[0], 0);
                 var heErrorSocialLink = heSocialLinkElement.FindChildByXPath(xpathErrorSocialLink[0], 0);
@@ -849,7 +849,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найден родительский элемент для установки ссылки на соц.сеть", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден родительский элемент для установки ссылки на соц.сеть",
                         xpathSocialLinkElement.XPathToStandardView(),
                         string.Empty
@@ -864,7 +864,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Некорректная ссылка на соц.сеть", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Некорректная ссылка на соц.сеть: {InstUrl}",
                         string.Empty
                     });
@@ -876,8 +876,8 @@ namespace Yandex.Zen.Core.Services
                     if (string.IsNullOrWhiteSpace(heFieldItemSocialLink.GetAttribute("value")))
                     {
                         // Ввод ссылки на соц.сеть
-                        heFieldItemSocialLink.SetValue(instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, rnd.Next(2000, 3000));
-                        heSocialLinkElement.FindChildByXPath(xpathSocialLinkTitle[0], 0).Click(instance.ActiveTab, rnd.Next(500, 1000));
+                        heFieldItemSocialLink.SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
+                        heSocialLinkElement.FindChildByXPath(xpathSocialLinkTitle[0], 0).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                         setted = true;
                     }
                     else
@@ -893,7 +893,7 @@ namespace Yandex.Zen.Core.Services
                 }
                 else if (!heButtonAddSocialLink.IsNullOrVoid())
                 {
-                    heButtonAddSocialLink.Click(instance.ActiveTab, rnd.Next(2000, 3000));
+                    heButtonAddSocialLink.Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
                 }
                 else
                 {
@@ -905,7 +905,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдены элементы для установки соц.сети", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдены элементы для установки соц.сети",
                         string.Join(Environment.NewLine, heElements),
                         string.Empty
@@ -937,7 +937,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось включить получение личных сообщений", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось включить получение личных сообщений",
                         string.Empty
                     });
@@ -945,8 +945,8 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение элементов обработки личных сообщений
-                var heButtonMessageEnable = instance.FuncGetFirstHe(xpathButtonMessageEnable, false, true, 5);
-                var heElementForCheckMessageStatus = instance.FuncGetFirstHe(xpathElementMessageStatus, false, true);
+                var heButtonMessageEnable = Instance.FuncGetFirstHe(xpathButtonMessageEnable, false, true, 5);
+                var heElementForCheckMessageStatus = Instance.FuncGetFirstHe(xpathElementMessageStatus, false, true);
 
                 // Проверка наличия элемента
                 if (heButtonMessageEnable.IsNullOrVoid())
@@ -954,7 +954,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдена кнопка для включения личных сообщений", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдена кнопка для включения личных сообщений",
                         xpathButtonMessageEnable.XPathToStandardView(),
                         string.Empty
@@ -968,7 +968,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найден элемент для проверки включения личных сообщений", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден элемент для проверки включения личных сообщений",
                         xpathElementMessageStatus.XPathToStandardView(),
                         string.Empty
@@ -979,7 +979,7 @@ namespace Yandex.Zen.Core.Services
                 // Включение личных сообщений
                 if (!heElementForCheckMessageStatus.GetAttribute("class").ToLower().Contains("allowed"))
                 {
-                    heButtonMessageEnable.Click(instance.ActiveTab, rnd.Next(1000, 2000));
+                    heButtonMessageEnable.Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
                     setted = true;
                 }
                 else
@@ -1016,7 +1016,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось установить описание канала", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось установить описание канала",
                         string.Empty
                     });
@@ -1024,7 +1024,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение селектора почты
-                var heSelectMail = instance.FuncGetFirstHe(xpathSelectMail, false, true, 5);
+                var heSelectMail = Instance.FuncGetFirstHe(xpathSelectMail, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heSelectMail.IsNullOrVoid())
@@ -1032,7 +1032,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найден селектор с выбором почты", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден селектор с выбором почты",
                         xpathSelectMail.XPathToStandardView(),
                         string.Empty
@@ -1043,7 +1043,7 @@ namespace Yandex.Zen.Core.Services
                 // Установка почты
                 if (heSelectMail.GetAttribute("innerhtml") != "")
                 {
-                    heSelectMail.Click(instance.ActiveTab, rnd.Next(3000, 4000));
+                    heSelectMail.Click(Instance.ActiveTab, Rnd.Next(3000, 4000));
 
                     var heOption = heSelectMail.NextSibling.FindChildByXPath(xpatChildOption[0], 0);
 
@@ -1052,7 +1052,7 @@ namespace Yandex.Zen.Core.Services
                     {
                         Logger.Write($"Не элемент с почтой", LoggerType.Warning, true, false, false);
                     }
-                    else heOption.Click(instance.ActiveTab, rnd.Next(3000, 4000));
+                    else heOption.Click(Instance.ActiveTab, Rnd.Next(3000, 4000));
 
                     setted = true;
                 }
@@ -1091,7 +1091,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось поставить чекбокс \"Я согласен получать рассылку Дзен\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось поставить чекбокс \"Я согласен получать рассылку Дзен\"",
                         string.Empty
                     });
@@ -1099,7 +1099,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение элементов
-                var heCheckElement = instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
+                var heCheckElement = Instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
                 var heChildCheckbox = heCheckElement.FindChildByXPath(xpathChildCheckbox[0], 0);
 
                 // Проверка наличия элемента
@@ -1114,7 +1114,7 @@ namespace Yandex.Zen.Core.Services
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден какой-то элемент для принятия согласия рассылки дзен...",
                         string.Join(Environment.NewLine, heElements),
                         string.Empty
@@ -1125,7 +1125,7 @@ namespace Yandex.Zen.Core.Services
 
                 if (!heCheckElement.GetAttribute("class").ToLower().Contains("is-checked"))
                 {
-                    heChildCheckbox.Click(instance.ActiveTab, rnd.Next(1500, 3000));
+                    heChildCheckbox.Click(Instance.ActiveTab, Rnd.Next(1500, 3000));
                     setted = true;
                 }
                 else
@@ -1162,7 +1162,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось установить сайт", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось установить сайт",
                         string.Empty
                     });
@@ -1170,8 +1170,8 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение поля с описанием канала
-                var heFieldSite = instance.FuncGetFirstHe(xpathFieldSite, false, true, 5);
-                var heFieldSiteStatus = instance.FuncGetFirstHe(xpathFieldSiteStatus, false, true);
+                var heFieldSite = Instance.FuncGetFirstHe(xpathFieldSite, false, true, 5);
+                var heFieldSiteStatus = Instance.FuncGetFirstHe(xpathFieldSiteStatus, false, true);
 
                 // Проверка наличия элемента
                 if (heFieldSite.IsNullOrVoid())
@@ -1179,7 +1179,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдено поле с сайтом", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдено поле с сайтом",
                         xpathFieldSite.XPathToStandardView(),
                         string.Empty
@@ -1193,7 +1193,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не найдено поле с сайтом", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найдено поле с сайтом",
                         xpathFieldSiteStatus.XPathToStandardView(),
                         string.Empty
@@ -1210,7 +1210,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Поле с сайтом заполнено некорректно", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Поле с сайтом заполнено некорректно",
                         xpathFieldSiteStatus.XPathToStandardView(),
                         string.Empty
@@ -1221,7 +1221,7 @@ namespace Yandex.Zen.Core.Services
                 // Заполнение поля
                 if (string.IsNullOrWhiteSpace(heFieldSite.GetAttribute("value")))
                 {
-                    heFieldSite.SetValue(instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, rnd.Next(2000, 3000));
+                    heFieldSite.SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
                     setted = true;
                 }
                 else
@@ -1263,9 +1263,9 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Включение метрики
-                if (instance.FuncGetFirstHe(xpathCurrentMetrikaId).GetAttribute("href").Contains("add"))
+                if (Instance.FuncGetFirstHe(xpathCurrentMetrikaId).GetAttribute("href").Contains("add"))
                 {
-                    instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(instance.ActiveTab, rnd.Next(150, 500));
+                    Instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение ID счетчика для метрики
                     counterIdForMetrika = GetCounterIdForMetrika();
@@ -1273,9 +1273,9 @@ namespace Yandex.Zen.Core.Services
                     // Завершение публикации, если не удалось настроить метрику
                     if (counterIdForMetrika == null) return null;
 
-                    instance.FuncGetFirstHe(xpathFieldMetrikaId).SetValue(instance.ActiveTab, counterIdForMetrika, LevelEmulation.SuperEmulation, rnd.Next(500, 1000));
-                    instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(instance.ActiveTab, rnd.Next(500, 1000));
-                    instance.FuncGetFirstHe(xpathButtonLinkedMetrikaOk).Click(instance.ActiveTab, rnd.Next(1500, 2000));
+                    Instance.FuncGetFirstHe(xpathFieldMetrikaId).SetValue(Instance.ActiveTab, counterIdForMetrika, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathButtonLinkedMetrikaOk).Click(Instance.ActiveTab, Rnd.Next(1500, 2000));
 
                     setted = true;
                 }
@@ -1307,17 +1307,17 @@ namespace Yandex.Zen.Core.Services
             var xpathCheckboxSubscriptions = new[] { "//span[contains(@data-bem, '\"name\":\"subscriptions_agreement\"')]/descendant::input", "Чекбокс - Я подтверждаю свое согласие на получение рекламных и иных маркетинговых сообщений от ООО «ЯНДЕКС»" };
             var xpathButtonSubmit = new[] { "//div[contains(@class, 'show')]/descendant::button[contains(@class, 'submit')]", "Кнопка - Создать счетчик" };
 
-            instance.NavigateInNewTab("Создание счетчика — Яндекс.Метрика", "https://metrika.yandex.ru/add", ZenChannel, true);
+            Instance.NavigateInNewTab("Создание счетчика — Яндекс.Метрика", "https://metrika.yandex.ru/add", ZenChannel, true);
 
             // Получение текущего емейла
-            var email = Regex.Match(instance.ActiveTab.DomText, "(?<=\"ownEmail\":\").*?(?=\")").Value;
+            var email = Regex.Match(Instance.ActiveTab.DomText, "(?<=\"ownEmail\":\").*?(?=\")").Value;
 
             if (string.IsNullOrWhiteSpace(email))
             {
                 Logger.Write($"На странице получения счетчика не найден текущий емейл", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
-                    instance.ActiveTab.URL,
+                    Instance.ActiveTab.URL,
                     $"На странице получения счетчика не найден текущий емейл",
                     string.Empty
                 });
@@ -1329,12 +1329,12 @@ namespace Yandex.Zen.Core.Services
             }
 
             // Получение элементов для обработки счетчика
-            var heFieldCounterName = instance.FuncGetFirstHe(xpathFieldCounterName, false, true);
-            var heFieldCounterSite = instance.FuncGetFirstHe(xpathFieldCounterSite, false, true);
-            var heFieldEmail = instance.FuncGetFirstHe(xpathFieldEmail, false, true);
-            var heCheckboxConditions = instance.FuncGetFirstHe(xpathCheckboxConditions, false, true);
-            var heCheckboxSubscriptions = instance.FuncGetFirstHe(xpathCheckboxSubscriptions, false, true);
-            var heButtonSubmit = instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
+            var heFieldCounterName = Instance.FuncGetFirstHe(xpathFieldCounterName, false, true);
+            var heFieldCounterSite = Instance.FuncGetFirstHe(xpathFieldCounterSite, false, true);
+            var heFieldEmail = Instance.FuncGetFirstHe(xpathFieldEmail, false, true);
+            var heCheckboxConditions = Instance.FuncGetFirstHe(xpathCheckboxConditions, false, true);
+            var heCheckboxSubscriptions = Instance.FuncGetFirstHe(xpathCheckboxSubscriptions, false, true);
+            var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
 
             // Проверка наличия элементов
             if (new[] { heFieldCounterName, heFieldCounterSite, heFieldEmail, heCheckboxConditions, heCheckboxSubscriptions }.Any(x => x.IsNullOrVoid()))
@@ -1352,7 +1352,7 @@ namespace Yandex.Zen.Core.Services
 
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
-                    instance.ActiveTab.URL,
+                    Instance.ActiveTab.URL,
                     $"Не найдены элементы для обработки счетчика...",
                     string.Join(Environment.NewLine, heElements),
                     string.Empty
@@ -1365,26 +1365,26 @@ namespace Yandex.Zen.Core.Services
             }
 
             // Заполнение полей
-            heFieldCounterName.SetValue(instance.ActiveTab, ZenChannel, LevelEmulation.SuperEmulation);
-            heFieldCounterSite.SetValue(instance.ActiveTab, ZenChannel, LevelEmulation.SuperEmulation);
-            heFieldEmail.SetValue(instance.ActiveTab, email, LevelEmulation.SuperEmulation);
+            heFieldCounterName.SetValue(Instance.ActiveTab, ZenChannel, LevelEmulation.SuperEmulation);
+            heFieldCounterSite.SetValue(Instance.ActiveTab, ZenChannel, LevelEmulation.SuperEmulation);
+            heFieldEmail.SetValue(Instance.ActiveTab, email, LevelEmulation.SuperEmulation);
 
             // Принятие условий пользовательского соглашения
             if (heCheckboxConditions.GetAttribute("aria-checked").Contains("false"))
-                heCheckboxConditions.Click(instance.ActiveTab, rnd.Next(150, 500));
+                heCheckboxConditions.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
             // Подтверждение на принятие рекламных сообщений от яндекс
             if (heCheckboxSubscriptions.GetAttribute("aria-checked").Contains("false"))
-                heCheckboxSubscriptions.Click(instance.ActiveTab, rnd.Next(150, 500));
+                heCheckboxSubscriptions.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
             // Создание счетчика
-            heButtonSubmit.Click(instance.ActiveTab, rnd.Next(2000, 3000));
+            heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
 
             // Получение ID счетчика для метрики
-            counterIdForMetrika = Regex.Match(instance.ActiveTab.DomText, "(?<=\"counter\":\\{\"id\":)[0-9]+(?=,)").Value;
+            counterIdForMetrika = Regex.Match(Instance.ActiveTab.DomText, "(?<=\"counter\":\\{\"id\":)[0-9]+(?=,)").Value;
 
             if (string.IsNullOrWhiteSpace(counterIdForMetrika))
-                counterIdForMetrika = Regex.Match(instance.ActiveTab.URL, @"(?<=metrika\.yandex\.ru/onboarding/)[0-9]+(?=\?)").Value;
+                counterIdForMetrika = Regex.Match(Instance.ActiveTab.URL, @"(?<=metrika\.yandex\.ru/onboarding/)[0-9]+(?=\?)").Value;
 
             // Извлечение ID счетчика
             if (string.IsNullOrWhiteSpace(counterIdForMetrika))
@@ -1406,7 +1406,7 @@ namespace Yandex.Zen.Core.Services
         /// Закрытие всех вкладок, кроме вкладки с каналом.
         /// </summary>
         private void CloseAllTabsExceptChannel() =>
-            instance.AllTabs.ToList().ForEach(x => { if (x.URL != ZenChannel) { x.Close(); } });
+            Instance.AllTabs.ToList().ForEach(x => { if (x.URL != ZenChannel) { x.Close(); } });
 
         /// <summary>
         /// Принятие пользовательского соглашения.
@@ -1430,7 +1430,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Не удалось поставить чекбокс \"Я принимаю условия пользовательского соглашения\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не удалось поставить чекбокс \"Я принимаю условия пользовательского соглашения\"",
                         string.Empty
                     });
@@ -1438,7 +1438,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получение элементов
-                var heCheckElement = instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
+                var heCheckElement = Instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
                 var heChildCheckbox = heCheckElement.FindChildByXPath(xpathChildCheckbox[0], 0);
 
                 // Проверка наличия элемента
@@ -1453,7 +1453,7 @@ namespace Yandex.Zen.Core.Services
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        instance.ActiveTab.URL,
+                        Instance.ActiveTab.URL,
                         $"Не найден какой-то элемент для принятия пользовательского соглашения...",
                         string.Join(Environment.NewLine, heElements),
                         string.Empty
@@ -1464,7 +1464,7 @@ namespace Yandex.Zen.Core.Services
 
                 if (!heCheckElement.GetAttribute("class").ToLower().Contains("is-checked"))
                 {
-                    heChildCheckbox.Click(instance.ActiveTab, rnd.Next(1500, 3000));
+                    heChildCheckbox.Click(Instance.ActiveTab, Rnd.Next(1500, 3000));
                     setted = true;
                 }
                 else
@@ -1491,7 +1491,7 @@ namespace Yandex.Zen.Core.Services
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
-                ResourceDirectory = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
                 Logger.LogResourceText = $"[Login: {Login}]\t";
 
@@ -1580,14 +1580,14 @@ namespace Yandex.Zen.Core.Services
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
-                Program.ResourcesMode.Add(Login);
-                Program.ResourcesAllThreadsInWork.Add(Login);
+                Program.CurrentObjectCache.Add(Login);
+                Program.ObjectsOfAllThreadsInWork.Add(Login);
                 Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                 return true;
             }
 
             // Не удалось получить ресурс
-            Program.ResetExecutionCounter(zenno);
+            Program.ResetExecutionCounter(Zenno);
             Logger.Write($"Отсутствуют свободные/подходящие аккаунты", LoggerType.Info, false, true, true, LogColor.Violet);
             return false;
             

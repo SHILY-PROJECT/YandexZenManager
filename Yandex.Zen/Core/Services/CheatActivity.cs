@@ -55,20 +55,20 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public CheatActivity()
         {
-            AccountsTable = zenno.Tables["AccountsForCheatActivity"];
-            _articlesAndStatisticsTable = zenno.Tables["ArticlesAndStatistics"];
+            AccountsTable = Zenno.Tables["AccountsForCheatActivity"];
+            _articlesAndStatisticsTable = Zenno.Tables["ArticlesAndStatistics"];
 
             // Проверка наличия аккаунтов для накручивания
             if (AccountsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"Таблица с аккаунтами пуста");
+                Program.StopTemplate(Zenno, $"Таблица с аккаунтами пуста");
                 return;
             }
 
             // Проверка наличия статей накрутки
             if (_articlesAndStatisticsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"Таблица со статьями и статистикой пуста");
+                Program.StopTemplate(Zenno, $"Таблица со статьями и статистикой пуста");
                 return;
             }
 
@@ -79,21 +79,21 @@ namespace Yandex.Zen.Core.Services
                 { "Использовать индивидуальные комментарии относительно статей аккаунта", CommentsSourceEnum.IndividualForAllArticlesOfAccount},
                 { "Использовать индивидуальные комментарии для каждой статьи", CommentsSourceEnum.IndividualForEachArticle }
             }
-            .TryGetValue(zenno.Variables["cfgCommentsSourceForCheatActivity"].Value, out _commentsSource);
+            .TryGetValue(Zenno.Variables["cfgCommentsSourceForCheatActivity"].Value, out _commentsSource);
 
             // Настройка привязки номера
-            BindingPhoneToAccountIfRequaid = zenno.Variables["cfgBindingPhoneIfRequiredForCheatActivity"].Value.Contains("Привязывать номер");
+            BindingPhoneToAccountIfRequaid = Zenno.Variables["cfgBindingPhoneIfRequiredForCheatActivity"].Value.Contains("Привязывать номер");
 
             // Получение данных из настроек для формирования задания
-            _totalTransitionsSettings = zenno.Variables["cfgTotalTransitionsForCheatActivity"].Value;
-            _secondsWatchArticleSettings = zenno.Variables["cfgTimeWatchArticleForCheatActivity"].Value;
-            _totalLikesSettings = zenno.Variables["cfgTotalLikesForCheatActivity"].Value;
-            _totalCommentsSettings = zenno.Variables["cfgTotalCommentsForCheatActivity"].Value;
-            _limitGoToArticleForOneAccount = zenno.Variables["cfgTransitionsLimitForOneAccountForCheatActivity"].Value.ExtractNumber();
+            _totalTransitionsSettings = Zenno.Variables["cfgTotalTransitionsForCheatActivity"].Value;
+            _secondsWatchArticleSettings = Zenno.Variables["cfgTimeWatchArticleForCheatActivity"].Value;
+            _totalLikesSettings = Zenno.Variables["cfgTotalLikesForCheatActivity"].Value;
+            _totalCommentsSettings = Zenno.Variables["cfgTotalCommentsForCheatActivity"].Value;
+            _limitGoToArticleForOneAccount = Zenno.Variables["cfgTransitionsLimitForOneAccountForCheatActivity"].Value.ExtractNumber();
 
-            _commonCommentsPathFile = zenno.ExecuteMacro(zenno.Variables["cfgSharedCommentsFileForCheatActivity"].Value);
-            _fileNameIndividualForAllArticlesOfAccount = zenno.Variables["cfgFileNameIndividualForAllArticlesOfAccountForCheatActivity"].Value;
-            _modifyArticleUrl = bool.Parse(zenno.Variables["cfgModifyArticleUrlForCheatActivity"].Value);
+            _commonCommentsPathFile = Zenno.ExecuteMacro(Zenno.Variables["cfgSharedCommentsFileForCheatActivity"].Value);
+            _fileNameIndividualForAllArticlesOfAccount = Zenno.Variables["cfgFileNameIndividualForAllArticlesOfAccountForCheatActivity"].Value;
+            _modifyArticleUrl = bool.Parse(Zenno.Variables["cfgModifyArticleUrlForCheatActivity"].Value);
 
             lock (_locker)
                 _launchIsAllowed = ResourceHandler();
@@ -140,7 +140,7 @@ namespace Yandex.Zen.Core.Services
                 url += $"?from=feed&utm_referrer=https%3A%2F%2Fzen.yandex.com&rid={rid}&integration=site_desktop&place=layout&secdata=C{TextMacros.GenerateString(23, 30, "abc")}%3D%3D";
             }
 
-            instance.ActiveTab.Navigate(url, $"https://zen.yandex.{Domain}/", true);
+            Instance.ActiveTab.Navigate(url, $"https://zen.yandex.{Domain}/", true);
 
 
         }
@@ -180,11 +180,11 @@ namespace Yandex.Zen.Core.Services
                 var heArticleCollection = new List<HtmlElement>();
 
                 // Добавляем элементы в список для обработки
-                heArticleCollection.AddRange(instance.ActiveTab.FindElementsByXPath(xpathButtonsLeftMenu[0]));
-                heArticleCollection.AddRange(instance.ActiveTab.FindElementsByXPath(xpathArticleControls[0]));
-                heArticleCollection.AddRange(instance.ActiveTab.FindElementsByXPath(string.Join("|", xpathElementsArticles[0])));
-                heArticleCollection.AddRange(instance.ActiveTab.FindElementsByXPath(xpathAdvertisingRightBlock[0]));
-                heArticleCollection.AddRange(instance.ActiveTab.FindElementsByXPath(xpathCommentsBlock[0]));
+                heArticleCollection.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathButtonsLeftMenu[0]));
+                heArticleCollection.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathArticleControls[0]));
+                heArticleCollection.AddRange(Instance.ActiveTab.FindElementsByXPath(string.Join("|", xpathElementsArticles[0])));
+                heArticleCollection.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathAdvertisingRightBlock[0]));
+                heArticleCollection.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathCommentsBlock[0]));
 
                 if (!triggerStartStopwatch)
                 {
@@ -215,7 +215,7 @@ namespace Yandex.Zen.Core.Services
                     heArticleCollection.Reverse();
                 }
 
-                instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(heArticleCollection[counter], rnd.Next(70, 110));
+                Instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(heArticleCollection[counter], Rnd.Next(70, 110));
 
                 if ((stopwatch.ElapsedMilliseconds / 1000) > setTimeInSeconds)
                 {
@@ -231,7 +231,7 @@ namespace Yandex.Zen.Core.Services
 
         private bool ActionLikeArticle()
         {
-            var heCollection = instance.ActiveTab.FindElementsByXPath("//div[contains(@class, 'bottom-block-redesign')]/descendant::button");
+            var heCollection = Instance.ActiveTab.FindElementsByXPath("//div[contains(@class, 'bottom-block-redesign')]/descendant::button");
 
             if (heCollection.Count < 3)
                 throw new Exception("В коллекции меньше трех элементов");
@@ -241,11 +241,11 @@ namespace Yandex.Zen.Core.Services
             if (heLike.GetAttribute("aria-pressed").Contains("false"))
             {
                 heLike.Click();
-                zenno.SendInfoToLog("Лайк поставлен");
+                Zenno.SendInfoToLog("Лайк поставлен");
             }
             else
             {
-                zenno.SendInfoToLog("Лайк уже стоит");
+                Zenno.SendInfoToLog("Лайк уже стоит");
             }
 
             return true;
@@ -261,8 +261,8 @@ namespace Yandex.Zen.Core.Services
             var xpathButtonSendComment = new[] { "//div[contains(@class, 'comment-editor') and contains(@class, 'editor-controls')]/descendant::button[contains(@class, 'send')]", "Кнопка - Отправить комментарий" };
 
             // Получение элементов
-            var heFieldComment = instance.FuncGetFirstHe(xpathFieldComment, false, true);
-            var heButtonSendComment = instance.FuncGetFirstHe(xpathButtonSendComment, false, true);
+            var heFieldComment = Instance.FuncGetFirstHe(xpathFieldComment, false, true);
+            var heButtonSendComment = Instance.FuncGetFirstHe(xpathButtonSendComment, false, true);
 
             // Проверка элементов
             if (new[]{heFieldComment, heButtonSendComment}.Any(x => x.IsNullOrVoid()))
@@ -274,7 +274,7 @@ namespace Yandex.Zen.Core.Services
 
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
-                    instance.ActiveTab.URL,
+                    Instance.ActiveTab.URL,
                     string.Join(Environment.NewLine, heElements),
                     string.Empty
                 });
@@ -283,9 +283,9 @@ namespace Yandex.Zen.Core.Services
             }
 
             // Написание и отправка комментария
-            heFieldComment.Click(instance.ActiveTab, rnd.Next(500, 1000));
-            heFieldComment.SetValue(instance.ActiveTab, _article.CommentData.CommentText, LevelEmulation.SuperEmulation, rnd.Next(500, 1500));
-            heButtonSendComment.Click(instance.ActiveTab, rnd.Next(500, 1000));
+            heFieldComment.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+            heFieldComment.SetValue(Instance.ActiveTab, _article.CommentData.CommentText, LevelEmulation.SuperEmulation, Rnd.Next(500, 1500));
+            heButtonSendComment.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
             _article.CommentData.WriteToUsedCommentsLog();
 
@@ -300,8 +300,8 @@ namespace Yandex.Zen.Core.Services
         {
             var response = ZennoPoster.HTTP.Request
             (
-                HttpMethod.GET, "https://zen.yandex.ru/", proxy: instance.GetProxy(), Encoding: "utf-8", respType: ResponceType.BodyOnly,
-                Timeout: 30000, UserAgent: zenno.Profile.UserAgent, cookieContainer: zenno.Profile.CookieContainer
+                HttpMethod.GET, "https://zen.yandex.ru/", proxy: Instance.GetProxy(), Encoding: "utf-8", respType: ResponceType.BodyOnly,
+                Timeout: 30000, UserAgent: Zenno.Profile.UserAgent, cookieContainer: Zenno.Profile.CookieContainer
             );
 
             var rid = Regex.Match(response, "(?<=\"rid\":\").*?(?=\")").Value;
@@ -322,7 +322,7 @@ namespace Yandex.Zen.Core.Services
             {
                 if (row >= numbArticlesAndStatistics)
                 {
-                    Program.ResetExecutionCounter(zenno);
+                    Program.ResetExecutionCounter(Zenno);
                     Logger.Write($"Отсутствуют свободные/подходящие статьи для обработки", LoggerType.Info, false, true, true, LogColor.Violet);
                     return false;
                 }
@@ -420,7 +420,7 @@ namespace Yandex.Zen.Core.Services
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
-                ResourceDirectory = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
                 Logger.LogResourceText = $"[Login: {Login}]\t";
 
@@ -467,14 +467,14 @@ namespace Yandex.Zen.Core.Services
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
-                Program.ResourcesMode.Add(Login);
-                Program.ResourcesAllThreadsInWork.Add(Login);
+                Program.CurrentObjectCache.Add(Login);
+                Program.ObjectsOfAllThreadsInWork.Add(Login);
                 Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                 return true;
             }
 
             // Не удалось получить ресурс
-            Program.ResetExecutionCounter(zenno);
+            Program.ResetExecutionCounter(Zenno);
             Logger.Write($"Отсутствуют свободные/подходящие аккаунты", LoggerType.Info, false, true, true, LogColor.Violet);
             return false;
         }

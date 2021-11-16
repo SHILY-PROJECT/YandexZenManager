@@ -34,7 +34,7 @@ namespace Yandex.Zen.Core.Tools
         /// </summary>
         public static void SaveProfile(bool refreshProfileInfo)
         {
-            zenno.Profile.Save
+            Zenno.Profile.Save
             (
                 path: ProfileInfo.FullName,
                 saveProxy: true,
@@ -106,7 +106,7 @@ namespace Yandex.Zen.Core.Tools
             }
             else
             {
-                zenno.Profile.Load(ProfileInfo.FullName, true);
+                Zenno.Profile.Load(ProfileInfo.FullName, true);
                 Logger.Write($"Профиль успешно загружен", LoggerType.Info, true, false, true);
                 return true;
             }
@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Tools
             }
             else ProfileInfo = profiles.First();
 
-            zenno.Profile.Load(ProfileInfo.FullName, true);
+            Zenno.Profile.Load(ProfileInfo.FullName, true);
 
             Logger.Write($"Профиль успешно загружен", LoggerType.Info, true, false, true);
             return true;
@@ -161,10 +161,10 @@ namespace Yandex.Zen.Core.Tools
 
                 var firstProfile = profiles.First();
 
-                if (!Program.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
+                if (!Program.ObjectsOfAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
-                    Program.ResourcesMode.Add(firstProfile.FullName);
-                    Program.ResourcesAllThreadsInWork.Add(firstProfile.FullName);
+                    Program.CurrentObjectCache.Add(firstProfile.FullName);
+                    Program.ObjectsOfAllThreadsInWork.Add(firstProfile.FullName);
                     return firstProfile;
                 }
                 else profiles.RemoveAt(0);

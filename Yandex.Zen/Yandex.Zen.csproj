@@ -106,6 +106,8 @@
     <Compile Include="Core\Models\CheatActivity\ActionStateModel.cs" />
     <Compile Include="Core\Models\CheatActivity\CommentData.cs" />
     <Compile Include="Core\Models\ResourceModels\Channel.cs" />
+    <Compile Include="Core\Models\ResourceModels\PropertiesState.cs" />
+    <Compile Include="Core\Models\ResourceModels\ProxyData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AgreeToReceiveZenNewsletterData.cs" />
@@ -125,7 +127,7 @@
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\BasicSettingsModel.cs" />
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
-    <Compile Include="Core\Models\Tables.cs" />
+    <Compile Include="Core\Models\TablesData.cs" />
     <Compile Include="Core\Services\PostingSecondWind.cs" />
     <Compile Include="Core\Tools\CaptchaService.cs" />
     <Compile Include="Core\Enums\Logger\LogFilter.cs" />

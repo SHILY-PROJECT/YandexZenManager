@@ -21,30 +21,27 @@ namespace Yandex.Zen.Core.Tools
         private static readonly string _logAccountFileName = @"_logger\account.log";
         private static readonly string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
 
-        [ThreadStatic] public static FileInfo GeneralLog;
+        [ThreadStatic] private static FileInfo _generalLog;
         [ThreadStatic] public static string LogResourceText;
 
         private static DirectoryInfo ResourceDirectory { get => ServiceComponents.ResourceDirectory; }
-        private static Instance Instance { get => ServiceComponents.instance; }
-        private static 
+        private static Instance Instance { get => ServiceComponents.Instance; }
+        private static IZennoPosterProjectModel Zenno { get => ServiceComponents.Zenno; }
+
+        public static FileInfo GeneralLog { get => _generalLog is null ? _generalLog = MainLogFile[Program.ProgramMode] : _generalLog; }
 
         /// <summary>
-        /// Получение лога режима.
+        /// Лог режима.
         /// </summary>
-        /// <returns></returns>
-        public static void SetGeneralLog()
+        private static Dictionary<ProgramModeEnum, FileInfo> MainLogFile => new Dictionary<ProgramModeEnum, FileInfo>
         {
-            new Dictionary<ProgramModeEnum, FileInfo>
-            {
-                { ProgramModeEnum.WalkingProfile, new FileInfo($@"{zenno.Directory}\_logger\walking_profile.log") },
-                { ProgramModeEnum.WalkingOnZen, new FileInfo($@"{zenno.Directory}\_logger\walking_on_zen.log") },
-                { ProgramModeEnum.InstanceAccountManagement, new FileInfo($@"{zenno.Directory}\_logger\instance_account_management.log") },
-                { ProgramModeEnum.YandexAccountRegistration, new FileInfo($@"{zenno.Directory}\_logger\yandex_account_registration.log") },
-                { ProgramModeEnum.ZenChannelCreationAndDesign, new FileInfo($@"{zenno.Directory}\_logger\zen_channel_creation_and_design.log") },
-                { ProgramModeEnum.ZenArticlePublication, new FileInfo($@"{zenno.Directory}\_logger\zen_posting.log") },
-            }
-            .TryGetValue(Program.ProgramMode, out GeneralLog);
-        }
+            [ProgramModeEnum.WalkingProfile] =              new FileInfo($@"{Zenno.Directory}\_logger\walking_profile.log"),
+            [ProgramModeEnum.WalkingOnZen] =                new FileInfo($@"{Zenno.Directory}\_logger\walking_on_zen.log"),
+            [ProgramModeEnum.InstanceAccountManagement] =   new FileInfo($@"{Zenno.Directory}\_logger\instance_account_management.log"),
+            [ProgramModeEnum.YandexAccountRegistration] =   new FileInfo($@"{Zenno.Directory}\_logger\yandex_account_registration.log"),
+            [ProgramModeEnum.ZenChannelCreationAndDesign] = new FileInfo($@"{Zenno.Directory}\_logger\zen_channel_creation_and_design.log"),
+            [ProgramModeEnum.ZenArticlePublication] =       new FileInfo($@"{Zenno.Directory}\_logger\zen_posting.log"),
+        };
 
         /// <summary>
         /// Получение текущий даты.
@@ -294,8 +291,8 @@ namespace Yandex.Zen.Core.Tools
                 WriteToGeneralLog($"{LogResourceText}{textToLog}", loggerType, dateTime);
             
             // Отправка сообщения в zp/pm
-            if (zenno != null)
-                zenno.SendToLog($"[{ProgramModeEnum.WalkingProfile}]\t{LogResourceText}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+            if (Zenno != null)
+                Zenno.SendToLog($"[{ProgramModeEnum.WalkingProfile}]\t{LogResourceText}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>

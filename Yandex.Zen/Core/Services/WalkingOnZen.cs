@@ -76,7 +76,7 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public WalkingOnZen()
         {
-            AccountsTable = zenno.Tables["AccountsForWalkingOnZen"];
+            AccountsTable = Zenno.Tables["AccountsForWalkingOnZen"];
 
             new Dictionary<string, UseResourceTypeInWorkEnum>
             {
@@ -84,17 +84,17 @@ namespace Yandex.Zen.Core.Services
                 { "Использовать для работы только аккаунты", UseResourceTypeInWorkEnum.UseOnlyAccount },
                 { "Использовать для работы доноры и аккаунты", UseResourceTypeInWorkEnum.UseAnyResource }
             }
-            .TryGetValue(zenno.Variables["cfgResourceTypeToUseForWalkingOnZen"].Value, out _useResourceTypeInWork);
+            .TryGetValue(Zenno.Variables["cfgResourceTypeToUseForWalkingOnZen"].Value, out _useResourceTypeInWork);
 
             // Получение и сравнение таблицы режима и общей таблицы
-            TableGeneralAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileAccounts"].Value));
-            TableModeAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileAccountsForWalkingOnZen"].Value));
+            TableGeneralAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileAccounts"].Value));
+            TableModeAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileAccountsForWalkingOnZen"].Value));
             TableGeneralAndTableModeIsSame = TableGeneralAccountFile.FullName.ToLower() == TableModeAccountFile.FullName.ToLower();
 
-            BindingPhoneToAccountIfRequaid = zenno.Variables["cfgBindingPhoneIfRequiredForWalkingZenForAccount"].Value.Contains("Привязывать номер");
-            _useAuthorizationForAccounts = bool.Parse(zenno.Variables["cfgAuthorizationForAccountsForWalkingOnZen"].Value);
+            BindingPhoneToAccountIfRequaid = Zenno.Variables["cfgBindingPhoneIfRequiredForWalkingZenForAccount"].Value.Contains("Привязывать номер");
+            _useAuthorizationForAccounts = bool.Parse(Zenno.Variables["cfgAuthorizationForAccountsForWalkingOnZen"].Value);
 
-            var logSettings = zenno.Variables["cfgLogSettingsForWalkingOnZen"].Value;
+            var logSettings = Zenno.Variables["cfgLogSettingsForWalkingOnZen"].Value;
             _enableInfoOnHowMuchTimeIsLeftBeforeWalk = logSettings.Contains("Через сколько будет доступна прогулка");
 
             SetSettingsMode();
@@ -111,15 +111,15 @@ namespace Yandex.Zen.Core.Services
         {
             _actionList = new List<ActionOnItem>();
 
-            _individualStateBusyEnabled = bool.Parse(zenno.Variables["cfgIndividualPolicyOfIgnoringEnabledForWalkingOnZen"].Value);
-            _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(zenno.Variables["cfgPolicyOfIgnoringForWalkingOnZen"].Value);
+            _individualStateBusyEnabled = bool.Parse(Zenno.Variables["cfgIndividualPolicyOfIgnoringEnabledForWalkingOnZen"].Value);
+            _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingOnZen"].Value);
 
-            _changeGeoIfMenuIsVoid = bool.Parse(zenno.Variables["cfgChangeGeoIfMenuIsVoidForWalkingZen"].Value);
-            _timeOnPageArticleZen = zenno.Variables["cfgTimeOnPageArticleForWalkingOnZen"].Value;
-            ShorDonorNameForLog = bool.Parse(zenno.Variables["cfgShorDonorNameForLog"].Value);
+            _changeGeoIfMenuIsVoid = bool.Parse(Zenno.Variables["cfgChangeGeoIfMenuIsVoidForWalkingZen"].Value);
+            _timeOnPageArticleZen = Zenno.Variables["cfgTimeOnPageArticleForWalkingOnZen"].Value;
+            ShorDonorNameForLog = bool.Parse(Zenno.Variables["cfgShorDonorNameForLog"].Value);
 
-            var actionsEnable = zenno.Variables["cfgUseActionForWalkingOnZen"].Value;
-            var actionsSkipError = zenno.Variables["cfgActionSkipErrorForWalkingOnZen"].Value;
+            var actionsEnable = Zenno.Variables["cfgUseActionForWalkingOnZen"].Value;
+            var actionsSkipError = Zenno.Variables["cfgActionSkipErrorForWalkingOnZen"].Value;
 
             _likeEnable = actionsEnable.Contains("Ставить лайки");
             _dislikeEnable = actionsEnable.Contains("Ставить дизлайки");
@@ -131,10 +131,10 @@ namespace Yandex.Zen.Core.Services
             _skipErrorOpenArticles = actionsSkipError.Contains("Пропускать ошибки статей");
 
             // Настройки для гуляния по zen.yandex
-            NumbZenItemOpen = zenno.Variables["cfgNumbZenItemOpen"].ExtractNumber();    // количество статей открывать.
-            NumbLikeToZen = zenno.Variables["cfgNumbLikeToZen"].ExtractNumber();        // количество статей лайкать.
-            NumbDislikeToZen = zenno.Variables["cfgNumbDislikeToZen"].ExtractNumber();  // количество статей дизлайкать.
-            StepBetweenItems = zenno.Variables["cfgStepBetweenItems"].Value;            // количество статей пропускать.
+            NumbZenItemOpen = Zenno.Variables["cfgNumbZenItemOpen"].ExtractNumber();    // количество статей открывать.
+            NumbLikeToZen = Zenno.Variables["cfgNumbLikeToZen"].ExtractNumber();        // количество статей лайкать.
+            NumbDislikeToZen = Zenno.Variables["cfgNumbDislikeToZen"].ExtractNumber();  // количество статей дизлайкать.
+            StepBetweenItems = Zenno.Variables["cfgStepBetweenItems"].Value;            // количество статей пропускать.
 
             // Добавляем список действий над элементами страницы
             if (_openArticlesEnable) for (int i = 0; i < NumbZenItemOpen; i++) _actionList.Add(ActionOnItem.OpenItem);
@@ -149,7 +149,7 @@ namespace Yandex.Zen.Core.Services
                 { "zen.yandex", StartPageWalkingOnZen.ZenYandex },
                 { "zen.yandex/about", StartPageWalkingOnZen.ZenYandexAbout }
             }
-            .TryGetValue(zenno.Variables["cfgStartPageForWalkingZen"].Value, out _startPage);
+            .TryGetValue(Zenno.Variables["cfgStartPageForWalkingZen"].Value, out _startPage);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Yandex.Zen.Core.Services
             var xpathAvatarProfile = new[] { "//div[contains(@class, 'zen-ui-profile') and contains(@class, 'avatar')]/descendant::button[contains(@class, 'zen-ui-avatar')]", "Кнопка - Аватар профиля" };
             var xpathButtonAuth = new[] { "//div[contains(@class, 'right-items')]/descendant::a[contains(@class, 'auth-header-buttons') and text()='Log in' or text()='Войти']", "Кнопка войти" };
 
-            instance.UseFullMouseEmulation = true;
+            Instance.UseFullMouseEmulation = true;
 
             var stopwatchFullProgram = new Stopwatch();
             var counterAttempt = 0;
@@ -196,15 +196,15 @@ namespace Yandex.Zen.Core.Services
                 switch (_startPage)
                 {
                     case StartPageWalkingOnZen.ZenYandex:
-                        instance.ActiveTab.Navigate($"https://zen.yandex.ru/", true);
+                        Instance.ActiveTab.Navigate($"https://zen.yandex.ru/", true);
                         AcceptingPrivacyPolicyCookie();
                         break;
                     case StartPageWalkingOnZen.ZenYandexAbout:
-                        instance.ActiveTab.Navigate("https://zen.yandex/about", true);
+                        Instance.ActiveTab.Navigate("https://zen.yandex/about", true);
                         AcceptingPrivacyPolicyCookie();
 
                         // Получение кнопки для перехода в дзен
-                        var heButtonGoToZen = instance.FuncGetFirstHe(xpathButtonGoToZen, false, true, 5);
+                        var heButtonGoToZen = Instance.FuncGetFirstHe(xpathButtonGoToZen, false, true, 5);
 
                         // Проверка наличия кнопки для перехода в дзен
                         if (heButtonGoToZen.IsNullOrVoid())
@@ -212,18 +212,18 @@ namespace Yandex.Zen.Core.Services
                             //Logger.LoggerWrite($"", );
                             Logger.ErrorAnalysis(true, true, true, new List<string>
                             {
-                                instance.ActiveTab.URL,
+                                Instance.ActiveTab.URL,
                                 xpathButtonGoToZen.XPathToStandardView(),
                                 string.Empty
                             });
                             continue;
                         }
-                        else heButtonGoToZen.Click(instance.ActiveTab, rnd.Next(150, 500));
+                        else heButtonGoToZen.Click(Instance.ActiveTab, Rnd.Next(150, 500));
                         break;
                 }
 
                 // Проверка наличия элементов
-                if (instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
+                if (Instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
 
                 // Смена geo при отсутствии бокового меню
                 if (_changeGeoIfMenuIsVoid)
@@ -235,13 +235,13 @@ namespace Yandex.Zen.Core.Services
                     }
 
                     // Проверка наличия элементов
-                    if (instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
+                    if (Instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
                 }
 
                 // Проверка авторизации перед прогулкой (для аккаунта)
-                if (_useAuthorizationForAccounts && CurrentResourceAtWork == ResourceType.Account && instance.FuncGetFirstHe(xpathAvatarProfile, false, false).IsNullOrVoid())
+                if (_useAuthorizationForAccounts && CurrentResourceAtWork == ResourceType.Account && Instance.FuncGetFirstHe(xpathAvatarProfile, false, false).IsNullOrVoid())
                 {
-                    var heButtonAuth = instance.FuncGetFirstHe(xpathButtonAuth, false, true);
+                    var heButtonAuth = Instance.FuncGetFirstHe(xpathButtonAuth, false, true);
 
                     if (heButtonAuth.IsNullOrVoid())
                     {
@@ -250,7 +250,7 @@ namespace Yandex.Zen.Core.Services
                         Logger.Write($"Не найдена кнопка для авторизации...", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         { 
-                            instance.ActiveTab.URL,
+                            Instance.ActiveTab.URL,
                             xpathButtonAuth.XPathToStandardView(),
                             "Не найдена кнопка для авторизации...",
                             string.Empty
@@ -259,7 +259,7 @@ namespace Yandex.Zen.Core.Services
                         return;
                     }
 
-                    heButtonAuth.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                    heButtonAuth.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                     // Авторизация
                     var statusAuth = Authorization.Auth(BindingPhoneToAccountIfRequaid, xpathItems);
@@ -274,7 +274,7 @@ namespace Yandex.Zen.Core.Services
 
                 try
                 {
-                    var items = instance.FuncGetHeCollection(xpathItems);
+                    var items = Instance.FuncGetHeCollection(xpathItems);
                     var numbItem = default(int);
                     var numbStepItem = default(int);
 
@@ -283,7 +283,7 @@ namespace Yandex.Zen.Core.Services
                     while (true)
                     {
                         // Установка времени ожидания загрузки страницы
-                        instance.ActiveTab.NavigateTimeout = 20;
+                        Instance.ActiveTab.NavigateTimeout = 20;
 
                         if (_actionList.Count == 0) break;
 
@@ -309,7 +309,7 @@ namespace Yandex.Zen.Core.Services
                         }
 
                         item = items.GetByNumber(numbItem);
-                        instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(item, rnd.Next(120, 150), true);
+                        Instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(item, Rnd.Next(120, 150), true);
 
                         if (numbItem == 0) numbItem++;
 
@@ -325,7 +325,7 @@ namespace Yandex.Zen.Core.Services
                             ScrollToCurrentLastPosition(xpathItems[0], numbItem);
                         }
 
-                        items = instance.ActiveTab.FindElementsByXPath(xpathItems[0]);
+                        items = Instance.ActiveTab.FindElementsByXPath(xpathItems[0]);
                     }
 
                     // Остановить счетчик
@@ -359,7 +359,7 @@ namespace Yandex.Zen.Core.Services
         /// <param name="numbItem"></param>
         private void ScrollToCurrentLastPosition(string xpathItems, int numbItem)
         {
-            instance.ActiveTab.NavigateTimeout = 5;
+            Instance.ActiveTab.NavigateTimeout = 5;
 
             HtmlElementCollection items;
 
@@ -367,17 +367,17 @@ namespace Yandex.Zen.Core.Services
 
             while (true)
             {
-                items = instance.ActiveTab.FindElementsByXPath(xpathItems);
+                items = Instance.ActiveTab.FindElementsByXPath(xpathItems);
 
                 if (numbItem > items.Count)
                 {
                     items.Last().ScrollIntoView();
                     //instance.ActiveTab.FullEmulationMouseMoveToHtmlElement(items.Last());
                     
-                    Thread.Sleep(rnd.Next(250, 500));
+                    Thread.Sleep(Rnd.Next(250, 500));
 
-                    if (instance.ActiveTab.IsBusy)
-                        instance.ActiveTab.WaitDownloading();
+                    if (Instance.ActiveTab.IsBusy)
+                        Instance.ActiveTab.WaitDownloading();
                 }
                 else break;
             }
@@ -415,13 +415,13 @@ namespace Yandex.Zen.Core.Services
             var stopwatch = new Stopwatch();
             var scrollIterationsOnSite = 15;
             var setTimeInSeconds = _timeOnPageArticleZen.ExtractNumber();
-            var sourceUrl = instance.ActiveTab.URL;
+            var sourceUrl = Instance.ActiveTab.URL;
             var openSourceTab = false;
             var xpathItemLabel = ".//a[@aria-label!='' and @href!='']";
             var heItemLabel = item.FindChildByXPath(xpathItemLabel, 0);
 
             // Установка времени ожидания загрузки страницы
-            instance.ActiveTab.NavigateTimeout = 20;
+            Instance.ActiveTab.NavigateTimeout = 20;
 
             // Индивидуальное состояние занятости
             if (_individualStateBusyEnabled)
@@ -440,12 +440,12 @@ namespace Yandex.Zen.Core.Services
             }
 
             // Клик по статье
-            heItemLabel.Click(instance.ActiveTab, rnd.Next(1000, 1500), true);
+            heItemLabel.Click(Instance.ActiveTab, Rnd.Next(1000, 1500), true);
 
             // Обработка ошибки, если не удалось загрузить страницу из-за прокси
-            if (!instance.ActiveTab.FindElementByXPath("//span[@jsselect='heading' and text()!='']", 0).IsNullOrVoid() || instance.ActiveTab.URL.Contains("about:blank"))
+            if (!Instance.ActiveTab.FindElementByXPath("//span[@jsselect='heading' and text()!='']", 0).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("about:blank"))
             {
-                urlWalk = instance.ActiveTab.URL;
+                urlWalk = Instance.ActiveTab.URL;
 
                 CloseTabs(sourceUrl, openSourceTab);
 
@@ -463,10 +463,10 @@ namespace Yandex.Zen.Core.Services
 
             stopwatch.Start();
 
-            if (!instance.ActiveTab.FindElementByXPath("//div[contains(@id, 'article') and contains(@id, 'left')]/descendant::div[contains(@class, 'sticky')]/descendant::button[contains(@class, 'left-column-button')]|//h1[contains(@class, 'article') and contains(@class, 'title')]", 0).IsNullOrVoid() || instance.ActiveTab.URL.Contains("zen.yandex.ru/media/"))
+            if (!Instance.ActiveTab.FindElementByXPath("//div[contains(@id, 'article') and contains(@id, 'left')]/descendant::div[contains(@class, 'sticky')]/descendant::button[contains(@class, 'left-column-button')]|//h1[contains(@class, 'article') and contains(@class, 'title')]", 0).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("zen.yandex.ru/media/"))
             {
                 // Обработка статьи
-                urlWalk = instance.ActiveTab.URL;
+                urlWalk = Instance.ActiveTab.URL;
                 contentType = "Article";
 
                 // Находиться на странице заданное количество времени (иначе обычный скроллинг).
@@ -491,10 +491,10 @@ namespace Yandex.Zen.Core.Services
                     var xpathCommentsBlock = new[] { "//div[contains(@class, 'article-comments')]/descendant::div[contains(@class, 'is-redesign') and contains(@class, 'without-paddings')]", "Блок комментариев" };
 
                     // Добавляем элементы в список для обработки
-                    hesArticle.AddRange(instance.ActiveTab.FindElementsByXPath(xpathButtonsLeftMenu[0]));
-                    hesArticle.AddRange(instance.ActiveTab.FindElementsByXPath(string.Join("|", xpathElementsArticles[0])));
-                    hesArticle.AddRange(instance.ActiveTab.FindElementsByXPath(xpathAdvertisingRightBlock[0]));
-                    hesArticle.AddRange(instance.ActiveTab.FindElementsByXPath(xpathCommentsBlock[0]));
+                    hesArticle.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathButtonsLeftMenu[0]));
+                    hesArticle.AddRange(Instance.ActiveTab.FindElementsByXPath(string.Join("|", xpathElementsArticles[0])));
+                    hesArticle.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathAdvertisingRightBlock[0]));
+                    hesArticle.AddRange(Instance.ActiveTab.FindElementsByXPath(xpathCommentsBlock[0]));
 
                     var counter = 0;
 
@@ -503,7 +503,7 @@ namespace Yandex.Zen.Core.Services
                         // Обработка ошибки, если элементы не найдены
                         if (hesArticle.Count == 0)
                         {
-                            urlWalk = instance.ActiveTab.URL;
+                            urlWalk = Instance.ActiveTab.URL;
 
                             if (_skipErrorOpenArticles)
                             {
@@ -524,7 +524,7 @@ namespace Yandex.Zen.Core.Services
                             counter = 0;
                         }
 
-                        instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(hesArticle[counter], rnd.Next(120, 150));
+                        Instance.ActiveTab.FullEmulationMouseMoveAboveHtmlElement(hesArticle[counter], Rnd.Next(120, 150));
 
                         if ((stopwatch.ElapsedMilliseconds / 1000) > setTimeInSeconds) break;
 
@@ -535,15 +535,15 @@ namespace Yandex.Zen.Core.Services
                 {
                     for (int i = 0; i < scrollIterationsOnSite; i++)
                     {
-                        instance.ActiveTab.FullEmulationMouseWheel(0, rnd.Next(600, 750));
-                        Thread.Sleep(rnd.Next(100, 150));
+                        Instance.ActiveTab.FullEmulationMouseWheel(0, Rnd.Next(600, 750));
+                        Thread.Sleep(Rnd.Next(100, 150));
                     }
                 }
             }
-            else if (!instance.ActiveTab.FindElementByXPath("//div[contains(@class, 'video-viewer-player')]/descendant::div[contains(@class, 'player-ratio')]", 0).IsNullOrVoid() || instance.ActiveTab.URL.Contains("zen.yandex.ru/#video"))
+            else if (!Instance.ActiveTab.FindElementByXPath("//div[contains(@class, 'video-viewer-player')]/descendant::div[contains(@class, 'player-ratio')]", 0).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("zen.yandex.ru/#video"))
             {
                 // Обработка видео
-                urlWalk = instance.ActiveTab.URL;
+                urlWalk = Instance.ActiveTab.URL;
                 contentType = "Video";
                 
                 var xpathButtonCloseVideo = new[] { "//div[contains(@class, 'zen-ui-modal') and contains(@class, 'scrollbar-fix')]/descendant::div[contains(@class, 'close-wrapper')]/descendant::button[contains(@class, 'close')]", "Кнопка - Закрыть видео" };
@@ -562,24 +562,24 @@ namespace Yandex.Zen.Core.Services
                 {
                     for (int i = 0; i < scrollIterationsOnSite; i++)
                     {
-                        instance.ActiveTab.FullEmulationMouseWheel(0, rnd.Next(600, 750));
-                        Thread.Sleep(rnd.Next(100, 150));
+                        Instance.ActiveTab.FullEmulationMouseWheel(0, Rnd.Next(600, 750));
+                        Thread.Sleep(Rnd.Next(100, 150));
                     }
                 }
 
                 // Закрыть видео
-                instance.FuncGetFirstHe(xpathButtonCloseVideo, false, true).Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                Instance.FuncGetFirstHe(xpathButtonCloseVideo, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
             }
             else
             {
                 // Обработка обычных сайтов (скроллинг страницы)
-                urlWalk = instance.ActiveTab.URL;
+                urlWalk = Instance.ActiveTab.URL;
                 contentType = "Site";
 
                 for (int i = 0; i < scrollIterationsOnSite; i++)
                 {
-                    instance.ActiveTab.FullEmulationMouseWheel(0, rnd.Next(600, 750));
-                    Thread.Sleep(rnd.Next(100, 150));
+                    Instance.ActiveTab.FullEmulationMouseWheel(0, Rnd.Next(600, 750));
+                    Thread.Sleep(Rnd.Next(100, 150));
                 }
             }
 
@@ -614,7 +614,7 @@ namespace Yandex.Zen.Core.Services
                 return false;
             }
 
-            heDislike.Click(instance.ActiveTab, rnd.Next(1000, 1500));
+            heDislike.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
             Logger.Write($"[Actions left: {_actionList.Count - 1}]\t[Item: {itemNumb}]\tДизлайк поставлен", LoggerType.Info, false, false, true);
             return true;
@@ -645,7 +645,7 @@ namespace Yandex.Zen.Core.Services
             
 
             // Клик по лайку
-            heLike.Click(instance.ActiveTab, rnd.Next(1000, 1500));
+            heLike.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
             // Проверка действия
             if (item.FindChildByXPath(xpathLike, 0).GetAttribute("aria-pressed").Contains("true"))
@@ -676,16 +676,16 @@ namespace Yandex.Zen.Core.Services
         private void CloseTabs(string sourceUrl, bool openSourceTab)
         {
             // Установка времени ожидания загрузки страницы
-            instance.ActiveTab.NavigateTimeout = 120;
+            Instance.ActiveTab.NavigateTimeout = 120;
 
             // Состояние занятости по умолчанию
             if (_individualStateBusyEnabled)
                 InstanceSettings.BusySettings.SetDefaultBusySettings();
 
-            var referrer = instance.ActiveTab.URL;
+            var referrer = Instance.ActiveTab.URL;
 
             // Закрытие ненужных вкладок
-            foreach (var tb in instance.AllTabs)
+            foreach (var tb in Instance.AllTabs)
             {
                 if (tb.URL == sourceUrl)
                 {
@@ -694,7 +694,7 @@ namespace Yandex.Zen.Core.Services
                 else tb.Close();
             }
 
-            if (!openSourceTab) instance.ActiveTab.Navigate(sourceUrl, referrer, true);
+            if (!openSourceTab) Instance.ActiveTab.Navigate(sourceUrl, referrer, true);
         }
 
         /// <summary>
@@ -709,7 +709,7 @@ namespace Yandex.Zen.Core.Services
             var xpathCheckboxAutoCity = new[] { "//div[contains(@class, 'checkbox') and contains(@class, 'city')]/descendant::span[contains(@class, 'checkbox_checked_yes')]", "Чекбокс автоматического определения страны" };
             var xpathButtonSave = new[] { "//button[contains(@class, 'save')]", "Кнопка - Сохранить" };
 
-            if (!instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
+            if (!Instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
             {
                 Logger.Write($"Боковое меню \"zen.yandex\" найдено", LoggerType.Info, false, false, false);
                 return true;
@@ -717,13 +717,13 @@ namespace Yandex.Zen.Core.Services
             else Logger.Write($"Отсутствует боковое меню \"zen.yandex\". Переход к смене geo", LoggerType.Info, true, false, true);
 
             //var sourceUrl = $"https://zen.yandex.{Domain}/";
-            var sourceUrl = instance.ActiveTab.URL;
+            var sourceUrl = Instance.ActiveTab.URL;
             var counterAttempt = 0;
 
             while (true)
             {
-                if (instance.ActiveTab.URL != sourceUrl)
-                    instance.ActiveTab.Navigate(sourceUrl, true);
+                if (Instance.ActiveTab.URL != sourceUrl)
+                    Instance.ActiveTab.Navigate(sourceUrl, true);
 
                 try
                 {
@@ -733,12 +733,12 @@ namespace Yandex.Zen.Core.Services
                         return false;
                     }
 
-                    if (instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
+                    if (Instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
                     {
-                        instance.ActiveTab.Navigate("https://yandex.ru/tune/geo", true);
+                        Instance.ActiveTab.Navigate("https://yandex.ru/tune/geo", true);
 
                         // Получаем поле страны
-                        var heFieldCity = instance.FuncGetFirstHe(xpathFieldCity, true, true, 5);
+                        var heFieldCity = Instance.FuncGetFirstHe(xpathFieldCity, true, true, 5);
 
                         // Очистить поле со страной
                         if (heFieldCity.GetAttribute("value") != "") heFieldCity.SetAttribute("value", "");
@@ -746,28 +746,28 @@ namespace Yandex.Zen.Core.Services
                         // Устанавливаем случайный русский город в поле со страной и вызываем событие "Enter"
                         heFieldCity.SetValue
                         (
-                            instance.ActiveTab, ListOfCities.GetListRussianCities().GetLine(LineOptions.Random),
-                            LevelEmulation.SuperEmulation, rnd.Next(3000, 3500), false, false, true, rnd.Next(3000, 3500)
+                            Instance.ActiveTab, ListOfCities.GetListRussianCities().GetLine(LineOptions.Random),
+                            LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, false, true, Rnd.Next(3000, 3500)
                         );
 
                         // Получаем активный чекбокс, если он не деактивирован сам и обрабатываем его
-                        var heCheckboxAutoCity = instance.FuncGetFirstHe(xpathCheckboxAutoCity, false, false);
+                        var heCheckboxAutoCity = Instance.FuncGetFirstHe(xpathCheckboxAutoCity, false, false);
 
                         if (!heCheckboxAutoCity.IsNullOrVoid())
                         {
-                            heCheckboxAutoCity.FindChildByXPath(".//input[contains(@class, 'checkbox') and contains(@class, 'checkbox')]", 0).Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                            heCheckboxAutoCity.FindChildByXPath(".//input[contains(@class, 'checkbox') and contains(@class, 'checkbox')]", 0).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                             Logger.Write($"Чекбокс автоматического определения geo не изменил своего состояния автоматически. Поэтому, была предпринята попытка ручного изменения состояния чекбокса", LoggerType.Info, true, false, false);
                         }
 
                         // Получаем кнопку сохранения изменений и обрабатываем её
-                        var heButtonSave = instance.FuncGetFirstHe(xpathButtonSave);
+                        var heButtonSave = Instance.FuncGetFirstHe(xpathButtonSave);
 
                         if (!heButtonSave.GetAttribute("disabled").Contains("disabled"))
                         {
-                            heButtonSave.Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                            heButtonSave.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
-                            instance.ActiveTab.Navigate(sourceUrl, true);
+                            Instance.ActiveTab.Navigate(sourceUrl, true);
                         }
                         else Logger.Write($"Что-то пошло не так и кнопка \"Сохранить\" не активна", LoggerType.Warning, true, true, false);
                     }
@@ -789,14 +789,14 @@ namespace Yandex.Zen.Core.Services
         {
             var xpathItems = new[] { "//div[contains(@class, 'desktop-interview-modal') and contains(@class, 'modal')]/descendant::div[contains(@class, 'container')]/descendant::div[contains(@class, 'single-choice-image') and contains(@class, 'list')]/descendant::div[contains(@class, 'item-image') and contains(@style, 'avatars')]", "Элементы оценки сервиса zen.yandex" };
 
-            var heItems = instance.ActiveTab.FindElementsByXPath(xpathItems[0]).ToList();
+            var heItems = Instance.ActiveTab.FindElementsByXPath(xpathItems[0]).ToList();
 
             if (heItems.Count == 3)
             {
                 var buttonText = string.Empty;
-                var index = rnd.Next(1, heItems.Count);
+                var index = Rnd.Next(1, heItems.Count);
 
-                heItems[index].Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                heItems[index].Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                 switch(index)
                 {
@@ -821,25 +821,25 @@ namespace Yandex.Zen.Core.Services
         /// <returns></returns>
         private bool ResourceHandler()
         {
-            var pathSharedFolderDonors = zenno.ExecuteMacro(zenno.Variables["cfgPathFolderDonors"].Value);
+            var pathSharedFolderDonors = Zenno.ExecuteMacro(Zenno.Variables["cfgPathFolderDonors"].Value);
 
             if (AccountsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"Таблица с аккаунтами/донорами пуста");
+                Program.StopTemplate(Zenno, $"Таблица с аккаунтами/донорами пуста");
                 return false;
             }
 
             // Проверяем наличие папки (создаем её, если нужно)
             if (string.IsNullOrWhiteSpace(pathSharedFolderDonors))
             {
-                Program.StopTemplate(zenno, $"Не указана папка с донорами");
+                Program.StopTemplate(Zenno, $"Не указана папка с донорами");
                 return false;
             }
             else if (!Directory.Exists(pathSharedFolderDonors))
             {
                 if (!CreateFolderResourceIfNotExist)
                 {
-                    Program.StopTemplate(zenno, $"Указанная папка с донорами не существует");
+                    Program.StopTemplate(Zenno, $"Указанная папка с донорами не существует");
                     return false;
                 }
                 else Directory.CreateDirectory(pathSharedFolderDonors);
@@ -859,7 +859,7 @@ namespace Yandex.Zen.Core.Services
                     {
                         CurrentResourceAtWork = ResourceType.Account;
                         Login = login;
-                        ResourceDirectory = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                        ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
                     }
                     else if (!string.IsNullOrWhiteSpace(donor))
                     {
@@ -874,7 +874,7 @@ namespace Yandex.Zen.Core.Services
                             {
                                 CurrentResourceAtWork = ResourceType.Account;
                                 Login = login;
-                                ResourceDirectory = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                                ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
                             }
                         }
 
@@ -919,7 +919,7 @@ namespace Yandex.Zen.Core.Services
 
                     if (logList.Count != 0)
                     {
-                        var timeFromLastWalk = int.Parse(zenno.Variables["cfgTimeFromLastWalk"].Value) * 60;
+                        var timeFromLastWalk = int.Parse(Zenno.Variables["cfgTimeFromLastWalk"].Value) * 60;
                         var lastUnixtime = int.Parse(Logger.GetRegexPatternForAccountLog(LogFilter.WalkingUnixtime).Match(logList.Last()).Value);
                         var nowUnixtime = Logger.GetUnixtime();
                         var calculationUnixtimeResult = nowUnixtime - lastUnixtime;
@@ -983,14 +983,14 @@ namespace Yandex.Zen.Core.Services
                     //var additionalLog = IpInfo != null ? $" | proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 
                     // Успешное получение ресурса
-                    Program.ResourcesMode.Add(Login);
-                    Program.ResourcesAllThreadsInWork.Add(Login);
+                    Program.CurrentObjectCache.Add(Login);
+                    Program.ObjectsOfAllThreadsInWork.Add(Login);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт/донор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }
 
                 // Не удалось получить ресурс
-                Program.ResetExecutionCounter(zenno);
+                Program.ResetExecutionCounter(Zenno);
                 Logger.Write($"Отсутствуют свободные/подходящие аккаунты/доноры", LoggerType.Info, false, true, true, LogColor.Violet);
                 return false;
             }

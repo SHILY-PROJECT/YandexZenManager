@@ -148,7 +148,7 @@ namespace Yandex.Zen.Core.Tools
                     else if (!heReSendSmsCode.IsNullOrVoid())
                     {
                         Logger.Write($"{phoneLog}[Status sms code: {sms_code}]\tПовторная попытка отправки sms кода", LoggerType.Info, true, false);
-                        heReSendSmsCode.Click(instance.ActiveTab, rnd.Next(150, 500));
+                        heReSendSmsCode.Click(Instance.ActiveTab, Rnd.Next(150, 500));
                         continue;
                     }
                 }

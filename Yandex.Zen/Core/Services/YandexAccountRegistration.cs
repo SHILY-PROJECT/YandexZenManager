@@ -49,19 +49,19 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public YandexAccountRegistration()
         {
-            AccountsTable = zenno.Tables["DonorsForRegistration"];
+            AccountsTable = Zenno.Tables["DonorsForRegistration"];
 
-            instance.UseFullMouseEmulation = true;
+            Instance.UseFullMouseEmulation = true;
 
-            _transferDonorWithNewName = bool.Parse(zenno.Variables["cfgTransferDonorWithNewName"].Value);
-            ShorDonorNameForLog = bool.Parse(zenno.Variables["cfgShorDonorNameForLog"].Value);
+            _transferDonorWithNewName = bool.Parse(Zenno.Variables["cfgTransferDonorWithNewName"].Value);
+            ShorDonorNameForLog = bool.Parse(Zenno.Variables["cfgShorDonorNameForLog"].Value);
 
-            TableGeneralAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileAccounts"].Value));
-            TableModeAccountFile = new FileInfo(zenno.ExecuteMacro(zenno.Variables["cfgPathFileDonorsForRegistration"].Value));
+            TableGeneralAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileAccounts"].Value));
+            TableModeAccountFile = new FileInfo(Zenno.ExecuteMacro(Zenno.Variables["cfgPathFileDonorsForRegistration"].Value));
             TableGeneralAndTableModeIsSame = TableGeneralAccountFile.FullName.ToLower() == TableModeAccountFile.FullName.ToLower();
 
-            var actionsBeforeRegistration = zenno.Variables["cfgActionsBeforeRegistrationYandexAccount"].Value;
-            var skipWalkingOnZen = zenno.Variables["cfgSkipWalkingOnZenForRegistrationYandex"].Value;
+            var actionsBeforeRegistration = Zenno.Variables["cfgActionsBeforeRegistrationYandexAccount"].Value;
+            var skipWalkingOnZen = Zenno.Variables["cfgSkipWalkingOnZenForRegistrationYandex"].Value;
             _beforeRegistrationCheckCaptcha = actionsBeforeRegistration.Contains("Перед регой идти в поисковик yandex и разгадывать капчу");
             _beforeRegistrationGoToWalkingZen = actionsBeforeRegistration.Contains("Перед регой идти погулять на zen.yandex");
             _useOnlyThoseAccountsThatHaveWalkedThroughZen = skipWalkingOnZen.Contains("Использовать только те доноры, которые уже гуляли по zen.yandex");
@@ -73,21 +73,21 @@ namespace Yandex.Zen.Core.Services
             //NumbDislikeToZen = zenno.Variables["cfgNumbDislikeToZen"].ExtractNumber();  // количество статей дизлайкать.
             //StepBetweenItems = zenno.Variables["cfgStepBetweenItems"].Value;            // количество статей пропускать.
 
-            _uploadAvatarAfterRegistration = bool.Parse(zenno.Variables["cfgUploadAvatarToYandex"].Value);            
+            _uploadAvatarAfterRegistration = bool.Parse(Zenno.Variables["cfgUploadAvatarToYandex"].Value);            
 
-            var sharedFolderDonors = zenno.ExecuteMacro(zenno.Variables["cfgPathFolderDonors"].Value);
+            var sharedFolderDonors = Zenno.ExecuteMacro(Zenno.Variables["cfgPathFolderDonors"].Value);
 
             // Проверяем наличие аккаунтов в таблице
             if (AccountsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"[{TableModeAccountFile.FullName}]\tТаблица с донорами пуста");
+                Program.StopTemplate(Zenno, $"[{TableModeAccountFile.FullName}]\tТаблица с донорами пуста");
                 return;
             }
 
             // Проверяем наличие папки (создаем её, если нужно)
             if (string.IsNullOrWhiteSpace(sharedFolderDonors))
             {
-                Program.StopTemplate(zenno, $"Не указана папка с донорами");
+                Program.StopTemplate(Zenno, $"Не указана папка с донорами");
                 return;
             }
             else _generalFolderDonors = new DirectoryInfo(sharedFolderDonors);
@@ -96,7 +96,7 @@ namespace Yandex.Zen.Core.Services
             {
                 if (!CreateFolderResourceIfNotExist)
                 {
-                    Program.StopTemplate(zenno, $"Указанная общая папка с донорами не существует");
+                    Program.StopTemplate(Zenno, $"Указанная общая папка с донорами не существует");
                     return;
                 }
                 else _generalFolderDonors.Create();
@@ -108,11 +108,11 @@ namespace Yandex.Zen.Core.Services
                 {"Регистрироваться по прямой ссылке", RegistrationStartPageEnum.RegistrationByDirectLink},
                 {"Регистрироваться через поиск", RegistrationStartPageEnum.RegisterThroughSearch}
             }
-            .TryGetValue(zenno.Variables["cfgYandexRegistrationStartPage"].Value, out _registrationStartPage);
+            .TryGetValue(Zenno.Variables["cfgYandexRegistrationStartPage"].Value, out _registrationStartPage);
 
             if (!statusConvertStartPage)
             {
-                Program.StopTemplate(zenno, $"Не удалось определить режим стартовой страницы регистрации");
+                Program.StopTemplate(Zenno, $"Не удалось определить режим стартовой страницы регистрации");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace Yandex.Zen.Core.Services
                     {"Ключевики из файла", SourceSearchKeysTypeEnum.FromFile},
                     {"Ключевики из настроек", SourceSearchKeysTypeEnum.FromSettings}
                 }
-                .TryGetValue(zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
+                .TryGetValue(Zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
 
                 if (!statusSourceSearchKeysType)
                 {
@@ -192,11 +192,11 @@ namespace Yandex.Zen.Core.Services
             foreach(var url in urlList)
             {
                 // Переходим к поисковой системе
-                instance.ActiveTab.Navigate(url, true);
+                Instance.ActiveTab.Navigate(url, true);
 
                 AcceptingPrivacyPolicyCookie();
 
-                var heFieldSearch = instance.FuncGetFirstHe(xpathFieldSearch, false, false);
+                var heFieldSearch = Instance.FuncGetFirstHe(xpathFieldSearch, false, false);
 
                 if (heFieldSearch.IsNullOrVoid())
                 {
@@ -204,9 +204,9 @@ namespace Yandex.Zen.Core.Services
                     return false;
                 }
 
-                heFieldSearch.SetValue(instance.ActiveTab, key, LevelEmulation.SuperEmulation, rnd.Next(150, 500), false, false, true, rnd.Next(150, 500));
+                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, false, true, Rnd.Next(150, 500));
 
-                var heItems = instance.FuncGetHeCollection(xpathItemsPage, false, false, 5);
+                var heItems = Instance.FuncGetHeCollection(xpathItemsPage, false, false, 5);
 
                 if (heItems == null || heItems.Count == 0)
                 {
@@ -268,18 +268,18 @@ namespace Yandex.Zen.Core.Services
 
                         try
                         {
-                            instance.ActiveTab.Navigate($"https://yandex.{Domain}/", true);
+                            Instance.ActiveTab.Navigate($"https://yandex.{Domain}/", true);
 
                             AcceptingPrivacyPolicyCookie();
 
-                            instance.FuncGetFirstHe($"//a[contains(@href, 'https://yandex.{Domain}/all')]", "Все сервисы яндекс", false, false).Click(instance.ActiveTab, rnd.Next(150, 500));
+                            Instance.FuncGetFirstHe($"//a[contains(@href, 'https://yandex.{Domain}/all')]", "Все сервисы яндекс", false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
-                            instance.FuncGetFirstHe("//div[@class='main']/descendant::a[@id='tab-mail']|//li[contains(@class, 'services')]/descendant::a[contains(@data-id, 'mail')]", "Tab Почта", true, true, 10).Click(instance.ActiveTab, rnd.Next(150, 500));
-                            instance.FuncGetFirstHe("//div[contains(@class, 'HeadBanne')]/descendant::a[contains(@href, 'registration')]/span", "Создать аккаунт", true, true, 10).Click(instance.ActiveTab, rnd.Next(150, 500));
+                            Instance.FuncGetFirstHe("//div[@class='main']/descendant::a[@id='tab-mail']|//li[contains(@class, 'services')]/descendant::a[contains(@data-id, 'mail')]", "Tab Почта", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                            Instance.FuncGetFirstHe("//div[contains(@class, 'HeadBanne')]/descendant::a[contains(@href, 'registration')]/span", "Создать аккаунт", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
                         }
                         catch { continue; }
 
-                        if (!instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
+                        if (!Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
                         {
                             Logger.Write($"Форма регистрации успешно загружена. Переход к заполнению формы", LoggerType.Info, true, false, true);
                             break;
@@ -291,9 +291,9 @@ namespace Yandex.Zen.Core.Services
 
                     Logger.Write($"[{urlReg}]\tРегистрация через прямую ссылку", LoggerType.Info, true, false, false);
 
-                    instance.ActiveTab.Navigate(urlReg, true);
+                    Instance.ActiveTab.Navigate(urlReg, true);
 
-                    if (!instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
+                    if (!Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
                         Logger.Write($"Форма регистрации успешно загружена. Переход к заполнению формы", LoggerType.Info, true, false, true);
                     break;
             }
@@ -310,21 +310,21 @@ namespace Yandex.Zen.Core.Services
 
                 try
                 {
-                    heFieldFirstName = instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7);
-                    heFieldLastName = instance.FuncGetFirstHe("//input[@id='lastname']", "Фамилия");
-                    heFieldPassword = instance.FuncGetFirstHe("//input[@id='password']", "Пароль");
-                    heFieldPasswordConfirm = instance.FuncGetFirstHe("//input[@id='password_confirm']", "Подтверждение пароля");
-                    heFieldLogin = instance.FuncGetFirstHe("//input[@id='login']", "Логин");                  
-                    heButtonNoPhone = instance.FuncGetFirstHe("//div[contains(@class, 'no-phone')]/span[text()!='']", "У меня нет телефона");
-                    heButtonSubmit = instance.FuncGetFirstHe("//div[contains(@class, 'submit')]/descendant::button[@type='submit']", "Зарегистрироваться");
+                    heFieldFirstName = Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7);
+                    heFieldLastName = Instance.FuncGetFirstHe("//input[@id='lastname']", "Фамилия");
+                    heFieldPassword = Instance.FuncGetFirstHe("//input[@id='password']", "Пароль");
+                    heFieldPasswordConfirm = Instance.FuncGetFirstHe("//input[@id='password_confirm']", "Подтверждение пароля");
+                    heFieldLogin = Instance.FuncGetFirstHe("//input[@id='login']", "Логин");                  
+                    heButtonNoPhone = Instance.FuncGetFirstHe("//div[contains(@class, 'no-phone')]/span[text()!='']", "У меня нет телефона");
+                    heButtonSubmit = Instance.FuncGetFirstHe("//div[contains(@class, 'submit')]/descendant::button[@type='submit']", "Зарегистрироваться");
                 }
                 catch { continue; }
 
-                heFieldFirstName.SetValue(instance.ActiveTab, _firstName, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                heFieldLastName.SetValue(instance.ActiveTab, _lastName, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                heFieldPassword.SetValue(instance.ActiveTab, Password, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                heFieldPasswordConfirm.Click(instance.ActiveTab, rnd.Next(150, 500));
-                heFieldPasswordConfirm.SetValue(instance.ActiveTab, Password, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
+                heFieldFirstName.SetValue(Instance.ActiveTab, _firstName, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                heFieldLastName.SetValue(Instance.ActiveTab, _lastName, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                heFieldPassword.SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                heFieldPasswordConfirm.Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                heFieldPasswordConfirm.SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
                 
                 try
                 {
@@ -338,13 +338,13 @@ namespace Yandex.Zen.Core.Services
                             throw new Exception();
                         }
 
-                        heFieldLogin.Click(instance.ActiveTab, rnd.Next(500, 1000));
-                        heLoginsList = instance.FuncGetHeCollection(xpathLoginList, false);
+                        heFieldLogin.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                        heLoginsList = Instance.FuncGetHeCollection(xpathLoginList, false);
 
                         if (heLoginsList == null) continue;
 
-                        heRandLogin = heLoginsList.GetByNumber(rnd.Next(0, heLoginsList.Count));
-                        heRandLogin.Click(instance.ActiveTab, rnd.Next(2000, 2500));
+                        heRandLogin = heLoginsList.GetByNumber(Rnd.Next(0, heLoginsList.Count));
+                        heRandLogin.Click(Instance.ActiveTab, Rnd.Next(2000, 2500));
 
                         if (!string.IsNullOrWhiteSpace(heFieldLogin.GetValue()))
                         {
@@ -352,24 +352,24 @@ namespace Yandex.Zen.Core.Services
                             break;
                         }
 
-                        heFieldFirstName.SetValue(instance.ActiveTab, _firstName, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
+                        heFieldFirstName.SetValue(Instance.ActiveTab, _firstName, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
                     }
                 }
                 catch { continue; }
 
-                heButtonNoPhone.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                heButtonNoPhone.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 try
                 {                    
-                    heQuestion = instance.FuncGetFirstHe(xpathQuestion);
-                    heQuestionOptions = instance.FuncGetHeCollection(xpathQuestionOptions, true, true, 7);
-                    heFieldAnswer = instance.FuncGetFirstHe(xpathFieldAnswer);
+                    heQuestion = Instance.FuncGetFirstHe(xpathQuestion);
+                    heQuestionOptions = Instance.FuncGetHeCollection(xpathQuestionOptions, true, true, 7);
+                    heFieldAnswer = Instance.FuncGetFirstHe(xpathFieldAnswer);
                 }
                 catch { continue; }
 
-                heQuestion.SetValue(instance.ActiveTab, heQuestionOptions.GetByNumber(rnd.Next((heQuestionOptions.Count - 1))).GetAttribute("innerhtml"), LevelEmulation.SuperEmulation, rnd.Next(500, 1000), true);
-                heQuestion.Click(instance.ActiveTab, rnd.Next(150, 500));
-                heFieldAnswer.SetValue(instance.ActiveTab, Answer, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
+                heQuestion.SetValue(Instance.ActiveTab, heQuestionOptions.GetByNumber(Rnd.Next((heQuestionOptions.Count - 1))).GetAttribute("innerhtml"), LevelEmulation.SuperEmulation, Rnd.Next(500, 1000), true);
+                heQuestion.Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                heFieldAnswer.SetValue(Instance.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
 
                 // Обработка капчи
                 var counterAttemptsRecognitionCaptcha = 0;
@@ -385,8 +385,8 @@ namespace Yandex.Zen.Core.Services
                             throw new Exception(textLog);
                         }
 
-                        heFieldCaptcha = instance.FuncGetFirstHe(xpathFieldCaptcha);
-                        heImgCaptcha = instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10);
+                        heFieldCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha);
+                        heImgCaptcha = Instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10);
 
                         try
                         {
@@ -400,21 +400,21 @@ namespace Yandex.Zen.Core.Services
                             if (heFieldCaptcha.GetAttribute("value") != "") heFieldCaptcha.SetAttribute("value", "");
 
                             // Ввод капчи
-                            heFieldCaptcha.SetValue(instance.ActiveTab, captcha, LevelEmulation.SuperEmulation, rnd.Next(500, 1000));
-                            heButtonSubmit.Click(instance.ActiveTab, rnd.Next(3000, 4000));
+                            heFieldCaptcha.SetValue(Instance.ActiveTab, captcha, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                            heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(3000, 4000));
 
                             var counterWaitEndRegistration = 0;
 
-                            instance.ActiveTab.NavigateTimeout = 20;
+                            Instance.ActiveTab.NavigateTimeout = 20;
 
                             while (true)
                             {
                                 if (++counterWaitEndRegistration > 30) throw new Exception($"Превышено время ожидания окончания регистрации");
 
-                                if (!instance.FuncGetFirstHe(xpathCheckElementsGoodRegistration, false, false).IsNullOrVoid())
+                                if (!Instance.FuncGetFirstHe(xpathCheckElementsGoodRegistration, false, false).IsNullOrVoid())
                                 {
                                     // Пропустить предложение о загрузку аватара после регистрации
-                                    instance.FuncGetFirstHe(xptahSkipUploadAvatar, false, false, 0).Click(instance.ActiveTab, rnd.Next(1000, 1500)); ;
+                                    Instance.FuncGetFirstHe(xptahSkipUploadAvatar, false, false, 0).Click(Instance.ActiveTab, Rnd.Next(1000, 1500)); ;
 
                                     // Сохранение данных аккаунта
                                     SaveAccountData();
@@ -434,15 +434,15 @@ namespace Yandex.Zen.Core.Services
                                     return;
                                 }
 
-                                if (instance.FuncGetFirstHe(xpathCaptchaError, false, false, 1) != null)
+                                if (Instance.FuncGetFirstHe(xpathCaptchaError, false, false, 1) != null)
                                 {
-                                    instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10).Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                                    Instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
                                     throw new Exception($"Капча введена неверно");
                                 }
 
-                                hePrivacyPolicy = instance.FuncGetFirstHe("//div[contains(@class, 'eula-popup-wrapper')]/descendant::button", "Privacy Policy and Terms of Use", false, false, 1);
+                                hePrivacyPolicy = Instance.FuncGetFirstHe("//div[contains(@class, 'eula-popup-wrapper')]/descendant::button", "Privacy Policy and Terms of Use", false, false, 1);
 
-                                if (hePrivacyPolicy != null) hePrivacyPolicy.Click(instance.ActiveTab, rnd.Next(150, 500));
+                                if (hePrivacyPolicy != null) hePrivacyPolicy.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                                 Thread.Sleep(1000);
                             }
@@ -463,7 +463,7 @@ namespace Yandex.Zen.Core.Services
         private void SaveAccountData()
         {
             var datetime = Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss);
-            var countryProfileAndProxy = $"{zenno.Profile.Country}/{IpInfo.CountryFullName} - {IpInfo.CountryShortName}";
+            var countryProfileAndProxy = $"{Zenno.Profile.Country}/{IpInfo.CountryFullName} - {IpInfo.CountryShortName}";
 
             Logger.MakeBackupData(new List<string>
             {
@@ -502,12 +502,12 @@ namespace Yandex.Zen.Core.Services
             
             if (_transferDonorWithNewName)
             {
-                dirTarget = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                dirTarget = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
                 endTextLog = "(с новым именем)";
             }
             else
             {
-                dirTarget = new DirectoryInfo($@"{zenno.Directory}\Accounts\{ResourceDirectory.Name}");
+                dirTarget = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{ResourceDirectory.Name}");
                 endTextLog = "(с исходным именем)";
             }
 
@@ -628,14 +628,14 @@ namespace Yandex.Zen.Core.Services
                     Answer = TextMacros.GenerateString(9, "c");
 
                     // Успешное получение ресурса
-                    Program.ResourcesMode.Add(InstUrl);
-                    Program.ResourcesAllThreadsInWork.Add(InstUrl);
+                    Program.CurrentObjectCache.Add(InstUrl);
+                    Program.ObjectsOfAllThreadsInWork.Add(InstUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }
 
                 // Не удалось получить ресурс
-                Program.ResetExecutionCounter(zenno);
+                Program.ResetExecutionCounter(Zenno);
                 Logger.Write($"Отсутствуют свободные/подходящие доноры", LoggerType.Info, false, true, true, LogColor.Violet);
                 return false;
             }

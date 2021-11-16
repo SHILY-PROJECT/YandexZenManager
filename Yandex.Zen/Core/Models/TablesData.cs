@@ -8,12 +8,12 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Services.Models
 {
-    public class Tables
+    public class TablesData
     {
-        public IZennoTable GeneralAccountsTable { get; set; }
-        public IZennoTable ModeAccountTable { get; set; }
+        public IZennoTable GeneralAccounts { get; set; }
+        public IZennoTable ModeAccounts { get; set; }
         public FileInfo GeneralAccountFile { get; set; }
         public FileInfo ModeAccountFile { get; set; }
-        public static bool GeneralAndModeIsSame { get; set; }
+        public static bool GeneralAndModeIsEquivalent { get; set; }
     }
 }

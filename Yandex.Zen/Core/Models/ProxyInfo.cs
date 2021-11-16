@@ -58,7 +58,7 @@ namespace Yandex.Zen.Core.Models
                 var httpResponse = ZennoPoster.HTTP.Request
                 (
                     HttpMethod.GET, $"https://ipinfo.io/{ip}", "", "", "", "UTF-8",
-                    ResponceType.BodyOnly, 20000, "", ServiceComponents.zenno.Profile.UserAgent, true, 5
+                    ResponceType.BodyOnly, 20000, "", ServiceComponents.Zenno.Profile.UserAgent, true, 5
                 );
 
                 proxyInfo.CountryShortName = Regex.Replace(ZennoPoster.Parser.ParseByXpath(httpResponse, "//a[contains(@href, '/countries/')]", "href").First(), @"/countries/.*?", "");

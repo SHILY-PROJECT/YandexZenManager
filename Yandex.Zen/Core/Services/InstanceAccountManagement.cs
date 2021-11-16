@@ -39,7 +39,7 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public InstanceAccountManagement()
         {
-            AccountsTable = zenno.Tables["AccountsShared"];
+            AccountsTable = Zenno.Tables["AccountsShared"];
 
             // Ручное управление аккаунтом в инстансе - Конвертация типа режима обработки аккаунтов
             var statusAccountProcessingMode = new Dictionary<string, AccountProcessingModeEnum>()
@@ -47,7 +47,7 @@ namespace Yandex.Zen.Core.Services
                 {"Обрабатывать только первый логин", AccountProcessingModeEnum.FirstLoginOnly},
                 {"Все логины по порядку", AccountProcessingModeEnum.AllLoginsInOrder}
             }
-            .TryGetValue(zenno.Variables["cfgManagingAnInstanceAccountProcessingMode"].Value, out _accountProcessingMode);
+            .TryGetValue(Zenno.Variables["cfgManagingAnInstanceAccountProcessingMode"].Value, out _accountProcessingMode);
 
             if (!statusAccountProcessingMode)
             {
@@ -65,7 +65,7 @@ namespace Yandex.Zen.Core.Services
                 { "zen.yandex/media/zen/login", StartPageInstanceEnum.ZenYandexMediaZenLogin },
                 { "passport.yandex/profile", StartPageInstanceEnum.PassportYandexProfile }
             }
-            .TryGetValue(zenno.Variables["cfgStartPageForInstanceAccountManagement"].Value, out _startPageInstance);
+            .TryGetValue(Zenno.Variables["cfgStartPageForInstanceAccountManagement"].Value, out _startPageInstance);
 
             if (!statusGoodGetStartPage)
             {
@@ -92,7 +92,7 @@ namespace Yandex.Zen.Core.Services
                 { "9 часов", 32400 },
                 { "10 часов", 36000 }
             }
-            .TryGetValue(zenno.Variables["cfgShowInstanceOnWaitSeconds"].Value, out _showInstanceOnWaitSeconds);
+            .TryGetValue(Zenno.Variables["cfgShowInstanceOnWaitSeconds"].Value, out _showInstanceOnWaitSeconds);
 
             if (!statusShowInstanceOnWaitSeconds)
             {
@@ -100,7 +100,7 @@ namespace Yandex.Zen.Core.Services
                 return;
             }
 
-            _loginList = zenno.Variables["cfgLoginsFromSettings"].Value.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            _loginList = Zenno.Variables["cfgLoginsFromSettings"].Value.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
             if (_loginList.Count == 0)
             {
@@ -114,12 +114,12 @@ namespace Yandex.Zen.Core.Services
                 if (ThreadInWork)
                 {
                     Logger.Write("Режим может работать только в один поток", LoggerType.Info, false, true, true, LogColor.Violet);
-                    Program.ResetExecutionCounter(zenno);
+                    Program.ResetExecutionCounter(Zenno);
                     return;
                 }
                 else
                 {
-                    Program.ResourcesMode.Add("first_thread_in_work");
+                    Program.CurrentObjectCache.Add("first_thread_in_work");
                     ThreadInWork = true;
                     _launchIsAllowed = true;
                 }
@@ -154,8 +154,8 @@ namespace Yandex.Zen.Core.Services
 
             Logger.Write($"Стартовая страница: {url}", LoggerType.Info, true, false, true);
 
-            instance.NavigateInNewTab(Login, url);
-            instance.AllTabs.ToList().ForEach(x => { if (x.Name != Login) x.Close(); });
+            Instance.NavigateInNewTab(Login, url);
+            Instance.AllTabs.ToList().ForEach(x => { if (x.Name != Login) x.Close(); });
 
             IntPtr hWnd = FindWindowByCaption(IntPtr.Zero, uniqueTitle);
             new Thread(() =>
@@ -171,7 +171,7 @@ namespace Yandex.Zen.Core.Services
 
             Logger.Write("Запускается инстанс для ручного управления...", LoggerType.Info, true, false, true, LogColor.Blue);
 
-            instance.WaitForUserAction(waitSec);
+            Instance.WaitForUserAction(waitSec);
             ProfileWorker.SaveProfile(true);
 
             Logger.Write("Обработка аккаунта в ручном режиме успешно завершена", LoggerType.Info, true, false, true, LogColor.Green);
@@ -196,12 +196,12 @@ namespace Yandex.Zen.Core.Services
                     }
                 }
 
-                ShowOnTopUserAction(instance.FormTitle, _showInstanceOnWaitSeconds);
+                ShowOnTopUserAction(Instance.FormTitle, _showInstanceOnWaitSeconds);
 
                 if (_accountProcessingMode == AccountProcessingModeEnum.FirstLoginOnly) break;
 
-                instance.ClearCookie();
-                instance.ClearCache();
+                Instance.ClearCookie();
+                Instance.ClearCache();
             }
         }
 
@@ -229,7 +229,7 @@ namespace Yandex.Zen.Core.Services
                     if (login == loginFromTabel)
                     {
                         Login = login;
-                        ResourceDirectory = new DirectoryInfo($@"{zenno.Directory}\Accounts\{Login}");
+                        ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
                         Logger.LogResourceText = $"[Login: {Login}]\t";
 

@@ -100,7 +100,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static OtherSettings GetCurrentOtherSettings()
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 var instanceSettings = new OtherSettings
                 {
@@ -125,7 +125,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetOtherSettings(OtherSettings otherSettings)
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 instance.LoadPictures = otherSettings.LoadPictures;                  // Загрузка картинок
                 instance.DownloadActiveX = otherSettings.DownloadActiveX;            // Загрузка ActiveX
@@ -145,7 +145,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetDefaultOtherSettings()
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 instance.LoadPictures = true;         // Загрузка картинок
                 instance.DownloadActiveX = true;      // Загрузка ActiveX
@@ -191,7 +191,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static BusySettings GetCurrentBusySettings()
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 var instanceSettings = new BusySettings
                 {
@@ -206,7 +206,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetBusySettings(BusySettings busySettings)
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = busySettings.IgnoreAdditionalRequests;
                 instance.IgnoreAjaxRequests = busySettings.IgnoreAjaxRequests;
@@ -216,7 +216,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetDefaultBusySettings()
             {
-                var instance = ServiceComponents.instance;
+                var instance = ServiceComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = false;  // Игнорировать Post/Get-запросы
                 instance.IgnoreAjaxRequests = false;        // Игнорировать Ajax-запросы

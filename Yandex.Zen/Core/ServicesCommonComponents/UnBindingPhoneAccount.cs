@@ -27,7 +27,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
             HtmlElement heShowPhoneIsHidden;
             string job_id = string.Empty, sms_code = string.Empty, statusRetryGet = string.Empty;
 
-            var refferer = instance.ActiveTab.URL;
+            var refferer = Instance.ActiveTab.URL;
 
             var xpathShowPhone = "//div[contains(@class, 'p-mails') and contains(@class, 'p-mails')]/descendant::div[contains(@class, 'Section-arrow')]";
             var xpathShowPhoneIsHidden = "//div[contains(@class, 'p-mails') and contains(@class, 'p-mails') and contains(@class, 'isHidden')]/descendant::div[contains(@class, 'Section-arrow')]";
@@ -53,19 +53,19 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
 
                 try
                 {
-                    instance.ActiveTab.Navigate("https://passport.yandex.ru/profile", refferer, true);
+                    Instance.ActiveTab.Navigate("https://passport.yandex.ru/profile", refferer, true);
 
                     // Проверяем наличие нужного элемента и раскрытие блока с редактированием номера, а так же, переход к самому редактированию
-                    instance.FuncGetFirstHe(xpathShowPhone, "Кнопка - Раскрыть информацию о номере", true, true, 7);
+                    Instance.FuncGetFirstHe(xpathShowPhone, "Кнопка - Раскрыть информацию о номере", true, true, 7);
 
-                    heShowPhoneIsHidden = instance.FuncGetFirstHe(xpathShowPhoneIsHidden, "Кнопка - Раскрыть информацию о номере", false, false);
+                    heShowPhoneIsHidden = Instance.FuncGetFirstHe(xpathShowPhoneIsHidden, "Кнопка - Раскрыть информацию о номере", false, false);
 
-                    if (!heShowPhoneIsHidden.IsNullOrVoid()) heShowPhoneIsHidden.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                    if (!heShowPhoneIsHidden.IsNullOrVoid()) heShowPhoneIsHidden.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
-                    instance.FuncGetFirstHe(xpathEditPhone, "Кнопка - Изменить список").Click(instance.ActiveTab, rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathEditPhone, "Кнопка - Изменить список").Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                     // Удаление номера
-                    instance.FuncGetFirstHe(xpathButtonRemove, "Кнопка - Удалить номер", true, true, 7).Click(instance.ActiveTab, rnd.Next(150, 500));
+                    Instance.FuncGetFirstHe(xpathButtonRemove, "Кнопка - Удалить номер", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение ID задания
                     var fileInfoLogAccount = Logger.GetLogAccountFileInfo(ResourceDirectory.FullName);
@@ -92,10 +92,10 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                             statusRetryGet = ZennoPoster.Sms.SetStatus(Program.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, Program.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
-                            instance.FuncGetFirstHe(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(instance.ActiveTab, rnd.Next(150, 500));
+                            Instance.FuncGetFirstHe(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                             // Получение кода
-                            sms_code = PhoneService.GetSmsCode(job_id, 1, instance.FuncGetFirstHe(xpathButtonReSendSmsCode, true, true), 3);
+                            sms_code = PhoneService.GetSmsCode(job_id, 1, Instance.FuncGetFirstHe(xpathButtonReSendSmsCode, true, true), 3);
                         }
                         catch (Exception ex)
                         {
@@ -104,16 +104,16 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                         }
                     }
 
-                    instance.FuncGetFirstHe(xpathFieldSmsCode).SetValue(instance.ActiveTab, sms_code, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                    instance.FuncGetFirstHe(xpathFieldPassword).SetValue(instance.ActiveTab, Password, LevelEmulation.SuperEmulation, rnd.Next(150, 500));
-                    instance.FuncGetFirstHe(xpathButtonConfirm).Click(instance.ActiveTab, rnd.Next(2000, 3000));
+                    Instance.FuncGetFirstHe(xpathFieldSmsCode).SetValue(Instance.ActiveTab, sms_code, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    Instance.FuncGetFirstHe(xpathButtonConfirm).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
 
-                    var heButtonCloseGoodWindow = instance.FuncGetFirstHe(xpathButtonCloseGoodWindow, false, false, 5);
+                    var heButtonCloseGoodWindow = Instance.FuncGetFirstHe(xpathButtonCloseGoodWindow, false, false, 5);
 
                     if (!heButtonCloseGoodWindow.IsNullOrVoid() || !CheckPhoneInPassportYandex())
                     {
                         if (!heButtonCloseGoodWindow.IsNullOrVoid())
-                            heButtonCloseGoodWindow.Click(instance.ActiveTab, rnd.Next(150, 500));
+                            heButtonCloseGoodWindow.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                         Logger.Write($"[AccountLinking:Untied]\tНомер успешно отвязан", LoggerType.Warning, true, true, true, LogColor.Green);
                     }
@@ -146,8 +146,8 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         {
             var httpResponse = ZennoPoster.HTTP.Request
             (
-                HttpMethod.GET, "https://passport.yandex.ru/profile", proxy: instance.GetProxy(), Encoding: "utf-8", respType: ResponceType.BodyOnly,
-                Timeout: 30000, UserAgent: zenno.Profile.UserAgent, cookieContainer: zenno.Profile.CookieContainer
+                HttpMethod.GET, "https://passport.yandex.ru/profile", proxy: Instance.GetProxy(), Encoding: "utf-8", respType: ResponceType.BodyOnly,
+                Timeout: 30000, UserAgent: Zenno.Profile.UserAgent, cookieContainer: Zenno.Profile.CookieContainer
             );
 
             return !string.IsNullOrWhiteSpace(Regex.Match(httpResponse, "(?<=\"number\":\").*?(?=\")").Value);

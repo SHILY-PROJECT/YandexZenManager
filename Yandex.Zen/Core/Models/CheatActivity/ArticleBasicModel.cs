@@ -33,7 +33,7 @@ namespace Yandex.Zen.Core.Models.CheatActivity
 
         public ArticleBasicModel(IZennoTable table, int row, string totalGoToArticleSettings, string secondsWatchArticleSettings, string totalLikesSettings, string totalCommentsSettings)
         {
-            var zenno = ServiceComponents.zenno;
+            var zenno = ServiceComponents.Zenno;
 
             Login = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Login, row);
             Login = !string.IsNullOrWhiteSpace(Login) ? Login : null;

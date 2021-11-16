@@ -22,13 +22,14 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
 {
     public class ServiceComponents
     {
-        public static IZennoTable AccountsGeneralTable;
-        public static Random rnd;
+        private static readonly object _locker = new object();
 
-        public static Instance instance { get => Program.Instance; }
-        public static IZennoPosterProjectModel zenno { get => Program.Zenno; }
-        //[ThreadStatic] public static Instance instance;
-        //[ThreadStatic] public static IZennoPosterProjectModel zenno;
+        public static Random _rnd;
+        public static IZennoTable AccountsGeneralTable;
+
+        public static IZennoPosterProjectModel Zenno { get => Program.Zenno; }
+        public static Instance Instance { get => Program.Instance; }
+        public static Random Rnd { get => _rnd is null ? _rnd = new Random() : _rnd; }
 
         /// <summary>
         /// Таблица режима.
@@ -129,8 +130,6 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         [ThreadStatic] public static int MinSizeProfileUseInModes;
         [ThreadStatic] public static bool CreateFolderResourceIfNotExist;
 
-
-
         /// <summary>
         /// Загрузка аватарки yandex (url: https://passport.yandex.{YandexDomain}/profile).
         /// </summary>
@@ -142,7 +141,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
             {
                 try
                 {
-                    instance.ActiveTab.NavigateTimeout = 20;
+                    Instance.ActiveTab.NavigateTimeout = 20;
 
                     if (++counterAttemptsUpload > 3)
                     {
@@ -150,10 +149,10 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                         return;
                     }
 
-                    if (!Regex.IsMatch(instance.ActiveTab.URL, @"https://passport\.yandex\.[a-zA-Z]+/profile.*?$"))
-                        instance.ActiveTab.Navigate($"https://passport.yandex.{Domain}/profile", instance.ActiveTab.URL, true);
+                    if (!Regex.IsMatch(Instance.ActiveTab.URL, @"https://passport\.yandex\.[a-zA-Z]+/profile.*?$"))
+                        Instance.ActiveTab.Navigate($"https://passport.yandex.{Domain}/profile", Instance.ActiveTab.URL, true);
 
-                    var heAvatarCheck = instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар", true, true, 7);
+                    var heAvatarCheck = Instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар", true, true, 7);
 
                     if (!Regex.IsMatch(heAvatarCheck.GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
                     {
@@ -161,31 +160,31 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                         return;
                     }
 
-                    instance.FuncGetFirstHe("//div[contains(@class, 'personal')]/descendant::div[contains(@class, 'add-avatar')]").Click(instance.ActiveTab, rnd.Next(150, 500));
-                    var heUpload = instance.FuncGetFirstHe("//span[contains(@id, 'load_avatar')]/descendant::input[contains(@name, 'attachment')]", "Загрузить");
+                    Instance.FuncGetFirstHe("//div[contains(@class, 'personal')]/descendant::div[contains(@class, 'add-avatar')]").Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                    var heUpload = Instance.FuncGetFirstHe("//span[contains(@id, 'load_avatar')]/descendant::input[contains(@name, 'attachment')]", "Загрузить");
 
-                    instance.SetFilesForUpload(AvatarInfo, true);
+                    Instance.SetFilesForUpload(AvatarInfo, true);
 
-                    heUpload.Click(instance.ActiveTab, rnd.Next(150, 500));
+                    heUpload.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
-                    instance.FuncGetFirstHe("//span[contains(@class, 'Attach-Holder')]/descendant::label[text()!='']", "Загруженный аватар", true, true, 10);
+                    Instance.FuncGetFirstHe("//span[contains(@class, 'Attach-Holder')]/descendant::label[text()!='']", "Загруженный аватар", true, true, 10);
 
-                    instance.ActiveTab.NavigateTimeout = 90;
+                    Instance.ActiveTab.NavigateTimeout = 90;
 
-                    instance.FuncGetFirstHe("//div[contains(@class, 'avatar-buttons')]/descendant::span[contains(@id, 'save')]/button", "Сохранить изменения", true, true, 7).Click(instance.ActiveTab, 5000);
+                    Instance.FuncGetFirstHe("//div[contains(@class, 'avatar-buttons')]/descendant::span[contains(@id, 'save')]/button", "Сохранить изменения", true, true, 7).Click(Instance.ActiveTab, 5000);
 
-                    if (!Regex.IsMatch(instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар").GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
+                    if (!Regex.IsMatch(Instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар").GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
                     {
                         Logger.Write($"[Файл: {AvatarInfo.FullName}]\tАватар аккаунта yandex успешно установлен", LoggerType.Info, true, false, true, LogColor.Blue);
                         ProfileWorker.SaveProfile(true);
 
                         return;
                     }
-                    else instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
+                    else Instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
                 }
                 catch
                 {
-                    instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
+                    Instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
                     continue;
                 }
             }
@@ -214,7 +213,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                 var httpResponse = ZennoPoster.HTTP.Request
                 (
                     HttpMethod.GET, $"https://ipinfo.io/{ip}", "", "", "", "UTF-8",
-                    ResponceType.BodyOnly, 20000, "", zenno.Profile.UserAgent, true, 5
+                    ResponceType.BodyOnly, 20000, "", Zenno.Profile.UserAgent, true, 5
                 );
 
                 ipInfo.CountryShortName = Regex.Replace(ZennoPoster.Parser.ParseByXpath(httpResponse, "//a[contains(@href, '/countries/')]", "href").First(), @"/countries/.*?", "");
@@ -244,7 +243,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                     Logger.Write($"[Папка: {ResourceDirectory.FullName}]\tПапка создана в автоматическом режиме. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
 
                     // Создание папки
-                    var nameFolderWithPosts = zenno.Variables["cfgNameFolderArticles"].Value;
+                    var nameFolderWithPosts = Zenno.Variables["cfgNameFolderArticles"].Value;
 
                     if (!string.IsNullOrWhiteSpace(nameFolderWithPosts))
                     {
@@ -254,7 +253,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                     }
 
                     // Создание файла с описанием к аккаунту и канала
-                    var channelDescriptionFileName = zenno.ExecuteMacro(zenno.Variables["cfgFileNameDescriptionChannel"].Value);
+                    var channelDescriptionFileName = Zenno.ExecuteMacro(Zenno.Variables["cfgFileNameDescriptionChannel"].Value);
 
                     if (!string.IsNullOrWhiteSpace(channelDescriptionFileName))
                         ChannelDescription = new FileInfo(Path.Combine(ResourceDirectory.FullName, channelDescriptionFileName));
@@ -292,7 +291,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
             }
 
             // Проверка на занятость другим потоком
-            if (Program.ResourcesAllThreadsInWork.Any(x => accountOrDonor == x))
+            if (Program.ObjectsOfAllThreadsInWork.Any(x => accountOrDonor == x))
             {
                 Logger.Write($"Ресурс используется другим потоком", LoggerType.Info, false, false, false);
                 return false;
@@ -306,18 +305,18 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         /// </summary>
         public void AcceptingPrivacyPolicyCookie()
         {
-            instance.UseFullMouseEmulation = false;
+            Instance.UseFullMouseEmulation = false;
 
             var xpathButtonCookieWhiteForm = new[] { "//a[contains(@href, 'privacy')]/../following-sibling::div[contains(@class, 'controls')]/descendant::button[contains(@class, 'type_ok')]", "Белая форма справа" };
             var xpathButtonCookieMulticoloredForm = new[] { "//td/descendant::table/descendant::button[contains(@data-text, 'Accept all')]", "Разноцветная форма внизу" };
 
-            var heButtonCookieWhiteForm = instance.FuncGetFirstHe(xpathButtonCookieWhiteForm[0], "", false, false, 0);
-            var heButtonCookieMulticoloredForm = instance.FuncGetFirstHe(xpathButtonCookieMulticoloredForm[0], "", false, false, 0);
+            var heButtonCookieWhiteForm = Instance.FuncGetFirstHe(xpathButtonCookieWhiteForm[0], "", false, false, 0);
+            var heButtonCookieMulticoloredForm = Instance.FuncGetFirstHe(xpathButtonCookieMulticoloredForm[0], "", false, false, 0);
 
-            if (!heButtonCookieWhiteForm.IsNullOrVoid()) heButtonCookieWhiteForm.Click(instance.ActiveTab, rnd.Next(150, 500));
-            if (!heButtonCookieMulticoloredForm.IsNullOrVoid()) heButtonCookieMulticoloredForm.Click(instance.ActiveTab, rnd.Next(150, 500));
+            if (!heButtonCookieWhiteForm.IsNullOrVoid()) heButtonCookieWhiteForm.Click(Instance.ActiveTab, Rnd.Next(150, 500));
+            if (!heButtonCookieMulticoloredForm.IsNullOrVoid()) heButtonCookieMulticoloredForm.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
-            instance.UseFullMouseEmulation = true;
+            Instance.UseFullMouseEmulation = true;
         }
 
         /// <summary>
@@ -364,12 +363,12 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
             {
                 var additionalLog = IpInfo != null ? $" | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 
-                instance.SetProxy(Proxy, false, true, true, true);
+                Instance.SetProxy(Proxy, false, true, true, true);
 
-                if (instance.ActiveTab.IsBusy)
-                    instance.ActiveTab.WaitDownloading();
+                if (Instance.ActiveTab.IsBusy)
+                    Instance.ActiveTab.WaitDownloading();
 
-                Logger.Write($"[Proxy instance: {instance.GetProxy()}{additionalLog}]\tПрокси установлено в инстанс", LoggerType.Info, true, false, true);
+                Logger.Write($"[Proxy instance: {Instance.GetProxy()}{additionalLog}]\tПрокси установлено в инстанс", LoggerType.Info, true, false, true);
             }
             catch (Exception ex)
             {

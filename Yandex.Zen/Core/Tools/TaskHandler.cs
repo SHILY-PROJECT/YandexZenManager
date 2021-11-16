@@ -74,7 +74,7 @@ namespace Yandex.Zen.Core.Tools
             }
 
             // Фильтрация свободных задач
-            taskNotCompleteList = taskNotCompleteList.Where(x => !Program.ResourcesAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
+            taskNotCompleteList = taskNotCompleteList.Where(x => !Program.ObjectsOfAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
 
             if (taskNotCompleteList.Count == 0)
             {
@@ -84,8 +84,8 @@ namespace Yandex.Zen.Core.Tools
 
             var taskItem = taskList.GetLine(LineOptions.Random);
 
-            Program.ResourcesMode.Add(taskItem.TaskId);
-            Program.ResourcesAllThreadsInWork.Add(taskItem.TaskId);
+            Program.CurrentObjectCache.Add(taskItem.TaskId);
+            Program.ObjectsOfAllThreadsInWork.Add(taskItem.TaskId);
 
             return taskItem;
         }
@@ -111,7 +111,7 @@ namespace Yandex.Zen.Core.Tools
             {
                 taskList.Add(new TaskItemModel
                 {
-                    TaskId = ServicesCommonComponents.ServiceComponents.rnd.Next(100000000, 999999999).ToString(),
+                    TaskId = ServicesCommonComponents.ServiceComponents.Rnd.Next(100000000, 999999999).ToString(),
                     GoToArticle = true,
                     SecondsWatchArticle = secondsWatchArticleSettings.ExtractNumber(),
                     Like = totalLikes != 0,

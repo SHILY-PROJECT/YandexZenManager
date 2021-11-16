@@ -40,13 +40,13 @@ namespace Yandex.Zen.Core.Services
         /// </summary>
         public ZenArticlePublication()
         {
-            AccountsTable = zenno.Tables["AccountsForPosting"];
+            AccountsTable = Zenno.Tables["AccountsForPosting"];
 
             _articlesList = new List<Article>();
 
-            _numbPublicationFull = int.Parse(zenno.Variables["cfgNumbPublicationFull"].Value);
-            _numbPublicationInCurrentRun = int.Parse(zenno.Variables["cfgNumbPublicationInOneRun"].Value);
-            _percentageRecommendedTagsForPublicationUse = zenno.Variables["cfgPercentageRecommendedTagsForPublicationUse"].Value;
+            _numbPublicationFull = int.Parse(Zenno.Variables["cfgNumbPublicationFull"].Value);
+            _numbPublicationInCurrentRun = int.Parse(Zenno.Variables["cfgNumbPublicationInOneRun"].Value);
+            _percentageRecommendedTagsForPublicationUse = Zenno.Variables["cfgPercentageRecommendedTagsForPublicationUse"].Value;
 
             lock (_locker) _launchIsAllowed = ResourceHandler();
         }
@@ -87,33 +87,33 @@ namespace Yandex.Zen.Core.Services
             while (true)
             {
                 // Открыть меню с добавлением публикаций
-                instance.FuncGetFirstHe(xpathButtonAddPublication[0], xpathButtonAddPublication[1], true, true, 5).Click(instance.ActiveTab, rnd.Next(500, 1000));
+                Instance.FuncGetFirstHe(xpathButtonAddPublication[0], xpathButtonAddPublication[1], true, true, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 // Закрыть окно помощника, если оно открыто
-                instance.FuncGetFirstHe(xpathButtonCloseHelper[0], xpathButtonCloseHelper[1], false, false).Click(instance.ActiveTab, rnd.Next(150, 500));
+                Instance.FuncGetFirstHe(xpathButtonCloseHelper[0], xpathButtonCloseHelper[1], false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                 // Создание публикации
                 var statusMakePublication = MakePublication(_articlesList[0]);
 
                 // Проверка формы заполнения профиля после 3-х публикаций
-                var heButtonShowProfile = instance.FuncGetFirstHe(xpathButtonShowProfile[0], xpathButtonShowProfile[1], false, false);
+                var heButtonShowProfile = Instance.FuncGetFirstHe(xpathButtonShowProfile[0], xpathButtonShowProfile[1], false, false);
 
                 if (!heButtonShowProfile.IsNullOrVoid())
                 {
                     // Заполнение поля с описанием канала
-                    instance.FuncGetFirstHe(xpathFieldDescriptionChannel[0], xpathFieldDescriptionChannel[1], true, true, 5).SetValue(instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathFieldDescriptionChannel[0], xpathFieldDescriptionChannel[1], true, true, 5).SetValue(Instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Logger.Write($"Описание канала успешно установлено", LoggerType.Info, true, false, true);
 
                     // Заполнение поля с сайтом
-                    instance.FuncGetFirstHe(xpathFieldSite[0], xpathFieldSite[1]).SetValue(instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathFieldSite[0], xpathFieldSite[1]).SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Logger.Write($"Сайт канала успешно установлен", LoggerType.Info, true, false, true);
 
                     // Включение личных сообщений
-                    var heElementForCheckMessageStatus = instance.FuncGetFirstHe(xpathElementMessageStatus[0], xpathElementMessageStatus[1], true, true);
+                    var heElementForCheckMessageStatus = Instance.FuncGetFirstHe(xpathElementMessageStatus[0], xpathElementMessageStatus[1], true, true);
 
                     if (!heElementForCheckMessageStatus.GetAttribute("class").Contains("allowed"))
                     {
-                        instance.FuncGetFirstHe(xpathButtonMessageOn[0], xpathButtonMessageOn[1]).Click(instance.ActiveTab, rnd.Next(500, 1000));
+                        Instance.FuncGetFirstHe(xpathButtonMessageOn[0], xpathButtonMessageOn[1]).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                         Logger.Write($"Получение сообщений успешно включено", LoggerType.Info, true, false, true);
                     }
                     else Logger.Write($"Получение сообщений уже включено", LoggerType.Info, true, false, false);
@@ -161,8 +161,8 @@ namespace Yandex.Zen.Core.Services
             var counterAttemptsPublication = 0;
 
             // Получение и ввод заголовка статьи (вызов события Enter после установки значения)
-            heFieldTitle = instance.FuncGetFirstHe(xpathFieldTitle[0], xpathFieldTitle[1], true, false, 7);
-            heFieldTitle.SetValue(instance.ActiveTab, article.TitleArticle, LevelEmulation.Full, rnd.Next(500, 1000), false, false, true, rnd.Next(1000, 1500));
+            heFieldTitle = Instance.FuncGetFirstHe(xpathFieldTitle[0], xpathFieldTitle[1], true, false, 7);
+            heFieldTitle.SetValue(Instance.ActiveTab, article.TitleArticle, LevelEmulation.Full, Rnd.Next(500, 1000), false, false, true, Rnd.Next(1000, 1500));
 
             // Ввод статьи
             foreach (var lineText in article.TextArticle)
@@ -170,7 +170,7 @@ namespace Yandex.Zen.Core.Services
                 var setText = lineText;
 
                 // Поиск последнего поля для ввода текста
-                var heFieldText = instance.FuncGetHeCollection(xpathParagraphForFieldText[0], xpathParagraphForFieldText[1], true, false, 5).Last().FindChildByXPath(xpathChildFieldText[0], 0);
+                var heFieldText = Instance.FuncGetHeCollection(xpathParagraphForFieldText[0], xpathParagraphForFieldText[1], true, false, 5).Last().FindChildByXPath(xpathChildFieldText[0], 0);
 
                 // Обработка обычных изображений
                 if (rxSimpleImage.IsMatch(setText))
@@ -189,16 +189,16 @@ namespace Yandex.Zen.Core.Services
                 // Обработка пустых строк
                 if (string.IsNullOrEmpty(setText))
                 {
-                    instance.ActiveTab.KeyEvent("Enter", "press", "", true, rnd.Next(1000, 1500));
+                    Instance.ActiveTab.KeyEvent("Enter", "press", "", true, Rnd.Next(1000, 1500));
                     continue;
                 }
 
                 // Ввод текста (вызов события Enter после установки значения)
-                heFieldText.SetValue(instance.ActiveTab, setText, LevelEmulation.Full, rnd.Next(500, 1000), false, true, true, rnd.Next(1000, 1500));
+                heFieldText.SetValue(Instance.ActiveTab, setText, LevelEmulation.Full, Rnd.Next(500, 1000), false, true, true, Rnd.Next(1000, 1500));
             }
 
             // Переход к форме публикации статьи
-            instance.FuncGetFirstHe(xpathButtonPublish[0], xpathButtonPublish[1], true, false).Click(instance.ActiveTab, rnd.Next(1000, 1500));
+            Instance.FuncGetFirstHe(xpathButtonPublish[0], xpathButtonPublish[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
             
             while (true)
             {
@@ -208,13 +208,13 @@ namespace Yandex.Zen.Core.Services
                     return false;
                 }
 
-                if (!instance.FuncGetFirstHe(xpathFormPublicationSettings[0], xpathFormPublicationSettings[1], false, false).IsNullOrVoid())
+                if (!Instance.FuncGetFirstHe(xpathFormPublicationSettings[0], xpathFormPublicationSettings[1], false, false).IsNullOrVoid())
                 {
                     Logger.Write($"Заполнение формы настройки публикации...", LoggerType.Info, false, true, true);
 
                     FillOnFormPublicationSettings();
                 }
-                else if (!instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], false, false).IsNullOrVoid())
+                else if (!Instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], false, false).IsNullOrVoid())
                 {
                     Logger.Write($"Обнаружена форма PrePublish. Переход к её заполнению...", LoggerType.Info, false, true, true);
 
@@ -224,17 +224,17 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Выход из цикла при успешной публикации
-                if (!instance.FuncGetFirstHe(xpathForCheck, "", false, false, 5).IsNullOrVoid()) break;
+                if (!Instance.FuncGetFirstHe(xpathForCheck, "", false, false, 5).IsNullOrVoid()) break;
             }
 
             Logger.Write($"[Publication unixtime: {Logger.GetUnixtime()}]\t[ArticleDirectory:{article.ArticleDirectory.FullName}]\tСтатья успешно опубликована", LoggerType.Info, true, false, true, LogColor.Blue);
 
             // Закрываем форму "Вы создали первую публикацию", если она есть
-            var heButtonFirstPublication = instance.FuncGetFirstHe(xpathButtonFirstPublication[0], "", false, false, 0);
+            var heButtonFirstPublication = Instance.FuncGetFirstHe(xpathButtonFirstPublication[0], "", false, false, 0);
 
             if (!heButtonFirstPublication.IsNullOrVoid())
             {
-                heButtonFirstPublication.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                heButtonFirstPublication.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 Logger.Write($"Закрыта форма \"Вы создали первую публикацию\" после обнаружения", LoggerType.Info, true, false, true);
             }
@@ -255,8 +255,8 @@ namespace Yandex.Zen.Core.Services
 
             try
             {
-                var heButtonSubmit = instance.FuncGetFirstHe(xpathButtonSubmit[0], xpathButtonSubmit[1], true, true, 5);
-                var heTags = instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, false, 5).ToList();
+                var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit[0], xpathButtonSubmit[1], true, true, 5);
+                var heTags = Instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, false, 5).ToList();
 
                 // Выбираем случайные теги
                 if (heTags.Count != 0)
@@ -264,12 +264,12 @@ namespace Yandex.Zen.Core.Services
                     var counterSetTags = CalculateNumberOfTags(heTags);
 
                     while (counterSetTags-- > 0)
-                        instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, true).ToList().GetLine(LineOptions.Random).Click(instance.ActiveTab, rnd.Next(500, 1000));
+                        Instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, true).ToList().GetLine(LineOptions.Random).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                 }
                 else Logger.Write($"Не найдено рекомендованных тегов", LoggerType.Warning, true, true, true, LogColor.Yellow);
 
                 // Проверяем наличие добавленных тегов
-                var addedTags = instance.FuncGetHeCollection(xpathAddedTags[0], xpathAddedTags[1], false, false, 5);
+                var addedTags = Instance.FuncGetHeCollection(xpathAddedTags[0], xpathAddedTags[1], false, false, 5);
 
                 if (addedTags == null || addedTags.Count == 0)
                 {
@@ -280,7 +280,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"[Количество тегов: {addedTags.Count}]\tТеги успешно добавлены", LoggerType.Info, true, false, true);
                 }
 
-                heButtonSubmit.Click(instance.ActiveTab, rnd.Next(5000, 7000));
+                heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(5000, 7000));
             }
             catch { return; }
         }
@@ -321,7 +321,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Получаем общий div селектора
-                var heSelectorEmail = instance.FuncGetFirstHe(xpathFormPrePublish, false, false).FindChildByXPath(xpathChildSelectorEmail[0], 0);
+                var heSelectorEmail = Instance.FuncGetFirstHe(xpathFormPrePublish, false, false).FindChildByXPath(xpathChildSelectorEmail[0], 0);
 
                 if (heSelectorEmail.IsNullOrVoid())
                 {
@@ -348,19 +348,19 @@ namespace Yandex.Zen.Core.Services
 
                 // Раскрытие селектора, если он скрыт
                 if (!heCurrentEmail.GetAttribute("class").Contains("active"))
-                    heCurrentEmail.Click(instance.ActiveTab, rnd.Next(150, 500));
+                    heCurrentEmail.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                 // Выбираем емейл
-                heSelectorEmail.FindChildByXPath(xpathChildSelectorOption[0], 0).Click(instance.ActiveTab, rnd.Next(1000, 1500));
+                heSelectorEmail.FindChildByXPath(xpathChildSelectorOption[0], 0).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
             }
 
             // Обработка чекбоксов
-            instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], true, false, 5).FindChildrenByXPath(xpathChildCheckbox[0]).ToList().ForEach(x =>
+            Instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], true, false, 5).FindChildrenByXPath(xpathChildCheckbox[0]).ToList().ForEach(x =>
             {
-                if (!x.GetAttribute("class").Contains("is-checked")) x.Click(instance.ActiveTab, rnd.Next(500, 1000));
+                if (!x.GetAttribute("class").Contains("is-checked")) x.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
             });
 
-            instance.FuncGetFirstHe(xpathChildButtonSubmit[0], xpathChildButtonSubmit[1], true, false).Click(instance.ActiveTab, rnd.Next(1000, 1500));    
+            Instance.FuncGetFirstHe(xpathChildButtonSubmit[0], xpathChildButtonSubmit[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));    
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Yandex.Zen.Core.Services
             var xpathButtonAddImg = new[]{ "//div[contains(@class, 'side-toolbar')]/descendant::button[contains(@class, 'image')]", "Кнопка - Добавить изображение в статью" };
             var xpathButtonUploadImg = new[] { "//div[contains(@class, 'content') and contains(@class, 'image-popup')]/descendant::button[contains(@class, 'file-button')]", "Кнопка - загрузить изображение" };
 
-            instance.SetFilesForUpload(list.GetLine(LineOptions.FirstWithRemoved), true);
+            Instance.SetFilesForUpload(list.GetLine(LineOptions.FirstWithRemoved), true);
 
             try
             {
@@ -386,20 +386,20 @@ namespace Yandex.Zen.Core.Services
                     try
                     {
                         // Поиск элемента для добавления изображения
-                        var heButtonAddImg = instance.FuncGetFirstHe(xpathButtonAddImg[0], xpathButtonAddImg[1], true, false, 5);
+                        var heButtonAddImg = Instance.FuncGetFirstHe(xpathButtonAddImg[0], xpathButtonAddImg[1], true, false, 5);
 
                         // Проверка активности элемента
                         if (!heButtonAddImg.ParentElement.GetAttribute("style").Contains("none"))
                         {
-                            heButtonAddImg.Click(instance.ActiveTab, rnd.Next(150, 500));
+                            heButtonAddImg.Click(Instance.ActiveTab, Rnd.Next(150, 500));
                             break;
                         }
-                        else instance.ActiveTab.KeyEvent("Enter", "press", "", true, rnd.Next(1000, 1500));
+                        else Instance.ActiveTab.KeyEvent("Enter", "press", "", true, Rnd.Next(1000, 1500));
                     }
                     catch { continue; }
                 }
 
-                instance.FuncGetFirstHe(xpathButtonUploadImg[0], xpathButtonUploadImg[1], true, false, 5).Click(instance.ActiveTab, rnd.Next(500, 1000));
+                Instance.FuncGetFirstHe(xpathButtonUploadImg[0], xpathButtonUploadImg[1], true, false, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
             }
             catch (Exception ex)
             {
@@ -425,24 +425,24 @@ namespace Yandex.Zen.Core.Services
                 return false;
             }
 
-            var channelDescriptionFileName = zenno.Variables["cfgFileNameDescriptionChannel"].Value;           
-            var articlesFolderName = zenno.Variables["cfgNameFolderArticles"].Value;
+            var channelDescriptionFileName = Zenno.Variables["cfgFileNameDescriptionChannel"].Value;           
+            var articlesFolderName = Zenno.Variables["cfgNameFolderArticles"].Value;
 
             if (AccountsTable.RowCount == 0)
             {
-                Program.StopTemplate(zenno, $"Таблица с аккаунтами/донорами пуста");
+                Program.StopTemplate(Zenno, $"Таблица с аккаунтами/донорами пуста");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(channelDescriptionFileName))
             {
-                Program.StopTemplate(zenno, $"Не указано имя файла с описанием к аккаунту");
+                Program.StopTemplate(Zenno, $"Не указано имя файла с описанием к аккаунту");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(articlesFolderName))
             {
-                Program.StopTemplate(zenno, $"Не указано имя папки со статьями");
+                Program.StopTemplate(Zenno, $"Не указано имя папки со статьями");
                 return false;
             }
 
@@ -455,7 +455,7 @@ namespace Yandex.Zen.Core.Services
                     // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                     Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
 
-                    ResourceDirectory = new DirectoryInfo(Path.Combine(zenno.Directory, "Accounts", Login));
+                    ResourceDirectory = new DirectoryInfo(Path.Combine(Zenno.Directory, "Accounts", Login));
                     ChannelDescription = new FileInfo(Path.Combine(ResourceDirectory.FullName, channelDescriptionFileName));
                     _articlesDirectory = new DirectoryInfo(Path.Combine(ResourceDirectory.FullName, articlesFolderName));
 
@@ -571,14 +571,14 @@ namespace Yandex.Zen.Core.Services
                     //ProfileRetrievedFromSharedFolder
 
                     // Успешное получение ресурса
-                    Program.ResourcesMode.Add(Login);
-                    Program.ResourcesAllThreadsInWork.Add(Login);
+                    Program.CurrentObjectCache.Add(Login);
+                    Program.ObjectsOfAllThreadsInWork.Add(Login);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }
 
                 // Не удалось получить ресурс
-                Program.ResetExecutionCounter(zenno);
+                Program.ResetExecutionCounter(Zenno);
                 Logger.Write($"Отсутствуют свободные/подходящие аккаунты", LoggerType.Info, false, true, true, LogColor.Violet);
                 return false;
             }

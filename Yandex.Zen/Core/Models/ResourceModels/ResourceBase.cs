@@ -22,28 +22,8 @@ namespace Yandex.Zen.Core.Models.ResourceModels
 
         public DirectoryInfo Directory { get; set; }
         public FileInfo Profile { get; set; }
-        public ProxyInfo ProxyInfo { get; set; }
+        public ProxyData ProxyData { get; set; }
         public ResourceType ResourceType { get; set; }
-        public DataStatuses DataStatuses { get; set; }
-    }
-
-    /// <summary>
-    /// Класс для хранения статуса данных аккаунта (true - данные есть, иначе - false).
-    /// </summary>
-    public class DataStatuses
-    {
-        public bool Login { get; set; }
-        public bool Password { get; set; }
-        public bool Proxy { get; set; }
-        public bool InstUrl { get; set; }
-        public bool AnswerQuestion { get; set; }
-        public bool Phone { get; set; }
-        public bool Channel { get; set; }
-        public bool ChannelProfileEditor { get; set; }
-        public bool ChannelDescription { get; set; }
-        public bool ChannelImage { get; set; }
-        public bool Dir { get; set; }
-        public bool Profile { get; set; }
-        public bool ProxyInfo { get; set; }
+        public PropertiesState PropertiesState { get; set; }
     }
 }
