@@ -631,7 +631,7 @@ namespace Yandex.Zen.Core.Services
 
                     // Успешное получение ресурса
                     Program.CurrentObjectCache.Add(InstagramUrl);
-                    Program.ObjectsOfAllThreadsInWork.Add(InstagramUrl);
+                    Program.CurrentObjectsOfAllThreadsInWork.Add(InstagramUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

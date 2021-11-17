@@ -986,7 +986,7 @@ namespace Yandex.Zen.Core.Services
 
                     // Успешное получение ресурса
                     Program.CurrentObjectCache.Add(Login);
-                    Program.ObjectsOfAllThreadsInWork.Add(Login);
+                    Program.CurrentObjectsOfAllThreadsInWork.Add(Login);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт/донор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

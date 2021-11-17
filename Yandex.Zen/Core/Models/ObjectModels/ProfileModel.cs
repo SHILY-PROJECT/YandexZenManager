@@ -15,7 +15,9 @@ namespace Yandex.Zen.Core.Models.ObjectModels
         private FileInfo _profile;
         private IZennoPosterProjectModel Zenno { get => ServicesComponents.Zenno; }
 
-
+        /// <summary>
+        /// Файл профиля.
+        /// </summary>
         public FileInfo File
         { 
             get
@@ -25,9 +27,22 @@ namespace Yandex.Zen.Core.Models.ObjectModels
             }
             set { _profile = value; }
         }
+
+        /// <summary>
+        /// Полный путь к файлу профиля.
+        /// </summary>
         public string Path => File.FullName;
+
+        /// <summary>
+        /// Имя файла профиля.
+        /// </summary>
         public string Name => File.Name;
 
+        /// <summary>
+        /// Загрузка профиля.
+        /// </summary>
+        /// <param name="createVariables"></param>
+        public void Load(bool createVariables = true) => Zenno.Profile.Load(Path, createVariables);
 
         /// <summary>
         /// Сохранение профиля аккаунта.
@@ -51,8 +66,21 @@ namespace Yandex.Zen.Core.Models.ObjectModels
             Logger.Write("Профиль сохранен", LoggerType.Info, true, false, false);
         }
 
-        public void Load(bool createVariables = true)
-            => Zenno.Profile.Load(Path, createVariables);
+        /// <summary>
+        /// Удаление профиля.
+        /// </summary>
+        public void Delete()
+        {
+            try
+            {
+                File.Delete();
+                Logger.Write($"[{Path}]\tПрофиль успешно удален", LoggerType.Info, true, false, false);
+            }
+            catch (Exception ex)
+            {
+                Logger.Write($"[{Path}]\tПрофиль не удалось удалить: {ex.Message}", LoggerType.Warning, true, false, true);
+            }
 
+        }
     }
 }

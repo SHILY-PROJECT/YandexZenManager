@@ -124,7 +124,7 @@ namespace Yandex.Zen.Core.Services
                         ProfileInfo = new FileInfo($@"{Program.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
                         Program.CurrentObjectCache.Add(ProfileInfo.FullName);
-                        Program.ObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
+                        Program.CurrentObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
 
                         Logger.SetCurrentObjectForLogText(ProfileInfo.Name, ObjectTypeEnum.Profile);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
@@ -152,10 +152,10 @@ namespace Yandex.Zen.Core.Services
 
                             var profile = profiles.First();
 
-                            if (!Program.ObjectsOfAllThreadsInWork.Any(x => x == profile.FullName))
+                            if (!Program.CurrentObjectsOfAllThreadsInWork.Any(x => x == profile.FullName))
                             {
                                 Program.CurrentObjectCache.Add(profile.FullName);
-                                Program.ObjectsOfAllThreadsInWork.Add(profile.FullName);
+                                Program.CurrentObjectsOfAllThreadsInWork.Add(profile.FullName);
                                 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;

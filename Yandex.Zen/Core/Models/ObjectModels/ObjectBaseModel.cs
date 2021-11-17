@@ -16,20 +16,20 @@ namespace Yandex.Zen.Core.Models.ObjectModels
     {
         public string Login { get; set; }
         public string Password { get; set; }
-        public string Proxy { get; set; }
-        public Uri Instagram { get; set; }
         public string AnswerQuestion { get; set; }
         public string PhoneNumber { get; set; }
-
+        public Uri Instagram { get; set; }
         public DirectoryInfo Directory { get; set; }
         public ProfileModel Profile { get; set; }
         public ProxyDataModel ProxyData { get; set; }
         public ObjectTypeEnum Type { get; set; }
         public PropertiesStateModel PropertiesState { get; set; }
 
-        public ObjectBaseModel(ProgramModeEnum programMode)
-        {
+        private static readonly ServicesComponents Components;
 
+        public ObjectBaseModel()
+        {
+            
         }
     }
 }

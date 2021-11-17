@@ -161,10 +161,10 @@ namespace Yandex.Zen.Core.Tools
 
                 var firstProfile = profiles.First();
 
-                if (!Program.ObjectsOfAllThreadsInWork.Any(x => x == firstProfile.FullName))
+                if (!Program.CurrentObjectsOfAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
                     Program.CurrentObjectCache.Add(firstProfile.FullName);
-                    Program.ObjectsOfAllThreadsInWork.Add(firstProfile.FullName);
+                    Program.CurrentObjectsOfAllThreadsInWork.Add(firstProfile.FullName);
                     return firstProfile;
                 }
                 else profiles.RemoveAt(0);
