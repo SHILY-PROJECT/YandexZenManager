@@ -28,23 +28,6 @@ namespace Yandex.Zen
 {
     public class DataStore
     {
-        public DataStore(){ }
-
-        public DataStore(Instance instance, IZennoPosterProjectModel zenno)
-        {
-            Zenno = zenno;
-            Instance = instance;
-
-            try
-            {
-                InitializingProjectProperties();
-            }
-            catch (Exception ex)
-            {
-                Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, false, true, LogColor.Red);
-            }
-        }
-
         private static readonly object _locker = new object();
 
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
@@ -126,6 +109,28 @@ namespace Yandex.Zen
         }
 
         /// <summary>
+        /// Настройка проекта перед работой.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="zenno"></param>
+        protected void ConfigureProject(Instance instance, IZennoPosterProjectModel zenno, out bool configurationStatus)
+        {
+            configurationStatus = true;
+
+            try
+            {
+                Zenno = zenno;
+                Instance = instance;
+                InitializingProjectProperties();
+            }
+            catch (Exception ex)
+            {
+                Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, false, true, LogColor.Red);
+                configurationStatus = false;
+            }
+        }
+
+        /// <summary>
         /// Инициализация свойств проекта.
         /// </summary>
         /// <returns></returns>
@@ -178,5 +183,21 @@ namespace Yandex.Zen
             #endregion
         }
 
+        /// <summary>
+        /// Очистка кэша проекта.
+        /// Очистка ресурсов потока из общего списка.
+        /// </summary>
+        protected void ClearProjectCache()
+        {
+            if (CurrentObjectCache.Count != 0)
+            {
+                lock (_locker)
+                {
+                    if (ProgramMode == ProgramModeEnum.InstanceAccountManagement)
+                        InstanceAccountManagement.ThreadInWork = false;
+                    CurrentObjectCache.ForEach(res => CurrentObjectsOfAllThreadsInWork.RemoveAll(x => x == res));
+                }
+            }
+        }
     }
 }

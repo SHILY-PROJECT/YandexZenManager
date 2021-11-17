@@ -41,7 +41,8 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            _ = new DataStore(instance, zenno);
+            ConfigureProject(instance, zenno, out var configurationStatus);
+            if (configurationStatus is false) return 0;
 
             var objectBase = new ObjectBaseModel();
 
@@ -63,18 +64,7 @@ namespace Yandex.Zen
             {
                 Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, true, true, LogColor.Red);
             }
-
-            // Очистка ресурсов
-            if (CurrentObjectCache.Count != 0)
-            {
-                lock (_locker)
-                {
-                    if (ProgramMode == ProgramModeEnum.InstanceAccountManagement)
-                        InstanceAccountManagement.ThreadInWork = false;
-                    CurrentObjectCache.ForEach(res => CurrentObjectsOfAllThreadsInWork.RemoveAll(x => x == res));
-                }
-            }
-
+            ClearProjectCache();
             return 0;
         }
 
