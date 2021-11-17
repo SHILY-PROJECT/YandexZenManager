@@ -86,16 +86,17 @@
     <Compile Include="Core\Enums\CheatActivity\CommentsSourceEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
-    <Compile Include="Core\Enums\UseResourceTypeInWorkEnum.cs" />
+    <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
-    <Compile Include="Core\Enums\Logger\BackupFilter.cs" />
-    <Compile Include="Core\Enums\Logger\DateTimeFormat.cs" />
+    <Compile Include="Core\Models\ObjectModels\ProfileModel.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Enums\BackupFilter.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Enums\Extensions\LevelEmulation.cs" />
     <Compile Include="Core\Enums\Extensions\LineOptions.cs" />
-    <Compile Include="Core\Enums\ResourceType.cs" />
+    <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\StartPageWalkingOnZen.cs" />
     <Compile Include="Core\Enums\WalkingProfile\ProfileWalkingMode.cs" />
-    <Compile Include="Core\Enums\WalkingProfile\SaveProfileMode.cs" />
+    <Compile Include="Core\Enums\WalkingProfile\SaveProfileModeEnum.cs" />
     <Compile Include="Core\Enums\WalkingProfile\SourceSearchKeysTypeEnum.cs" />
     <Compile Include="Core\Enums\YandexAccountRegistration\RegistrationStartPageEnum.cs" />
     <Compile Include="Core\Enums\ZenChannelCreationAndDesign\StartPageCreateChannelEnum.cs" />
@@ -105,9 +106,9 @@
     <Compile Include="Core\Models\CheatActivity\TaskItemModel.cs" />
     <Compile Include="Core\Models\CheatActivity\ActionStateModel.cs" />
     <Compile Include="Core\Models\CheatActivity\CommentData.cs" />
-    <Compile Include="Core\Models\ResourceModels\Channel.cs" />
-    <Compile Include="Core\Models\ResourceModels\PropertiesState.cs" />
-    <Compile Include="Core\Models\ResourceModels\ProxyData.cs" />
+    <Compile Include="Core\Models\ObjectModels\ChannelModel.cs" />
+    <Compile Include="Core\Models\ObjectModels\PropertiesStateModel.cs" />
+    <Compile Include="Core\Models\ObjectModels\ProxyDataModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AgreeToReceiveZenNewsletterData.cs" />
@@ -123,20 +124,20 @@
     <Compile Include="Core\ServicesCommonComponents\Authorization.cs" />
     <Compile Include="Core\ServicesCommonComponents\UnBindingPhoneAccount.cs" />
     <Compile Include="Core\Enums\ZenChannelCreationAndDesign\ChannelSettingsEnum.cs" />
-    <Compile Include="Core\Models\ResourceModels\ResourceBase.cs" />
+    <Compile Include="Core\Models\ObjectModels\ObjectBaseModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\BasicSettingsModel.cs" />
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
-    <Compile Include="Core\Models\TablesData.cs" />
+    <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Services\PostingSecondWind.cs" />
     <Compile Include="Core\Tools\CaptchaService.cs" />
-    <Compile Include="Core\Enums\Logger\LogFilter.cs" />
-    <Compile Include="Core\Enums\Logger\LoggerType.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Enums\LogFilter.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Tools\Extensions\FormattingExtensions.cs" />
-    <Compile Include="Core\Models\Logger\ErrorAnalysisData.cs" />
-    <Compile Include="Core\Models\Logger\LogItem.cs" />
-    <Compile Include="Core\Models\Logger\ResourceData.cs" />
-    <Compile Include="Core\Models\Logger\TimeData.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Models\ErrorAnalysisData.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Models\LogItem.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Models\ResourceData.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Models\TimeData.cs" />
     <Compile Include="Core\Tools\Macros\HtmlElementMacros.cs" />
     <Compile Include="Core\Tools\PhoneService.cs" />
     <Compile Include="Core\Enums\FileManager\ProxyModeEnum.cs" />
@@ -168,15 +169,14 @@
     <Compile Include="Core\Services\WalkingProfile.cs" />
     <Compile Include="Core\Services\YandexAccountRegistration.cs" />
     <Compile Include="Core\Enums\TableColumnEnum.cs" />
-    <Compile Include="Core\Tools\Logger.cs" />
-    <Compile Include="Core\ServicesCommonComponents\ServiceComponents.cs" />
+    <Compile Include="Core\Tools\LoggerTool\Logger.cs" />
+    <Compile Include="Core\ServicesComponents.cs" />
     <Compile Include="Core\Tools\ProfileWorker.cs" />
     <Compile Include="Core\Tools\TableHandler.cs" />
     <Compile Include="Core\Tools\TaskHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
       <Visible>False</Visible>

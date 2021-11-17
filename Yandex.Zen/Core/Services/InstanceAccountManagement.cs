@@ -13,16 +13,16 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Runtime.InteropServices;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.InstanceAccountManagement;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class InstanceAccountManagement : ServiceComponents
+    public class InstanceAccountManagement : ServicesComponents
     {
         private static readonly object _locker = new object();
 
@@ -213,7 +213,7 @@ namespace Yandex.Zen.Core.Services
         private bool ResourceHandler(string login)
         {
             Login = default;
-            ResourceDirectory = default;
+            ObjectDirectory = default;
             ZenChannel = default;
             ZenChannelProfile = default;
             Proxy = default;
@@ -229,9 +229,9 @@ namespace Yandex.Zen.Core.Services
                     if (login == loginFromTabel)
                     {
                         Login = login;
-                        ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
+                        ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                        Logger.LogResourceText = $"[Login: {Login}]\t";
+                        Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
 
                         // Проверка наличия zen канала
                         if (_startPageInstance == StartPageInstanceEnum.ZenChannelAccount || _startPageInstance == StartPageInstanceEnum.ZenChannelProfileEditor)

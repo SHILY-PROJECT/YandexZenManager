@@ -5,9 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.ServicesCommonComponents;
-using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
@@ -58,7 +57,7 @@ namespace Yandex.Zen.Core.Models
                 var httpResponse = ZennoPoster.HTTP.Request
                 (
                     HttpMethod.GET, $"https://ipinfo.io/{ip}", "", "", "", "UTF-8",
-                    ResponceType.BodyOnly, 20000, "", ServiceComponents.Zenno.Profile.UserAgent, true, 5
+                    ResponceType.BodyOnly, 20000, "", ServicesComponents.Zenno.Profile.UserAgent, true, 5
                 );
 
                 proxyInfo.CountryShortName = Regex.Replace(ZennoPoster.Parser.ParseByXpath(httpResponse, "//a[contains(@href, '/countries/')]", "href").First(), @"/countries/.*?", "");

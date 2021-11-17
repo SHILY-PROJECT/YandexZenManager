@@ -2,17 +2,17 @@
 using Global.ZennoExtensions;
 using System.Threading;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Tools
 {
     /// <summary>
     /// Класс для работы с таблицей.
     /// </summary>
-    public class TableHandler : ServiceComponents
+    public class TableHandler : ServicesComponents
     {
         /// <summary>
         /// Записать данные в ячейку таблицы режима и общую таблицу.

@@ -6,9 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Tools.Extensions;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
@@ -16,7 +17,7 @@ using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.ServicesCommonComponents
 {
-    public class UnBindingPhoneAccount : ServiceComponents
+    public class UnBindingPhoneAccount : ServicesComponents
     {
         /// <summary>
         /// Отвязать номер от аккаунта яндекс.
@@ -68,7 +69,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                     Instance.FuncGetFirstHe(xpathButtonRemove, "Кнопка - Удалить номер", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение ID задания
-                    var fileInfoLogAccount = Logger.GetLogAccountFileInfo(ResourceDirectory.FullName);
+                    var fileInfoLogAccount = Logger.GetLogAccountFileInfo(ObjectDirectory.FullName);
 
                     if (!fileInfoLogAccount.Exists)
                     {

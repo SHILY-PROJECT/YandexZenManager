@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums.CheatActivity;
-using Yandex.Zen.Core.Models.Logger;
+using Yandex.Zen.Core.Tools.LoggerTool.Models;
 
 namespace Yandex.Zen.Core.Models.CheatActivity
 {

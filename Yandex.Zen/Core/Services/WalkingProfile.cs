@@ -11,16 +11,17 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.CommandCenter;
 using Global.ZennoExtensions;
 using Yandex.Zen.Core.Tools;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools.Macros;
 using Yandex.Zen.Core.Enums.WalkingProfile;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class WalkingProfile : ServiceComponents
+    public class WalkingProfile : ServicesComponents
     {
         private static readonly object _locker = new object();
 
@@ -28,7 +29,7 @@ namespace Yandex.Zen.Core.Services
         private readonly SourceSearchKeysTypeEnum _sourceSearchKeysType;
         private readonly InstanceSettings.BusySettings _individualStateBusy;
         private readonly bool _individualStateBusyEnabled;
-        private SaveProfileMode _saveMode;
+        private SaveProfileModeEnum _saveMode;
 
         /// <summary>
         /// Конструктор для скрипта (настройка лога).
@@ -93,19 +94,13 @@ namespace Yandex.Zen.Core.Services
             var searchServicesToUse = Zenno.Variables["cfgSearchServicesToUse"].Value;
             var addCountryProfileToProfileName = bool.Parse(Zenno.Variables["cfgAddCountryProfileToProfileName"].Value);
             
-            switch (Zenno.Variables["cfgSaveProfileModeForWalkingProfile"].Value)
+            _saveMode = new Dictionary<string, SaveProfileModeEnum>
             {
-                default:
-                case "Сохранять профиль после обработки каждого сайта":
-                    _saveMode = SaveProfileMode.SaveAfterEverySite;
-                    break;
-                case "Сохранять профиль только по завершению всей работы":
-                    _saveMode = SaveProfileMode.SaveOnTaskCompletion;
-                    break;
-                case "Сохранять профиль после обработки каждой поисковой системы":
-                    _saveMode = SaveProfileMode.SaveAfterEverySearchSystem;
-                    break;
+                ["Сохранять профиль после обработки каждого сайта"] =               SaveProfileModeEnum.SaveAfterEverySite,
+                ["Сохранять профиль только по завершению всей работы"] =            SaveProfileModeEnum.SaveOnTaskCompletion,
+                ["Сохранять профиль после обработки каждой поисковой системы"] =    SaveProfileModeEnum.SaveAfterEverySearchSystem
             }
+            [Zenno.Variables["cfgSaveProfileModeForWalkingProfile"].Value];
 
             if (string.IsNullOrWhiteSpace(searchServicesToUse))
             {
@@ -131,7 +126,7 @@ namespace Yandex.Zen.Core.Services
                         Program.CurrentObjectCache.Add(ProfileInfo.FullName);
                         Program.ObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
 
-                        Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
+                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name, ObjectTypeEnum.Profile);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
@@ -172,7 +167,7 @@ namespace Yandex.Zen.Core.Services
 
                         Zenno.Profile.Load(ProfileInfo.FullName, true);
 
-                        Logger.LogResourceText = $"[{ProfileInfo.Name}]\t";
+                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name, ObjectTypeEnum.Profile);
                         Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
 
                         break;
@@ -192,7 +187,7 @@ namespace Yandex.Zen.Core.Services
                 GoWalkingByService(service, GetKeysForSearchService(_sourceSearchKeysType), numbKeyUse.ExtractNumber(), numbSearchPagesView.ExtractNumber());
 
                 // Сохранять профиль по завершению обработки поисковой системы
-                if (_saveMode == SaveProfileMode.SaveAfterEverySearchSystem)
+                if (_saveMode == SaveProfileModeEnum.SaveAfterEverySearchSystem)
                 {
                     ProfileWorker.SaveProfile(true);
                     Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки поисковой системы: {service}", LoggerType.Info, false, false, true, LogColor.Blue);
@@ -200,7 +195,7 @@ namespace Yandex.Zen.Core.Services
             });
 
             // Сохранять профиль по завершению задачи
-            if (_saveMode == SaveProfileMode.SaveOnTaskCompletion)
+            if (_saveMode == SaveProfileModeEnum.SaveOnTaskCompletion)
             {
                 ProfileWorker.SaveProfile(true);
                Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля по завершению задачи", LoggerType.Info, false, false, true, LogColor.Blue);
@@ -406,7 +401,7 @@ namespace Yandex.Zen.Core.Services
                         }
 
                         // Сохранение профиля после каждого сайта
-                        if (_saveMode == SaveProfileMode.SaveAfterEverySite)
+                        if (_saveMode == SaveProfileModeEnum.SaveAfterEverySite)
                         {
                             ProfileWorker.SaveProfile(true);
                            Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки сайта", LoggerType.Info, false, false, true, LogColor.Blue);

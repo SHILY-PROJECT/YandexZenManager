@@ -1,6 +1,6 @@
 ﻿namespace Yandex.Zen.Core.Enums
 {
-    public enum UseResourceTypeInWorkEnum
+    public enum UseObjectTypeInWorkEnum
     {
         UseOnlyDonor = 0,
         UseOnlyAccount = 1,

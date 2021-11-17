@@ -6,14 +6,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.ServicesCommonComponents;
-using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Models.ZenArticlePublication
 {
-    public class Article : ServiceComponents
+    public class Article : ServicesComponents
     {
         public bool IsVoid { get; private set; }
         public List<FileInfo> SimpleImagesList { get; set; }
@@ -31,7 +30,7 @@ namespace Yandex.Zen.Core.Models.ZenArticlePublication
 
             if (textFilesArticle.Count() == 0)
             {
-                Tools.Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\tВ папке отсутствует файл с текстом статьи", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\tВ папке отсутствует файл с текстом статьи", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 IsVoid = true;
                 return;
             }
@@ -42,7 +41,7 @@ namespace Yandex.Zen.Core.Models.ZenArticlePublication
 
             if (fullText.Where(x => string.IsNullOrEmpty(x)).ToList().Count < 2)
             {
-                Tools.Logger.Write($"{logText}[Файл: {file.FullName}]\tФайл заполнен не корректно (1-я строка - заголовок статьи; со 2-й строки - статья)", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"{logText}[Файл: {file.FullName}]\tФайл заполнен не корректно (1-я строка - заголовок статьи; со 2-й строки - статья)", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 IsVoid = true;
                 return;
             }
@@ -68,7 +67,7 @@ namespace Yandex.Zen.Core.Models.ZenArticlePublication
             if (namedImages.Count < listNamesNamedImages.Count)
             {
                 var macros = "[IMAGE=Имя файла.jpg]";
-                Tools.Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\t[MacrosType: {macros}]\tМакросов больше, чем самих изображений", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\t[MacrosType: {macros}]\tМакросов больше, чем самих изображений", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 IsVoid = true;
                 return;
             }
@@ -91,7 +90,7 @@ namespace Yandex.Zen.Core.Models.ZenArticlePublication
             if (simpleImages.Count < numbSimpleImages)
             {
                 var macros = "[IMAGE]";
-                Tools.Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\t[MacrosType: {macros}]\tМакросов больше, чем самих изображений", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"{logText}[Папка: {dirArticle.FullName}]\t[MacrosType: {macros}]\tМакросов больше, чем самих изображений", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 IsVoid = true;
                 return;
             }

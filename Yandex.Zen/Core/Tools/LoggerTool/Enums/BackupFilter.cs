@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Enums.Logger
+﻿namespace Yandex.Zen.Core.Tools.LoggerTool.Enums
 {
     public enum BackupFilter
     {

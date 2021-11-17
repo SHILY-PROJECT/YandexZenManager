@@ -10,17 +10,17 @@ using Global.ZennoExtensions;
 using System.Threading;
 using System.IO;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ZenArticlePublication;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class ZenArticlePublication : ServiceComponents
+    public class ZenArticlePublication : ServicesComponents
     {
         private static readonly object _locker = new object();
 
@@ -105,7 +105,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.Write($"Описание канала успешно установлено", LoggerType.Info, true, false, true);
 
                     // Заполнение поля с сайтом
-                    Instance.FuncGetFirstHe(xpathFieldSite[0], xpathFieldSite[1]).SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FuncGetFirstHe(xpathFieldSite[0], xpathFieldSite[1]).SetValue(Instance.ActiveTab, InstagramUrl, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Logger.Write($"Сайт канала успешно установлен", LoggerType.Info, true, false, true);
 
                     // Включение личных сообщений
@@ -455,19 +455,19 @@ namespace Yandex.Zen.Core.Services
                     // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                     Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
 
-                    ResourceDirectory = new DirectoryInfo(Path.Combine(Zenno.Directory, "Accounts", Login));
-                    ChannelDescription = new FileInfo(Path.Combine(ResourceDirectory.FullName, channelDescriptionFileName));
-                    _articlesDirectory = new DirectoryInfo(Path.Combine(ResourceDirectory.FullName, articlesFolderName));
+                    ObjectDirectory = new DirectoryInfo(Path.Combine(Zenno.Directory, "Accounts", Login));
+                    ChannelDescription = new FileInfo(Path.Combine(ObjectDirectory.FullName, channelDescriptionFileName));
+                    _articlesDirectory = new DirectoryInfo(Path.Combine(ObjectDirectory.FullName, articlesFolderName));
 
-                    Logger.LogResourceText = $"[Login: {Login}]\t";
+                    Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
 
                     // Проверка на наличия ресурса и его занятость
                     if (!ResourceIsAvailable(Login, row)) continue;
 
                     // Получение инстаграм ссылки
-                    InstUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
+                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
 
-                    if (string.IsNullOrWhiteSpace(InstUrl))
+                    if (string.IsNullOrWhiteSpace(InstagramUrl))
                     {
                         Logger.Write($"[Row: {row + 2}]\tОтсутствует ссылка", LoggerType.Info, true, true, true, LogColor.Yellow);
                         continue;

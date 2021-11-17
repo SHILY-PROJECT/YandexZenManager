@@ -1,4 +1,4 @@
-﻿using Yandex.Zen.Core.Models.Logger;
+﻿using Yandex.Zen.Core.Tools.LoggerTool.Models;
 
 namespace Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels
 {

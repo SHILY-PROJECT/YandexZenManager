@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Models.ResourceModels
+namespace Yandex.Zen.Core.Models.ObjectModels
 {
-    public class Channel
+    public class ChannelModel
     {
         public Uri Url { get; set; }
         public string ProfileEditor { get; set; }

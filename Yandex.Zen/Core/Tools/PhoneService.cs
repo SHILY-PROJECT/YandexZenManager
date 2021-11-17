@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Tools.Extensions;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.Tools
 {
-    public class PhoneService : ServiceComponents
+    public class PhoneService : ServicesComponents
     {
         public string Dll { get; set; }
         public string YandexService { get; set; }

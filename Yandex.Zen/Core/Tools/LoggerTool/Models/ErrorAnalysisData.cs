@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Models.Logger
+namespace Yandex.Zen.Core.Tools.LoggerTool.Models
 {
     /// <summary>
     /// Класс для хранения данных анализа ошибки.

@@ -5,8 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.Models.Logger;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Tools.LoggerTool.Models;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.Macros;
 
@@ -43,7 +44,7 @@ namespace Yandex.Zen.Core.Models.CheatActivity
                 {
                     CommentText = commentText;
 
-                    Tools.Logger.Write(accountArticleData.Directory, "Комментарий успешно получен", LoggerType.Info, true, false, false);
+                    Logger.Write(accountArticleData.Directory, "Комментарий успешно получен", LoggerType.Info, true, false, false);
 
                     return;
                 }

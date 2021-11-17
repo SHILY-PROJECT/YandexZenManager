@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Tools
 {
-    public class ProfileWorker : ServiceComponents
+    public class ProfileWorker : ServicesComponents
     {
         /// <summary>
         /// Получение и загрузка профиля (если в рабочей папке нет профиля, то он будет получен из общей папки).
@@ -64,7 +64,7 @@ namespace Yandex.Zen.Core.Tools
         private static bool CheckAndLoadProfile(int minSizeProfile)
         {
             // Получение профиля из папки аккаунта
-            var profiles = ResourceDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly);
+            var profiles = ObjectDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly);
 
             if (profiles.Count() == 0)
             {
@@ -78,7 +78,7 @@ namespace Yandex.Zen.Core.Tools
 
                 Logger.Write($"[Profile: {ProfileInfo.FullName} | {ProfileInfo.Length / 1024} КБ]\tПрофиль для работы успешно получен из общей папки", LoggerType.Info, true, false, true);
 
-                var newPathProfile = Path.Combine(ResourceDirectory.FullName, ProfileInfo.Name);
+                var newPathProfile = Path.Combine(ObjectDirectory.FullName, ProfileInfo.Name);
 
                 // Копирование профиля из общий папки в папку с аккаунтом
                 File.Copy(ProfileInfo.FullName, newPathProfile);
@@ -118,11 +118,11 @@ namespace Yandex.Zen.Core.Tools
         /// <returns></returns>
         private static bool CheckAndLoadProfile()
         {
-            var profiles = ResourceDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly);
+            var profiles = ObjectDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly);
 
             if (profiles.Count() == 0)
             {
-                Logger.Write($"[Папка: {ResourceDirectory.FullName}]\tПрофиль отсутствует", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка: {ObjectDirectory.FullName}]\tПрофиль отсутствует", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 return false;
             }
             else ProfileInfo = profiles.First();

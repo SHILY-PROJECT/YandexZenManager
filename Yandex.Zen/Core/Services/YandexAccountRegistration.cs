@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Global.ZennoExtensions;
 using Yandex.Zen.Core.Tools;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools.Macros;
@@ -20,12 +19,13 @@ using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums.WalkingProfile;
 using Yandex.Zen.Core.Enums.YandexAccountRegistration;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services
 {
 
-    public class YandexAccountRegistration : ServiceComponents
+    public class YandexAccountRegistration : ServicesComponents
     {
         private static readonly object _locker = new object();
 
@@ -162,7 +162,7 @@ namespace Yandex.Zen.Core.Services
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new WalkingOnZen(ResourceType.Donor).Start();
+                    new WalkingOnZen(ObjectTypeEnum.Donor).Start();
 
                     // Проверка прогулки по yandex.zen (если статус false - разгружаем ресурсы и завершаем работу скрипта)
                     if (!WalkingOnZen.StatusWalkIsGood) return;
@@ -214,8 +214,8 @@ namespace Yandex.Zen.Core.Services
                     (
                         $"[URL: {url}]\tНе найдено ни одного элемента на сайте\t" +
                         $"КИНЬ МНЕ ПАПКУ И ДАННЫЕ ДОНОРА!\t" +
-                        $"[Папка: {ResourceDirectory.FullName}]\t" +
-                        $"[Donor: {InstUrl}]\t" +
+                        $"[Папка: {ObjectDirectory.FullName}]\t" +
+                        $"[Donor: {InstagramUrl}]\t" +
                         $"[Proxy: {Proxy}]", 
                         LoggerType.Warning, true, true, true, LogColor.Red
                     );
@@ -477,7 +477,7 @@ namespace Yandex.Zen.Core.Services
             false);
 
             // Сохранение результата в таблицу режима и общую таблицу
-            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.InstaUrl, InstUrl, new List<InstDataItem>
+            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.InstaUrl, InstagramUrl, new List<InstDataItem>
             {
                 new InstDataItem(TableColumnEnum.Inst.Profile, countryProfileAndProxy),
                 new InstDataItem(TableColumnEnum.Inst.Login, Login),
@@ -498,7 +498,7 @@ namespace Yandex.Zen.Core.Services
             DirectoryInfo dirSource, dirTarget;
             string endTextLog;
 
-            dirSource = new DirectoryInfo(ResourceDirectory.FullName);
+            dirSource = new DirectoryInfo(ObjectDirectory.FullName);
             
             if (_transferDonorWithNewName)
             {
@@ -507,11 +507,11 @@ namespace Yandex.Zen.Core.Services
             }
             else
             {
-                dirTarget = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{ResourceDirectory.Name}");
+                dirTarget = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{ObjectDirectory.Name}");
                 endTextLog = "(с исходным именем)";
             }
 
-            ResourceDirectory = new DirectoryInfo(dirTarget.FullName);
+            ObjectDirectory = new DirectoryInfo(dirTarget.FullName);
 
             var textLog = $"[Старый путь: {dirSource.FullName}]\t[Новый путь: {dirTarget.FullName}]\tДонор эволюционировал в аккаунт и был скопирован в новую директорию {endTextLog}";
 
@@ -553,27 +553,27 @@ namespace Yandex.Zen.Core.Services
                 for (int row = 0; row < accountsCount; row++)
                 {
                     // Получение аккаунта, информация о директории и файле описания аккаунта
-                    InstUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
-                    ResourceDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstUrl, @"(?<=com/).*?(?=/)").Value}"));
+                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
+                    ObjectDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstagramUrl, @"(?<=com/).*?(?=/)").Value}"));
 
-                    Logger.LogResourceText = ShorDonorNameForLog ? $"[Donor: {ResourceDirectory.Name}]\t" : $"[Donor: {InstUrl}]\t";
+                    if (ShorDonorNameForLog) Logger.SetCurrentObjectForLogText(ObjectDirectory.Name, ObjectTypeEnum.Donor);
+                    else Logger.SetCurrentObjectForLogText(InstagramUrl, ObjectTypeEnum.Donor);
 
                     // Проверка на наличия ресурса и его занятость
-                    if (!ResourceIsAvailable(InstUrl, row)) continue;
+                    if (!ResourceIsAvailable(InstagramUrl, row)) continue;
 
                     // Проверка актуальности донора
-                    if (!string.IsNullOrWhiteSpace(AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row)))
+                    if (string.IsNullOrWhiteSpace(AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row)) is false)
                     {
                         Logger.Write($"[Row: {row + 2}]\tУже использовался для регистрации yandex аккаунта", LoggerType.Info, false, false, false);
                         continue;
                     }
 
                     // Проверка директории на существование (создать, если требуется)
-                    if (!ResourceDirectoryExists())
+                    if (ResourceDirectoryExists() is false)
                     {
-                        ResourceDirectory.Refresh();
-
-                        if (!ResourceDirectory.Exists) continue;
+                        ObjectDirectory.Refresh();
+                        if (ObjectDirectory.Exists is false) continue;
                     }
 
                     // Проверка донора на нагуливание по zen.yandex
@@ -587,49 +587,51 @@ namespace Yandex.Zen.Core.Services
                     }
 
                     // Получение имени и фамилии для регистрации
-                    var firstAndLastName = AccountsTable.GetCell((int)TableColumnEnum.Inst.FirstAndLastName, row);
+                    var nameAndSurname = AccountsTable.GetCell((int)TableColumnEnum.Inst.FirstAndLastName, row);
+                    var recommendation = "Варианты заполнения ИФ: \"Имя Фамили\", \"Имя:Фамилия\", \"Имя;Фамилия\"";
 
-                    if (!string.IsNullOrWhiteSpace(firstAndLastName))
+                    if (string.IsNullOrWhiteSpace(nameAndSurname) is false)
                     {
                         var separators = new[] { ' ', ':', ';' };
 
-                        if (!separators.Any(x => firstAndLastName.Contains(x)))
+                        if (separators.Any(x => nameAndSurname.Contains(x)) is false)
                         {
-                            Logger.Write($"[Row: {row + 2}]\tНекорректное заполнение строки с именем и фамилией. Варианты заполнения ИФ: \"Имя Фамили\", \"Имя:Фамилия\", \"Имя;Фамилия\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                            Logger.Write($"[Row: {row + 2}]\t'{nameof(nameAndSurname)}' - Некорректное заполнение. {recommendation}", LoggerType.Warning, true, true, true, LogColor.Yellow);
                             continue;
                         }
 
-                        _firstName = firstAndLastName.Split(separators)[0];
-                        _lastName = firstAndLastName.Split(separators)[1];
+                        _firstName = nameAndSurname.Split(separators)[0];
+                        _lastName = nameAndSurname.Split(separators)[1];
 
                         if (string.IsNullOrWhiteSpace(_firstName) || string.IsNullOrWhiteSpace(_lastName))
                         {
-                            Logger.Write($"[Row: {row + 2}]\tОтсутствует имя или фамилия. Варианты заполнения ИФ: \"Имя Фамили\", \"Имя:Фамилия\", \"Имя;Фамилия\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                            Logger.Write($"[Row: {row + 2}]\t'{nameof(_firstName)}: {_firstName}' '{nameof(_lastName)}: {_lastName}' - Отсутствует значение. {recommendation}",
+                                LoggerType.Warning, true, true, true, LogColor.Yellow);
                             continue;
                         }
                     }
                     else
                     {
-                        Logger.Write($"[Row: {row + 2}]\tЯчейка с именем и фамилией пуста. Варианты заполнения ИФ: \"Имя Фамили\", \"Имя:Фамилия\", \"Имя;Фамилия\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                        Logger.Write($"[Row: {row + 2}]\tЯчейка с именем и фамилией пуста. {recommendation}", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         continue;
                     }
 
                     // Проверка и установка аватара в соответствующее поле
-                    if (_uploadAvatarAfterRegistration && !GetAvatar()) continue;
+                    if (_uploadAvatarAfterRegistration && GetAvatar() is false) continue;
 
                     // Получение и загрузка профиля
-                    if (!ProfileWorker.LoadProfile(true)) return false;
+                    if (ProfileWorker.LoadProfile(true) is false) return false;
 
                     // Получение прокси
-                    if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                    if (SetProxy((int)TableColumnEnum.Inst.Proxy, row, true) is false) continue;
 
                     // Генерация пароля и ответа на контрольный вопрос
                     Password = TextMacros.GenerateString(15, "abcd");
                     Answer = TextMacros.GenerateString(9, "c");
 
                     // Успешное получение ресурса
-                    Program.CurrentObjectCache.Add(InstUrl);
-                    Program.ObjectsOfAllThreadsInWork.Add(InstUrl);
+                    Program.CurrentObjectCache.Add(InstagramUrl);
+                    Program.ObjectsOfAllThreadsInWork.Add(InstagramUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

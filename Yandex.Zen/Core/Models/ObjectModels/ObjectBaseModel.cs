@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.ResourceModels
+namespace Yandex.Zen.Core.Models.ObjectModels
 {
     /// <summary>
     /// Класс для хранения данных аккаунта.
     /// </summary>
-    public class Resource
+    public class ObjectBaseModel
     {
         public string Login { get; set; }
         public string Password { get; set; }
@@ -21,9 +22,14 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         public string PhoneNumber { get; set; }
 
         public DirectoryInfo Directory { get; set; }
-        public FileInfo Profile { get; set; }
-        public ProxyData ProxyData { get; set; }
-        public ResourceType ResourceType { get; set; }
-        public PropertiesState PropertiesState { get; set; }
+        public ProfileModel Profile { get; set; }
+        public ProxyDataModel ProxyData { get; set; }
+        public ObjectTypeEnum Type { get; set; }
+        public PropertiesStateModel PropertiesState { get; set; }
+
+        public ObjectBaseModel(ProgramModeEnum programMode)
+        {
+
+        }
     }
 }

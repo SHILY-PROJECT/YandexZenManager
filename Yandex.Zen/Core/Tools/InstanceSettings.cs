@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
@@ -100,7 +99,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static OtherSettings GetCurrentOtherSettings()
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 var instanceSettings = new OtherSettings
                 {
@@ -125,7 +124,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetOtherSettings(OtherSettings otherSettings)
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 instance.LoadPictures = otherSettings.LoadPictures;                  // Загрузка картинок
                 instance.DownloadActiveX = otherSettings.DownloadActiveX;            // Загрузка ActiveX
@@ -145,7 +144,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetDefaultOtherSettings()
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 instance.LoadPictures = true;         // Загрузка картинок
                 instance.DownloadActiveX = true;      // Загрузка ActiveX
@@ -191,7 +190,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static BusySettings GetCurrentBusySettings()
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 var instanceSettings = new BusySettings
                 {
@@ -206,7 +205,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetBusySettings(BusySettings busySettings)
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = busySettings.IgnoreAdditionalRequests;
                 instance.IgnoreAjaxRequests = busySettings.IgnoreAjaxRequests;
@@ -216,7 +215,7 @@ namespace Yandex.Zen.Core.Tools
 
             public static void SetDefaultBusySettings()
             {
-                var instance = ServiceComponents.Instance;
+                var instance = ServicesComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = false;  // Игнорировать Post/Get-запросы
                 instance.IgnoreAjaxRequests = false;        // Игнорировать Ajax-запросы

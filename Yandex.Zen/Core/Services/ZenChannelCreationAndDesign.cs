@@ -14,24 +14,25 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using Global.ZennoLab.Json;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.Logger;
 using Yandex.Zen.Core.Enums.ZenChannelCreationAndDesign;
 using Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels;
 using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Tools.LoggerTool.Models;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class ZenChannelCreationAndDesign : ServiceComponents
+    public class ZenChannelCreationAndDesign : ServicesComponents
     {
         private static readonly object _locker = new object();
 
         [ThreadStatic]
-        public static FileInfo SettingsFile = new FileInfo(Path.Combine(ResourceDirectory.FullName, "_logger", "config_setted_channel_settings.ini"));
+        public static FileInfo SettingsFile = new FileInfo(Path.Combine(ObjectDirectory.FullName, "_logger", "config_setted_channel_settings.ini"));
 
         private readonly StartPageCreateChannelEnum _startPageCreateChannelZen;
 
@@ -134,7 +135,7 @@ namespace Yandex.Zen.Core.Services
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new WalkingOnZen(ResourceType.Account).Start();
+                    new WalkingOnZen(ObjectTypeEnum.Account).Start();
 
                     if (!WalkingOnZen.StatusWalkIsGood) return false;
                 }
@@ -865,7 +866,7 @@ namespace Yandex.Zen.Core.Services
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
                         Instance.ActiveTab.URL,
-                        $"Некорректная ссылка на соц.сеть: {InstUrl}",
+                        $"Некорректная ссылка на соц.сеть: {InstagramUrl}",
                         string.Empty
                     });
                     return null;
@@ -876,7 +877,7 @@ namespace Yandex.Zen.Core.Services
                     if (string.IsNullOrWhiteSpace(heFieldItemSocialLink.GetAttribute("value")))
                     {
                         // Ввод ссылки на соц.сеть
-                        heFieldItemSocialLink.SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
+                        heFieldItemSocialLink.SetValue(Instance.ActiveTab, InstagramUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
                         heSocialLinkElement.FindChildByXPath(xpathSocialLinkTitle[0], 0).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                         setted = true;
                     }
@@ -886,7 +887,7 @@ namespace Yandex.Zen.Core.Services
 
                         addUrlToSocialNetworkData.ActionsStatus = true;
                         addUrlToSocialNetworkData.TimeAction = new TimeData();
-                        addUrlToSocialNetworkData.SocialUrl = InstUrl;
+                        addUrlToSocialNetworkData.SocialUrl = InstagramUrl;
 
                         return addUrlToSocialNetworkData;
                     }
@@ -1221,7 +1222,7 @@ namespace Yandex.Zen.Core.Services
                 // Заполнение поля
                 if (string.IsNullOrWhiteSpace(heFieldSite.GetAttribute("value")))
                 {
-                    heFieldSite.SetValue(Instance.ActiveTab, InstUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
+                    heFieldSite.SetValue(Instance.ActiveTab, InstagramUrl, LevelEmulation.SuperEmulation, Rnd.Next(2000, 3000));
                     setted = true;
                 }
                 else
@@ -1230,7 +1231,7 @@ namespace Yandex.Zen.Core.Services
 
                     setSiteData.ActionsStatus = true;
                     setSiteData.TimeAction = new TimeData();
-                    setSiteData.SiteUrl = InstUrl;
+                    setSiteData.SiteUrl = InstagramUrl;
 
                     return setSiteData;
                 }
@@ -1491,9 +1492,9 @@ namespace Yandex.Zen.Core.Services
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
-                ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
+                ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                Logger.LogResourceText = $"[Login: {Login}]\t";
+                Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
 
                 // Проверка на наличия ресурса и его занятость
                 if (!ResourceIsAvailable(Login, row)) continue;

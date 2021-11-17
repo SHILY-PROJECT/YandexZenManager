@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Enums.Logger;
-using Yandex.Zen.Core.ServicesCommonComponents;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Tools
 {
-    public class CaptchaService : ServiceComponents
+    public class CaptchaService : ServicesComponents
     {
         /// <summary>
         /// Отправка капчи на распознание (ошибки логирует автоматически).

@@ -14,23 +14,22 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using Global.ZennoLab.Json;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.Logger;
 using Yandex.Zen.Core.Enums.ZenChannelCreationAndDesign;
 using Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels;
 using Yandex.Zen.Core.Enums.CheatActivity;
 using Yandex.Zen.Core.Models.CheatActivity;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Tools.Macros;
 using System.Diagnostics;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class CheatActivity : ServiceComponents
+    public class CheatActivity : ServicesComponents
     {
         private static readonly object _locker = new object();
 
@@ -420,9 +419,9 @@ namespace Yandex.Zen.Core.Services
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
-                ResourceDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
+                ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                Logger.LogResourceText = $"[Login: {Login}]\t";
+                Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
 
                 // Проверка на наличия ресурса и его занятость
                 if (!ResourceIsAvailable(Login, row)) continue;
@@ -449,14 +448,14 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Проверка директории на существование (создать, если требуется)
-                if (!ResourceDirectory.Exists && CreateFolderResourceIfNotExist)
+                if (!ObjectDirectory.Exists && CreateFolderResourceIfNotExist)
                 {
-                    ResourceDirectory.Create();
-                    Logger.Write($"[{ResourceDirectory.FullName}]\tПапка создана автоматически. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
+                    ObjectDirectory.Create();
+                    Logger.Write($"[{ObjectDirectory.FullName}]\tПапка создана автоматически. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
                 }
-                else if (!ResourceDirectory.Exists)
+                else if (!ObjectDirectory.Exists)
                 {
-                    Logger.Write($"[{ResourceDirectory.FullName}]\tОтсутствует папка. Создайте её и заполните всеми необходимыми данными", LoggerType.Info, false, true, true, LogColor.Yellow);
+                    Logger.Write($"[{ObjectDirectory.FullName}]\tОтсутствует папка. Создайте её и заполните всеми необходимыми данными", LoggerType.Info, false, true, true, LogColor.Yellow);
                     continue;
                 }
 

@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums.CheatActivity;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Global.ZennoExtensions;
-using Yandex.Zen.Core.Models.Logger;
 using Global.ZennoLab.Json;
-using Yandex.Zen.Core.Enums.Logger;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Tools;
 
@@ -33,7 +30,7 @@ namespace Yandex.Zen.Core.Models.CheatActivity
 
         public ArticleBasicModel(IZennoTable table, int row, string totalGoToArticleSettings, string secondsWatchArticleSettings, string totalLikesSettings, string totalCommentsSettings)
         {
-            var zenno = ServiceComponents.Zenno;
+            var zenno = ServicesComponents.Zenno;
 
             Login = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Login, row);
             Login = !string.IsNullOrWhiteSpace(Login) ? Login : null;

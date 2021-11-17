@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Models.ResourceModels
+namespace Yandex.Zen.Core.Models.ObjectModels
 {
-    public class PropertiesState
+    public class PropertiesStateModel
     {
         public bool Login { get; set; }
         public bool Password { get; set; }

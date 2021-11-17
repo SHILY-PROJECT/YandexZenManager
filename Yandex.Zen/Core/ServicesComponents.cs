@@ -9,28 +9,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Enums.Logger;
 using Yandex.Zen.Core.Models;
+using Yandex.Zen.Core.Models.ObjectModels;
 using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Tools.Extensions;
+using Yandex.Zen.Core.Tools.LoggerTool;
+using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.ServicesCommonComponents
+namespace Yandex.Zen.Core
 {
-    public class ServiceComponents
+    public class ServicesComponents
     {
         private static readonly object _locker = new object();
 
-        public static Random _rnd;
-        public static IZennoTable AccountsGeneralTable;
+        [ThreadStatic] private static ObjectBaseModel _objectModel;
 
         public static IZennoPosterProjectModel Zenno { get => Program.Zenno; }
         public static Instance Instance { get => Program.Instance; }
-        public static Random Rnd { get => _rnd is null ? _rnd = new Random() : _rnd; }
+        public static ProgramModeEnum ProgramMode { get => Program.ProgramMode; }
+        public static Random Rnd { get; set; } = new Random();
+        public static ObjectBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 
+
+        public static IZennoTable AccountsGeneralTable;
         /// <summary>
         /// Таблица режима.
         /// </summary>
@@ -42,7 +47,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         /// <summary>
         /// Донор (ссылка на инстаграм профиль).
         /// </summary>
-        [ThreadStatic] public static string InstUrl;
+        [ThreadStatic] public static string InstagramUrl;
 
         /// <summary>
         /// Ссылка на zen канал.
@@ -104,7 +109,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         /// <summary>
         /// Полная информация о папке аккаунта/донора (путь и прочее).
         /// </summary>
-        [ThreadStatic] public static DirectoryInfo ResourceDirectory;
+        [ThreadStatic] public static DirectoryInfo ObjectDirectory;
 
         /// <summary>
         /// Полная информация файла описания к аккаунту (путь, размер и т.д.).
@@ -125,7 +130,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         [ThreadStatic] public static bool BindingPhoneToAccountIfRequaid;
 
         [ThreadStatic] public static string DescriptionChannel;
-        [ThreadStatic] public static ResourceType ResourceType;
+        [ThreadStatic] public static ObjectTypeEnum ResourceType;
 
         [ThreadStatic] public static int MinSizeProfileUseInModes;
         [ThreadStatic] public static bool CreateFolderResourceIfNotExist;
@@ -234,20 +239,20 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         /// <returns>true - директория существует; false - директория отсутствует.</returns>
         public bool ResourceDirectoryExists()
         {
-            if (!ResourceDirectory.Exists)
+            if (!ObjectDirectory.Exists)
             {
                 if (CreateFolderResourceIfNotExist)
                 {
-                    ResourceDirectory.Create();
+                    ObjectDirectory.Create();
 
-                    Logger.Write($"[Папка: {ResourceDirectory.FullName}]\tПапка создана в автоматическом режиме. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
+                    Logger.Write($"[Папка: {ObjectDirectory.FullName}]\tПапка создана в автоматическом режиме. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
 
                     // Создание папки
                     var nameFolderWithPosts = Zenno.Variables["cfgNameFolderArticles"].Value;
 
                     if (!string.IsNullOrWhiteSpace(nameFolderWithPosts))
                     {
-                        var dirTemp = new DirectoryInfo(Path.Combine(ResourceDirectory.FullName, nameFolderWithPosts));
+                        var dirTemp = new DirectoryInfo(Path.Combine(ObjectDirectory.FullName, nameFolderWithPosts));
                         dirTemp.Create();
                         Logger.Write($"[Папке: {dirTemp.FullName}]\tАвтоматически создана папка для постов. Создайде в ней отдельную папку (с произвольным именем) с файлами поста (1 папка с файлами = 1 пост)", LoggerType.Info, true, false, true);
                     }
@@ -256,7 +261,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                     var channelDescriptionFileName = Zenno.ExecuteMacro(Zenno.Variables["cfgFileNameDescriptionChannel"].Value);
 
                     if (!string.IsNullOrWhiteSpace(channelDescriptionFileName))
-                        ChannelDescription = new FileInfo(Path.Combine(ResourceDirectory.FullName, channelDescriptionFileName));
+                        ChannelDescription = new FileInfo(Path.Combine(ObjectDirectory.FullName, channelDescriptionFileName));
 
                     if (ChannelDescription != null)
                     {
@@ -268,7 +273,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                 {
                     Logger.Write
                     (
-                        $"[Папка: {ResourceDirectory.FullName}]\tОтсутствует папка. Создайте её и заполните всеми необходимыми данными (некоторые данные могут создаться автоматически, если выставлены соответствующие настройки)",
+                        $"[Папка: {ObjectDirectory.FullName}]\tОтсутствует папка. Создайте её и заполните всеми необходимыми данными (некоторые данные могут создаться автоматически, если выставлены соответствующие настройки)",
                         LoggerType.Info, false, true, true, LogColor.Yellow
                     );
                 }
@@ -384,11 +389,11 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
         /// <returns></returns>
         public bool GetAvatar()
         {
-            var images = ResourceDirectory.EnumerateFiles("*", SearchOption.TopDirectoryOnly).Where(x => Regex.IsMatch(Path.GetExtension(x.FullName), @"\.(jpg|jpeg|png)$"));
+            var images = ObjectDirectory.EnumerateFiles("*", SearchOption.TopDirectoryOnly).Where(x => Regex.IsMatch(Path.GetExtension(x.FullName), @"\.(jpg|jpeg|png)$"));
 
             if (images.Count() == 0)
             {
-                Logger.Write($"[Папка: {ResourceDirectory.FullName}]\tНе найдено ни одной аватарки. Изображения должны находиться в папке донора и иметь формат: \"*.jpg\", \"*.jpeg\", \"*.png\"", LoggerType.Info, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка: {ObjectDirectory.FullName}]\tНе найдено ни одной аватарки. Изображения должны находиться в папке донора и иметь формат: \"*.jpg\", \"*.jpeg\", \"*.png\"", LoggerType.Info, true, true, true, LogColor.Yellow);
                 return false;
             }
             else AvatarInfo = images.First();

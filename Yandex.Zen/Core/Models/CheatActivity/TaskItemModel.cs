@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools;
-using Yandex.Zen.Core.Enums.Logger;
 
 namespace Yandex.Zen.Core.Models.CheatActivity
 {
