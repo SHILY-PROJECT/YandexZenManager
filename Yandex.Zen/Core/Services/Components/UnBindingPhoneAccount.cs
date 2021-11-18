@@ -15,7 +15,7 @@ using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
-namespace Yandex.Zen.Core.ServicesCommonComponents
+namespace Yandex.Zen.Core.Services.Components
 {
     public class UnBindingPhoneAccount : ServicesComponents
     {
@@ -90,7 +90,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                         try
                         {
                             // Запрос на повторное принятие sms кода
-                            statusRetryGet = ZennoPoster.Sms.SetStatus(Program.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, Program.PhoneService.CountryParam);
+                            statusRetryGet = ZennoPoster.Sms.SetStatus(DataStore.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, DataStore.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
                             Instance.FuncGetFirstHe(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Models.ObjectModels;
+using Yandex.Zen.Core.Models.AccountOrDonorModels;
 
 namespace Yandex.Zen.Core.Services
 {
@@ -11,11 +11,11 @@ namespace Yandex.Zen.Core.Services
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static ObjectBaseModel _account;
+        [ThreadStatic] private static AccountOrDonorBaseModel _account;
 
-        public PostingSecondWind(ObjectBaseModel account)
+        public PostingSecondWind()
         {
-            _account = account;
+            
         }
 
         public void Start()

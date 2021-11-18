@@ -21,9 +21,9 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
-namespace Yandex.Zen.Core.ServicesCommonComponents
+namespace Yandex.Zen.Core.Services.Components
 {
-    public class Authorization : ServicesComponents
+    public class AuthorizationNew : ServicesComponents
     {
         [ThreadStatic]
         private static InstanceSettings.BusySettings BusyMode = InstanceSettings.BusySettings.GetCurrentBusySettings();
@@ -282,7 +282,7 @@ namespace Yandex.Zen.Core.ServicesCommonComponents
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
 
-                    var phoneLog = $"[Sms service dll: {Program.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                    var phoneLog = $"[Sms service dll: {DataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                     // Ввод номера
                     heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));

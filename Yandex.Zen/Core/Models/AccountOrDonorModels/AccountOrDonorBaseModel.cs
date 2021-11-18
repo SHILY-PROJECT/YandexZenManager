@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.ObjectModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     /// <summary>
     /// Класс для хранения данных аккаунта.
     /// </summary>
-    public class ObjectBaseModel
+    public class AccountOrDonorBaseModel
     {
         public string Login { get; set; }
         public string Password { get; set; }
@@ -27,9 +27,9 @@ namespace Yandex.Zen.Core.Models.ObjectModels
 
         private static readonly ServicesComponents Components;
 
-        public ObjectBaseModel()
+        public AccountOrDonorBaseModel()
         {
-            
+
         }
     }
 }

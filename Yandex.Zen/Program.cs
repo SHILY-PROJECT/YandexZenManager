@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using Yandex.Zen.Core;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.ObjectModels;
+using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Tools;
@@ -44,8 +44,6 @@ namespace Yandex.Zen
             ConfigureProject(instance, zenno, out var configurationStatus);
             if (configurationStatus is false) return 0;
 
-            var objectBase = new ObjectBaseModel();
-
             try
             {
                 switch (ProgramMode)
@@ -57,7 +55,7 @@ namespace Yandex.Zen
                     case ProgramModeEnum.WalkingOnZen:                  new WalkingOnZen().Start();                 break;
                     case ProgramModeEnum.InstanceAccountManagement:     new InstanceAccountManagement().Start();    break;
                     case ProgramModeEnum.CheatActivity:                 new CheatActivity().Start();                break;
-                    case ProgramModeEnum.PostingSecondWind:             new PostingSecondWind(objectBase).Start();  break;
+                    case ProgramModeEnum.PostingSecondWind:             new PostingSecondWind().Start();  break;
                 }
             }
             catch (Exception ex)
@@ -88,7 +86,6 @@ namespace Yandex.Zen
             lock (_locker)
             {
                 ZennoPoster.SetTries(new Guid(zenno.TaskId), ZennoPoster.GetThreadsCount(new Guid(zenno.TaskId)));
-
                 Thread.Sleep(2000);
             }
         }

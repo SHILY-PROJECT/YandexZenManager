@@ -4,6 +4,6 @@
     {
         Account = 0,
         Donor = 1,
-        Profile = 2
+        //Profile = 2
     }
 }

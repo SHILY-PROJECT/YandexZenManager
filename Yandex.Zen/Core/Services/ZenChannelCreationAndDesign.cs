@@ -20,10 +20,10 @@ using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.ZenChannelCreationAndDesign;
 using Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using Yandex.Zen.Core.Tools.LoggerTool.Models;
+using Yandex.Zen.Core.Services.Components;
 
 namespace Yandex.Zen.Core.Services
 {

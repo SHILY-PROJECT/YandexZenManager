@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Services;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Tools.LoggerTool.Models

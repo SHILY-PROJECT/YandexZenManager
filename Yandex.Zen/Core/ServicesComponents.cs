@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Models.ObjectModels;
+using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools.LoggerTool;
@@ -26,13 +26,13 @@ namespace Yandex.Zen.Core
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static ObjectBaseModel _objectModel;
+        [ThreadStatic] private static AccountOrDonorBaseModel _objectModel;
 
-        public static IZennoPosterProjectModel Zenno { get => Program.Zenno; }
-        public static Instance Instance { get => Program.Instance; }
-        public static ProgramModeEnum ProgramMode { get => Program.ProgramMode; }
+        public static IZennoPosterProjectModel Zenno { get => DataStore.Zenno; }
+        public static Instance Instance { get => DataStore.Browser; }
+        public static ProgramModeEnum ProgramMode { get => DataStore.ProgramMode; }
         public static Random Rnd { get; set; } = new Random();
-        public static ObjectBaseModel Object { get => _objectModel; set { _objectModel = value; } }
+        public static AccountOrDonorBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 
 
         public static IZennoTable AccountsGeneralTable;

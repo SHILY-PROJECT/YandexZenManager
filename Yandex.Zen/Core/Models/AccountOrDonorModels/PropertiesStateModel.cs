@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Models.ObjectModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     public class PropertiesStateModel
     {

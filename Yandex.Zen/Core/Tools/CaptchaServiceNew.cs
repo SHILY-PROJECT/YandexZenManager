@@ -3,22 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Tools
 {
-    public class CaptchaService : ServicesComponents
+    public class CaptchaServiceNew
     {
+        public string ServiceDll { get; set; }
+
+        public CaptchaServiceNew(string dllName)
+        {
+            ServiceDll = dllName;
+        }
+
+        public CaptchaServiceNew(ILocalVariable dllName) : this(dllName.Value) { }
+
+
         /// <summary>
         /// Отправка капчи на распознание (ошибки логирует автоматически).
         /// </summary>
         /// <param name="htmlElementImgCaptcha"></param>
-        /// <returns></returns>
-        public static string Recognize(HtmlElement htmlElementImgCaptcha)
+        /// <returns>Возвращение результата распознавания.</returns>
+        public string Recognize(HtmlElement htmlElementImgCaptcha)
         {
             string captchaResult;
 
@@ -30,7 +40,7 @@ namespace Yandex.Zen.Core.Tools
                 Logger.Write($"Отправка капчи на распознавание", LoggerType.Info, true, false, true, LogColor.Default);
 
                 // Отправка капчи на распознание
-                var responseCaptcha = ZennoPoster.CaptchaRecognition(DataStore.CaptchaServiceDll, Convert.ToBase64String(btImg), "");
+                var responseCaptcha = ZennoPoster.CaptchaRecognition(ServiceDll, Convert.ToBase64String(btImg), "");
 
                 // Получение результата распознавания
                 captchaResult = responseCaptcha.Split(new[] { "-|-" }, StringSplitOptions.None)[0];
@@ -51,7 +61,6 @@ namespace Yandex.Zen.Core.Tools
                 return null;
             }
 
-            // Возвращение результата распознавания
             return captchaResult;
         }
     }

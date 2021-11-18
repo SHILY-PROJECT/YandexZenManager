@@ -88,7 +88,10 @@
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
-    <Compile Include="Core\Models\ObjectModels\ProfileModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModel.cs" />
+    <Compile Include="Core\ServicesComponentsNew.cs" />
+    <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
+    <Compile Include="Core\Tools\CaptchaServiceNew.cs" />
     <Compile Include="Core\Tools\LoggerTool\Enums\BackupFilter.cs" />
     <Compile Include="Core\Tools\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Enums\Extensions\LevelEmulation.cs" />
@@ -106,9 +109,9 @@
     <Compile Include="Core\Models\CheatActivity\TaskItemModel.cs" />
     <Compile Include="Core\Models\CheatActivity\ActionStateModel.cs" />
     <Compile Include="Core\Models\CheatActivity\CommentData.cs" />
-    <Compile Include="Core\Models\ObjectModels\ChannelModel.cs" />
-    <Compile Include="Core\Models\ObjectModels\PropertiesStateModel.cs" />
-    <Compile Include="Core\Models\ObjectModels\ProxyDataModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ChannelModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\PropertiesStateModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProxyDataModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AgreeToReceiveZenNewsletterData.cs" />
@@ -121,10 +124,10 @@
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\SetMailData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\SetSiteData.cs" />
     <Compile Include="Core\Services\CheatActivity.cs" />
-    <Compile Include="Core\ServicesCommonComponents\Authorization.cs" />
-    <Compile Include="Core\ServicesCommonComponents\UnBindingPhoneAccount.cs" />
+    <Compile Include="Core\Services\Components\Authorization.cs" />
+    <Compile Include="Core\Services\Components\UnBindingPhoneAccount.cs" />
     <Compile Include="Core\Enums\ZenChannelCreationAndDesign\ChannelSettingsEnum.cs" />
-    <Compile Include="Core\Models\ObjectModels\ObjectBaseModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\AccountOrDonorBaseModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\BasicSettingsModel.cs" />
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
@@ -171,6 +174,10 @@
     <Compile Include="Core\Enums\TableColumnEnum.cs" />
     <Compile Include="Core\Tools\LoggerTool\Logger.cs" />
     <Compile Include="Core\ServicesComponents.cs" />
+    <Compile Include="Core\Tools\PhoneServiceTool\Models\PhoneDataModel.cs" />
+    <Compile Include="Core\Tools\PhoneServiceTool\Models\PhoneSettingsModel.cs" />
+    <Compile Include="Core\Tools\PhoneServiceTool\PhoneServiceNew.cs" />
+    <Compile Include="Core\Tools\PhoneServiceTool\Models\PhoneServiceParamsModel.cs" />
     <Compile Include="Core\Tools\ProfileWorker.cs" />
     <Compile Include="Core\Tools\TableHandler.cs" />
     <Compile Include="Core\Tools\TaskHandler.cs" />
@@ -189,6 +196,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Tools\PhoneServiceTool\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="ValidateZennoPosterDllPath" BeforeTargets="BeforeBuild">

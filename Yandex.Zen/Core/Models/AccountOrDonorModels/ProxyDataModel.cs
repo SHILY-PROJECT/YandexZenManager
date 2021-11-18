@@ -10,7 +10,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Models.ObjectModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     public class ProxyDataModel
     {
@@ -29,9 +29,9 @@ namespace Yandex.Zen.Core.Models.ObjectModels
                 _proxy = string.Empty;
                 return;
             }
-            
+
             if (string.IsNullOrWhiteSpace(proxy) || proxy.Contains(":") is false)
-                    throw new ArgumentException($"'{nameof(proxy)}' - Некорректный аргумент");
+                throw new ArgumentException($"'{nameof(proxy)}' - Некорректный аргумент");
 
             if (defineIpCountryInfo)
             {
@@ -40,7 +40,7 @@ namespace Yandex.Zen.Core.Models.ObjectModels
                 _countryShortName = countryShortName;
             }
 
-            _proxy = proxy;          
+            _proxy = proxy;
         }
 
         public void GetIpCountryInfo(string ip, out string countryFullName, out string countryShortName)

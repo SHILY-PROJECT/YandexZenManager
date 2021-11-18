@@ -24,11 +24,14 @@ namespace Yandex.Zen.Core.Tools.LoggerTool
         [ThreadStatic] private static FileInfo _generalLog;
         [ThreadStatic] private static string _textObjectForLog;
 
-        private static DirectoryInfo ResourceDirectory { get => ServicesComponents.ObjectDirectory; }
-        private static Instance Instance { get => ServicesComponents.Instance; }
-        private static IZennoPosterProjectModel Zenno { get => ServicesComponents.Zenno; }
+        private static IZennoPosterProjectModel Zenno { get => DataStore.Zenno; }
+        private static Instance Browser { get => DataStore.Browser; }
+        private static DirectoryInfo ResourceDirectory { get => DataStore.ResourceObject.Directory; }
 
         public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[Program.ProgramMode])) : _generalLog; }
+
+        public static void SetCurrentObjectForLogText(string currentObject)
+            => _textObjectForLog = $"[{currentObject}]\t";
 
         public static void SetCurrentObjectForLogText(string currentObject, ObjectTypeEnum objectType)
         {
@@ -36,7 +39,6 @@ namespace Yandex.Zen.Core.Tools.LoggerTool
             {
                 case ObjectTypeEnum.Account: _textObjectForLog = $"[Login: {currentObject}]\t"; break;
                 case ObjectTypeEnum.Donor: _textObjectForLog = $"[Donor: {currentObject}]\t"; break;
-                case ObjectTypeEnum.Profile: _textObjectForLog = $"[{currentObject}]\t"; break;
             }
         }
 
@@ -171,7 +173,7 @@ namespace Yandex.Zen.Core.Tools.LoggerTool
         {
             var datetime = $"{DateTime.Now:yyyy-MM-dd   HH-mm-ss}";
             var errorFolder = new DirectoryInfo(Path.Combine(resourceDirectory.FullName, "_logger", $"error - {datetime}"));
-            var titleActiveTab = $"{new string(Path.GetInvalidFileNameChars())}{new string(Path.GetInvalidPathChars())}".Aggregate(Instance.ActiveTab.Title, (t, c) => t.Replace(c.ToString(), ""));
+            var titleActiveTab = $"{new string(Path.GetInvalidFileNameChars())}{new string(Path.GetInvalidPathChars())}".Aggregate(Browser.ActiveTab.Title, (t, c) => t.Replace(c.ToString(), ""));
 
             try
             {
@@ -180,11 +182,11 @@ namespace Yandex.Zen.Core.Tools.LoggerTool
 
                 // Сохранение DomText
                 if (saveDomText)
-                    File.WriteAllText(Path.Combine(errorFolder.FullName, $"[{datetime}] - [DomText] - {titleActiveTab}.html"), Instance.ActiveTab.DomText, Encoding.UTF8);
+                    File.WriteAllText(Path.Combine(errorFolder.FullName, $"[{datetime}] - [DomText] - {titleActiveTab}.html"), Browser.ActiveTab.DomText, Encoding.UTF8);
 
                 // Сохранение SourceText
                 if (saveSourceText)
-                    File.WriteAllText(Path.Combine(errorFolder.FullName, $"[{datetime}] - [SourceText] - {titleActiveTab}.html"), Instance.ActiveTab.GetSourceText("utf-8"), Encoding.UTF8);
+                    File.WriteAllText(Path.Combine(errorFolder.FullName, $"[{datetime}] - [SourceText] - {titleActiveTab}.html"), Browser.ActiveTab.GetSourceText("utf-8"), Encoding.UTF8);
 
                 // Сохранение дополнительной информации об ошибке
                 if (otherInfoList != null && otherInfoList.Count != 0)
@@ -195,7 +197,7 @@ namespace Yandex.Zen.Core.Tools.LoggerTool
                 {
                     using (var ms = new MemoryStream())
                     {
-                        var btScreenshot = Convert.FromBase64String(Instance.ActiveTab.GetPagePreview());
+                        var btScreenshot = Convert.FromBase64String(Browser.ActiveTab.GetPagePreview());
                         ms.Write(btScreenshot, 0, btScreenshot.Length);
 
                         using (var bm = new Bitmap(ms))

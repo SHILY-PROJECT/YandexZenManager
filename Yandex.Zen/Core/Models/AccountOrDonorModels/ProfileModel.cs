@@ -8,7 +8,7 @@ using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.ObjectModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     public class ProfileModel
     {
@@ -19,7 +19,7 @@ namespace Yandex.Zen.Core.Models.ObjectModels
         /// Файл профиля.
         /// </summary>
         public FileInfo File
-        { 
+        {
             get
             {
                 _profile.Refresh();

@@ -19,9 +19,9 @@ using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums.WalkingOnZen;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Services.Components;
 
 namespace Yandex.Zen.Core.Services
 {

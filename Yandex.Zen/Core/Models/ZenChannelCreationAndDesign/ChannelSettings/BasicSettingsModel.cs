@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.ServicesCommonComponents;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels;
 
