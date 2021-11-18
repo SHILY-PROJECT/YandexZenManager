@@ -12,15 +12,17 @@ using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using Yandex.Zen.Core.Tools.PhoneServiceTool.Models;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.Tools.PhoneServiceTool
 {
     public class PhoneServiceNew
     {
-        private Instance Browser { get => DataStore.Browser; }
+        #region=========================================================
+        private Instance Browser { get => ServicesComponents.Instance; }
         private Random Rnd { get; set; } = new Random();
-
+        #endregion======================================================
 
         public PhoneSettingsModel Settings { get; private set; }
         public PhoneServiceParamsModel Params { get; private set; }
@@ -32,6 +34,8 @@ namespace Yandex.Zen.Core.Tools.PhoneServiceTool
             Params = new PhoneServiceParamsModel(serviceDllAndCountry);
             Settings = phoneSettings;
         }
+
+        public PhoneServiceNew(ILocalVariable serviceDllAndCountry, PhoneSettingsModel phoneSettings) : this(serviceDllAndCountry.Value, phoneSettings) { }
 
 
         /// <summary>

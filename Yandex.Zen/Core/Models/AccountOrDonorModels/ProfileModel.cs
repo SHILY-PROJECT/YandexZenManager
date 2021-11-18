@@ -12,8 +12,11 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     public class ProfileModel
     {
-        private FileInfo _profile;
+        #region====================================================================
         private IZennoPosterProjectModel Zenno { get => ServicesComponents.Zenno; }
+        private FileInfo _profile;
+        #endregion=================================================================
+
 
         /// <summary>
         /// Файл профиля.
@@ -37,6 +40,12 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         /// Имя файла профиля.
         /// </summary>
         public string Name => File.Name;
+
+        /// <summary>
+        /// Настройки использования общих профилей.
+        /// </summary>
+        public SettingsUseProfileSharedModel SettingsUseProfileShared {get; set;}
+
 
         /// <summary>
         /// Загрузка профиля.

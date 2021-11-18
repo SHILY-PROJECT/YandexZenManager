@@ -126,7 +126,7 @@ namespace Yandex.Zen.Core.Services
                         Program.CurrentObjectCache.Add(ProfileInfo.FullName);
                         Program.CurrentObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
 
-                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name, ObjectTypeEnum.Profile);
+                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
@@ -167,7 +167,7 @@ namespace Yandex.Zen.Core.Services
 
                         Zenno.Profile.Load(ProfileInfo.FullName, true);
 
-                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name, ObjectTypeEnum.Profile);
+                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
                         Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
 
                         break;

@@ -25,11 +25,9 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public ObjectTypeEnum Type { get; set; }
         public PropertiesStateModel PropertiesState { get; set; }
 
-        private static readonly ServicesComponents Components;
-
-        public AccountOrDonorBaseModel()
+        public AccountOrDonorBaseModel(SettingsUseProfileSharedModel settingsUseProfileShared)
         {
-
+            Profile = new ProfileModel { SettingsUseProfileShared = settingsUseProfileShared };
         }
     }
 }

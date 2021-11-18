@@ -18,12 +18,14 @@ using Yandex.Zen.Core.Tools;
 using Yandex.Zen.Core.Tools.Extensions;
 using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Tools.PhoneServiceTool;
 using ZennoLab.CommandCenter;
 using ZennoLab.Emulation;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.ProjectModel.Collections;
 using ZennoLab.InterfacesLibrary.ProjectModel.Enums;
+using Yandex.Zen.Core.Tools.PhoneServiceTool.Models;
 
 namespace Yandex.Zen
 {
@@ -80,9 +82,16 @@ namespace Yandex.Zen
         public static PhoneService PhoneService { get; private set; }
 
         /// <summary>
+        /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
+        /// </summary>
+        public static PhoneServiceNew PhoneServiceNew { get; private set; }
+
+        /*todo Снести CaptchaServiceDll после рефакторинга*/
+        public static string CaptchaServiceDll { get; private set; }
+        /// <summary>
         /// Капча сервис (данные dll).
         /// </summary>
-        public static CaptchaServiceNew CaptchaServiceDll { get; private set; }
+        public static CaptchaServiceNew CaptchaServiceDllNew { get; private set; }
 
         /// <summary>
         /// Текущие объекты потока.
@@ -157,11 +166,10 @@ namespace Yandex.Zen
                 Zenno = zenno;
                 InitializingProjectProperties();
                 Browser = instance;
-                ResourceObject = new AccountOrDonorBaseModel();
             }
             catch (Exception ex)
             {
-                Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, false, true, LogColor.Red);
+                Logger.Write($"[{nameof(ex.Message)}:{ex.Message}]{Environment.NewLine}{nameof(ex.StackTrace)}:{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, false, true, LogColor.Red);
                 configurationStatus = false;
             }
         }
@@ -194,46 +202,56 @@ namespace Yandex.Zen
 
             _programMode = new Dictionary<string, ProgramModeEnum>()
             {
-                ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.InstanceAccountManagement,
-                ["Нагуливание профилей"] = ProgramModeEnum.WalkingProfile,
-                ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkingOnZen,
-                ["Регистрация аккаунтов yandex"] = ProgramModeEnum.YandexAccountRegistration,
-                ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ZenChannelCreationAndDesign,
-                ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.ZenArticlePublication,
-                ["Накрутка активности"] = ProgramModeEnum.CheatActivity,
-                ["Posting - second wind (new theme)"] = ProgramModeEnum.PostingSecondWind
+                ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
+                ["Нагуливание профилей"] =                          ProgramModeEnum.WalkingProfile,
+                ["Нагуливание аккаунтов/доноров по zen.yandex"] =   ProgramModeEnum.WalkingOnZen,
+                ["Регистрация аккаунтов yandex"] =                  ProgramModeEnum.YandexAccountRegistration,
+                ["Создание и оформление канала zen.yandex"] =       ProgramModeEnum.ZenChannelCreationAndDesign,
+                ["Публикация статей на канале zen.yandex"] =        ProgramModeEnum.ZenArticlePublication,
+                ["Накрутка активности"] =                           ProgramModeEnum.CheatActivity,
+                ["Posting - second wind (new theme)"] =             ProgramModeEnum.PostingSecondWind
             }
             [Zenno.Variables["cfgScriptServices"].Value];
 
+            /* todo После переноса сервисов на улучшенную архитектуру - снести данный объект и его создание*/
             if (CaptchaServiceDll is null)
-                lock (_locker) CaptchaServiceDll = CaptchaServiceDll is null ? CaptchaServiceDll = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]) : CaptchaServiceDll;
-
+                lock (_locker) CaptchaServiceDll = CaptchaServiceDll is null ? CaptchaServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value : CaptchaServiceDll;
             if (PhoneService is null)
                 lock (_locker) PhoneService = PhoneService is null ? PhoneService = new PhoneService(Zenno.Variables["cfgSmsServiceAndCountry"].Value) : PhoneService;
+           
             #endregion
 
             #region [ ИНИЦИАЛИЗАЦИЯ СВОЙСТВ СЕРВИСОВ ]==========================================
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
             _modeTable = new Dictionary<ProgramModeEnum, TableModel>
             {
-                [ProgramModeEnum.InstanceAccountManagement] = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
-                [ProgramModeEnum.YandexAccountRegistration] = new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
+                [ProgramModeEnum.InstanceAccountManagement] =   new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
+                [ProgramModeEnum.YandexAccountRegistration] =   new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
                 [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
-                [ProgramModeEnum.ZenArticlePublication] = new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
-                [ProgramModeEnum.CheatActivity] = new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
-                [ProgramModeEnum.PostingSecondWind] = new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
+                [ProgramModeEnum.ZenArticlePublication] =       new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
+                [ProgramModeEnum.CheatActivity] =               new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
+                [ProgramModeEnum.PostingSecondWind] =           new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
             }
             [_programMode];
 
-            if (ServicesComponents.AccountsGeneralTable is null)
-                lock (_locker) ServicesComponents.AccountsGeneralTable = ServicesComponents.AccountsGeneralTable is null ? ServicesComponents.AccountsGeneralTable = Zenno.Tables["AccountsShared"] : ServicesComponents.AccountsGeneralTable;
-
-            ServicesComponents.TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].ExtractNumber();
-            ServicesComponents.MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber();
-            ServicesComponents.AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber();
+            CaptchaServiceDllNew = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
+            PhoneServiceNew = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
+            (
+                Zenno.Variables["cfgNumbAttempsGetPhone"],
+                Zenno.Variables["cfgNumbMinutesWaitSmsCode"],
+                Zenno.Variables["cfgNumbAttemptsRequestSmsCode"]
+            ));
+            
+            
             ServicesComponents.MinSizeProfileUseInModes = Zenno.Variables["cfgMinSizeProfileUseInModes"].Value.ExtractNumber();
             ServicesComponents.CreateFolderResourceIfNotExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value);
             #endregion
+
+            ResourceObject = new AccountOrDonorBaseModel(new SettingsUseProfileSharedModel
+            (
+                Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"],
+                Zenno.Variables["cfgMinSizeProfileUseInModes"]
+            ));
         }
 
     }

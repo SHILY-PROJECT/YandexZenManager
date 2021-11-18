@@ -89,6 +89,7 @@
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProfileModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\SettingsUseProfileSharedModel.cs" />
     <Compile Include="Core\ServicesComponentsNew.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
     <Compile Include="Core\Tools\CaptchaServiceNew.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Core\Tools\InstanceSettings.cs" />
     <Compile Include="Core\Services\WalkingOnZen.cs" />
     <Compile Include="Core\Services\ZenArticlePublication.cs" />
-    <Compile Include="Core\Tools\FileManager.cs" />
     <Compile Include="Core\Tools\Macros\HttpMacros.cs" />
     <Compile Include="Core\Tools\Macros\TabMacros.cs" />
     <Compile Include="Core\Tools\Macros\TextMacros.cs" />

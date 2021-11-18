@@ -10,9 +10,31 @@ namespace Yandex.Zen.Core.Tools.PhoneServiceTool.Models
     {
         private string _serviceDllAndCountry;
 
+        /// <summary>
+        /// Название сервиса dll.
+        /// </summary>
         public string Dll { get; private set; }
+
+        /// <summary>
+        /// Параметр сервиса для которого нужен номер.
+        /// Например: ya, vk, ok, tw и т.д.
+        /// </summary>
         public string NetworkService { get; private set; }
+
+        /// <summary>
+        /// Параметр страны для сервиса.
+        /// </summary>
         public string Country { get; private set; }
+
+        /// <summary>
+        /// Название страны (из выводных настроек).
+        /// </summary>
+        public string CountryName { get; private set; }
+
+        /// <summary>
+        /// Название dll сервиса и страны, через разделитель (" - ").
+        /// Пример: SmsActivate.dll - Россия
+        /// </summary>
         public string ServiceDllAndCountry
         {
             get => _serviceDllAndCountry;
@@ -23,6 +45,13 @@ namespace Yandex.Zen.Core.Tools.PhoneServiceTool.Models
             }
         }
 
+        /// <summary>
+        /// Модель с параметрами для сервиса.
+        /// </summary>
+        /// <param name="serviceDllAndCountry">
+        /// Название dll сервиса и страны, через разделитель (" - ").
+        /// Пример: SmsActivate.dll - Россия
+        /// </param>
         public PhoneServiceParamsModel(string serviceDllAndCountry)
             => ServiceDllAndCountry = serviceDllAndCountry;
 
