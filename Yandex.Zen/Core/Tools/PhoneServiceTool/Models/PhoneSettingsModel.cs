@@ -17,6 +17,8 @@ namespace Yandex.Zen.Core.Tools.PhoneServiceTool.Models
         }
 
         public PhoneSettingsModel(ILocalVariable timeToSecondsWaitPhone, ILocalVariable minutesWaitSmsCode, ILocalVariable attemptsReSendSmsCode) :
-            this (timeToSecondsWaitPhone.ExtractNumber(), minutesWaitSmsCode.Value.Split(' ')[0].ExtractNumber(), attemptsReSendSmsCode.Value.Split(' ')[0].ExtractNumber()) { }
+            this(timeToSecondsWaitPhone.ExtractNumber(),
+                 minutesWaitSmsCode.Value.Split(' ')[0].ExtractNumber(),
+                 attemptsReSendSmsCode.Value.Split(' ')[0].ExtractNumber()) { }
     }
 }

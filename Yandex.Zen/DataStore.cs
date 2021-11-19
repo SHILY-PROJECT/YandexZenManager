@@ -26,6 +26,7 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.ProjectModel.Collections;
 using ZennoLab.InterfacesLibrary.ProjectModel.Enums;
 using Yandex.Zen.Core.Tools.PhoneServiceTool.Models;
+using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
 
 namespace Yandex.Zen
 {
@@ -33,6 +34,7 @@ namespace Yandex.Zen
     {
         private static readonly object _locker = new object();
 
+        #region=========================================================================
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
         [ThreadStatic] private static AccountOrDonorBaseModel _accountOrDonorBaseModel;
@@ -44,8 +46,11 @@ namespace Yandex.Zen
         private static DirectoryInfo _accountsDirectory;
         private static List<string> _objectsOfAllThreadsInWork;
         private static string _instanceWindowSize;
+        #endregion======================================================================
 
-
+        /// <summary>
+        /// Объект типа аккаунта или донора с соответствующими данными.
+        /// </summary>
         public static AccountOrDonorBaseModel ResourceObject { get => _accountOrDonorBaseModel; private set { _accountOrDonorBaseModel = value; } }
         
         /// <summary>
@@ -197,9 +202,18 @@ namespace Yandex.Zen
         /// <returns></returns>
         private static void InitializingProjectProperties()
         {
-            #region [ ИНИЦИАЛИЗАЦИЯ СВОЙСТВ ПРОЕКТА ]==========================================
-            _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
-
+            _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
+            _modeTable = new Dictionary<ProgramModeEnum, TableModel>
+            {
+                [ProgramModeEnum.InstanceAccountManagement] = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
+                [ProgramModeEnum.YandexAccountRegistration] = new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
+                [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
+                [ProgramModeEnum.ZenArticlePublication] = new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
+                [ProgramModeEnum.CheatActivity] = new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
+                [ProgramModeEnum.PostingSecondWind] = new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
+            }
+            [_programMode];
+        
             _programMode = new Dictionary<string, ProgramModeEnum>()
             {
                 ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
@@ -213,26 +227,13 @@ namespace Yandex.Zen
             }
             [Zenno.Variables["cfgScriptServices"].Value];
 
+            _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
+
             /* todo После переноса сервисов на улучшенную архитектуру - снести данный объект и его создание*/
             if (CaptchaServiceDll is null)
                 lock (_locker) CaptchaServiceDll = CaptchaServiceDll is null ? CaptchaServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value : CaptchaServiceDll;
             if (PhoneService is null)
                 lock (_locker) PhoneService = PhoneService is null ? PhoneService = new PhoneService(Zenno.Variables["cfgSmsServiceAndCountry"].Value) : PhoneService;
-           
-            #endregion
-
-            #region [ ИНИЦИАЛИЗАЦИЯ СВОЙСТВ СЕРВИСОВ ]==========================================
-            _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
-            _modeTable = new Dictionary<ProgramModeEnum, TableModel>
-            {
-                [ProgramModeEnum.InstanceAccountManagement] =   new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
-                [ProgramModeEnum.YandexAccountRegistration] =   new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
-                [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
-                [ProgramModeEnum.ZenArticlePublication] =       new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
-                [ProgramModeEnum.CheatActivity] =               new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
-                [ProgramModeEnum.PostingSecondWind] =           new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
-            }
-            [_programMode];
 
             CaptchaServiceDllNew = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
             PhoneServiceNew = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
@@ -241,17 +242,17 @@ namespace Yandex.Zen
                 Zenno.Variables["cfgNumbMinutesWaitSmsCode"],
                 Zenno.Variables["cfgNumbAttemptsRequestSmsCode"]
             ));
-            
-            
-            ServicesComponents.MinSizeProfileUseInModes = Zenno.Variables["cfgMinSizeProfileUseInModes"].Value.ExtractNumber();
-            ServicesComponents.CreateFolderResourceIfNotExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value);
-            #endregion
-
-            ResourceObject = new AccountOrDonorBaseModel(new SettingsUseProfileSharedModel
-            (
-                Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"],
-                Zenno.Variables["cfgMinSizeProfileUseInModes"]
-            ));
+           
+            ResourceObject = new AccountOrDonorBaseModel(
+                new SettingsAccountOrDonorFromZennoVariablesModel
+                (
+                    Zenno.Variables["cfgIfFolderErrorThenCreateIt"]
+                ),
+                new SettingsUseSharedProfileFromZennoVariablesModel
+                (
+                    Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"],
+                    Zenno.Variables["cfgMinSizeProfileUseInModes"]
+                ));            
         }
 
     }

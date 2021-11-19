@@ -88,8 +88,9 @@
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\SettingsUseProfileSharedModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\ProfileModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\SettingsUseSharedProfileFromZennoVariablesModel.cs" />
     <Compile Include="Core\ServicesComponentsNew.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
     <Compile Include="Core\Tools\CaptchaServiceNew.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Core\Models\CheatActivity\ActionStateModel.cs" />
     <Compile Include="Core\Models\CheatActivity\CommentData.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ChannelModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\PropertiesStateModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProxyDataModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />

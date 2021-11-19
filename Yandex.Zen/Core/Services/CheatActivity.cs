@@ -336,7 +336,7 @@ namespace Yandex.Zen.Core.Services
                 if (ResourceIsAvailable(_article.Login, row)) continue;
 
                 // Проверка директории аккаунта
-                if (!_article.Directory.Exists && CreateFolderResourceIfNotExist)
+                if (!_article.Directory.Exists && CreateFolderResourceIfNoExist)
                 {
                     _article.Directory.Create();
                     Logger.Write(_article.Directory, $"[{_article.Directory.FullName}]\tПапка создана автоматически. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);
@@ -448,7 +448,7 @@ namespace Yandex.Zen.Core.Services
                 }
 
                 // Проверка директории на существование (создать, если требуется)
-                if (!ObjectDirectory.Exists && CreateFolderResourceIfNotExist)
+                if (!ObjectDirectory.Exists && CreateFolderResourceIfNoExist)
                 {
                     ObjectDirectory.Create();
                     Logger.Write($"[{ObjectDirectory.FullName}]\tПапка создана автоматически. Заполните её всеми необходимыми данными", LoggerType.Info, true, false, true);

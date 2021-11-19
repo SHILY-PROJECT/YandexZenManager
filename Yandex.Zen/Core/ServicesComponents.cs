@@ -133,7 +133,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] public static ObjectTypeEnum ResourceType;
 
         [ThreadStatic] public static int MinSizeProfileUseInModes;
-        [ThreadStatic] public static bool CreateFolderResourceIfNotExist;
+        [ThreadStatic] public static bool CreateFolderResourceIfNoExist;
 
         /// <summary>
         /// Загрузка аватарки yandex (url: https://passport.yandex.{YandexDomain}/profile).
@@ -241,7 +241,7 @@ namespace Yandex.Zen.Core
         {
             if (!ObjectDirectory.Exists)
             {
-                if (CreateFolderResourceIfNotExist)
+                if (CreateFolderResourceIfNoExist)
                 {
                     ObjectDirectory.Create();
 

@@ -94,7 +94,7 @@ namespace Yandex.Zen.Core.Services
 
             if (!_generalFolderDonors.Exists)
             {
-                if (!CreateFolderResourceIfNotExist)
+                if (!CreateFolderResourceIfNoExist)
                 {
                     Program.StopTemplate(Zenno, $"Указанная общая папка с донорами не существует");
                     return;

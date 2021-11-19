@@ -838,7 +838,7 @@ namespace Yandex.Zen.Core.Services
             }
             else if (!Directory.Exists(pathSharedFolderDonors))
             {
-                if (!CreateFolderResourceIfNotExist)
+                if (!CreateFolderResourceIfNoExist)
                 {
                     Program.StopTemplate(Zenno, $"Указанная папка с донорами не существует");
                     return false;

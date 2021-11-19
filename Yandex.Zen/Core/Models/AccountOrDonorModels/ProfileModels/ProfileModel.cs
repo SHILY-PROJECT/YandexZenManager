@@ -8,14 +8,32 @@ using Yandex.Zen.Core.Tools.LoggerTool;
 using Yandex.Zen.Core.Tools.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
 {
+    /// <summary>
+    /// Модель с данными профиля.
+    /// </summary>
     public class ProfileModel
     {
         #region====================================================================
         private IZennoPosterProjectModel Zenno { get => ServicesComponents.Zenno; }
         private FileInfo _profile;
         #endregion=================================================================
+
+
+        /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        public ProfileModel() { }
+
+        /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        /// <param name="settingsFromZennoVariables">Настройки использования общих профилей.</param>
+        public ProfileModel(SettingsUseSharedProfileFromZennoVariablesModel settingsFromZennoVariables)
+        {
+            SettingsFromZennoVariables = settingsFromZennoVariables;
+        }
 
 
         /// <summary>
@@ -44,7 +62,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         /// <summary>
         /// Настройки использования общих профилей.
         /// </summary>
-        public SettingsUseProfileSharedModel SettingsUseProfileShared {get; set;}
+        public SettingsUseSharedProfileFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
 
 
         /// <summary>

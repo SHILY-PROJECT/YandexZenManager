@@ -58,7 +58,7 @@ namespace Yandex.Zen.Core.Tools.PhoneServiceTool.Models
         private void SetOtherParams(string serviceDllAndCountry)
         {
             var service = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[0];
-            var country = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[1];
+            var country = CountryName = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[1];
 
             switch (service)
             {
