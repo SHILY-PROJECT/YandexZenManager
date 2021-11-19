@@ -1,31 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Resources;
-using System.Text;
-using System.Threading;
-using Yandex.Zen.Core;
+using System.Collections.Generic;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.Models;
-using Yandex.Zen.Core.Tools;
-using Yandex.Zen.Core.Tools.Extensions;
-using Yandex.Zen.Core.Tools.LoggerTool;
-using Yandex.Zen.Core.Tools.LoggerTool.Enums;
-using Yandex.Zen.Core.Tools.PhoneServiceTool;
+using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
 using ZennoLab.CommandCenter;
-using ZennoLab.Emulation;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using ZennoLab.InterfacesLibrary.ProjectModel.Collections;
-using ZennoLab.InterfacesLibrary.ProjectModel.Enums;
-using Yandex.Zen.Core.Tools.PhoneServiceTool.Models;
+using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
 using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
 
 namespace Yandex.Zen
@@ -169,7 +156,7 @@ namespace Yandex.Zen
             try
             {
                 Zenno = zenno;
-                InitializingProjectProperties();
+                InitializingProjectData();
                 Browser = instance;
             }
             catch (Exception ex)
@@ -200,8 +187,22 @@ namespace Yandex.Zen
         /// Инициализация свойств проекта.
         /// </summary>
         /// <returns></returns>
-        private static void InitializingProjectProperties()
+        private static void InitializingProjectData()
         {
+            _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
+            _programMode = new Dictionary<string, ProgramModeEnum>()
+            {
+                ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.InstanceAccountManagement,
+                ["Нагуливание профилей"] = ProgramModeEnum.WalkingProfile,
+                ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkingOnZen,
+                ["Регистрация аккаунтов yandex"] = ProgramModeEnum.YandexAccountRegistration,
+                ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ZenChannelCreationAndDesign,
+                ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.ZenArticlePublication,
+                ["Накрутка активности"] = ProgramModeEnum.CheatActivity,
+                ["Posting - second wind (new theme)"] = ProgramModeEnum.PostingSecondWind
+            }
+            [Zenno.Variables["cfgScriptServices"].Value];
+
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
             _modeTable = new Dictionary<ProgramModeEnum, TableModel>
             {
@@ -213,21 +214,6 @@ namespace Yandex.Zen
                 [ProgramModeEnum.PostingSecondWind] = new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
             }
             [_programMode];
-        
-            _programMode = new Dictionary<string, ProgramModeEnum>()
-            {
-                ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
-                ["Нагуливание профилей"] =                          ProgramModeEnum.WalkingProfile,
-                ["Нагуливание аккаунтов/доноров по zen.yandex"] =   ProgramModeEnum.WalkingOnZen,
-                ["Регистрация аккаунтов yandex"] =                  ProgramModeEnum.YandexAccountRegistration,
-                ["Создание и оформление канала zen.yandex"] =       ProgramModeEnum.ZenChannelCreationAndDesign,
-                ["Публикация статей на канале zen.yandex"] =        ProgramModeEnum.ZenArticlePublication,
-                ["Накрутка активности"] =                           ProgramModeEnum.CheatActivity,
-                ["Posting - second wind (new theme)"] =             ProgramModeEnum.PostingSecondWind
-            }
-            [Zenno.Variables["cfgScriptServices"].Value];
-
-            _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
 
             /* todo После переноса сервисов на улучшенную архитектуру - снести данный объект и его создание*/
             if (CaptchaServiceDll is null)

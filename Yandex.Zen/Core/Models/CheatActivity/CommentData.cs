@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Tools.LoggerTool;
-using Yandex.Zen.Core.Tools.LoggerTool.Enums;
-using Yandex.Zen.Core.Tools.LoggerTool.Models;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.Macros;
 

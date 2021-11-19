@@ -10,7 +10,7 @@ using Yandex.Zen.Core.Enums;
 using Global.ZennoExtensions;
 using Global.ZennoLab.Json;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Toolkit;
 
 namespace Yandex.Zen.Core.Models.CheatActivity
 {

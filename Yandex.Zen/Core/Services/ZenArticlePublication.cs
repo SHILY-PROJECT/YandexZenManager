@@ -11,12 +11,12 @@ using System.Threading;
 using System.IO;
 using System.Text.RegularExpressions;
 using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Tools.Extensions;
-using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ZenArticlePublication;
-using Yandex.Zen.Core.Tools.LoggerTool;
-using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit;
 
 namespace Yandex.Zen.Core.Services
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Tools;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.Enums.Log;
@@ -15,17 +14,18 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Global.ZennoLab.Json;
 using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Tools.Extensions;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.ZenChannelCreationAndDesign;
 using Yandex.Zen.Core.Models.ZenChannelCreationAndDesign.ChannelSettings.DataModels;
 using Yandex.Zen.Core.Enums.CheatActivity;
 using Yandex.Zen.Core.Models.CheatActivity;
-using Yandex.Zen.Core.Tools.Macros;
+using Yandex.Zen.Core.Toolkit.Macros;
 using System.Diagnostics;
-using Yandex.Zen.Core.Tools.LoggerTool;
-using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit;
 
 namespace Yandex.Zen.Core.Services
 {

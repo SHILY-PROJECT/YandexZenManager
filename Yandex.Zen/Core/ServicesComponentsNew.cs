@@ -13,7 +13,7 @@ namespace Yandex.Zen.Core
 {
     public class ServicesComponentsNew
     {
-        public static AccountOrDonorBaseModel Object { get => DataStore.ResourceObject; } 
+        public static AccountOrDonorBaseModel ResourceObject { get => DataStore.ResourceObject; } 
         public static IZennoPosterProjectModel Zenno { get => DataStore.Zenno; }
         public static Instance Instance { get => DataStore.Browser; }
         public static ProgramModeEnum ProgramMode { get => DataStore.ProgramMode; }

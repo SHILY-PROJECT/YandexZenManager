@@ -17,13 +17,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
             MinProfileSizeToUse = minProfileSizeToUse;
         }
 
-        public SettingsUseSharedProfileFromZennoVariablesModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse)
-        {
-            bool.TryParse(useWalkedProfileFromSharedFolder.Value, out var useWalkedProfile);
-            UseWalkedProfileFromSharedFolder = useWalkedProfile;
-
-            int.TryParse(minProfileSizeToUse.Value, out var minProfileSize);
-            MinProfileSizeToUse = minProfileSize;
-        }
+        public SettingsUseSharedProfileFromZennoVariablesModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse) :
+            this(bool.Parse(useWalkedProfileFromSharedFolder.Value), int.Parse(minProfileSizeToUse.Value)) { }
     }
 }

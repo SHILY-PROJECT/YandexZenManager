@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Yandex.Zen.Core.Tools;
+using Yandex.Zen.Core.Toolkit;
 using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.SmsService.Enums;
-using ZennoLab.InterfacesLibrary.Enums.Http;
-using Global.ZennoExtensions;
-using System.Threading;
 using System.Text.RegularExpressions;
-using System.IO;
 using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Tools.Extensions;
-using Yandex.Zen.Core.Tools.Macros;
+using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Tools.LoggerTool;
-using Yandex.Zen.Core.Tools.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Services.Components
 {
-    public class AuthorizationNew : ServicesComponents
+    public class AuthorizationNew
     {
         [ThreadStatic]
         private static InstanceSettings.BusySettings BusyMode = InstanceSettings.BusySettings.GetCurrentBusySettings();
+
+        #region=====================================================================
+        private static Instance Browser { get => ServicesComponentsNew.Instance; }
+        private static Random Rnd { get => ServicesComponentsNew.Rnd; }
+        #endregion==================================================================
 
         /// <summary>
         /// Стартовая страница - авторизация.
@@ -36,8 +34,8 @@ namespace Yandex.Zen.Core.Services.Components
         {
             InstanceSettings.BusySettings.SetDefaultBusySettings();
 
-            if (Instance.ActiveTab.IsBusy)
-                Instance.ActiveTab.WaitDownloading();
+            if (Browser.ActiveTab.IsBusy)
+                Browser.ActiveTab.WaitDownloading();
 
             var xpathFieldLogin = new[] { "//input[@name='login']", "Поле - Логин" };
             var xpathFieldPassword = new[] { "//input[contains(@type, 'password')]", "Поле - Пароль" };
@@ -50,12 +48,12 @@ namespace Yandex.Zen.Core.Services.Components
 
             var statusBindingPhoneToAccount = default(bool);
             var counterIterationsZenYandexMedia = 0;
-            var sourceUrl = Instance.ActiveTab.URL;
+            var sourceUrl = Browser.ActiveTab.URL;
 
             while (true)
             {
                 if (counterIterationsZenYandexMedia != 0)
-                    Instance.ActiveTab.Navigate(sourceUrl, true);
+                    Browser.ActiveTab.Navigate(sourceUrl, true);
 
                 if (++counterIterationsZenYandexMedia > 3)
                 {
@@ -64,45 +62,45 @@ namespace Yandex.Zen.Core.Services.Components
                 }
 
                 // Определение типа авторизации
-                if (!Instance.FuncGetFirstHe(xpathFieldLogin, false, false, 3).IsNullOrVoid())
+                if (!Browser.FuncGetFirstHe(xpathFieldLogin, false, false, 3).IsNullOrVoid())
                 {
                     // Полная авторизация
                     try
                     {
-                        Instance.FuncGetFirstHe(xpathFieldLogin).SetValue(Instance.ActiveTab, Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathFieldLogin).SetValue(Browser.ActiveTab, Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(150, 500));
                     }
                     catch { continue; }
                 }
-                else if (!Instance.FuncGetFirstHe(xpathAuthAccountList).IsNullOrVoid())
+                else if (!Browser.FuncGetFirstHe(xpathAuthAccountList).IsNullOrVoid())
                 {
                     // Авторизация, когда нужно выбрать аккаунт из списка
-                    var heAccountFormList = Instance.FuncGetFirstHe(xpathAuthAccountList).FindChildByXPath(xpathItemAccount[0], 0);
+                    var heAccountFormList = Browser.FuncGetFirstHe(xpathAuthAccountList).FindChildByXPath(xpathItemAccount[0], 0);
 
                     if (heAccountFormList.IsNullOrVoid())
                     {
                         Logger.Write($"Не найдена форма с листом аккаунтов", LoggerType.Info, true, true, true, LogColor.Yellow);
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             $"Не найдена форма с листом аккаунтов...",
                             xpathAuthAccountList.XPathToStandardView(),
                             string.Empty
                         });
                         continue;
                     }
-                    else heAccountFormList.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                    else heAccountFormList.Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
 
                     // Ввод пароля и вход
-                    Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
-                    Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                    Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
                 }
                 else continue;
 
                 // Проверка на наличие формы смены пароля
-                if (!Instance.FuncGetFirstHe(xpathChangePassword, false, false, 5).IsNullOrVoid())
+                if (!Browser.FuncGetFirstHe(xpathChangePassword, false, false, 5).IsNullOrVoid())
                 {
                     if (!bindingPhoneToAccountIfRequaid)
                     {
@@ -115,20 +113,20 @@ namespace Yandex.Zen.Core.Services.Components
                     Logger.Write($"[Binding phone: {bindingPhoneToAccountIfRequaid}]\tДоступ к аккаунту ограничен, требуется привязка номера. Переход к привязке номера к аккаунту", LoggerType.Info, true, false, true);
 
                     // Получение для перехода к разгадыванию капчи
-                    var heButtonChangePasswordNext = Instance.FuncGetFirstHe(xpathButtonChangePasswordNext, false, true);
+                    var heButtonChangePasswordNext = Browser.FuncGetFirstHe(xpathButtonChangePasswordNext, false, true);
 
                     if (heButtonChangePasswordNext.IsNullOrVoid())
                     {
                         Logger.Write($"На форме \"Доступ к аккаунту ограничен\" не найдена кнопка \"Далее\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             xpathButtonChangePasswordNext.XPathToStandardView(),
                             string.Empty
                         });
                         return false;
                     }
-                    else heButtonChangePasswordNext.Click(Instance.ActiveTab, Rnd.Next(1500, 2000));
+                    else heButtonChangePasswordNext.Click(Browser.ActiveTab, Rnd.Next(1500, 2000));
 
                     var xpathFieldCaptcha = new[] { "//input[contains(@name, 'captcha_answer')]", "Поле - Разгадка капчи" };
                     var xpathImgCaptcha = new[] { "//div[@class='captcha__container']/descendant::img[@src!='']", "Изображение капчи" };
@@ -150,7 +148,7 @@ namespace Yandex.Zen.Core.Services.Components
                     var refreshPage = default(bool);
                     var counterAttemptBindingPhone = default(int);
 
-                    Instance.UseTrafficMonitoring = true;
+                    Browser.UseTrafficMonitoring = true;
 
                     // Обработка капчи
                     while (true)
@@ -163,8 +161,8 @@ namespace Yandex.Zen.Core.Services.Components
                         }
 
                         // Разгадывание капчи
-                        var heFieldCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha, false, true, 5);
-                        var heImgCaptcha = Instance.FuncGetFirstHe(xpathImgCaptcha, false, true, 5);
+                        var heFieldCaptcha = Browser.FuncGetFirstHe(xpathFieldCaptcha, false, true, 5);
+                        var heImgCaptcha = Browser.FuncGetFirstHe(xpathImgCaptcha, false, true, 5);
 
                         // Проверка наличия капчи и поля для её ввода
                         if (heFieldCaptcha.IsNullOrVoid() || heImgCaptcha.IsNullOrVoid() || string.IsNullOrWhiteSpace(heImgCaptcha.GetAttribute("src")))
@@ -178,7 +176,7 @@ namespace Yandex.Zen.Core.Services.Components
 
                             Logger.ErrorAnalysis(true, true, true, new List<string>
                             {
-                                Instance.ActiveTab.URL,
+                                Browser.ActiveTab.URL,
                                 string.Join(Environment.NewLine, heElements),
                                 string.Empty
                             });
@@ -193,30 +191,30 @@ namespace Yandex.Zen.Core.Services.Components
                         // Проверка результата распознания
                         if (string.IsNullOrWhiteSpace(captchaResult))
                         {
-                            heImgCaptcha.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                            heImgCaptcha.Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
                             continue;
                         }
 
                         // Ввод капчи
-                        heFieldCaptcha.SetValue(Instance.ActiveTab, captchaResult, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                        Instance.FuncGetFirstHe(xpathButtonCaptchaNext, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
+                        heFieldCaptcha.SetValue(Browser.ActiveTab, captchaResult, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                        Browser.FuncGetFirstHe(xpathButtonCaptchaNext, false, true).Click(Browser.ActiveTab, Rnd.Next(1000, 2000));
 
                         // Проверка наличия поля контрольного вопроса
-                        if (Instance.FuncGetFirstHe(xpathFieldAnswer, false, false, 5).IsNullOrVoid())
+                        if (Browser.FuncGetFirstHe(xpathFieldAnswer, false, false, 5).IsNullOrVoid())
                         {
                             var statusCaptcha = default(string);
-                            var traffic = Instance.ActiveTab.GetTraffic().Where(x => x.Url.Contains("registration-validations/checkHuman")).ToList();
+                            var traffic = Browser.ActiveTab.GetTraffic().Where(x => x.Url.Contains("registration-validations/checkHuman")).ToList();
 
                             if (traffic.Count != 0)
                             {
                                 var responseBody = traffic.Last().ResponseBody;
                                 statusCaptcha = Regex.Match(Encoding.UTF8.GetString(responseBody, 0, responseBody.Length), "(?<=\"status\":\").*?(?=\")").Value;
-                                heImgCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha, false, false);
+                                heImgCaptcha = Browser.FuncGetFirstHe(xpathFieldCaptcha, false, false);
 
                                 if (statusCaptcha == "error")
                                 {
                                     Logger.Write($"[Status: {statusCaptcha}]\tКапча введена неверно: {captchaResult}", LoggerType.Info, true, true, true, LogColor.Yellow);
-                                    heImgCaptcha.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                                    heImgCaptcha.Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
                                 }
                                 else if (statusCaptcha == "ok")
                                 {
@@ -225,7 +223,7 @@ namespace Yandex.Zen.Core.Services.Components
                                     // Проверка наличия капчи
                                     if (!heImgCaptcha.IsNullOrVoid())
                                     {
-                                        heImgCaptcha.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                                        heImgCaptcha.Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
                                         continue;
                                     }
 
@@ -242,19 +240,19 @@ namespace Yandex.Zen.Core.Services.Components
                         }
                     }
 
-                    Instance.UseTrafficMonitoring = false;
-                    Instance.ActiveTab.NavigateTimeout = 30;
+                    Browser.UseTrafficMonitoring = false;
+                    Browser.ActiveTab.NavigateTimeout = 30;
 
                     // Рефреш странички
                     if (refreshPage) continue;
 
                     // Ввод ответа на контрольный вопрос и переход к полю ввода номера
-                    Instance.FuncGetFirstHe(xpathFieldAnswer, false).SetValue(Instance.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                    Instance.FuncGetFirstHe(xpathBottonSubmitAnswer, false).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
+                    Browser.FuncGetFirstHe(xpathFieldAnswer, false).SetValue(Browser.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Browser.FuncGetFirstHe(xpathBottonSubmitAnswer, false).Click(Browser.ActiveTab, Rnd.Next(2000, 3000));
 
                     // Обработка номера
-                    var heFieldPhone = Instance.FuncGetFirstHe(xpathFieldPhone, false, true, 10);
-                    var heButtonPhoneNext = Instance.FuncGetFirstHe(xpathButtonPhoneNext, false, true);
+                    var heFieldPhone = Browser.FuncGetFirstHe(xpathFieldPhone, false, true, 10);
+                    var heButtonPhoneNext = Browser.FuncGetFirstHe(xpathButtonPhoneNext, false, true);
 
                     // Проверка наличия поля для ввода телефона (рефреш, если не нашли)
                     if (new[] { heFieldPhone, heButtonPhoneNext }.Any(x => x.IsNullOrVoid()))
@@ -268,7 +266,7 @@ namespace Yandex.Zen.Core.Services.Components
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             string.Join(Environment.NewLine, elements),
                             string.Empty
                         });
@@ -285,13 +283,13 @@ namespace Yandex.Zen.Core.Services.Components
                     var phoneLog = $"[Sms service dll: {DataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                     // Ввод номера
-                    heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                    heButtonPhoneNext.Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                    heFieldPhone.SetValue(Browser.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    heButtonPhoneNext.Click(Browser.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение элементов для ввода и отправки sms кода
-                    var heFieldSmsCode = Instance.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
-                    var heButtonSmsCodeNext = Instance.FuncGetFirstHe(xpathButtonSmsCodeNext, false, true);
-                    var heButtonReSendCode = Instance.FuncGetFirstHe(xpathButtonReSendCode, false, true);
+                    var heFieldSmsCode = Browser.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
+                    var heButtonSmsCodeNext = Browser.FuncGetFirstHe(xpathButtonSmsCodeNext, false, true);
+                    var heButtonReSendCode = Browser.FuncGetFirstHe(xpathButtonReSendCode, false, true);
 
                     // Проверка наличия полученных элементов для обработки номера (если нет, то отмена номера и выход из метода)
                     if (new[] { heFieldSmsCode, heButtonSmsCodeNext, heButtonReSendCode }.Any(x => x.IsNullOrVoid()))
@@ -306,7 +304,7 @@ namespace Yandex.Zen.Core.Services.Components
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             string.Join(Environment.NewLine, heElements),
                             string.Empty
                         });
@@ -327,13 +325,13 @@ namespace Yandex.Zen.Core.Services.Components
                     Logger.Write($"{phoneLog}Код успешно получен: {sms_code}", LoggerType.Info, true, false, true, LogColor.Blue);
 
                     // Ввод номера и переход к следующему шагу
-                    heFieldSmsCode.SetValue(Instance.ActiveTab, sms_code, LevelEmulation.SuperEmulation, Rnd.Next(3000, 5000));
+                    heFieldSmsCode.SetValue(Browser.ActiveTab, sms_code, LevelEmulation.SuperEmulation, Rnd.Next(3000, 5000));
                     //heButtonSmsCodeNext.Click(instance.ActiveTab, rnd.Next(1000, 2000));
 
                     // Смена пароля
-                    var heRefreshedPassword = Instance.FuncGetFirstHe(xpathRefreshedPassword, false, true, 10);
-                    var heRefreshedPasswordConfirm = Instance.FuncGetFirstHe(xpathRefreshedPasswordConfirm, false, true);
-                    var heRefreshedPasswordNext = Instance.FuncGetFirstHe(xpathRefreshedPasswordNext, false, true);
+                    var heRefreshedPassword = Browser.FuncGetFirstHe(xpathRefreshedPassword, false, true, 10);
+                    var heRefreshedPasswordConfirm = Browser.FuncGetFirstHe(xpathRefreshedPasswordConfirm, false, true);
+                    var heRefreshedPasswordNext = Browser.FuncGetFirstHe(xpathRefreshedPasswordNext, false, true);
 
                     // Проверка наличия элементов
                     if (new[] { heRefreshedPassword, heRefreshedPasswordConfirm, heRefreshedPasswordNext }.Any(x => x.IsNullOrVoid()))
@@ -348,7 +346,7 @@ namespace Yandex.Zen.Core.Services.Components
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             string.Join(Environment.NewLine, heElements),
                             string.Empty
                         });
@@ -360,9 +358,9 @@ namespace Yandex.Zen.Core.Services.Components
                     }
 
                     // Заполнение нового пароля и переход дальше
-                    heRefreshedPassword.SetValue(Instance.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
-                    heRefreshedPasswordConfirm.SetValue(Instance.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
-                    heRefreshedPasswordNext.Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
+                    heRefreshedPassword.SetValue(Browser.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    heRefreshedPasswordConfirm.SetValue(Browser.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    heRefreshedPasswordNext.Click(Browser.ActiveTab, Rnd.Next(2000, 3000));
 
                     // Бэкап данных
                     Logger.MakeBackupData(new List<string>
@@ -372,8 +370,8 @@ namespace Yandex.Zen.Core.Services.Components
                     true);
 
                     // Получение формы для проверки
-                    var heFormaChangePasswordIsGood = Instance.FuncGetFirstHe(xpathFormaChangePasswordIsGood, false, true, 10);
-                    var heButtonSubmitFinish = Instance.FuncGetFirstHe(xpathButtonSubmitFinish, false, true);
+                    var heFormaChangePasswordIsGood = Browser.FuncGetFirstHe(xpathFormaChangePasswordIsGood, false, true, 10);
+                    var heButtonSubmitFinish = Browser.FuncGetFirstHe(xpathButtonSubmitFinish, false, true);
 
                     // Проверка формы
                     if (heFormaChangePasswordIsGood.IsNullOrVoid() && heButtonSubmitFinish.IsNullOrVoid())
@@ -381,7 +379,7 @@ namespace Yandex.Zen.Core.Services.Components
                         Logger.Write($"Не найдена форма с уведомлением о успешном изменении пароля (деньги за текущий номер, скорее всего, проёбаны)", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             xpathFormaChangePasswordIsGood.XPathToStandardView(),
                             xpathButtonSubmitFinish.XPathToStandardView(),
                             string.Empty
@@ -421,25 +419,25 @@ namespace Yandex.Zen.Core.Services.Components
                         Logger.Write($"На форме с уведомлением о успешном изменении пароля не найдена кнопка \"Далее\"", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             "На форме с уведомлением о успешном изменении пароля не найдена кнопка \"Далее\"",
                             xpathButtonSubmitFinish.XPathToStandardView(),
                             string.Empty
                         });
                         return false;
                     }
-                    else heButtonSubmitFinish.Click(Instance.ActiveTab, Rnd.Next(1500, 2000));
+                    else heButtonSubmitFinish.Click(Browser.ActiveTab, Rnd.Next(1500, 2000));
 
                     return CheckAuthorization(checkByXpathOfElement, statusBindingPhoneToAccount);
                 }
                 else
                 {
-                    var heButtonSkipPhone = Instance.FuncGetFirstHe(xpathButtonSkipPhone, false, false, 10);
-                    var heCheckElement = Instance.FuncGetFirstHe(checkByXpathOfElement, false, false, 10);
+                    var heButtonSkipPhone = Browser.FuncGetFirstHe(xpathButtonSkipPhone, false, false, 10);
+                    var heCheckElement = Browser.FuncGetFirstHe(checkByXpathOfElement, false, false, 10);
 
                     if (heButtonSkipPhone.IsNullOrVoid() && heCheckElement.IsNullOrVoid())
                     {
-                        Logger.Write($"Что-то пошло не так во время авторизации: {Instance.ActiveTab.URL}", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                        Logger.Write($"Что-то пошло не так во время авторизации: {Browser.ActiveTab.URL}", LoggerType.Warning, true, true, true, LogColor.Yellow);
 
                         var heElements = new List<string>();
 
@@ -448,7 +446,7 @@ namespace Yandex.Zen.Core.Services.Components
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
-                            Instance.ActiveTab.URL,
+                            Browser.ActiveTab.URL,
                             string.Join(Environment.NewLine, heElements),
                             string.Empty
                         });
@@ -458,10 +456,10 @@ namespace Yandex.Zen.Core.Services.Components
                         return false;
                     }
 
-                    Instance.ActiveTab.NavigateTimeout = 30;
+                    Browser.ActiveTab.NavigateTimeout = 30;
 
                     if (!heButtonSkipPhone.IsNullOrVoid())
-                        heButtonSkipPhone.Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
+                        heButtonSkipPhone.Click(Browser.ActiveTab, Rnd.Next(1000, 2000));
 
                     return CheckAuthorization(checkByXpathOfElement, statusBindingPhoneToAccount);
                 }
@@ -484,10 +482,10 @@ namespace Yandex.Zen.Core.Services.Components
                 // Счетчик количества попыток
                 if (++counterAttempts > 5)
                 {
-                    Logger.Write($"Что-то пошло не так во время авторизации: {Instance.ActiveTab.URL}", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"Что-то пошло не так во время авторизации: {Browser.ActiveTab.URL}", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
-                        Instance.ActiveTab.URL,
+                        Browser.ActiveTab.URL,
                         $"Что-то пошло не так во время авторизации...",
                         checkByXpathOfElement.XPathToStandardView(),
                         string.Empty
@@ -496,7 +494,7 @@ namespace Yandex.Zen.Core.Services.Components
                 }
 
                 // Успешный выход из метода, если нужный элемент обнаружен
-                if (!Instance.FuncGetFirstHe(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
+                if (!Browser.FuncGetFirstHe(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Успешная авторизация аккаунта{endLog}", LoggerType.Info, true, false, true, LogColor.Blue);
 
