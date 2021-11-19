@@ -91,7 +91,7 @@
     <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\ProfileModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\SettingsUseSharedProfileFromZennoVariablesModel.cs" />
-    <Compile Include="Core\ServicesComponentsNew.cs" />
+    <Compile Include="Core\ProjectComponents.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />

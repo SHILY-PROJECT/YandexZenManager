@@ -13,17 +13,22 @@ using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Models.AccountOrDonorModels;
+using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
 
 namespace Yandex.Zen.Core.Services.Components
 {
     public class AuthorizationNew
     {
-        [ThreadStatic]
-        private static InstanceSettings.BusySettings BusyMode = InstanceSettings.BusySettings.GetCurrentBusySettings();
+        [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
 
         #region=====================================================================
-        private static Instance Browser { get => ServicesComponentsNew.Instance; }
-        private static Random Rnd { get => ServicesComponentsNew.Rnd; }
+        private static Instance Browser { get => ProjectComponents.Browser; }
+        private static AccountOrDonorBaseModel Account { get => ProjectComponents.ResourceObject; }
+        private static PhoneServiceNew PhoneService { get => ProjectComponents.PhoneServiceNew; }
+        private static Random Rnd { get => ProjectComponents.Rnd; }
         #endregion==================================================================
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace Yandex.Zen.Core.Services.Components
         /// <returns></returns>
         public static bool Auth(bool bindingPhoneToAccountIfRequaid, string[] checkByXpathOfElement)
         {
-            InstanceSettings.BusySettings.SetDefaultBusySettings();
+            _settingsMode = Browser.BrowserGetCurrentBusySettings();
 
             if (Browser.ActiveTab.IsBusy)
                 Browser.ActiveTab.WaitDownloading();
@@ -67,9 +72,9 @@ namespace Yandex.Zen.Core.Services.Components
                     // Полная авторизация
                     try
                     {
-                        Browser.FuncGetFirstHe(xpathFieldLogin).SetValue(Browser.ActiveTab, Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathFieldLogin).SetValue(Browser.ActiveTab, Account.Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
                         Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(150, 500));
-                        Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Account.Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
                         Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(150, 500));
                     }
                     catch { continue; }
@@ -94,7 +99,7 @@ namespace Yandex.Zen.Core.Services.Components
                     else heAccountFormList.Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
 
                     // Ввод пароля и вход
-                    Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    Browser.FuncGetFirstHe(xpathFieldPassword).SetValue(Browser.ActiveTab, Account.Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
                     Browser.FuncGetFirstHe(xpathButtonSubmit).Click(Browser.ActiveTab, Rnd.Next(1000, 1500));
                 }
                 else continue;
@@ -144,7 +149,7 @@ namespace Yandex.Zen.Core.Services.Components
                     var xpathFormaChangePasswordIsGood = new[] { "//div[contains(@data-t, 'change-password')]", "Форма - Пароль был успешно изменён" };
                     var xpathButtonSubmitFinish = new[] { "//div[contains(@data-t, 'submit-finish')]/descendant::a[contains(@data-t, 'action')]", "Кнопка - Далее на форме успешного изменения пароля" };
 
-                    var refreshedPassword = TextMacros.GenerateString(15, "abcd");
+                    var newPassword = TextMacros.GenerateString(15, "abcd");
                     var refreshPage = default(bool);
                     var counterAttemptBindingPhone = default(int);
 
@@ -247,7 +252,7 @@ namespace Yandex.Zen.Core.Services.Components
                     if (refreshPage) continue;
 
                     // Ввод ответа на контрольный вопрос и переход к полю ввода номера
-                    Browser.FuncGetFirstHe(xpathFieldAnswer, false).SetValue(Browser.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Browser.FuncGetFirstHe(xpathFieldAnswer, false).SetValue(Browser.ActiveTab, Account.AnswerQuestion, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Browser.FuncGetFirstHe(xpathBottonSubmitAnswer, false).Click(Browser.ActiveTab, Rnd.Next(2000, 3000));
 
                     // Обработка номера
@@ -275,7 +280,7 @@ namespace Yandex.Zen.Core.Services.Components
                     }
 
                     // Получение номера
-                    Phone = PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
+                    PhoneService.GetPhone();
 
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
@@ -358,14 +363,14 @@ namespace Yandex.Zen.Core.Services.Components
                     }
 
                     // Заполнение нового пароля и переход дальше
-                    heRefreshedPassword.SetValue(Browser.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
-                    heRefreshedPasswordConfirm.SetValue(Browser.ActiveTab, refreshedPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    heRefreshedPassword.SetValue(Browser.ActiveTab, newPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    heRefreshedPasswordConfirm.SetValue(Browser.ActiveTab, newPassword, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
                     heRefreshedPasswordNext.Click(Browser.ActiveTab, Rnd.Next(2000, 3000));
 
                     // Бэкап данных
                     Logger.MakeBackupData(new List<string>
                     {
-                        $"Refreshed password: {refreshedPassword}"
+                        $"Refreshed password: {newPassword}"
                     },
                     true);
 
@@ -393,7 +398,7 @@ namespace Yandex.Zen.Core.Services.Components
                     else
                     {
                         statusBindingPhoneToAccount = true;
-                        Logger.Write($"[Старый пароль: {Password}]\t[Новый пароль: {refreshedPassword}]\tПароль был успешно изменен", LoggerType.Info, true, false, true, LogColor.Blue);
+                        Logger.Write($"[Старый пароль: {Password}]\t[Новый пароль: {newPassword}]\tПароль был успешно изменен", LoggerType.Info, true, false, true, LogColor.Blue);
                     }
 
                     // Бэкап данных
@@ -406,8 +411,8 @@ namespace Yandex.Zen.Core.Services.Components
                     // Сохранение результата в таблицу режима и общую таблицу
                     TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.Login, Login, new List<InstDataItem>
                     {
-                        new InstDataItem(TableColumnEnum.Inst.Password, refreshedPassword),
-                        new InstDataItem(TableColumnEnum.Inst.PhoneNumber, Phone)
+                        new InstDataItem(TableColumnEnum.Inst.Password, newPassword),
+                        new InstDataItem(TableColumnEnum.Inst.PhoneNumber, Account.PhoneData.NumberPhoneForServiceView)
                     });
 
                     // Сохранение профиля
@@ -498,7 +503,7 @@ namespace Yandex.Zen.Core.Services.Components
                 {
                     Logger.Write($"Успешная авторизация аккаунта{endLog}", LoggerType.Info, true, false, true, LogColor.Blue);
 
-                    InstanceSettings.BusySettings.SetBusySettings(BusyMode);
+                    Browser.BrowserSetBusySettings(_settingsMode);
                     ProfileWorker.SaveProfile(true);
 
                     return true;

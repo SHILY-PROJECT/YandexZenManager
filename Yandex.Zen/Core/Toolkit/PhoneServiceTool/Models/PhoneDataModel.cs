@@ -9,6 +9,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
     public class PhoneDataModel
     {
         public string JobID { get; set; }
+        public string SmsCodeOrStatus { get; set; }
         public string NumberPhone { get; set; }
         public string NumberPhoneForServiceView { get; set; }
     }

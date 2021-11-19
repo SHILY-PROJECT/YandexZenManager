@@ -11,7 +11,7 @@ namespace Yandex.Zen.Core.Services
     {
         private static readonly object _locker = new object();
 
-        private AccountOrDonorBaseModel Account { get => ServicesComponentsNew.ResourceObject is null ? null : ServicesComponentsNew.ResourceObject; }
+        private AccountOrDonorBaseModel Account { get => ProjectComponents.ResourceObject is null ? null : ProjectComponents.ResourceObject; }
 
         public PostingSecondWind()
         {

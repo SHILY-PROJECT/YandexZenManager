@@ -83,7 +83,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Капча сервис (данные dll).
         /// </summary>
-        public static CaptchaServiceNew CaptchaServiceDllNew { get; private set; }
+        public static CaptchaServiceNew CaptchaService { get; private set; }
 
         /// <summary>
         /// Текущие объекты потока.
@@ -221,7 +221,7 @@ namespace Yandex.Zen
             if (PhoneService is null)
                 lock (_locker) PhoneService = PhoneService is null ? PhoneService = new PhoneService(Zenno.Variables["cfgSmsServiceAndCountry"].Value) : PhoneService;
 
-            CaptchaServiceDllNew = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
+            CaptchaService = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
             PhoneServiceNew = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
             (
                 Zenno.Variables["cfgNumbAttempsGetPhone"],

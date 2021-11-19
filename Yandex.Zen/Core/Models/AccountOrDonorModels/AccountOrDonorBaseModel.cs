@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
+using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Models.AccountOrDonorModels
@@ -20,6 +21,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public string AnswerQuestion { get; set; }
         public string PhoneNumber { get; set; }
         public Uri Instagram { get; set; }
+        public PhoneDataModel PhoneData { get; set; }
 
         public ObjectTypeEnum Type { get; set; }
         public DirectoryInfo Directory { get; set; }
@@ -31,6 +33,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         {
             Profile = new ProfileModel(settingsUseProfileShared);
             SettingsFromZennoVariables = settingsFromZennoVariables;
+            PhoneData = ProjectComponents.PhoneServiceNew.Data;
         }
     }
 }
