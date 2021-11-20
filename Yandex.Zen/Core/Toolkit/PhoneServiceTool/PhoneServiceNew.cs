@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         private Random Rnd { get; set; } = new Random();
         #endregion======================================================
 
-        public PhoneSettingsModel Settings { get; private set; }
+        public PhoneSettingsModel SettingsFromZennoVariables { get; private set; }
         public PhoneServiceParamsModel Params { get; private set; }
         public PhoneDataModel Data { get; private set; }
 
@@ -32,7 +32,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         {
             Data = new PhoneDataModel();
             Params = new PhoneServiceParamsModel(serviceDllAndCountry);
-            Settings = phoneSettings;
+            SettingsFromZennoVariables = phoneSettings;
         }
 
         public PhoneServiceNew(ILocalVariable serviceDllAndCountry, PhoneSettingsModel phoneSettings) : this(serviceDllAndCountry.Value, phoneSettings) { }
@@ -49,7 +49,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         {
             string log, phone, jobId;
 
-            var secondsWaitPhone = Settings.TimeToSecondsWaitPhone;
+            var secondsWaitPhone = SettingsFromZennoVariables.TimeToSecondsWaitPhone;
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();
@@ -92,6 +92,54 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         }
 
         /// <summary>
+        /// Получение номера телефона.
+        /// </summary>
+        public bool GetNumberPhone()
+        {
+            var stopwatch = new Stopwatch();
+            var secondsWaitPhone = SettingsFromZennoVariables.TimeToSecondsWaitPhone;
+            stopwatch.Start();
+
+            while (true)
+            {
+                var jobID = ZennoPoster.Sms.GetNumber
+                (
+                    serviceDll: Params.Dll,
+                    service: Params.NetworkService,
+                    param: Params.Country,
+                    oper: "any",
+                    number: out string phone,
+                    forward: null
+                );
+
+                if (string.IsNullOrWhiteSpace(phone) is false && Regex.IsMatch(phone, @"[0-5]{5,}"))
+                {
+                    Logger.Write($"[{nameof(Params.Dll)}:{Params.Dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t" +
+                        $"[{stopwatch.ElapsedMilliseconds / 60} sec]\tНомер успешно получен", LoggerType.Info, true, false, true, LogColor.Blue);
+                    Data.JobID = jobID;
+                    Data.NumberPhone = phone;
+                    Data.NumberPhoneForServiceView = phone.Contains("+") ? phone : $"+{phone}";
+                    return true;
+                }
+                else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase) && secondsWaitPhone < (stopwatch.ElapsedMilliseconds / 60))
+                {
+                    Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tНомеров нет", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    return false;
+                }
+                else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase))
+                {
+                    Thread.Sleep(500);
+                    continue;
+                }
+                else
+                {
+                    Logger.Write($"[{nameof(jobID)}:{jobID}]\t[{new StackTrace().GetFrame(0).GetMethod().Name}]\tUnknown error", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Получение sms кода (ошибки логирует автоматически).
         /// </summary>
         /// <param name="jobId"></param>
@@ -102,46 +150,53 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         /// <returns></returns>
         public bool GetSmsCode(HtmlElement heReSendSmsCode = null)
         {
-            string smsCodeOrStatus;
-
             var counterAttemptsReSendCode = default(int);
-            var minutesWaitSmsCode = Settings.MinutesWaitSmsCode;
-            var attemptsReSendCode = Settings.AttemptsReSendSmsCode;
+            var attemptsReSendCode = SettingsFromZennoVariables.AttemptsReSendSmsCode;
+            var minutesWaitSmsCode = SettingsFromZennoVariables.MinutesWaitSmsCode;
+            var jobID = Data.JobID;
+            var phone = Data.NumberPhone;
 
             while (true)
             {
-                smsCodeOrStatus = ZennoPoster.Sms.GetStatus(Params.Dll, Data.JobID, "", minutesWaitSmsCode);
+                var smsCodeOrStatus = ZennoPoster.Sms.GetStatus(Params.Dll, jobID, "", minutesWaitSmsCode);
+                var logCode = $"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]";
 
-                if (string.IsNullOrWhiteSpace(smsCodeOrStatus))
+                if (Regex.IsMatch(smsCodeOrStatus, @"[0-9]{4,}"))
                 {
-                    Logger.Write($"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]\tError reply to SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"[{nameof(Params.Dll)}:{Params.Dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t{logCode}\tКод успешно получен", LoggerType.Info, true, false, true, LogColor.Default);
+                    Data.SmsCodeOrStatus = smsCodeOrStatus;
+                    return true;
+                }
+                else if (string.IsNullOrWhiteSpace(smsCodeOrStatus))
+                {
+                    Logger.Write($"{logCode}\tError reply to SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return false;
                 }
-                else if (smsCodeOrStatus == "Error")
+                else if (smsCodeOrStatus.Equals("Error", StringComparison.OrdinalIgnoreCase))
                 {
-                    Logger.Write($"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]\t[{nameof(minutesWaitSmsCode)}:{minutesWaitSmsCode}]\tLimit min wait sms code", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"{logCode}\t[{nameof(minutesWaitSmsCode)}:{minutesWaitSmsCode}]\tLimit min wait sms code", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return false;
                 }
-                else if (smsCodeOrStatus == "Wait")
+                else if (smsCodeOrStatus.Equals("Wait", StringComparison.OrdinalIgnoreCase))
                 {
                     if (++counterAttemptsReSendCode > attemptsReSendCode)
                     {
-                        Logger.Write($"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]\t[{attemptsReSendCode}]\tLimit attempts resend code", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                        Logger.Write($"{logCode}\t[{attemptsReSendCode}]\tLimit attempts resend code", LoggerType.Warning, true, true, true, LogColor.Yellow);
                         return false;
                     }
                     else if (!heReSendSmsCode.IsNullOrVoid())
                     {
-                        Logger.Write($"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]\tNew attempt to resend code ", LoggerType.Info, true, false);
+                        Logger.Write($"{logCode}\tNew attempt to resend code ", LoggerType.Info, true, false);
                         heReSendSmsCode.Click(Browser.ActiveTab, Rnd.Next(150, 500));
                         continue;
                     }
                 }
-                else break;
+                else
+                {
+                    Logger.Write($"[{nameof(jobID)}:{jobID}]\t{logCode}\t[{new StackTrace().GetFrame(0).GetMethod().Name}]\tUnknown error", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    return false;
+                }
             }
-
-            Data.SmsCodeOrStatus = smsCodeOrStatus;
-
-            return true;
         }
 
         /// <summary>
