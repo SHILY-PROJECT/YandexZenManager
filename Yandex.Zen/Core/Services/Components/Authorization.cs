@@ -275,7 +275,7 @@ namespace Yandex.Zen.Core.Services.Components
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
 
-                    var phoneLog = $"[Sms service dll: {DataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                    var phoneLog = $"[Sms service dll: {ProjectDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                     // Ввод номера
                     heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));

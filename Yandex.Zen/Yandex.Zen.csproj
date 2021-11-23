@@ -115,7 +115,7 @@
     <Compile Include="Core\Models\CheatActivity\TaskItemModel.cs" />
     <Compile Include="Core\Models\CheatActivity\ActionStateModel.cs" />
     <Compile Include="Core\Models\CheatActivity\CommentData.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ChannelModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ChannelDataModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProxyDataModel.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Models\ZenChannelCreationAndDesign\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
@@ -185,7 +185,7 @@
     <Compile Include="Core\Toolkit\ProfileWorker.cs" />
     <Compile Include="Core\Toolkit\TableHandler.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
-    <Compile Include="DataStore.cs" />
+    <Compile Include="ProjectDataStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -28,9 +28,9 @@ namespace Yandex.Zen.Core
 
         [ThreadStatic] private static AccountOrDonorBaseModel _objectModel;
 
-        public static IZennoPosterProjectModel Zenno { get => DataStore.Zenno; }
-        public static Instance Instance { get => DataStore.Browser; }
-        public static ProgramModeEnum ProgramMode { get => DataStore.ProgramMode; }
+        public static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
+        public static Instance Instance { get => ProjectDataStore.Browser; }
+        public static ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
         public static Random Rnd { get; set; } = new Random();
         public static AccountOrDonorBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 

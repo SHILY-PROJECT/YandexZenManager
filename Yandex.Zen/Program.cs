@@ -29,7 +29,7 @@ namespace Yandex.Zen
     /// <summary>
     /// Класс для запуска выполнения скрипта
     /// </summary>
-    public class Program : DataStore, IZennoExternalCode
+    public class Program : ProjectDataStore, IZennoExternalCode
     {
         private static readonly object _locker = new object();
 

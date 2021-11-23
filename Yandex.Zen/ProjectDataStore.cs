@@ -17,7 +17,7 @@ using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
 
 namespace Yandex.Zen
 {
-    public class DataStore
+    public class ProjectDataStore
     {
         private static readonly object _locker = new object();
 
@@ -29,6 +29,8 @@ namespace Yandex.Zen
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
         [ThreadStatic] private static List<string> _currentObjectCache;
+        [ThreadStatic] private static PhoneServiceNew _phoneService;
+        [ThreadStatic] private static CaptchaServiceNew _captchaService;
         private static DirectoryInfo _profilesDirectory;
         private static DirectoryInfo _accountsDirectory;
         private static List<string> _objectsOfAllThreadsInWork;
@@ -38,7 +40,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static AccountOrDonorBaseModel ResourceObject { get => _accountOrDonorBaseModel; private set { _accountOrDonorBaseModel = value; } }
+        public static AccountOrDonorBaseModel ResourceObject { get => _accountOrDonorBaseModel; }
         
         /// <summary>
         /// Общая таблица с аккаунтами.
@@ -76,14 +78,14 @@ namespace Yandex.Zen
         /// <summary>
         /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
         /// </summary>
-        public static PhoneServiceNew PhoneServiceNew { get; private set; }
+        public static PhoneServiceNew PhoneServiceNew { get => _phoneService; }
 
         /*todo Снести CaptchaServiceDll после рефакторинга*/
         public static string CaptchaServiceDll { get; private set; }
         /// <summary>
         /// Капча сервис (данные dll).
         /// </summary>
-        public static CaptchaServiceNew CaptchaService { get; private set; }
+        public static CaptchaServiceNew CaptchaService { get => _captchaService; }
 
         /// <summary>
         /// Текущие объекты потока.
@@ -215,21 +217,15 @@ namespace Yandex.Zen
             }
             [_programMode];
 
-            /* todo После переноса сервисов на улучшенную архитектуру - снести данный объект и его создание*/
-            if (CaptchaServiceDll is null)
-                lock (_locker) CaptchaServiceDll = CaptchaServiceDll is null ? CaptchaServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value : CaptchaServiceDll;
-            if (PhoneService is null)
-                lock (_locker) PhoneService = PhoneService is null ? PhoneService = new PhoneService(Zenno.Variables["cfgSmsServiceAndCountry"].Value) : PhoneService;
-
-            CaptchaService = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
-            PhoneServiceNew = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
+            _captchaService = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
+            _phoneService = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
             (
                 Zenno.Variables["cfgNumbAttempsGetPhone"],
                 Zenno.Variables["cfgNumbMinutesWaitSmsCode"],
                 Zenno.Variables["cfgNumbAttemptsRequestSmsCode"]
             ));
-           
-            ResourceObject = new AccountOrDonorBaseModel(
+
+            _accountOrDonorBaseModel = new AccountOrDonorBaseModel(
                 new SettingsAccountOrDonorFromZennoVariablesModel
                 (
                     Zenno.Variables["cfgIfFolderErrorThenCreateIt"]

@@ -30,7 +30,7 @@ namespace Yandex.Zen.Core.Toolkit
                 Logger.Write($"Отправка капчи на распознавание", LoggerType.Info, true, false, true, LogColor.Default);
 
                 // Отправка капчи на распознание
-                var responseCaptcha = ZennoPoster.CaptchaRecognition(DataStore.CaptchaServiceDll, Convert.ToBase64String(btImg), "");
+                var responseCaptcha = ZennoPoster.CaptchaRecognition(ProjectDataStore.CaptchaServiceDll, Convert.ToBase64String(btImg), "");
 
                 // Получение результата распознавания
                 captchaResult = responseCaptcha.Split(new[] { "-|-" }, StringSplitOptions.None)[0];

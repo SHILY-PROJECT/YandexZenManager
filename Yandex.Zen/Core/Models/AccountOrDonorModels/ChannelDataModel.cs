@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
-    public class ChannelModel
+    public class ChannelDataModel
     {
         public Uri Url { get; set; }
         public string ProfileEditor { get; set; }

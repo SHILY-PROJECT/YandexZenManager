@@ -16,6 +16,8 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
     /// </summary>
     public class AccountOrDonorBaseModel
     {
+        private static readonly object _locker = new object();
+
         public string Login { get; set; }
         public string Password { get; set; }
         public string AnswerQuestion { get; set; }
@@ -34,6 +36,33 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             Profile = new ProfileModel(settingsUseProfileShared);
             SettingsFromZennoVariables = settingsFromZennoVariables;
             PhoneData = ProjectComponents.PhoneServiceNew.Data;
+            SetAccount(ProjectComponents.ProgramMode);
         }
+
+        private void SetAccount(ProgramModeEnum programMode)
+        {
+            lock (_locker)
+            {
+                var tb = ProjectComponents.ModeTable;
+
+                switch (programMode)
+                {
+                    case ProgramModeEnum.PostingSecondWind:
+                        for (int row = 0; row < tb.Table.RowCount; row++)
+                             if (ConfigurePostingSecondWind(tb.Table, row)) break;        
+                        break;
+
+                }
+            }
+        }
+
+        private bool ConfigurePostingSecondWind(IZennoTable table, int row)
+        {
+
+
+            return true;
+        }
+
+
     }
 }
