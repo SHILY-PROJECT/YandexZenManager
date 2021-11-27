@@ -22,9 +22,30 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public string CountryShortName { get => _countryShortName; }
         public string Proxy { get => _proxy; }
 
+        public ProxyDataModel(string proxy, bool defineIpCountryInfo)
+        {
+            if (proxy.Equals("none", StringComparison.OrdinalIgnoreCase) || proxy.Equals("-", StringComparison.OrdinalIgnoreCase))
+            {
+                _proxy = string.Empty;
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(proxy) || proxy.Contains(":") is false)
+                throw new ArgumentException($"'{nameof(proxy)}' - Некорректный аргумент");
+
+            if (defineIpCountryInfo)
+            {
+                GetIpCountryInfo(proxy, out var countryFullName, out var countryShortName);
+                _countryFullName = countryFullName;
+                _countryShortName = countryShortName;
+            }
+
+            _proxy = proxy;
+        }
+
         public void Configure(string proxy, bool defineIpCountryInfo)
         {
-            if (proxy.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (proxy.Equals("none", StringComparison.OrdinalIgnoreCase) || proxy.Equals("-", StringComparison.OrdinalIgnoreCase))
             {
                 _proxy = string.Empty;
                 return;

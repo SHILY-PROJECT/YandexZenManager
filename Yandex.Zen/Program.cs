@@ -55,7 +55,7 @@ namespace Yandex.Zen
                     case ProgramModeEnum.WalkingOnZen:                  new WalkingOnZen().Start();                 break;
                     case ProgramModeEnum.InstanceAccountManagement:     new InstanceAccountManagement().Start();    break;
                     case ProgramModeEnum.CheatActivity:                 new CheatActivity().Start();                break;
-                    case ProgramModeEnum.PostingSecondWind:             new PostingSecondWind().Start();  break;
+                    case ProgramModeEnum.PostingSecondWind:             new PostingSecondWind().Start();            break;
                 }
             }
             catch (Exception ex)

@@ -41,5 +41,21 @@
             Comments = 6,
             ProcessStatus = 7
         }
+
+        /// <summary>
+        /// Столбцы для таблицы режима PostingSecondWind.
+        /// </summary>
+        public enum PostingSecondWind
+        {
+            Profile,
+            Login,
+            Password,
+            AnswerQuestion,
+            AccountNumberPhone,
+            ChannelNumberPhone,
+            Proxy,
+            ChannelUrl,
+            IndexationStatus
+        }
     }
 }

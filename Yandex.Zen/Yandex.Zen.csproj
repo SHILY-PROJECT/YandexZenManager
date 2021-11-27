@@ -86,10 +86,11 @@
     <Compile Include="Core\Enums\CheatActivity\CommentsSourceEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
+    <Compile Include="Core\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\ProfileModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\ProfileDataModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\SettingsUseSharedProfileFromZennoVariablesModel.cs" />
     <Compile Include="Core\ProjectComponents.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
@@ -202,6 +203,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\Enums\PositionsOfDataInTable\" />
     <Folder Include="Core\Toolkit\PhoneServiceTool\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

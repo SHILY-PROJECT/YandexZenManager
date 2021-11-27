@@ -13,7 +13,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
     /// <summary>
     /// Модель с данными профиля.
     /// </summary>
-    public class ProfileModel
+    public class ProfileDataModel
     {
         #region====================================================================
         private IZennoPosterProjectModel Zenno { get => ServicesComponents.Zenno; }
@@ -24,13 +24,13 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        public ProfileModel() { }
+        public ProfileDataModel() { }
 
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
         /// <param name="settingsFromZennoVariables">Настройки использования общих профилей.</param>
-        public ProfileModel(SettingsUseSharedProfileFromZennoVariablesModel settingsFromZennoVariables)
+        public ProfileDataModel(SettingsUseSharedProfileFromZennoVariablesModel settingsFromZennoVariables)
         {
             SettingsFromZennoVariables = settingsFromZennoVariables;
         }

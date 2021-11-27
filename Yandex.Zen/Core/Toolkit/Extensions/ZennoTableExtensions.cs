@@ -121,5 +121,24 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
             numbRow = -1;
             return null;
         }
+
+        /// <summary>
+        /// Получение значения ячейки.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column">Столбец ячейки.</param>
+        /// <param name="row">Строка ячейки.</param>
+        /// <param name="result">Значение ячейки.</param>
+        /// <returns>Возвращает 'true', если значение было успешно получено; иначе - 'false'.</returns>
+        public static bool ParseValueFromCell(this IZennoTable table, int column, int row, out string result)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(result = table.GetCell(column, row))) return true;
+            }
+            catch { }
+            result = null;
+            return false;
+        }
     }
 }
