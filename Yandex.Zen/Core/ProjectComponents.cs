@@ -13,21 +13,16 @@ namespace Yandex.Zen.Core
     public class ProjectComponents
     {
         public static ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
-
         public static AccountOrDonorBaseModel ResourceObject { get => ProjectDataStore.ResourceObject; }
         public static PhoneServiceNew PhoneServiceNew { get => ProjectDataStore.PhoneServiceNew; }
         public static CaptchaServiceNew CaptchaService { get => ProjectDataStore.CaptchaService; }
 
+
         public static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
         public static Instance Browser { get => ProjectDataStore.Browser; }
 
+
         public static TableModel MainTable { get => ProjectDataStore.MainTable; }
         public static TableModel ModeTable { get => ProjectDataStore.ModeTable; }
-
-        public static ILocalVariables ZVars { get => ProjectDataStore.Zenno.Variables; }
-        public static ITables ZTables { get => ProjectDataStore.Zenno.Tables; }
-        public static ILists ZLists { get => ProjectDataStore.Zenno.Lists; }
-
-        public static Random Rnd { get; set; } = new Random();
     }
 }

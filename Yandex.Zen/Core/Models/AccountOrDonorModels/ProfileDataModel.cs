@@ -8,7 +8,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
+namespace Yandex.Zen.Core.Models.AccountOrDonorModels
 {
     /// <summary>
     /// Модель с данными профиля.
@@ -24,17 +24,18 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        public ProfileDataModel() { }
+        public ProfileDataModel(bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse)
+        {
+            UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
+            MinProfileSizeToUse = minProfileSizeToUse;
+        }
 
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        /// <param name="settingsFromZennoVariables">Настройки использования общих профилей.</param>
-        public ProfileDataModel(SettingsUseSharedProfileFromZennoVariablesModel settingsFromZennoVariables)
-        {
-            SettingsFromZennoVariables = settingsFromZennoVariables;
-        }
-
+        public ProfileDataModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse) :
+            this(bool.Parse(useWalkedProfileFromSharedFolder.Value), int.Parse(minProfileSizeToUse.Value))
+        { }
 
         /// <summary>
         /// Файл профиля.
@@ -60,10 +61,14 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels
         public string Name => File.Name;
 
         /// <summary>
-        /// Настройки использования общих профилей.
+        /// Использовать нагуленные профиля.
         /// </summary>
-        public SettingsUseSharedProfileFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
+        public bool UseWalkedProfileFromSharedFolder { get; set; }
 
+        /// <summary>
+        /// Минимальный размер нагуленного профиля.
+        /// </summary>
+        public int MinProfileSizeToUse { get; set; }
 
         /// <summary>
         /// Загрузка профиля.

@@ -13,7 +13,9 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
-using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
+using Yandex.Zen.Core.Services.PostingSecondWindService;
+using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PostingSecondWindService.Models;
 
 namespace Yandex.Zen
 {
@@ -222,19 +224,28 @@ namespace Yandex.Zen
                 Zenno.Variables["cfgNumbAttemptsRequestSmsCode"]
             ));
 
-            PostingSecondWind.Mode = new Dictionary<string, PostingSecondWindModeEnum>
+            switch (ProgramMode)
             {
-                ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
-                ["Постинг"] =                       PostingSecondWindModeEnum.Posting
+                case ProgramModeEnum.PostingSecondWind:
+                    var postingSecondWindMode = new Dictionary<string, PostingSecondWindModeEnum>
+                    {
+                        ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
+                        ["Постинг"] =                       PostingSecondWindModeEnum.Posting
+                    }
+                    [Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+                    PostingSecondWind.SetSettings(new PostingSecondWindSettings(postingSecondWindMode));
+                    break;
+
+                default: throw new Exception($"'{ProgramMode}' - на текущий момент режим отключен");
             }
-            [Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+
 
             _accountOrDonorBaseModel = new AccountOrDonorBaseModel(
                 new SettingsAccountOrDonorFromZennoVariablesModel
                 (                   
                     Zenno.Variables["cfgIfFolderErrorThenCreateIt"]
                 ),
-                new SettingsUseSharedProfileFromZennoVariablesModel
+                new ProfileDataModel
                 (
                     Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"],
                     Zenno.Variables["cfgMinSizeProfileUseInModes"]

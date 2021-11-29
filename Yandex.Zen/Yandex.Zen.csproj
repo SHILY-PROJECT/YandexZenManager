@@ -86,14 +86,14 @@
     <Compile Include="Core\Enums\CheatActivity\CommentsSourceEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
-    <Compile Include="Core\Enums\PostingSecondWindModeEnum.cs" />
+    <Compile Include="Core\Services\PostingSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\ProfileDataModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProfileModels\SettingsUseSharedProfileFromZennoVariablesModel.cs" />
+    <Compile Include="Core\Models\AccountOrDonorModels\ProfileDataModel.cs" />
     <Compile Include="Core\ProjectComponents.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
+    <Compile Include="Core\Services\PostingSecondWindService\Models\PostingSecondWindSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserBusySettingsModel.cs" />
@@ -138,7 +138,7 @@
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
-    <Compile Include="Core\Services\PostingSecondWind.cs" />
+    <Compile Include="Core\Services\PostingSecondWindService\PostingSecondWind.cs" />
     <Compile Include="Core\Toolkit\CaptchaService.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
@@ -149,7 +149,6 @@
     <Compile Include="Core\Toolkit\LoggerTool\Models\TimeData.cs" />
     <Compile Include="Core\Toolkit\Macros\HtmlElementMacros.cs" />
     <Compile Include="Core\Toolkit\PhoneService.cs" />
-    <Compile Include="Core\Enums\FileManager\ProxyModeEnum.cs" />
     <Compile Include="Core\Enums\ProgramModeEnum.cs" />
     <Compile Include="Core\Enums\WalkingProfile\SearchServiceEnum.cs" />
     <Compile Include="Core\Enums\Extensions\SearchTypeForAnyMatch.cs" />
@@ -203,7 +202,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Enums\PositionsOfDataInTable\" />
     <Folder Include="Core\Toolkit\PhoneServiceTool\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

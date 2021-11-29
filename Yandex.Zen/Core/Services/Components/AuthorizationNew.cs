@@ -28,7 +28,7 @@ namespace Yandex.Zen.Core.Services.Components
         private static Instance Browser { get => ProjectComponents.Browser; }
         private static AccountOrDonorBaseModel Account { get => ProjectComponents.ResourceObject; }
         private static PhoneServiceNew PhoneService { get => ProjectComponents.PhoneServiceNew; }
-        private static Random Rnd { get => ProjectComponents.Rnd; }
+        private static Random Rnd { get; set; } = new Random();
         #endregion==================================================================
 
         /// <summary>

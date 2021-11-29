@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.AccountOrDonorModels.ProfileModels;
-using Yandex.Zen.Core.Services;
+using Yandex.Zen.Core.Services.PostingSecondWindService;
+using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -36,10 +36,10 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public ProxyDataModel ProxyData { get; set; }
         public SettingsAccountOrDonorFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
 
-        public AccountOrDonorBaseModel(SettingsAccountOrDonorFromZennoVariablesModel settingsFromZennoVariables, SettingsUseSharedProfileFromZennoVariablesModel settingsUseProfileShared)
+        public AccountOrDonorBaseModel(SettingsAccountOrDonorFromZennoVariablesModel settingsFromZennoVariables, ProfileDataModel profileData)
         {
             ChannelData = new ChannelDataModel();
-            Profile = new ProfileDataModel(settingsUseProfileShared);
+            Profile = profileData;
             SettingsFromZennoVariables = settingsFromZennoVariables;
 
             SetAccount(ProjectComponents.ProgramMode);
@@ -91,7 +91,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectDataStore.AccountsDirectory.FullName, Login));
 
-                if (PostingSecondWind.Mode == PostingSecondWindModeEnum.AuthorizationAndLinkPhone && !this.Directory.Exists) this.Directory.Create();
+                if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.AuthorizationAndLinkPhone && !this.Directory.Exists) this.Directory.Create();
             }
             else throw new Exception($"[{nameof(colLogin)}:{result}]\tValue is void or null");
 
@@ -121,7 +121,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             {
                 this.PhoneNumber = result;
             }
-            else if (PostingSecondWind.Mode == PostingSecondWindModeEnum.Posting)
+            else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
                 throw new Exception($"[{nameof(colAccountPhone)}:{result}]\tValue is void or null");
 
 
@@ -129,7 +129,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             {
                 this.ChannelData.NumberPhone = result;
             }
-            else if (PostingSecondWind.Mode == PostingSecondWindModeEnum.Posting)
+            else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
                 throw new Exception($"[{nameof(colChannelPhone)}:{result}]\tValue is void or null");
 
 
