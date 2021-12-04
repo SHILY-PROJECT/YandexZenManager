@@ -93,7 +93,7 @@
     <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\ProfileDataModel.cs" />
     <Compile Include="Core\ProjectComponents.cs" />
-    <Compile Include="Core\Services\ServicesComponents\AuthorizationNew.cs" />
+    <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
     <Compile Include="Core\Services\PostingSecondWindService\Models\PostingSecondWindSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />
@@ -131,11 +131,11 @@
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\DataModels\SetMailData.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\DataModels\SetSiteData.cs" />
     <Compile Include="Core\Services\CheatActivityService\CheatActivity.cs" />
-    <Compile Include="Core\Services\ServicesComponents\Authorization.cs" />
-    <Compile Include="Core\Services\ServicesComponents\UnBindingPhoneAccount.cs" />
+    <Compile Include="Core\Services\Components\Authorization.cs" />
+    <Compile Include="Core\Services\Components\UnBindingPhoneAccount.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Enums\ChannelSettingsEnum.cs" />
     <Compile Include="Core\Models\AccountOrDonorModels\AccountOrDonorBaseModel.cs" />
-    <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\BasicSettingsModel.cs" />
+    <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\SettingsBaseModel.cs" />
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
     <Compile Include="Core\Models\TableModel.cs" />

@@ -5,7 +5,7 @@ using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.Channel
 
 namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.ChannelSettings
 {
-    public class BasicSettingsModel
+    public class SettingsBaseModel
     {
         public BindingPhoneToChannelData BindingPhoneToChannel { get; set; }
         public ChangeChannelImageData ChangeChannelImage { get; set; }
@@ -19,19 +19,19 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.Cha
         public ConnectMetricData ConnectMetric { get; set; }
         public AcceptTermsOfUserAgreementData AcceptTermsOfUserAgreement { get; set; }
 
-        public static BasicSettingsModel GetCurrentSettings()
+        public static SettingsBaseModel GetCurrentSettings()
         {
             var settingsFile = ZenChannelCreationAndDesign.SettingsFile;
 
             if (settingsFile.Exists)
             {
                 // Получение настроек из файла
-                return JsonConvert.DeserializeObject<BasicSettingsModel>(File.ReadAllText(settingsFile.FullName, Encoding.UTF8));
+                return JsonConvert.DeserializeObject<SettingsBaseModel>(File.ReadAllText(settingsFile.FullName, Encoding.UTF8));
             }
             else
             {
                 // Создание нового экземпляра настроек
-                var settings = new BasicSettingsModel();
+                var settings = new SettingsBaseModel();
 
                 // Сохранение настроек в файл
                 File.WriteAllText(settingsFile.FullName, JsonConvert.SerializeObject(settings, Formatting.Indented), Encoding.UTF8);
@@ -40,9 +40,9 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.Cha
             }
         }
 
-        public static BasicSettingsModel ExtractSettingsFromTemplateVariable(string templateVariableWithSettings)
+        public static SettingsBaseModel ExtractSettingsFromTemplateVariable(string templateVariableWithSettings)
         {
-            var settings = new BasicSettingsModel
+            var settings = new SettingsBaseModel
             {
 
             };

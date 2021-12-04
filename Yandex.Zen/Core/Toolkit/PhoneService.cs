@@ -12,6 +12,7 @@ using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.Toolkit
 {
+    [Obsolete]
     public class PhoneService : ServicesDataAndComponents
     {
         public string Dll { get; set; }

@@ -4,7 +4,10 @@ namespace Yandex.Zen.Core.Toolkit
 {
     public class DataLists
     {
-        public static List<string> GetListRussianCities => new List<string>
+        /// <summary>
+        /// Список Русских городов.
+        /// </summary>
+        public static List<string> ListOfRussianCities => new List<string>
         {
             "Абаза",
             "Абакан",

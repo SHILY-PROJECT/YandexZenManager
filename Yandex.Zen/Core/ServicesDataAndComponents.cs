@@ -22,6 +22,7 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core
 {
+    [Obsolete]
     public class ServicesDataAndComponents
     {
         private static readonly object _locker = new object();

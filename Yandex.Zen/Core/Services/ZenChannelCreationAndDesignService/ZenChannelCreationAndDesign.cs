@@ -16,9 +16,9 @@ using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
-using Yandex.Zen.Core.Services.ServicesComponents;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Enums;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.ChannelSettings.DataModels;
+using Yandex.Zen.Core.Services.Components;
 
 namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
 {

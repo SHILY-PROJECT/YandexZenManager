@@ -10,8 +10,10 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Toolkit
 {
+    [Obsolete]
     public class InstanceSettings
     {
+        [Obsolete]
         public class OtherSettings
         {
             //Добавить в выводные настройки
@@ -163,6 +165,7 @@ namespace Yandex.Zen.Core.Toolkit
             }
         }
 
+        [Obsolete]
         public class BusySettings
         {
             public bool IgnoreAdditionalRequests { get; set; }

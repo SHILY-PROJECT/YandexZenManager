@@ -17,7 +17,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingOnZenService.Enums;
-using Yandex.Zen.Core.Services.ServicesComponents;
+using Yandex.Zen.Core.Services.Components;
 
 namespace Yandex.Zen.Core.Services.WalkingOnZenService
 {
@@ -743,7 +743,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         // Устанавливаем случайный русский город в поле со страной и вызываем событие "Enter"
                         heFieldCity.SetValue
                         (
-                            Instance.ActiveTab, DataLists.GetListRussianCities().GetLine(LineOptions.Random),
+                            Instance.ActiveTab, DataLists.ListOfRussianCities().GetLine(LineOptions.Random),
                             LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, false, true, Rnd.Next(3000, 3500)
                         );
 
