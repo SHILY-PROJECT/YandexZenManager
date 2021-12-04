@@ -11,7 +11,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Toolkit
 {
-    public class ProfileWorker : ServicesComponents
+    public class ProfileWorker : ServicesDataAndComponents
     {
         /// <summary>
         /// Получение и загрузка профиля (если в рабочей папке нет профиля, то он будет получен из общей папки).

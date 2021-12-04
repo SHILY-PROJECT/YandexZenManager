@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Enums.Extensions;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 
 namespace Yandex.Zen.Core.Toolkit.Extensions
 {
@@ -83,7 +83,5 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
             list.Add(line);
             return line;
         }
-
-
     }
 }

@@ -11,7 +11,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Toolkit
 {
-    public class CaptchaService : ServicesComponents
+    public class CaptchaService : ServicesDataAndComponents
     {
         /// <summary>
         /// Отправка капчи на распознание (ошибки логирует автоматически).

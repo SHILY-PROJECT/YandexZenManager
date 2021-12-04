@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
-using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -16,6 +15,7 @@ using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Models;
+using Yandex.Zen.Core.Services.InstanceAccountManagementService;
 
 namespace Yandex.Zen
 {
@@ -115,11 +115,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Объект зенно постера (project).
         /// </summary>
-        public static IZennoPosterProjectModel Zenno
-        {
-            get => _zenno;
-            private set { _zenno = value; }
-        }
+        public static IZennoPosterProjectModel Zenno { get => _zenno; }
 
         /// <summary>
         /// Объект зенно постера (браузер).
@@ -156,7 +152,7 @@ namespace Yandex.Zen
 
             try
             {
-                Zenno = zenno;
+                _zenno = zenno;
                 InitializingProjectData();
                 Browser = instance;
             }

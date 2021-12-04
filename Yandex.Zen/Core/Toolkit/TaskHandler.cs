@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums.Extensions;
-using Yandex.Zen.Core.Models.CheatActivity;
+using Yandex.Zen.Core.Services.CheatActivityService.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 
@@ -112,7 +112,7 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 taskList.Add(new TaskItemModel
                 {
-                    TaskId = ServicesComponents.Rnd.Next(100000000, 999999999).ToString(),
+                    TaskId = ServicesDataAndComponents.Rnd.Next(100000000, 999999999).ToString(),
                     GoToArticle = true,
                     SecondsWatchArticle = secondsWatchArticleSettings.ExtractNumber(),
                     Like = totalLikes != 0,

@@ -18,9 +18,9 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
 
         public ResourceData()
         {
-            Name = ServicesComponents.Login;
-            Type = ServicesComponents.ResourceType;
-            Dir = ServicesComponents.ObjectDirectory.FullName;
+            Name = ServicesDataAndComponents.Login;
+            Type = ServicesDataAndComponents.ResourceType;
+            Dir = ServicesDataAndComponents.ObjectDirectory.FullName;
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Yandex.Zen.Core.Toolkit.Macros
             var symbols = temp.ToArray();
             var line = string.Join("", symbols);
 
+            //chars = chars.Select(value => value = line[rnd.Next(line.Length)]).ToArray();
+
             for (int i = 0; i < chars.Length; i++) chars[i] = line[rnd.Next(line.Length)];
 
             if (chars.Length >= symbols.Length)
