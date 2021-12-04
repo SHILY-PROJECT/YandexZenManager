@@ -86,6 +86,7 @@
     <Compile Include="Core\Enums\CheatActivity\CommentsSourceEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Enums\InstanceAccountManagement\StartPageInstanceEnum.cs" />
+    <Compile Include="Core\Models\HE.cs" />
     <Compile Include="Core\Services\PostingSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Enums\WalkingOnZen\ActionOnItem.cs" />
@@ -153,8 +154,7 @@
     <Compile Include="Core\Enums\WalkingProfile\SearchServiceEnum.cs" />
     <Compile Include="Core\Enums\Extensions\SearchTypeForAnyMatch.cs" />
     <Compile Include="Core\Enums\Extensions\TypeRefreshEnum.cs" />
-    <Compile Include="Core\Toolkit\Extensions\HtmlElementExtensions.cs" />
-    <Compile Include="Core\Toolkit\Extensions\InstanceAndTabExtensions.cs" />
+    <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoTableExtensions.cs" />
     <Compile Include="Core\Toolkit\Macros\DirectoryMacros.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesign.cs" />

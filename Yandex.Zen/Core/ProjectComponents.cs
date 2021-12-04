@@ -12,17 +12,18 @@ namespace Yandex.Zen.Core
 {
     public class ProjectComponents
     {
-        public static ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
-        public static AccountOrDonorBaseModel ResourceObject { get => ProjectDataStore.ResourceObject; }
-        public static PhoneServiceNew PhoneServiceNew { get => ProjectDataStore.PhoneServiceNew; }
-        public static CaptchaServiceNew CaptchaService { get => ProjectDataStore.CaptchaService; }
+        [ThreadStatic] private static ProjectComponents _instance;
+        public static ProjectComponents Project { get => _instance is null ? _instance = _instance = new ProjectComponents() : _instance; }
 
+        public ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
+        public AccountOrDonorBaseModel ResourceObject { get => ProjectDataStore.ResourceObject; }
+        public PhoneServiceNew PhoneServiceNew { get => ProjectDataStore.PhoneServiceNew; }
+        public CaptchaServiceNew CaptchaService { get => ProjectDataStore.CaptchaService; }
 
-        public static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
-        public static Instance Browser { get => ProjectDataStore.Browser; }
+        public IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
+        public Instance Browser { get => ProjectDataStore.Browser; }
 
-
-        public static TableModel MainTable { get => ProjectDataStore.MainTable; }
-        public static TableModel ModeTable { get => ProjectDataStore.ModeTable; }
+        public TableModel MainTable { get => ProjectDataStore.MainTable; }
+        public TableModel ModeTable { get => ProjectDataStore.ModeTable; }
     }
 }

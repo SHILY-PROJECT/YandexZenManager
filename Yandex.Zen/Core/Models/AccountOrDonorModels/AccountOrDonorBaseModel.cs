@@ -22,6 +22,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
     public class AccountOrDonorBaseModel
     {
         private static readonly object _locker = new object();
+        private ProjectComponents Project { get => ProjectComponents.Project; }
 
         public string Login { get; set; }
         public string Password { get; set; }
@@ -42,12 +43,12 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             Profile = profileData;
             SettingsFromZennoVariables = settingsFromZennoVariables;
 
-            SetAccount(ProjectComponents.ProgramMode);
+            SetAccount(Project.ProgramMode);
         }
 
         private void SetAccount(ProgramModeEnum programMode)
         {
-            var tb = ProjectComponents.ModeTable;
+            var tb = Project.ModeTable;
 
             if (tb.Table.RowCount == 0)
                 throw new Exception($"Таблица пуста: {tb.FileName}");

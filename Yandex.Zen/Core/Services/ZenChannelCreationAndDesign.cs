@@ -17,6 +17,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using Yandex.Zen.Core.Services.Components;
 using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Services
 {

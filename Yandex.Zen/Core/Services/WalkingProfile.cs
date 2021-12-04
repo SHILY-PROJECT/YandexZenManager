@@ -13,6 +13,7 @@ using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Enums.WalkingProfile;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Services
 {

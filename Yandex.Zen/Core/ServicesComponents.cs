@@ -12,7 +12,7 @@ using Yandex.Zen.Core.Enums.Extensions;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;

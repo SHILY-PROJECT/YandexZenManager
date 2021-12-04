@@ -25,9 +25,10 @@ namespace Yandex.Zen.Core.Services.Components
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
 
         #region=====================================================================
-        private static Instance Browser { get => ProjectComponents.Browser; }
-        private static AccountOrDonorBaseModel Account { get => ProjectComponents.ResourceObject; }
-        private static PhoneServiceNew PhoneService { get => ProjectComponents.PhoneServiceNew; }
+        private static ProjectComponents Project { get => ProjectComponents.Project; }
+        private static Instance Browser { get => Project.Browser; }
+        private static AccountOrDonorBaseModel Account { get => Project.ResourceObject; }
+        private static PhoneServiceNew PhoneService { get => Project.PhoneServiceNew; }
         private static Random Rnd { get; set; } = new Random();
         #endregion==================================================================
 

@@ -13,12 +13,12 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Runtime.InteropServices;
-using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Enums.InstanceAccountManagement;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Services
 {
