@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Toolkit.Extensions
+﻿namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 {
     public static class FormattingExtensions
     {

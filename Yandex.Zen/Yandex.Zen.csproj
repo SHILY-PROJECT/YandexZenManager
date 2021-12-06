@@ -102,7 +102,7 @@
     <Compile Include="Core\Toolkit\CaptchaServiceNew.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\BackupFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
-    <Compile Include="Core\Toolkit\Extensions\Enums\LevelEmulation.cs" />
+    <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
     <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\StartPageWalkingOnZen.cs" />

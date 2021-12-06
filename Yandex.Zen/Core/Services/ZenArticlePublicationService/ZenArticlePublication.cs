@@ -10,14 +10,15 @@ using Global.ZennoExtensions;
 using System.Threading;
 using System.IO;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.Extensions.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.ZenArticlePublicationService.Models;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.ZenArticlePublicationService
 {

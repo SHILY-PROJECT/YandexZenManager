@@ -16,7 +16,7 @@ using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;

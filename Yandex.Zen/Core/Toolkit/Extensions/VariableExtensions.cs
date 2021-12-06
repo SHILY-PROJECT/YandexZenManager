@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Toolkit.Extensions
+namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 {
     public static class VariableExtensions
     {

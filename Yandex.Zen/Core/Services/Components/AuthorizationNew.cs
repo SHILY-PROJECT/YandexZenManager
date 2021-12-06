@@ -6,7 +6,7 @@ using Yandex.Zen.Core.Toolkit;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
@@ -16,7 +16,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
-using Yandex.Zen.Core.Toolkit.Extensions.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.Components
 {
@@ -34,7 +34,20 @@ namespace Yandex.Zen.Core.Services.Components
 
         public static void AuthNew()
         {
+            _settingsMode = Browser.BrowserGetCurrentBusySettings();
 
+            HE xFieldLogin = new HE("//input[@name='login']", "Логин");
+            HE xFieldPassword = new HE("//input[contains(@type, 'password')]", "Пароль");
+            HE xButtonSubmit = new HE("//button[@type='submit']", "Войти");
+            HE xChangePassword = new HE("//div[contains(@class, 'ChangePassword')]/descendant::div[contains(@class, 'info-wrap')]", "Доступ к аккаунту ограничен");
+            HE xButtonChangePasswordNext = new HE("//div[contains(@data-t, 'submit-gocaptcha')]/descendant::button[contains(@data-t, 'action')]", "Кнопка - Далее на форме смены пароля");
+            HE xButtonSkipPhone = new HE("//div[contains(@data-t, 'phone_skip')]/descendant::button", "Кнопка - Пропустить привязку номера");
+            HE xAuthAccountList = new HE("//div[contains(@class, 'passp-auth')]/descendant::div[contains(@class, 'passp-auth-content')]/descendant::div[contains(@class, 'AuthAccountList') and contains(@data-t, 'account') and not(contains(@data-t, 'item'))]", "Форма - Выберите учетную запись (список аккаунтов)");
+            HE xItemAccount = new HE(".//div[contains(@data-t, 'account-list-item')]/descendant::div[contains(@class, 'AuthAccountListItem-inner')]", "Кнопка - Аккаунт из списка");
+
+            Browser.ActiveTab.Navigate("https://passport.yandex.ru/auth?origin=home_yandexid&retpath=https%3A%2F%2Fyandex.ru&backpath=https%3A%2F%2Fyandex.ru", "https://yandex.ru/", true);
+
+            xFieldLogin.SetValue();
         }
 
         /// <summary>

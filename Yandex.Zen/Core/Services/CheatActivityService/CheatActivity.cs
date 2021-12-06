@@ -10,7 +10,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using System.Threading;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -19,7 +19,7 @@ using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Services.CheatActivityService.Models;
 using Yandex.Zen.Core.Services.CheatActivityService.Enums;
-using Yandex.Zen.Core.Toolkit.Extensions.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.CheatActivityService
 {

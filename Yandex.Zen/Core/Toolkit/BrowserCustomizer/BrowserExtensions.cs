@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Toolkit.Extensions.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
@@ -21,9 +23,9 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="name"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="numberSecondsWaitElement"></param>
+        /// <param name="attemptsFindElement"></param>
         /// <returns></returns>
-        public static HtmlElement FuncGetFirstHe(this Instance instance, string xpath, string name = "", bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3)
+        public static HtmlElement FuncGetFirstHe(this Instance instance, string xpath, string name = "", bool throwException = true, bool logger = true, int attemptsFindElement = 3)
         {
             var counter = 0;
 
@@ -33,7 +35,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
                 if (he.IsNullOrVoid())
                 {
-                    if (++counter < numberSecondsWaitElement)
+                    if (++counter < attemptsFindElement)
                     {
                         Thread.Sleep(1000);
 
@@ -43,7 +45,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
                         continue;
                     }
 
-                    name = name != "" ? $"[{name}]\t" : "";
+                    name = !string.IsNullOrWhiteSpace(name) ? $"[{name}]\t" : "";
                     var textLog = $"[XPath: {xpath}]\t{name}Элемент не найден";
 
                     if (logger) Logger.Write(textLog, LoggerType.Warning, true, false, false);
@@ -61,10 +63,16 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="xpathAndName"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="numberSecondsWaitElement"></param>
+        /// <param name="attemptsFindElement"></param>
         /// <returns></returns>
-        public static HtmlElement FuncGetFirstHe(this Instance instance, string[] xpathAndName, bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3) =>
-            instance.FuncGetFirstHe(xpathAndName[0], xpathAndName[1], throwException, logger, numberSecondsWaitElement);
+        public static HtmlElement FuncGetFirstHe(this Instance instance, string[] xpathAndName, bool throwException = true, bool logger = true, int attemptsFindElement = 3) =>
+            instance.FuncGetFirstHe(xpathAndName[0], xpathAndName[1], throwException, logger, attemptsFindElement);
+
+        /// <summary>
+        /// Получение первого HtmlElement.
+        /// </summary>
+        public static HtmlElement FuncGetFirstHe(this Instance instance, HE htmlElement, bool throwException = true, bool logger = true, int attemptsFindElement = 3)
+            => instance.FuncGetFirstHe(htmlElement.XPath, htmlElement.Title, throwException, logger, attemptsFindElement);
 
         /// <summary>
         /// Получение HtmlElement.

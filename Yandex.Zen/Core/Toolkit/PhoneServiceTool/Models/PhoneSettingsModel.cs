@@ -1,5 +1,5 @@
 ﻿using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
 {
