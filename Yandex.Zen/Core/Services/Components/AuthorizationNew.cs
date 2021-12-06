@@ -13,7 +13,6 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
@@ -25,14 +24,14 @@ namespace Yandex.Zen.Core.Services.Components
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
 
         #region=====================================================================
+        private static AccountOrDonorBaseModel Account { get => Project.ResourceObject; }
         private static ProjectComponents Project { get => ProjectComponents.Project; }
         private static Instance Browser { get => Project.Browser; }
-        private static AccountOrDonorBaseModel Account { get => Project.ResourceObject; }
         private static PhoneServiceNew PhoneService { get => Project.PhoneServiceNew; }
         private static Random Rnd { get; set; } = new Random();
         #endregion==================================================================
 
-        public static void AuthNew()
+        public static void AuthNew(out bool statusAuth)
         {
             _settingsMode = Browser.BrowserGetCurrentBusySettings();
 
@@ -45,9 +44,30 @@ namespace Yandex.Zen.Core.Services.Components
             HE xAuthAccountList = new HE("//div[contains(@class, 'passp-auth')]/descendant::div[contains(@class, 'passp-auth-content')]/descendant::div[contains(@class, 'AuthAccountList') and contains(@data-t, 'account') and not(contains(@data-t, 'item'))]", "Форма - Выберите учетную запись (список аккаунтов)");
             HE xItemAccount = new HE(".//div[contains(@data-t, 'account-list-item')]/descendant::div[contains(@class, 'AuthAccountListItem-inner')]", "Кнопка - Аккаунт из списка");
 
-            Browser.ActiveTab.Navigate("https://passport.yandex.ru/auth?origin=home_yandexid&retpath=https%3A%2F%2Fyandex.ru&backpath=https%3A%2F%2Fyandex.ru", "https://yandex.ru/", true);
+            var attemptsAuth = 0;
+            while (true)
+            {
+                if (++attemptsAuth > 3)
+                {
+                    Logger.Write($"Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
+                    statusAuth = false;
+                    return;
+                }
 
-            xFieldLogin.SetValue();
+                try
+                {
+                    Browser.ActiveTab.Navigate("https://passport.yandex.ru/auth?origin=home_yandexid&retpath=https%3A%2F%2Fyandex.ru&backpath=https%3A%2F%2Fyandex.ru", "https://yandex.ru/", true);
+
+                    xFieldLogin.SetValue(Account.Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    xButtonSubmit.Click(Rnd.Next(150, 500));
+                    xFieldPassword.SetValue(Account.Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    xButtonSubmit.Click(Rnd.Next(150, 500));
+                }
+                catch { continue; }
+
+
+            }
         }
 
         /// <summary>

@@ -189,8 +189,11 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
                     File.WriteAllText(Path.Combine(errorFolder.FullName, $"[{datetime}] - [SourceText] - {titleActiveTab}.html"), Browser.ActiveTab.GetSourceText("utf-8"), Encoding.UTF8);
 
                 // Сохранение дополнительной информации об ошибке
-                if (otherInfoList != null && otherInfoList.Count != 0)
+                if (otherInfoList != null && otherInfoList.Any())
+                {
+                    otherInfoList.Add(string.Empty);
                     File.WriteAllLines(Path.Combine(errorFolder.FullName, $"[{datetime}] - other info error.txt"), otherInfoList, Encoding.UTF8);
+                }
 
                 // Сохранение скриншота страницы
                 if (takeScreenshot)
