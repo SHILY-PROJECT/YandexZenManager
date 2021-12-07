@@ -125,6 +125,8 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <returns></returns>
         public static HtmlElementCollection FuncGetHeCollection(this Instance instance, string[] xpathAndName, bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3) =>
             instance.FuncGetHeCollection(xpathAndName[0], xpathAndName[1], throwException, logger, numberSecondsWaitElement);
+        public static HtmlElementCollection FuncGetHeCollection(this Instance instance, HE htmlElement, bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3) =>
+            instance.FuncGetHeCollection(htmlElement.XPath, htmlElement.Title, throwException, logger, numberSecondsWaitElement);
 
         /// <summary>
         /// Получение HtmlElementCollection.
