@@ -630,8 +630,8 @@ namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
                     Answer = TextMacros.GenerateString(9, "c");
 
                     // Успешное получение ресурса
-                    ProjectDataStore.CurrentObjectCache.Add(InstagramUrl);
-                    ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(InstagramUrl);
+                    ProjectDataStore.ResourcesCurrentThread.Add(InstagramUrl);
+                    ProjectDataStore.ResourcesAllThreadsInWork.Add(InstagramUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

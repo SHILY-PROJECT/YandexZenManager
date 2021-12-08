@@ -75,7 +75,7 @@ namespace Yandex.Zen.Core.Toolkit
             }
 
             // Фильтрация свободных задач
-            taskNotCompleteList = taskNotCompleteList.Where(x => !ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
+            taskNotCompleteList = taskNotCompleteList.Where(x => !ProjectDataStore.ResourcesAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
 
             if (taskNotCompleteList.Count == 0)
             {
@@ -85,8 +85,8 @@ namespace Yandex.Zen.Core.Toolkit
 
             var taskItem = taskList.GetLine(LineOptions.Random);
 
-            ProjectDataStore.CurrentObjectCache.Add(taskItem.TaskId);
-            ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(taskItem.TaskId);
+            ProjectDataStore.ResourcesCurrentThread.Add(taskItem.TaskId);
+            ProjectDataStore.ResourcesAllThreadsInWork.Add(taskItem.TaskId);
 
             return taskItem;
         }

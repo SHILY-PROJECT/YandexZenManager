@@ -20,7 +20,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
     public class PhoneServiceNew
     {
         #region=========================================================
-        private Instance Browser { get => ProjectComponents.Browser; }
+        private Instance Browser { get => ProjectComponents.Project.Browser; }
         private Random Rnd { get; set; } = new Random();
         #endregion======================================================
 

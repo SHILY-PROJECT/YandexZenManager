@@ -23,6 +23,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
     {
         private static readonly object _locker = new object();
         private ProjectComponents Project { get => ProjectComponents.Project; }
+        private List<string> CurrentObjectsCache { get => ProjectDataStore.ResourcesCurrentThread; }
 
         public string Login { get; set; }
         public string Password { get; set; }
@@ -77,6 +78,9 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             throw new Exception($"Отсутствуют свободные/подходящие аккаунты: {tb.FileName}");
         }
 
+        /// <summary>
+        /// Получение и конфигурирование аккаунта.
+        /// </summary>
         private bool ConfigurePostingSecondWind(IZennoTable table, int row)
         {
             var colLogin = (int)TableColumnEnum.PostingSecondWind.Login;
@@ -86,9 +90,11 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             var colAccountPhone = (int)TableColumnEnum.PostingSecondWind.AccountNumberPhone;
             var colChannelPhone = (int)TableColumnEnum.PostingSecondWind.ChannelNumberPhone;
 
-
+            // логин
             if (table.ParseValueFromCell(colLogin, row, out var result))
             {
+                if ()
+
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectDataStore.AccountsDirectory.FullName, Login));
 
@@ -96,28 +102,28 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             }
             else throw new Exception($"[{nameof(colLogin)}:{result}]\tValue is void or null");
 
-
+            // пароль
             if (table.ParseValueFromCell(colPassword, row, out result))
             {
                 this.Password = result;
             }
             else throw new Exception($"[{nameof(colPassword)}:{result}]\tValue is void or null");
 
-
+            // ответ на контрольный вопрос
             if (table.ParseValueFromCell(colAnswerQuestion, row, out result))
             {
                 this.AnswerQuestion = result;
             }
             else throw new Exception($"[{nameof(colAnswerQuestion)}:{result}]\tValue is void or null");
 
-
+            // прокси
             if (table.ParseValueFromCell(colProxy, row, out result))
             {
                 this.ProxyData = new ProxyDataModel(result, true);
             }
             else throw new Exception($"[{nameof(colProxy)}:{result}]\tValue is void or null");
 
-
+            // номер телефона аккаунта
             if (table.ParseValueFromCell(colAccountPhone, row, out result))
             {
                 this.PhoneNumber = result;
@@ -125,7 +131,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
                 throw new Exception($"[{nameof(colAccountPhone)}:{result}]\tValue is void or null");
 
-
+            // номер телефона канала
             if (table.ParseValueFromCell(colChannelPhone, row, out result))
             {
                 this.ChannelData.NumberPhone = result;
@@ -133,7 +139,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
                 throw new Exception($"[{nameof(colChannelPhone)}:{result}]\tValue is void or null");
 
-
+            
             return true;
         }
 

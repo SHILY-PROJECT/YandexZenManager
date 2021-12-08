@@ -36,7 +36,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         public void SetValue(string value, LevelEmulation levelEmulation, int timeoutMillisecondsAfterAction,
             bool findElement = true, int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
         {
-            if (findElement)
+            if (Element.IsNullOrVoid() && findElement)
                 Find(attemptsFindElement, throwExceptionIfElementNoFind, logger);
             Element.SetValue(Browser.ActiveTab, value, levelEmulation, timeoutMillisecondsAfterAction);
         }
@@ -46,8 +46,8 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// </summary>
         public void Click(int timeoutMillisecondsAfterAction = 0, bool ifBusyThenWait = true,
             bool findElement = true, int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
-        {
-            if (findElement)
+        {           
+            if (Element.IsNullOrVoid() && findElement)
                 Find(attemptsFindElement, throwExceptionIfElementNoFind, logger);
             Element.Click(Browser.ActiveTab, timeoutMillisecondsAfterAction, ifBusyThenWait);
         }
@@ -63,7 +63,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
             //Element = Browser.FuncGetFirstHe(this, false, false, attemptsFindElement);
             Collection = Browser.FuncGetHeCollection(this, false, false, attemptsFindElement).ToList();
 
-            if (Collection is null || !Collection.Any())
+            if (Element.IsNullOrVoid())
             {
                 if (logger) Logger.Write(InformationLog, LoggerType.Warning, true, false, false);
                 if (throwExceptionIfElementNoFind) throw new Exception(InformationLog);

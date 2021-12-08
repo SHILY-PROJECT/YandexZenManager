@@ -119,7 +119,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
                 }
                 else
                 {
-                    ProjectDataStore.CurrentObjectCache.Add("first_thread_in_work");
+                    ProjectDataStore.ResourcesCurrentThread.Add("first_thread_in_work");
                     ThreadInWork = true;
                     _launchIsAllowed = true;
                 }

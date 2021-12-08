@@ -13,8 +13,15 @@ using Yandex.Zen.Core;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.AccountOrDonorModels;
 using Yandex.Zen.Core.Services;
+using Yandex.Zen.Core.Services.CheatActivityService;
+using Yandex.Zen.Core.Services.InstanceAccountManagementService;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
+using Yandex.Zen.Core.Services.WalkingOnZenService;
+using Yandex.Zen.Core.Services.WalkingProfileService;
+using Yandex.Zen.Core.Services.YandexAccountRegistrationService;
+using Yandex.Zen.Core.Services.ZenArticlePublicationService;
+using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -63,8 +70,34 @@ namespace Yandex.Zen
             {
                 Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, true, true, LogColor.Red);
             }
-            ClearProjectCache();
+            CleanUpResourcesFromCache();
             return 0;
+        }
+
+        /// <summary>
+        /// Добавление ресурса в списки занятости.
+        /// </summary>
+        public static void AddResourcesToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
+        {
+            if (addToResourcesCurrentThread) ResourcesCurrentThread.Add(obj);
+            if (addToResourcesAllThreadsInWork) ResourcesAllThreadsInWork.Add(obj);
+        }
+
+        /// <summary>
+        /// Очистка кэша проекта.
+        /// Очистка ресурсов потока из общего списка.
+        /// </summary>
+        public void CleanUpResourcesFromCache()
+        {
+            if (ResourcesCurrentThread.Any())
+            {
+                lock (_locker)
+                {
+                    if (ProgramMode == ProgramModeEnum.InstanceAccountManagement)
+                        InstanceAccountManagement.ThreadInWork = false;
+                    ResourcesCurrentThread.ForEach(res => ResourcesAllThreadsInWork.RemoveAll(x => x == res));
+                }
+            }
         }
 
         /// <summary>

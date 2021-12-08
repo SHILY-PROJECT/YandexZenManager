@@ -120,8 +120,8 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                         ProfileInfo = new FileInfo($@"{ProjectDataStore.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
-                        ProjectDataStore.CurrentObjectCache.Add(ProfileInfo.FullName);
-                        ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(ProfileInfo.FullName);
+                        ProjectDataStore.ResourcesCurrentThread.Add(ProfileInfo.FullName);
+                        ProjectDataStore.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
 
                         Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
@@ -149,10 +149,10 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                             var profile = profiles.First();
 
-                            if (!ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Any(x => x == profile.FullName))
+                            if (!ProjectDataStore.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
                             {
-                                ProjectDataStore.CurrentObjectCache.Add(profile.FullName);
-                                ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(profile.FullName);
+                                ProjectDataStore.ResourcesCurrentThread.Add(profile.FullName);
+                                ProjectDataStore.ResourcesAllThreadsInWork.Add(profile.FullName);
 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;

@@ -744,7 +744,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         // Устанавливаем случайный русский город в поле со страной и вызываем событие "Enter"
                         heFieldCity.SetValue
                         (
-                            Instance.ActiveTab, DataLists.ListOfRussianCities().GetLine(LineOptions.Random),
+                            Instance.ActiveTab, DataLists.ListOfRussianCities.GetLine(LineOptions.Random),
                             LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, false, true, Rnd.Next(3000, 3500)
                         );
 
@@ -982,8 +982,8 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     //var additionalLog = IpInfo != null ? $" | proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 
                     // Успешное получение ресурса
-                    ProjectDataStore.CurrentObjectCache.Add(Login);
-                    ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(Login);
+                    ProjectDataStore.ResourcesCurrentThread.Add(Login);
+                    ProjectDataStore.ResourcesAllThreadsInWork.Add(Login);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт/донор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

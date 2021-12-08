@@ -573,8 +573,8 @@ namespace Yandex.Zen.Core.Services.ZenArticlePublicationService
                     //ProfileRetrievedFromSharedFolder
 
                     // Успешное получение ресурса
-                    ProjectDataStore.CurrentObjectCache.Add(Login);
-                    ProjectDataStore.CurrentObjectsOfAllThreadsInWork.Add(Login);
+                    ProjectDataStore.ResourcesCurrentThread.Add(Login);
+                    ProjectDataStore.ResourcesAllThreadsInWork.Add(Login);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

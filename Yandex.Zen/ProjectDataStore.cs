@@ -30,13 +30,13 @@ namespace Yandex.Zen
         [ThreadStatic] private static ProgramModeEnum _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
-        [ThreadStatic] private static List<string> _currentObjectCache;
         [ThreadStatic] private static PhoneServiceNew _phoneService;
         [ThreadStatic] private static CaptchaServiceNew _captchaService;
-        private static readonly DirectoryInfo _profilesDirectory = new DirectoryInfo($@"{Zenno.Directory}\profiles");
-        private static readonly DirectoryInfo _accountsDirectory = new DirectoryInfo($@"{Zenno.Directory}\accounts");
-        private static List<string> _objectsOfAllThreadsInWork;
+        [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
+        private static List<string> _resourcesAllThreadsInWork = new List<string>();
         private static string _instanceWindowSize;
+        private static DirectoryInfo _profilesDirectory;
+        private static DirectoryInfo _accountsDirectory;
         #endregion======================================================================
 
         /// <summary>
@@ -89,28 +89,12 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущие объекты потока.
         /// </summary>
-        public static List<string> CurrentObjectCache
-        {
-            get
-            {
-                if (_currentObjectCache is null)
-                    lock (_locker) _currentObjectCache = _currentObjectCache is null ? _currentObjectCache = new List<string>() : _currentObjectCache;
-                return _currentObjectCache;
-            }
-        }
+        public static List<string> ResourcesCurrentThread { get => _resourcesCurrentThread; }
 
         /// <summary>
         /// Все объекты всех потоков, которые сейчас в работе.
         /// </summary>
-        public static List<string> CurrentObjectsOfAllThreadsInWork
-        {
-            get
-            {
-                if (_objectsOfAllThreadsInWork is null)
-                    lock (_locker) _objectsOfAllThreadsInWork = _objectsOfAllThreadsInWork is null ? _objectsOfAllThreadsInWork = new List<string>() : _objectsOfAllThreadsInWork;
-                return _objectsOfAllThreadsInWork;
-            }
-        }
+        public static List<string> ResourcesAllThreadsInWork { get => _resourcesAllThreadsInWork; }
 
         /// <summary>
         /// Объект зенно постера (project).
@@ -164,28 +148,14 @@ namespace Yandex.Zen
         }
 
         /// <summary>
-        /// Очистка кэша проекта.
-        /// Очистка ресурсов потока из общего списка.
-        /// </summary>
-        public void ClearProjectCache()
-        {
-            if (CurrentObjectCache.Count != 0)
-            {
-                lock (_locker)
-                {
-                    if (ProgramMode == ProgramModeEnum.InstanceAccountManagement)
-                        InstanceAccountManagement.ThreadInWork = false;
-                    CurrentObjectCache.ForEach(res => CurrentObjectsOfAllThreadsInWork.RemoveAll(x => x == res));
-                }
-            }
-        }
-
-        /// <summary>
         /// Инициализация свойств проекта.
         /// </summary>
         /// <returns></returns>
         private static void InitializingProjectData()
         {
+            _profilesDirectory = new DirectoryInfo($@"{Zenno.Directory}\profiles");
+            _accountsDirectory = new DirectoryInfo($@"{Zenno.Directory}\accounts");
+
             _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
             _programMode = new Dictionary<string, ProgramModeEnum>()
             {
