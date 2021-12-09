@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
@@ -14,16 +15,15 @@ using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels
+namespace Yandex.Zen.Core.Models.ResourceModels
 {
     /// <summary>
     /// Класс для хранения данных аккаунта.
     /// </summary>
-    public class AccountOrDonorBaseModel
+    public class ResourceBaseModel
     {
         private static readonly object _locker = new object();
         private ProjectComponents Project { get => ProjectComponents.Project; }
-        private List<string> CurrentObjectsCache { get => ProjectDataStore.ResourcesCurrentThread; }
 
         public string Login { get; set; }
         public string Password { get; set; }
@@ -32,22 +32,13 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public Uri Instagram { get; set; }
 
         public ObjectTypeEnum Type { get; set; }
-        public ChannelDataModel ChannelData { get; set; }
+        public ChannelDataModel ChannelData { get; set; } = new ChannelDataModel();
         public DirectoryInfo Directory { get; set; }
         public ProfileDataModel Profile { get; set; }
         public ProxyDataModel ProxyData { get; set; }
-        public SettingsAccountOrDonorFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
+        public ResourceSettingsFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
 
-        public AccountOrDonorBaseModel(SettingsAccountOrDonorFromZennoVariablesModel settingsFromZennoVariables, ProfileDataModel profileData)
-        {
-            ChannelData = new ChannelDataModel();
-            Profile = profileData;
-            SettingsFromZennoVariables = settingsFromZennoVariables;
-
-            SetAccount(Project.ProgramMode);
-        }
-
-        private void SetAccount(ProgramModeEnum programMode)
+        public void SetAccount()
         {
             var tb = Project.ModeTable;
 
@@ -60,12 +51,11 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
                 {
                     try
                     {
-                        switch (programMode)
+                        switch (Program.Mode)
                         {
                             case ProgramModeEnum.PostingSecondWind:
                                 if (ConfigurePostingSecondWind(tb.Table, row)) return;
                                 break;
-
                         }
                     }
                     catch (Exception ex)
@@ -93,7 +83,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             // логин
             if (table.ParseValueFromCell(colLogin, row, out var result))
             {
-                if ()
+                if (Program.ResourceInWork(Login)) return false;
 
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectDataStore.AccountsDirectory.FullName, Login));
@@ -139,6 +129,7 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
             else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
                 throw new Exception($"[{nameof(colChannelPhone)}:{result}]\tValue is void or null");
 
+            Program.AddResourcesToCache(Login, true, true);
             
             return true;
         }

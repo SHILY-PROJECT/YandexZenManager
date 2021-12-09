@@ -10,7 +10,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels
+namespace Yandex.Zen.Core.Models.ResourceModels
 {
     public class ProxyDataModel
     {

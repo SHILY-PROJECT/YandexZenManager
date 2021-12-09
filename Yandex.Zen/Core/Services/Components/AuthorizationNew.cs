@@ -13,7 +13,7 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
-using Yandex.Zen.Core.Models.AccountOrDonorModels;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
@@ -25,7 +25,7 @@ namespace Yandex.Zen.Core.Services.Components
 
         #region=====================================================================
         private static ProjectComponents Project { get => ProjectComponents.Project; }
-        private static AccountOrDonorBaseModel Account { get => Project.ResourceObject; }
+        private static ResourceBaseModel Account { get => Project.ResourceObject; }
         private static Instance Browser { get => Project.Browser; }
         private static PhoneServiceNew PhoneService { get => Project.PhoneServiceNew; }
         private static Random Rnd { get; set; } = new Random();

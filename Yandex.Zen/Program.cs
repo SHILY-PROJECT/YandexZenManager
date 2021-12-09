@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using Yandex.Zen.Core;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.AccountOrDonorModels;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.CheatActivityService;
 using Yandex.Zen.Core.Services.InstanceAccountManagementService;
@@ -40,6 +40,8 @@ namespace Yandex.Zen
     public class Program : ProjectDataStore, IZennoExternalCode
     {
         private static readonly object _locker = new object();
+
+        public static ProgramModeEnum Mode { get => ProjectComponents.Project.ProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -87,7 +89,7 @@ namespace Yandex.Zen
         /// Очистка кэша проекта.
         /// Очистка ресурсов потока из общего списка.
         /// </summary>
-        public void CleanUpResourcesFromCache()
+        public static void CleanUpResourcesFromCache()
         {
             if (ResourcesCurrentThread.Any())
             {
@@ -99,6 +101,13 @@ namespace Yandex.Zen
                 }
             }
         }
+
+        /// <summary>
+        /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
+        /// </summary>
+        public static bool ResourceInWork(string resource)
+            => ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
+        
 
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).

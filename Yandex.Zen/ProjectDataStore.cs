@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.AccountOrDonorModels;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -26,7 +26,7 @@ namespace Yandex.Zen
         #region=========================================================================
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
-        [ThreadStatic] private static AccountOrDonorBaseModel _accountOrDonorBaseModel;
+        [ThreadStatic] private static ResourceBaseModel _resourceBaseModel;
         [ThreadStatic] private static ProgramModeEnum _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
@@ -42,7 +42,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static AccountOrDonorBaseModel ResourceObject { get => _accountOrDonorBaseModel; }
+        public static ResourceBaseModel ResourceObject { get => _resourceBaseModel; }
         
         /// <summary>
         /// Общая таблица с аккаунтами.
@@ -206,16 +206,22 @@ namespace Yandex.Zen
             }
 
 
-            _accountOrDonorBaseModel = new AccountOrDonorBaseModel(
-                new SettingsAccountOrDonorFromZennoVariablesModel
-                (                   
-                    Zenno.Variables["cfgIfFolderErrorThenCreateIt"]
-                ),
-                new ProfileDataModel
-                (
-                    Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"],
-                    Zenno.Variables["cfgMinSizeProfileUseInModes"]
-                ));            
+            var profile = new ProfileDataModel()
+            {
+                UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
+                MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
+            };
+            var settings = new ResourceSettingsFromZennoVariablesModel()
+            {
+                CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value)
+            };
+
+            _resourceBaseModel = new ResourceBaseModel
+            {
+                SettingsFromZennoVariables = settings,
+                Profile = profile
+            };
+            _resourceBaseModel.SetAccount();
         }
 
     }

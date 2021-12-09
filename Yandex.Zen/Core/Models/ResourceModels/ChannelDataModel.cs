@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels
+namespace Yandex.Zen.Core.Models.ResourceModels
 {
     public class ChannelDataModel
     {

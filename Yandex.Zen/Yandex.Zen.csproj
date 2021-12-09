@@ -90,8 +90,8 @@
     <Compile Include="Core\Services\PostingSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\ActionOnItem.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\SettingsAccountOrDonorFromZennoVariablesModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProfileDataModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ResourceSettingsFromZennoVariablesModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ProfileDataModel.cs" />
     <Compile Include="Core\ProjectComponents.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
     <Compile Include="Core\Services\PostingSecondWindService\Models\PostingSecondWindSettings.cs" />
@@ -117,8 +117,8 @@
     <Compile Include="Core\Services\CheatActivityService\Models\TaskItemModel.cs" />
     <Compile Include="Core\Services\CheatActivityService\Models\ActionStateModel.cs" />
     <Compile Include="Core\Services\CheatActivityService\Models\CommentData.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ChannelDataModel.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\ProxyDataModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ChannelDataModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ProxyDataModel.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\DataModels\AgreeToReceiveZenNewsletterData.cs" />
@@ -134,7 +134,7 @@
     <Compile Include="Core\Services\Components\Authorization.cs" />
     <Compile Include="Core\Services\Components\UnBindingPhoneAccount.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Enums\ChannelSettingsEnum.cs" />
-    <Compile Include="Core\Models\AccountOrDonorModels\AccountOrDonorBaseModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ResourceBaseModel.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\Models\ChannelSettings\SettingsBaseModel.cs" />
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />

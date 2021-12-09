@@ -8,7 +8,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Models.AccountOrDonorModels
+namespace Yandex.Zen.Core.Models.ResourceModels
 {
     /// <summary>
     /// Модель с данными профиля.
@@ -16,26 +16,11 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
     public class ProfileDataModel
     {
         #region====================================================================
-        private IZennoPosterProjectModel Zenno { get => ServicesDataAndComponents.Zenno; }
+        private IZennoPosterProjectModel Zenno { get => ProjectComponents.Project.Zenno; }
         private FileInfo _profile;
         #endregion=================================================================
 
 
-        /// <summary>
-        /// Модель с данными профиля.
-        /// </summary>
-        public ProfileDataModel(bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse)
-        {
-            UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
-            MinProfileSizeToUse = minProfileSizeToUse;
-        }
-
-        /// <summary>
-        /// Модель с данными профиля.
-        /// </summary>
-        public ProfileDataModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse) :
-            this(bool.Parse(useWalkedProfileFromSharedFolder.Value), int.Parse(minProfileSizeToUse.Value))
-        { }
 
         /// <summary>
         /// Файл профиля.
@@ -71,10 +56,32 @@ namespace Yandex.Zen.Core.Models.AccountOrDonorModels
         public int MinProfileSizeToUse { get; set; }
 
         /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        public ProfileDataModel() { }
+
+        /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        public ProfileDataModel(bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse)
+        {
+            UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
+            MinProfileSizeToUse = minProfileSizeToUse;
+        }
+
+        /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        //public ProfileDataModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse) :
+        //    this(bool.Parse(useWalkedProfileFromSharedFolder.Value), int.Parse(minProfileSizeToUse.Value))
+        //{ }
+
+        /// <summary>
         /// Загрузка профиля.
         /// </summary>
         /// <param name="createVariables"></param>
-        public void Load(bool createVariables = true) => Zenno.Profile.Load(Path, createVariables);
+        public void Load(bool createVariables = true)
+            => Zenno.Profile.Load(Path, createVariables);
 
         /// <summary>
         /// Сохранение профиля аккаунта.

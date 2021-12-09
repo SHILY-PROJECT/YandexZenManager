@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Models.AccountOrDonorModels;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
@@ -27,13 +27,13 @@ namespace Yandex.Zen.Core
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static AccountOrDonorBaseModel _objectModel;
+        [ThreadStatic] private static ResourceBaseModel _objectModel;
 
         public static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
         public static Instance Instance { get => ProjectDataStore.Browser; }
         public static ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
         public static Random Rnd { get; set; } = new Random();
-        public static AccountOrDonorBaseModel Object { get => _objectModel; set { _objectModel = value; } }
+        public static ResourceBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 
 
         public static IZennoTable AccountsGeneralTable;
