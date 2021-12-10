@@ -45,25 +45,25 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             if (tb.Table.RowCount == 0)
                 throw new Exception($"Таблица пуста: {tb.FileName}");
 
-            lock (_locker)
+            lock (_locker) for (int row = 0; row < tb.Table.RowCount; row++)
             {
-                for (int row = 0; row < tb.Table.RowCount; row++)
+                try
                 {
-                    try
+                    switch (Program.Mode)
                     {
-                        switch (Program.Mode)
-                        {
-                            case ProgramModeEnum.PostingSecondWind:
-                                if (ConfigurePostingSecondWind(tb.Table, row)) return;
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Write(ex.Message, LoggerType.Warning, this.Directory.Exists, true, true, LogColor.Yellow);
+                        case ProgramModeEnum.PostingSecondWind:
+                            if (ConfigurePostingSecondWind(tb.Table, row)) return;
+                            break;
                     }
                 }
+                catch (Exception ex)
+                {
+                    Logger.Write(ex.Message, LoggerType.Warning, this.Directory.Exists, true, true, LogColor.Yellow);
+                }
             }
+
+
+            
 
             throw new Exception($"Отсутствуют свободные/подходящие аккаунты: {tb.FileName}");
         }
@@ -88,46 +88,47 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectDataStore.AccountsDirectory.FullName, Login));
 
-                if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.AuthorizationAndLinkPhone && !this.Directory.Exists) this.Directory.Create();
+                if (PostingSecondWind.CurrentMode == PostingSecondWindModeEnum.AuthorizationAndLinkPhone && this.Directory.Exists is false)
+                    this.Directory.Create();
             }
-            else throw new Exception($"[{nameof(colLogin)}:{result}]\tValue is void or null");
+            else throw new Exception($"'{nameof(colLogin)}' - value is void or null");
 
             // пароль
             if (table.ParseValueFromCell(colPassword, row, out result))
             {
                 this.Password = result;
             }
-            else throw new Exception($"[{nameof(colPassword)}:{result}]\tValue is void or null");
+            else throw new Exception($"'{nameof(colPassword)}' - value is void or null");
 
             // ответ на контрольный вопрос
             if (table.ParseValueFromCell(colAnswerQuestion, row, out result))
             {
                 this.AnswerQuestion = result;
             }
-            else throw new Exception($"[{nameof(colAnswerQuestion)}:{result}]\tValue is void or null");
+            else throw new Exception($"'{nameof(colAnswerQuestion)}' - value is void or null");
 
             // прокси
             if (table.ParseValueFromCell(colProxy, row, out result))
             {
                 this.ProxyData = new ProxyDataModel(result, true);
             }
-            else throw new Exception($"[{nameof(colProxy)}:{result}]\tValue is void or null");
+            else throw new Exception($"'{nameof(colProxy)}' - value is void or null");
 
             // номер телефона аккаунта
             if (table.ParseValueFromCell(colAccountPhone, row, out result))
             {
                 this.PhoneNumber = result;
             }
-            else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
-                throw new Exception($"[{nameof(colAccountPhone)}:{result}]\tValue is void or null");
+            else if (PostingSecondWindModeEnum.Posting.Equals(PostingSecondWind.CurrentMode))
+                throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
             if (table.ParseValueFromCell(colChannelPhone, row, out result))
             {
                 this.ChannelData.NumberPhone = result;
             }
-            else if (PostingSecondWind.Settings.Mode == PostingSecondWindModeEnum.Posting)
-                throw new Exception($"[{nameof(colChannelPhone)}:{result}]\tValue is void or null");
+            else if (PostingSecondWindModeEnum.Posting.Equals(PostingSecondWind.CurrentMode))
+                throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourcesToCache(Login, true, true);
             

@@ -14,19 +14,31 @@ namespace Yandex.Zen.Core.Services.PostingSecondWindService
     {
         private static readonly object _locker = new object();
         [ThreadStatic] private static PostingSecondWindSettings _settings;
+        [ThreadStatic] private static PostingSecondWindModeEnum _currentMode;
+        [ThreadStatic] private static bool _currentModeSetted;
 
-        private ResourceBaseModel Account { get => ProjectComponents.Project.ResourceObject is null ? null : ProjectComponents.Project.ResourceObject; }
-        public static PostingSecondWindSettings Settings { get => _settings; }
-        public static void SetSettings(PostingSecondWindSettings Settings) => _settings = Settings;
+        private ResourceBaseModel Account { get => ProjectComponents.Project.ResourceObject ?? null; }
+        //public static PostingSecondWindSettings Settings { get => _settings; }
+        //public static void SetSettings(PostingSecondWindSettings Settings) => _settings = Settings;
+        /// <summary>
+        /// Текущий режим работы сервиса.
+        /// </summary>
+        public static PostingSecondWindModeEnum CurrentMode
+        {
+            get => _currentMode;
+            set
+            {
+                _currentMode = value;
+                _currentModeSetted = true;
+            }
+        }
 
         public void Start()
         {
-            if (Account is null)
-                throw new Exception($"'{nameof(Account)}' - is null");
-            if (Settings is null)
-                throw new Exception($"'{nameof(Settings)}' - is null");
+            if (Account is null) throw new Exception($"Account object is null");
+            if (_currentModeSetted is false) throw new Exception($"The current operating mode is not set");
 
-            switch (Settings.Mode)
+            switch (CurrentMode)
             {
                 case PostingSecondWindModeEnum.AuthorizationAndLinkPhone:
                     AuthorizationAndLinkPhone();

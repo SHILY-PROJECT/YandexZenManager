@@ -104,25 +104,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Объект зенно постера (браузер).
         /// </summary>
-        public static Instance Browser
-        {
-            get => _browser;
-            private set
-            {
-                _browser = value;
-                _browser.SetWindowSize
-                (
-                    int.Parse(_instanceWindowSize.Split('x')[0]),
-                    int.Parse(_instanceWindowSize.Split('x')[1])
-                );
-                _browser.ClearCache();
-                _browser.ClearCookie();
-                _browser.IgnoreAdditionalRequests = false;
-                _browser.IgnoreAjaxRequests = false;
-                _browser.IgnoreFrameRequests = false;
-                _browser.IgnoreFlashRequests = true;
-            }
-        }
+        public static Instance Browser { get => _browser; }
 
 
         /// <summary>
@@ -138,7 +120,9 @@ namespace Yandex.Zen
             {
                 _zenno = zenno;
                 InitializingProjectData();
-                Browser = instance;
+
+                _browser = instance;
+                SetBrowserSettings();
             }
             catch (Exception ex)
             {
@@ -157,6 +141,8 @@ namespace Yandex.Zen
             _accountsDirectory = new DirectoryInfo($@"{Zenno.Directory}\accounts");
 
             _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
+
+            // режим работы шаблона
             _programMode = new Dictionary<string, ProgramModeEnum>()
             {
                 ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
@@ -170,6 +156,7 @@ namespace Yandex.Zen
             }
             [Zenno.Variables["cfgScriptServices"].Value];
 
+            // установка таблиц
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
             _modeTable = new Dictionary<ProgramModeEnum, TableModel>
             {
@@ -182,6 +169,7 @@ namespace Yandex.Zen
             }
             [_programMode];
 
+            // установка сервисов капчи и телефонных номеров
             _captchaService = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
             _phoneService = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
             (
@@ -193,13 +181,12 @@ namespace Yandex.Zen
             switch (ProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
-                    var postingSecondWindMode = new Dictionary<string, PostingSecondWindModeEnum>
+                    PostingSecondWind.CurrentMode = new Dictionary<string, PostingSecondWindModeEnum>
                     {
                         ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
                         ["Постинг"] =                       PostingSecondWindModeEnum.Posting
                     }
                     [Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
-                    PostingSecondWind.SetSettings(new PostingSecondWindSettings(postingSecondWindMode));
                     break;
 
                 default: throw new Exception($"'{ProgramMode}' - на текущий момент режим отключен");
@@ -215,13 +202,32 @@ namespace Yandex.Zen
             {
                 CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value)
             };
-
             _resourceBaseModel = new ResourceBaseModel
             {
                 SettingsFromZennoVariables = settings,
                 Profile = profile
             };
             _resourceBaseModel.SetAccount();
+        }
+
+        /// <summary>
+        /// Установка настроек браузера.
+        /// </summary>
+        private void SetBrowserSettings()
+        {
+            _browser.SetWindowSize
+            (
+                int.Parse(_instanceWindowSize.Split('x')[0]),
+                int.Parse(_instanceWindowSize.Split('x')[1])
+            );
+
+            _browser.ClearCache();
+            _browser.ClearCookie();
+
+            _browser.IgnoreAdditionalRequests = false;
+            _browser.IgnoreAjaxRequests = false;
+            _browser.IgnoreFrameRequests = false;
+            _browser.IgnoreFlashRequests = true;
         }
 
     }
