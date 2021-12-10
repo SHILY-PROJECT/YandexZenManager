@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Services.CheatActivityService.Models;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 
@@ -75,7 +76,7 @@ namespace Yandex.Zen.Core.Toolkit
             }
 
             // Фильтрация свободных задач
-            taskNotCompleteList = taskNotCompleteList.Where(x => !ProjectDataStore.ResourcesAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
+            taskNotCompleteList = taskNotCompleteList.Where(x => !ProjectSettingsDataStore.ResourcesAllThreadsInWork.Any(res => res == x.TaskId)).ToList();
 
             if (taskNotCompleteList.Count == 0)
             {
@@ -85,8 +86,8 @@ namespace Yandex.Zen.Core.Toolkit
 
             var taskItem = taskList.GetLine(LineOptions.Random);
 
-            ProjectDataStore.ResourcesCurrentThread.Add(taskItem.TaskId);
-            ProjectDataStore.ResourcesAllThreadsInWork.Add(taskItem.TaskId);
+            ProjectSettingsDataStore.ResourcesCurrentThread.Add(taskItem.TaskId);
+            ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(taskItem.TaskId);
 
             return taskItem;
         }

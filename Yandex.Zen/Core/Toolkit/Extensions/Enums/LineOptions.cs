@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums
+﻿namespace Yandex.Zen.Core.Toolkit.Extensions.Enums
 {
     public enum LineOptions
     {

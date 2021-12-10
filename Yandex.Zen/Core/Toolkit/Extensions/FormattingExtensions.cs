@@ -1,6 +1,4 @@
-﻿using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
-
-namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
+﻿namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class FormattingExtensions
     {

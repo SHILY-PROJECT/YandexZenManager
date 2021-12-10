@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Yandex.Zen.Core.Toolkit;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.Macros;
-using Yandex.Zen.Core.Models.TableHandler;
-using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.Components
@@ -24,10 +19,10 @@ namespace Yandex.Zen.Core.Services.Components
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
 
         #region=====================================================================
+        private static Instance Browser { get => Project.Browser; }
         private static ProjectComponents Project { get => ProjectComponents.Project; }
         private static ResourceBaseModel Account { get => Project.ResourceObject; }
-        private static Instance Browser { get => Project.Browser; }
-        private static PhoneServiceNew PhoneService { get => Project.PhoneServiceNew; }
+        private static SmsService SmsService { get => Account.SmsService; }
         private static Random Rnd { get; set; } = new Random();
         #endregion==================================================================
 

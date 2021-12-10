@@ -9,47 +9,40 @@ using System.Threading.Tasks;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
-namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
+namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
-    public class PhoneServiceNew
+    public class SmsService
     {
         #region=========================================================
         private Instance Browser { get => ProjectComponents.Project.Browser; }
         private Random Rnd { get; set; } = new Random();
+
         #endregion======================================================
 
-        public PhoneSettingsModel SettingsFromZennoVariables { get; private set; }
-        public PhoneServiceParamsModel Params { get; private set; }
-        public PhoneDataModel Data { get; private set; }
+        public SmsServiceSettingsModel Settings { get; private set; }
+        public SmsServiceParamsDataModel Params { get; private set; }
+        public SmsServiceDataModel Data { get; private set; } = new SmsServiceDataModel();
 
-        public PhoneServiceNew(string serviceDllAndCountry, PhoneSettingsModel phoneSettings)
+        public SmsService(SmsServiceSettingsModel smsServiceSettings, SmsServiceParamsDataModel smsServiceParams)
         {
-            Data = new PhoneDataModel();
-            Params = new PhoneServiceParamsModel(serviceDllAndCountry);
-            SettingsFromZennoVariables = phoneSettings;
+            Params = smsServiceParams;
+            Settings = smsServiceSettings;
         }
 
-        public PhoneServiceNew(ILocalVariable serviceDllAndCountry, PhoneSettingsModel phoneSettings) : this(serviceDllAndCountry.Value, phoneSettings) { }
-
-
         /// <summary>
-        /// Получение номера (Ошибки логируются автоматически).
+        /// Получение номера (Ошибки логируются автоматически)
         /// </summary>
-        /// <param name="jobId">Id задания.</param>
-        /// <param name="timeToSecondsWaitPhone">Время ожидания номера телефона (в секундах).</param>
-        /// <param name="handlingNumberPhoneForRegion">Обработка номера под регионы - обрезание или дополнение символов (true - обрабатывать; иначе false).</param>
-        /// <returns></returns>
         public bool GetPhone()
         {
             string log, phone, jobId;
 
-            var secondsWaitPhone = SettingsFromZennoVariables.TimeToSecondsWaitPhone;
+            var secondsWaitPhone = Settings.TimeToSecondsWaitPhone;
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();
@@ -97,7 +90,7 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         public bool GetNumberPhone()
         {
             var stopwatch = new Stopwatch();
-            var secondsWaitPhone = SettingsFromZennoVariables.TimeToSecondsWaitPhone;
+            var secondsWaitPhone = Settings.TimeToSecondsWaitPhone;
             stopwatch.Start();
 
             while (true)
@@ -151,8 +144,8 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool
         public bool GetSmsCode(HtmlElement heReSendSmsCode = null)
         {
             var counterAttemptsReSendCode = default(int);
-            var attemptsReSendCode = SettingsFromZennoVariables.AttemptsReSendSmsCode;
-            var minutesWaitSmsCode = SettingsFromZennoVariables.MinutesWaitSmsCode;
+            var attemptsReSendCode = Settings.AttemptsReSendSmsCode;
+            var minutesWaitSmsCode = Settings.MinutesWaitSmsCode;
             var jobID = Data.JobID;
             var phone = Data.NumberPhone;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -20,7 +21,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
 
         public string XPath { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public HtmlElement Element { get => _collection.FirstOrDefault(); set { _collection = new List<HtmlElement>{ value }; } }
+        public HtmlElement Element { get => _collection.FirstOrDefault(); set { _collection = new List<HtmlElement> { value }; } }
         public List<HtmlElement> Collection { get => _collection; set { _collection = value; } }
         public string InformationLog => $"'{nameof(XPath)}:{XPath} | {Title}' - Не найден элемент по заданному пути...";
 
@@ -46,7 +47,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// </summary>
         public void Click(int timeoutMillisecondsAfterAction = 0, bool ifBusyThenWait = true,
             bool findElement = true, int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
-        {           
+        {
             if (Element.IsNullOrVoid() && findElement)
                 Find(attemptsFindElement, throwExceptionIfElementNoFind, logger);
             Element.Click(Browser.ActiveTab, timeoutMillisecondsAfterAction, ifBusyThenWait);

@@ -90,7 +90,7 @@
     <Compile Include="Core\Services\PostingSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\ActionOnItem.cs" />
-    <Compile Include="Core\Models\ResourceModels\ResourceSettingsFromZennoVariablesModel.cs" />
+    <Compile Include="Core\Models\ResourceModels\ResourceSettingsModel.cs" />
     <Compile Include="Core\Models\ResourceModels\ProfileDataModel.cs" />
     <Compile Include="Core\ProjectComponents.cs" />
     <Compile Include="Core\Services\Components\AuthorizationNew.cs" />
@@ -99,12 +99,12 @@
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserBusySettingsModel.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserOtherSettingsModel.cs" />
-    <Compile Include="Core\Toolkit\CaptchaServiceNew.cs" />
+    <Compile Include="Core\Toolkit\CaptchaService.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\BackupFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
-    <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
+    <Compile Include="Core\Enums\ResourceTypeEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\StartPageWalkingOnZen.cs" />
     <Compile Include="Core\Services\WalkingProfileService\Enums\ProfileWalkingMode.cs" />
     <Compile Include="Core\Services\WalkingProfileService\Enums\SaveProfileModeEnum.cs" />
@@ -140,7 +140,6 @@
     <Compile Include="Core\Models\ProxyInfo.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Services\PostingSecondWindService\PostingSecondWind.cs" />
-    <Compile Include="Core\Toolkit\CaptchaService.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Toolkit\Extensions\FormattingExtensions.cs" />
@@ -174,14 +173,14 @@
     <Compile Include="Core\Enums\TableColumnEnum.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
     <Compile Include="Core\ServicesDataAndComponents.cs" />
-    <Compile Include="Core\Toolkit\PhoneServiceTool\Models\PhoneDataModel.cs" />
-    <Compile Include="Core\Toolkit\PhoneServiceTool\Models\PhoneSettingsModel.cs" />
-    <Compile Include="Core\Toolkit\PhoneServiceTool\PhoneServiceNew.cs" />
-    <Compile Include="Core\Toolkit\PhoneServiceTool\Models\PhoneServiceParamsModel.cs" />
+    <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceDataModel.cs" />
+    <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceSettingsModel.cs" />
+    <Compile Include="Core\Toolkit\SmsServiceTool\SmsService.cs" />
+    <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceParamsDataModel.cs" />
     <Compile Include="Core\Toolkit\ProfileWorker.cs" />
     <Compile Include="Core\Toolkit\TableHandler.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
-    <Compile Include="ProjectDataStore.cs" />
+    <Compile Include="ProjectSettingsDataStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -198,7 +197,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Toolkit\PhoneServiceTool\Enums\" />
+    <Folder Include="Core\Toolkit\SmsServiceTool\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="ValidateZennoPosterDllPath" BeforeTargets="BeforeBuild">

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
-namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
+namespace Yandex.Zen.Core.Toolkit.SmsServiceTool.Models
 {
-    public class PhoneServiceParamsModel
+    public class SmsServiceParamsDataModel
     {
         private string _serviceDllAndCountry;
 
@@ -41,7 +39,9 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
             private set
             {
                 _serviceDllAndCountry = value;
-                SetOtherParams(_serviceDllAndCountry);
+                if (Regex.IsMatch(value, @"[0-9a-zA-Z]+\.dll\ -\ [0-9A-Za-zА-Яа-я]+") is false)
+                    throw new Exception("Sms service is not formatted correctly");
+                SetOtherParams(value);
             }
         }
 
@@ -52,9 +52,13 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
         /// Название dll сервиса и страны, через разделитель (" - ").
         /// Пример: SmsActivate.dll - Россия
         /// </param>
-        public PhoneServiceParamsModel(string serviceDllAndCountry)
+        public SmsServiceParamsDataModel(string serviceDllAndCountry)
             => ServiceDllAndCountry = serviceDllAndCountry;
 
+        /// <summary>
+        /// Получение и установка параметров для получения номера.
+        /// </summary>
+        /// <param name="serviceDllAndCountry"></param>
         private void SetOtherParams(string serviceDllAndCountry)
         {
             var service = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[0];
@@ -67,11 +71,11 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
                     NetworkService = "yandex";
                     Country = new Dictionary<string, string>
                     {
-                        ["Россия"] = "&country=russia",
-                        ["USA"] = "&country=usa",
-                        ["Украина"] = "&country=ukraine",
-                        ["Канада"] = "&country=canada",
-                        ["Великобритания"] = "&country=england"
+                        ["Россия"] =            "&country=russia",
+                        ["USA"] =               "&country=usa",
+                        ["Украина"] =           "&country=ukraine",
+                        ["Канада"] =            "&country=canada",
+                        ["Великобритания"] =    "&country=england"
                     }
                     [country];
                     break;
@@ -81,8 +85,8 @@ namespace Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models
                     NetworkService = "ya";
                     Country = new Dictionary<string, string>
                     {
-                        ["Россия"] = "&country=0",
-                        ["USA"] = "&country=187",
+                        ["Россия"] =            "&country=0",
+                        ["USA"] =               "&country=187",
                         ["USA (виртуальные)"] = "&country=12"
                     }
                     [country];

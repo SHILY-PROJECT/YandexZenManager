@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 
-namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
+namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class ListExtensions
     {

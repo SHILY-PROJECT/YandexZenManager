@@ -1,25 +1,24 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.PhoneServiceTool;
-using ZennoLab.CommandCenter;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
-using Yandex.Zen.Core.Services.PostingSecondWindService.Models;
-using Yandex.Zen.Core.Services.InstanceAccountManagementService;
+using Yandex.Zen.Core.Toolkit.Extensions;
 
 namespace Yandex.Zen
 {
-    public class ProjectDataStore
+    public class ProjectSettingsDataStore
     {
         private static readonly object _locker = new object();
 
@@ -30,10 +29,8 @@ namespace Yandex.Zen
         [ThreadStatic] private static ProgramModeEnum _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
-        [ThreadStatic] private static PhoneServiceNew _phoneService;
-        [ThreadStatic] private static CaptchaServiceNew _captchaService;
         [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
-        private static List<string> _resourcesAllThreadsInWork = new List<string>();
+        private static readonly List<string> _resourcesAllThreadsInWork = new List<string>();
         private static string _instanceWindowSize;
         private static DirectoryInfo _profilesDirectory;
         private static DirectoryInfo _accountsDirectory;
@@ -57,12 +54,28 @@ namespace Yandex.Zen
         /// <summary>
         /// Общая директория со всеми аккаунтами.
         /// </summary>
-        public static DirectoryInfo AccountsDirectory { get { if (!_accountsDirectory.Exists) _accountsDirectory.Create(); return _accountsDirectory; } }
+        public static DirectoryInfo AccountsDirectory
+        {
+            get
+            {
+                if (_accountsDirectory.Exists is false)
+                    _accountsDirectory.Create();
+                return _accountsDirectory;
+            }
+        }
 
         /// <summary>
         /// Общая директория со всеми профилями.
         /// </summary>
-        public static DirectoryInfo ProfilesDirectory { get { if (!_profilesDirectory.Exists) _accountsDirectory.Create(); return _accountsDirectory; } }
+        public static DirectoryInfo ProfilesDirectory
+        { 
+            get
+            { 
+                if (_profilesDirectory.Exists is false)
+                    _accountsDirectory.Create();
+                return _accountsDirectory;
+            }
+        }
         
         /// <summary>
         /// Режим работы скрипта (программы).
@@ -72,19 +85,7 @@ namespace Yandex.Zen
         /// <summary>
         /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
         /// </summary>
-        public static PhoneService PhoneService { get; private set; }
-
-        /// <summary>
-        /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
-        /// </summary>
-        public static PhoneServiceNew PhoneServiceNew { get => _phoneService; }
-
-        /*todo Снести CaptchaServiceDll после рефакторинга*/
-        public static string CaptchaServiceDll { get; private set; }
-        /// <summary>
-        /// Капча сервис (данные dll).
-        /// </summary>
-        public static CaptchaServiceNew CaptchaService { get => _captchaService; }
+        [Obsolete] public static PhoneService PhoneService { get; private set; }
 
         /// <summary>
         /// Текущие объекты потока.
@@ -142,7 +143,7 @@ namespace Yandex.Zen
 
             _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
 
-            // режим работы шаблона
+            // Режим работы шаблона
             _programMode = new Dictionary<string, ProgramModeEnum>()
             {
                 ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
@@ -156,7 +157,7 @@ namespace Yandex.Zen
             }
             [Zenno.Variables["cfgScriptServices"].Value];
 
-            // установка таблиц
+            // Установка таблиц
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
             _modeTable = new Dictionary<ProgramModeEnum, TableModel>
             {
@@ -169,15 +170,7 @@ namespace Yandex.Zen
             }
             [_programMode];
 
-            // установка сервисов капчи и телефонных номеров
-            _captchaService = new CaptchaServiceNew(Zenno.Variables["cfgCaptchaServiceDll"]);
-            _phoneService = new PhoneServiceNew(Zenno.Variables["cfgSmsServiceAndCountry"], new PhoneSettingsModel
-            (
-                Zenno.Variables["cfgNumbAttempsGetPhone"],
-                Zenno.Variables["cfgNumbMinutesWaitSmsCode"],
-                Zenno.Variables["cfgNumbAttemptsRequestSmsCode"]
-            ));
-
+            // Настройка режимов работы сервисов
             switch (ProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
@@ -192,20 +185,33 @@ namespace Yandex.Zen
                 default: throw new Exception($"'{ProgramMode}' - на текущий момент режим отключен");
             }
 
-
+            // Установка сервисов капчи и телефонных номеров
+            var captchaService = new CaptchaService
+            {
+                ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value
+            };
+            var smsService = new SmsService(
+                new SmsServiceSettingsModel(
+                    Zenno.Variables["cfgNumbAttempsGetPhone"].Value.Split(' ')[0].ExtractNumber(),
+                    Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.ExtractNumber(),
+                    Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()),
+                new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value));
             var profile = new ProfileDataModel()
             {
                 UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
                 MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
             };
-            var settings = new ResourceSettingsFromZennoVariablesModel()
+
+            var resourceSettings = new ResourceSettingsModel()
             {
                 CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value)
             };
             _resourceBaseModel = new ResourceBaseModel
             {
-                SettingsFromZennoVariables = settings,
-                Profile = profile
+                CaptchaService = captchaService,
+                SmsService = smsService,
+                ActionSettings  = resourceSettings,
+                ProfileData = profile
             };
             _resourceBaseModel.SetAccount();
         }

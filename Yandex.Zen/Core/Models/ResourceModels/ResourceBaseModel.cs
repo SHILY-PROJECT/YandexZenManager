@@ -8,10 +8,12 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.PhoneServiceTool.Models;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
@@ -30,13 +32,15 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         public string AnswerQuestion { get; set; }
         public string PhoneNumber { get; set; }
         public Uri Instagram { get; set; }
-
-        public ObjectTypeEnum Type { get; set; }
         public ChannelDataModel ChannelData { get; set; } = new ChannelDataModel();
+
+        public ResourceTypeEnum Type { get; set; }
         public DirectoryInfo Directory { get; set; }
-        public ProfileDataModel Profile { get; set; }
+        public ProfileDataModel ProfileData { get; set; }
         public ProxyDataModel ProxyData { get; set; }
-        public ResourceSettingsFromZennoVariablesModel SettingsFromZennoVariables { get; set; }
+        public CaptchaService CaptchaService { get; set; }
+        public SmsService SmsService { get; set; }
+        public ResourceSettingsModel ActionSettings  { get; set; }
 
         public void SetAccount()
         {
@@ -49,7 +53,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 try
                 {
-                    switch (Program.Mode)
+                    switch (Program.CurrentMode)
                     {
                         case ProgramModeEnum.PostingSecondWind:
                             if (ConfigurePostingSecondWind(tb.Table, row)) return;
@@ -83,12 +87,12 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             // логин
             if (table.ParseValueFromCell(colLogin, row, out var result))
             {
-                if (Program.ResourceInWork(Login)) return false;
+                if (Program.CheckResourceInWork(Login)) return false;
 
                 this.Login = result;
-                this.Directory = new DirectoryInfo(Path.Combine(ProjectDataStore.AccountsDirectory.FullName, Login));
+                this.Directory = new DirectoryInfo(Path.Combine(ProjectSettingsDataStore.AccountsDirectory.FullName, Login));
 
-                if (PostingSecondWind.CurrentMode == PostingSecondWindModeEnum.AuthorizationAndLinkPhone && this.Directory.Exists is false)
+                if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
                     this.Directory.Create();
             }
             else throw new Exception($"'{nameof(colLogin)}' - value is void or null");
@@ -119,7 +123,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.PhoneNumber = result;
             }
-            else if (PostingSecondWindModeEnum.Posting.Equals(PostingSecondWind.CurrentMode))
+            else if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
@@ -127,10 +131,10 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.ChannelData.NumberPhone = result;
             }
-            else if (PostingSecondWindModeEnum.Posting.Equals(PostingSecondWind.CurrentMode))
+            else if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
-            Program.AddResourcesToCache(Login, true, true);
+            Program.AddResourceToCache(Login, true, true);
             
             return true;
         }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
+namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class VariableExtensions
     {
@@ -14,7 +14,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// Извлечение числа из переменной (поддерживает рандом через разделители '-', ':', ';', ' ').
         /// </summary>
         public static int ExtractNumber(this ILocalVariable zennoVariable)
-            => ExtractNumber(zennoVariable.Value);
+            => zennoVariable.Value.ExtractNumber();
 
         /// <summary>
         /// Извлечение числа из переменной (поддерживает рандом через разделители '-', ':', ';', ' ').

@@ -6,18 +6,18 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Enums;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService.Models.ChannelSettings.DataModels;
 using Yandex.Zen.Core.Services.Components;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
@@ -130,7 +130,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new WalkingOnZen(ObjectTypeEnum.Account).Start();
+                    new WalkingOnZen(ResourceTypeEnum.Account).Start();
 
                     if (!WalkingOnZen.StatusWalkIsGood) return false;
                 }
@@ -462,7 +462,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                     return null;
                 }
 
-                var phoneLog = $"[Sms service dll: {ProjectDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                var phoneLog = $"[Sms service dll: {ProjectSettingsDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                 // Ввод номера телефона и отправка sms кода
                 heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
@@ -550,7 +550,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 bindingPhoneToChannel.TimeAction = new TimeData();
                 bindingPhoneToChannel.Phone = Phone;
                 bindingPhoneToChannel.JobId = job_id;
-                bindingPhoneToChannel.ServiceDll = ProjectDataStore.PhoneService.Dll;
+                bindingPhoneToChannel.ServiceDll = ProjectSettingsDataStore.PhoneService.Dll;
             }
 
             return bindingPhoneToChannel;
@@ -1489,7 +1489,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
+                Logger.SetCurrentObjectForLogText(Login, ResourceTypeEnum.Account);
 
                 // Проверка на наличия ресурса и его занятость
                 if (!ResourceIsAvailable(Login, row)) continue;
@@ -1576,8 +1576,8 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
-                ProjectDataStore.ResourcesCurrentThread.Add(Login);
-                ProjectDataStore.ResourcesAllThreadsInWork.Add(Login);
+                ProjectSettingsDataStore.ResourcesCurrentThread.Add(Login);
+                ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(Login);
                 Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                 return true;
             }

@@ -7,7 +7,7 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {
-    public class ResourceSettingsFromZennoVariablesModel
+    public class ResourceSettingsModel
     {
         public bool CreateFolderResourceIfNoExist { get; set; }
 

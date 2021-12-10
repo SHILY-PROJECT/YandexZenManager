@@ -1,47 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using System.Resources;
-using System.Text;
 using System.Threading;
 using Yandex.Zen.Core;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Services.CheatActivityService;
 using Yandex.Zen.Core.Services.InstanceAccountManagementService;
-using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.YandexAccountRegistrationService;
 using Yandex.Zen.Core.Services.ZenArticlePublicationService;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService;
-using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
-using ZennoLab.Emulation;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using ZennoLab.InterfacesLibrary.ProjectModel.Enums;
 
 namespace Yandex.Zen
 {
     /// <summary>
     /// Класс для запуска выполнения скрипта
     /// </summary>
-    public class Program : ProjectDataStore, IZennoExternalCode
+    public class Program : ProjectSettingsDataStore, IZennoExternalCode
     {
         private static readonly object _locker = new object();
 
-        public static ProgramModeEnum Mode { get => ProjectComponents.Project.ProgramMode; }
+        /// <summary>
+        /// Текущий режим работы шаблона.
+        /// </summary>
+        public static ProgramModeEnum CurrentMode { get => ProjectComponents.Project.ProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -79,7 +67,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Добавление ресурса в списки занятости.
         /// </summary>
-        public static void AddResourcesToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
+        public static void AddResourceToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
         {
             if (addToResourcesCurrentThread) ResourcesCurrentThread.Add(obj);
             if (addToResourcesAllThreadsInWork) ResourcesAllThreadsInWork.Add(obj);
@@ -105,10 +93,9 @@ namespace Yandex.Zen
         /// <summary>
         /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
         /// </summary>
-        public static bool ResourceInWork(string resource)
+        public static bool CheckResourceInWork(string resource)
             => ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
         
-
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).
         /// </summary>

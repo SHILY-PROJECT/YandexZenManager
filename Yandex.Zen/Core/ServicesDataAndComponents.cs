@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Http;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Http;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core
 {
@@ -29,9 +24,9 @@ namespace Yandex.Zen.Core
 
         [ThreadStatic] private static ResourceBaseModel _objectModel;
 
-        public static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
-        public static Instance Instance { get => ProjectDataStore.Browser; }
-        public static ProgramModeEnum ProgramMode { get => ProjectDataStore.ProgramMode; }
+        public static IZennoPosterProjectModel Zenno { get => ProjectSettingsDataStore.Zenno; }
+        public static Instance Instance { get => ProjectSettingsDataStore.Browser; }
+        public static ProgramModeEnum ProgramMode { get => ProjectSettingsDataStore.ProgramMode; }
         public static Random Rnd { get; set; } = new Random();
         public static ResourceBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 
@@ -131,7 +126,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] public static bool BindingPhoneToAccountIfRequaid;
 
         [ThreadStatic] public static string DescriptionChannel;
-        [ThreadStatic] public static ObjectTypeEnum ResourceType;
+        [ThreadStatic] public static ResourceTypeEnum ResourceType;
 
         [ThreadStatic] public static int MinSizeProfileUseInModes;
         [ThreadStatic] public static bool CreateFolderResourceIfNoExist;

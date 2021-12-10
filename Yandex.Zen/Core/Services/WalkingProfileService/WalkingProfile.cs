@@ -7,13 +7,13 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.CommandCenter;
 using Global.ZennoExtensions;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingProfileService.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.WalkingProfileService
@@ -107,7 +107,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             Instance.UseFullMouseEmulation = false;
 
-            if (!ProjectDataStore.ProfilesDirectory.Exists) ProjectDataStore.ProfilesDirectory.Create();
+            if (!ProjectSettingsDataStore.ProfilesDirectory.Exists) ProjectSettingsDataStore.ProfilesDirectory.Create();
 
             long oldSize = 0, newSize = 0;
 
@@ -118,17 +118,17 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                     case ProfileWalkingMode.WalkingNewProfile:
                         var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
-                        ProfileInfo = new FileInfo($@"{ProjectDataStore.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+                        ProfileInfo = new FileInfo($@"{ProjectSettingsDataStore.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
-                        ProjectDataStore.ResourcesCurrentThread.Add(ProfileInfo.FullName);
-                        ProjectDataStore.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
+                        ProjectSettingsDataStore.ResourcesCurrentThread.Add(ProfileInfo.FullName);
+                        ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
 
                         Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
                     case ProfileWalkingMode.WalkingOldProfile:
-                        var profiles = ProjectDataStore.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+                        var profiles = ProjectSettingsDataStore.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
                         if (profiles.Count == 0)
                         {
@@ -149,10 +149,10 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                             var profile = profiles.First();
 
-                            if (!ProjectDataStore.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
+                            if (!ProjectSettingsDataStore.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
                             {
-                                ProjectDataStore.ResourcesCurrentThread.Add(profile.FullName);
-                                ProjectDataStore.ResourcesAllThreadsInWork.Add(profile.FullName);
+                                ProjectSettingsDataStore.ResourcesCurrentThread.Add(profile.FullName);
+                                ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(profile.FullName);
 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;

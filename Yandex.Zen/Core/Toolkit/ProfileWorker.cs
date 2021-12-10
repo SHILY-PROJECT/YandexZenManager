@@ -139,13 +139,13 @@ namespace Yandex.Zen.Core.Toolkit
         /// <returns></returns>
         private static FileInfo GetProfileFromCommonFolder(int minSizeProfile)
         {
-            if (ProjectDataStore.ProfilesDirectory == null) return null;
+            if (ProjectSettingsDataStore.ProfilesDirectory == null) return null;
 
-            var profiles = ProjectDataStore.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+            var profiles = ProjectSettingsDataStore.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
             if (profiles.Count == 0)
             {
-                Logger.Write($"[Папка с профилями: {ProjectDataStore.ProfilesDirectory.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка с профилями: {ProjectSettingsDataStore.ProfilesDirectory.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 return null;
             }
 
@@ -155,16 +155,16 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (profiles.Count == 0)
                 {
-                    Logger.Write($"[Папка с профилями: {ProjectDataStore.ProfilesDirectory.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"[Папка с профилями: {ProjectSettingsDataStore.ProfilesDirectory.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return null;
                 }
 
                 var firstProfile = profiles.First();
 
-                if (!ProjectDataStore.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
+                if (!ProjectSettingsDataStore.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
-                    ProjectDataStore.ResourcesCurrentThread.Add(firstProfile.FullName);
-                    ProjectDataStore.ResourcesAllThreadsInWork.Add(firstProfile.FullName);
+                    ProjectSettingsDataStore.ResourcesCurrentThread.Add(firstProfile.FullName);
+                    ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(firstProfile.FullName);
                     return firstProfile;
                 }
                 else profiles.RemoveAt(0);

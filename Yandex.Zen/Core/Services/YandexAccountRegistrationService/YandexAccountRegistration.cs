@@ -8,18 +8,18 @@ using Global.ZennoExtensions;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.WalkingProfileService.Enums;
 using Yandex.Zen.Core.Services.YandexAccountRegistrationService.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
@@ -162,7 +162,7 @@ namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new WalkingOnZen(ObjectTypeEnum.Donor).Start();
+                    new WalkingOnZen(ResourceTypeEnum.Donor).Start();
 
                     // Проверка прогулки по yandex.zen (если статус false - разгружаем ресурсы и завершаем работу скрипта)
                     if (!WalkingOnZen.StatusWalkIsGood) return;
@@ -391,7 +391,11 @@ namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
                         try
                         {
                             // Отправка капчи на распознавание
-                            captcha = CaptchaService.Recognize(heImgCaptcha);
+                            //captcha = CaptchaService.Recognize(heImgCaptcha);
+                            captcha = null;
+                            /*
+                             * todo Переработать обработку капчи
+                            */
 
                             // Проверяем результат распознавания
                             if (string.IsNullOrWhiteSpace(captcha)) continue;
@@ -556,8 +560,8 @@ namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
                     InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
                     ObjectDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstagramUrl, @"(?<=com/).*?(?=/)").Value}"));
 
-                    if (ShorDonorNameForLog) Logger.SetCurrentObjectForLogText(ObjectDirectory.Name, ObjectTypeEnum.Donor);
-                    else Logger.SetCurrentObjectForLogText(InstagramUrl, ObjectTypeEnum.Donor);
+                    if (ShorDonorNameForLog) Logger.SetCurrentObjectForLogText(ObjectDirectory.Name, ResourceTypeEnum.Donor);
+                    else Logger.SetCurrentObjectForLogText(InstagramUrl, ResourceTypeEnum.Donor);
 
                     // Проверка на наличия ресурса и его занятость
                     if (!ResourceIsAvailable(InstagramUrl, row)) continue;
@@ -630,8 +634,8 @@ namespace Yandex.Zen.Core.Services.YandexAccountRegistrationService
                     Answer = TextMacros.GenerateString(9, "c");
 
                     // Успешное получение ресурса
-                    ProjectDataStore.ResourcesCurrentThread.Add(InstagramUrl);
-                    ProjectDataStore.ResourcesAllThreadsInWork.Add(InstagramUrl);
+                    ProjectSettingsDataStore.ResourcesCurrentThread.Add(InstagramUrl);
+                    ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(InstagramUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

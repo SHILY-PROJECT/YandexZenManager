@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
+namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class FileExtensions
     {

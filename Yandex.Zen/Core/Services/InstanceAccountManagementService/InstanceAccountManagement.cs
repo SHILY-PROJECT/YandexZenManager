@@ -17,8 +17,8 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Services.InstanceAccountManagementService.Enums;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
 {
@@ -119,7 +119,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
                 }
                 else
                 {
-                    ProjectDataStore.ResourcesCurrentThread.Add("first_thread_in_work");
+                    ProjectSettingsDataStore.ResourcesCurrentThread.Add("first_thread_in_work");
                     ThreadInWork = true;
                     _launchIsAllowed = true;
                 }
@@ -231,7 +231,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
                         Login = login;
                         ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                        Logger.SetCurrentObjectForLogText(Login, ObjectTypeEnum.Account);
+                        Logger.SetCurrentObjectForLogText(Login, ResourceTypeEnum.Account);
 
                         // Проверка наличия zen канала
                         if (_startPageInstance == StartPageInstanceEnum.ZenChannelAccount || _startPageInstance == StartPageInstanceEnum.ZenChannelProfileEditor)

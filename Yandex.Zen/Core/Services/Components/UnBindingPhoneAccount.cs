@@ -90,7 +90,7 @@ namespace Yandex.Zen.Core.Services.Components
                         try
                         {
                             // Запрос на повторное принятие sms кода
-                            statusRetryGet = ZennoPoster.Sms.SetStatus(ProjectDataStore.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, ProjectDataStore.PhoneService.CountryParam);
+                            statusRetryGet = ZennoPoster.Sms.SetStatus(ProjectSettingsDataStore.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, ProjectSettingsDataStore.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
                             Instance.FuncGetFirstHe(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));

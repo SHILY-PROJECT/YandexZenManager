@@ -6,7 +6,7 @@ using Yandex.Zen.Core.Toolkit;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Enums;
@@ -183,7 +183,11 @@ namespace Yandex.Zen.Core.Services.Components
                         }
 
                         // Отправка капчи на распознание
-                        var captchaResult = CaptchaService.Recognize(heImgCaptcha);
+                        //var captchaResult = CaptchaService.Recognize(heImgCaptcha);
+                        var captchaResult = string.Empty;
+                        /*
+                         * todo Переработать обработку капчи
+                        */
 
                         // Проверка результата распознания
                         if (string.IsNullOrWhiteSpace(captchaResult))
@@ -277,7 +281,7 @@ namespace Yandex.Zen.Core.Services.Components
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
 
-                    var phoneLog = $"[Sms service dll: {ProjectDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                    var phoneLog = $"[Sms service dll: {ProjectSettingsDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                     // Ввод номера
                     heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));

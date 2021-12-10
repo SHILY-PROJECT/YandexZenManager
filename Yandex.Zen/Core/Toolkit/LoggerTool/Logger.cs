@@ -24,21 +24,21 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         [ThreadStatic] private static FileInfo _generalLog;
         [ThreadStatic] private static string _textObjectForLog;
 
-        private static IZennoPosterProjectModel Zenno { get => ProjectDataStore.Zenno; }
-        private static Instance Browser { get => ProjectDataStore.Browser; }
-        private static DirectoryInfo ResourceDirectory { get => ProjectDataStore.ResourceObject?.Directory; }
+        private static IZennoPosterProjectModel Zenno { get => ProjectSettingsDataStore.Zenno; }
+        private static Instance Browser { get => ProjectSettingsDataStore.Browser; }
+        private static DirectoryInfo ResourceDirectory { get => ProjectSettingsDataStore.ResourceObject?.Directory; }
 
-        public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[ProjectDataStore.ProgramMode])) : _generalLog; }
+        public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[ProjectSettingsDataStore.ProgramMode])) : _generalLog; }
 
         public static void SetCurrentObjectForLogText(string currentObject)
             => _textObjectForLog = $"[{currentObject}]\t";
 
-        public static void SetCurrentObjectForLogText(string currentObject, ObjectTypeEnum objectType)
+        public static void SetCurrentObjectForLogText(string currentObject, ResourceTypeEnum objectType)
         {
             switch (objectType)
             {
-                case ObjectTypeEnum.Account: _textObjectForLog = $"[Login: {currentObject}]\t"; break;
-                case ObjectTypeEnum.Donor: _textObjectForLog = $"[Donor: {currentObject}]\t"; break;
+                case ResourceTypeEnum.Account: _textObjectForLog = $"[Login: {currentObject}]\t"; break;
+                case ResourceTypeEnum.Donor: _textObjectForLog = $"[Donor: {currentObject}]\t"; break;
             }
         }
 
@@ -287,14 +287,14 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 new Dictionary<ProgramModeEnum, string>
                 {
-                    [ProgramModeEnum.WalkingProfile] = $"[{ProjectDataStore.ProgramMode}]                  " ,
-                    [ProgramModeEnum.WalkingOnZen] = $"[{ProjectDataStore.ProgramMode}]                    " ,
-                    [ProgramModeEnum.InstanceAccountManagement] = $"[{ProjectDataStore.ProgramMode}]       " ,
-                    [ProgramModeEnum.YandexAccountRegistration] = $"[{ProjectDataStore.ProgramMode}]       " ,
-                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{ProjectDataStore.ProgramMode}]     " ,
-                    [ProgramModeEnum.ZenArticlePublication] = $"[{ProjectDataStore.ProgramMode}]           " ,
+                    [ProgramModeEnum.WalkingProfile] = $"[{ProjectSettingsDataStore.ProgramMode}]                  " ,
+                    [ProgramModeEnum.WalkingOnZen] = $"[{ProjectSettingsDataStore.ProgramMode}]                    " ,
+                    [ProgramModeEnum.InstanceAccountManagement] = $"[{ProjectSettingsDataStore.ProgramMode}]       " ,
+                    [ProgramModeEnum.YandexAccountRegistration] = $"[{ProjectSettingsDataStore.ProgramMode}]       " ,
+                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{ProjectSettingsDataStore.ProgramMode}]     " ,
+                    [ProgramModeEnum.ZenArticlePublication] = $"[{ProjectSettingsDataStore.ProgramMode}]           " ,
                 }
-                .TryGetValue(ProjectDataStore.ProgramMode, out string modeForAccountLog);
+                .TryGetValue(ProjectSettingsDataStore.ProgramMode, out string modeForAccountLog);
 
                 WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_textObjectForLog}{textToLog}", loggerType, dateTime);
             }
