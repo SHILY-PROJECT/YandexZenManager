@@ -44,7 +44,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         public LogItem(string message, LoggerType loggerType)
         {
             Message = message;
-            TemplateMode = Program.ProgramMode;
+            TemplateMode = Program.CurrentProgramMode;
             LogType = loggerType.ToString().ToUpper();
             Time = new TimeData();
             Resource = new ResourceData();
@@ -53,7 +53,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         public LogItem(string message, LoggerType loggerType, ErrorAnalysisData errorAnalysisData)
         {
             Message = message;
-            TemplateMode = Program.ProgramMode;
+            TemplateMode = Program.CurrentProgramMode;
             LogType = loggerType.ToString().ToUpper();
             ErrorAnalysis = new ErrorAnalysisData(errorAnalysisData) ?? null;
             Time = new TimeData();

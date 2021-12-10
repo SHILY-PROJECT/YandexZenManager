@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
+using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.SmsService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
-using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
     public class SmsService
     {
         #region=========================================================
-        private Instance Browser { get => ProjectComponents.Project.Browser; }
+        private Instance Browser { get => DataManager.Data.Browser; }
         private Random Rnd { get; set; } = new Random();
 
         #endregion======================================================

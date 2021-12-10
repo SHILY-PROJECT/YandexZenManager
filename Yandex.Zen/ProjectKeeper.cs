@@ -18,11 +18,8 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 
 namespace Yandex.Zen
 {
-    public class ProjectSettingsDataStore
+    public class ProjectKeeper
     {
-        private static readonly object _locker = new object();
-
-        #region=========================================================================
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
         [ThreadStatic] private static ResourceBaseModel _resourceBaseModel;
@@ -30,16 +27,20 @@ namespace Yandex.Zen
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
         [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
+
         private static readonly List<string> _resourcesAllThreadsInWork = new List<string>();
-        private static string _instanceWindowSize;
         private static DirectoryInfo _profilesDirectory;
         private static DirectoryInfo _accountsDirectory;
-        #endregion======================================================================
+
+        /// <summary>
+        /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
+        /// </summary>
+        [Obsolete] public static PhoneService PhoneService { get; private set; }
 
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static ResourceBaseModel ResourceObject { get => _resourceBaseModel; }
+        public static ResourceBaseModel Resource { get => _resourceBaseModel; }
         
         /// <summary>
         /// Общая таблица с аккаунтами.
@@ -80,12 +81,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Режим работы скрипта (программы).
         /// </summary>
-        public static ProgramModeEnum ProgramMode { get => _programMode; }
-
-        /// <summary>
-        /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
-        /// </summary>
-        [Obsolete] public static PhoneService PhoneService { get; private set; }
+        public static ProgramModeEnum CurrentProgramMode { get => _programMode; }
 
         /// <summary>
         /// Текущие объекты потока.
@@ -107,7 +103,6 @@ namespace Yandex.Zen
         /// </summary>
         public static Instance Browser { get => _browser; }
 
-
         /// <summary>
         /// Настройка проекта перед работой.
         /// </summary>
@@ -119,11 +114,9 @@ namespace Yandex.Zen
 
             try
             {
+                _browser = instance;
                 _zenno = zenno;
                 InitializingProjectData();
-
-                _browser = instance;
-                SetBrowserSettings();
             }
             catch (Exception ex)
             {
@@ -136,12 +129,12 @@ namespace Yandex.Zen
         /// Инициализация свойств проекта.
         /// </summary>
         /// <returns></returns>
-        private static void InitializingProjectData()
+        private void InitializingProjectData()
         {
+            SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
+
             _profilesDirectory = new DirectoryInfo($@"{Zenno.Directory}\profiles");
             _accountsDirectory = new DirectoryInfo($@"{Zenno.Directory}\accounts");
-
-            _instanceWindowSize = Zenno.Variables["cfgInstanceWindowSize"].Value;
 
             // Режим работы шаблона
             _programMode = new Dictionary<string, ProgramModeEnum>()
@@ -171,7 +164,7 @@ namespace Yandex.Zen
             [_programMode];
 
             // Настройка режимов работы сервисов
-            switch (ProgramMode)
+            switch (CurrentProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
                     PostingSecondWind.CurrentMode = new Dictionary<string, PostingSecondWindModeEnum>
@@ -182,7 +175,7 @@ namespace Yandex.Zen
                     [Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
                     break;
 
-                default: throw new Exception($"'{ProgramMode}' - на текущий момент режим отключен");
+                default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");
             }
 
             // Установка сервисов капчи и телефонных номеров
@@ -219,12 +212,12 @@ namespace Yandex.Zen
         /// <summary>
         /// Установка настроек браузера.
         /// </summary>
-        private void SetBrowserSettings()
+        private void SetBrowserSettings(string instanceWindowSize)
         {
             _browser.SetWindowSize
             (
-                int.Parse(_instanceWindowSize.Split('x')[0]),
-                int.Parse(_instanceWindowSize.Split('x')[1])
+                int.Parse(instanceWindowSize.Split('x')[0]),
+                int.Parse(instanceWindowSize.Split('x')[1])
             );
 
             _browser.ClearCache();

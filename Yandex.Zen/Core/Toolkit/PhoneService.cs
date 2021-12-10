@@ -79,7 +79,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             while (true)
             {
-                jobId = ZennoPoster.Sms.GetNumber(ProjectSettingsDataStore.PhoneService.Dll, out phone, ProjectSettingsDataStore.PhoneService.YandexService, "any", null, ProjectSettingsDataStore.PhoneService.CountryParam);
+                jobId = ZennoPoster.Sms.GetNumber(ProjectKeeper.PhoneService.Dll, out phone, ProjectKeeper.PhoneService.YandexService, "any", null, ProjectKeeper.PhoneService.CountryParam);
 
                 if (phone == "No numbers" && timeToSecondsWaitPhone < stopwatch.ElapsedMilliseconds / 60)
                 {
@@ -93,7 +93,7 @@ namespace Yandex.Zen.Core.Toolkit
                 }
                 else
                 {
-                    phoneLog = $"[Sms service dll: {ProjectSettingsDataStore.PhoneService.Dll}]\t[Sms job id: {jobId}]\t[Phone: {phone}]\t";
+                    phoneLog = $"[Sms service dll: {ProjectKeeper.PhoneService.Dll}]\t[Sms job id: {jobId}]\t[Phone: {phone}]\t";
                     break;
                 }
             }
@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             while (true)
             {
-                sms_code = ZennoPoster.Sms.GetStatus(ProjectSettingsDataStore.PhoneService.Dll, job_id, "", minutesWaitSmsCode);
+                sms_code = ZennoPoster.Sms.GetStatus(ProjectKeeper.PhoneService.Dll, job_id, "", minutesWaitSmsCode);
 
                 if (string.IsNullOrWhiteSpace(sms_code))
                 {
@@ -169,7 +169,7 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (job_id != "-1")
                 {
-                    var responseCancel = ZennoPoster.Sms.SetStatus(ProjectSettingsDataStore.PhoneService.Dll, job_id, SmsServiceStatus.Cancel);
+                    var responseCancel = ZennoPoster.Sms.SetStatus(ProjectKeeper.PhoneService.Dll, job_id, SmsServiceStatus.Cancel);
                     Logger.Write($"{phoneLog}[Response cancel: {responseCancel}]\tНомер отменен", LoggerType.Info, true, false, true);
                 }
             }

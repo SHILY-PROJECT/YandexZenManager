@@ -17,7 +17,7 @@ namespace Yandex.Zen.Core.Services.PostingSecondWindService
         [ThreadStatic] private static PostingSecondWindModeEnum _currentMode;
         [ThreadStatic] private static bool _currentModeSetted;
 
-        private ResourceBaseModel Account { get => ProjectComponents.Project.ResourceObject ?? null; }
+        private ResourceBaseModel Account { get => DataManager.Data.Resource ?? null; }
         //public static PostingSecondWindSettings Settings { get => _settings; }
         //public static void SetSettings(PostingSecondWindSettings Settings) => _settings = Settings;
         /// <summary>

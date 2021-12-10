@@ -22,14 +22,14 @@ namespace Yandex.Zen
     /// <summary>
     /// Класс для запуска выполнения скрипта
     /// </summary>
-    public class Program : ProjectSettingsDataStore, IZennoExternalCode
+    public class Program : ProjectKeeper, IZennoExternalCode
     {
         private static readonly object _locker = new object();
 
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => ProjectComponents.Project.ProgramMode; }
+        public static ProgramModeEnum CurrentMode { get => DataManager.Data.CurrentProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -44,7 +44,7 @@ namespace Yandex.Zen
 
             try
             {
-                switch (ProgramMode)
+                switch (CurrentProgramMode)
                 {
                     case ProgramModeEnum.WalkingProfile:                new WalkingProfile().Start();               break;
                     case ProgramModeEnum.YandexAccountRegistration:     new YandexAccountRegistration().Start();    break;
@@ -83,7 +83,7 @@ namespace Yandex.Zen
             {
                 lock (_locker)
                 {
-                    if (ProgramMode == ProgramModeEnum.InstanceAccountManagement)
+                    if (CurrentProgramMode == ProgramModeEnum.InstanceAccountManagement)
                         InstanceAccountManagement.ThreadInWork = false;
                     ResourcesCurrentThread.ForEach(res => ResourcesAllThreadsInWork.RemoveAll(x => x == res));
                 }

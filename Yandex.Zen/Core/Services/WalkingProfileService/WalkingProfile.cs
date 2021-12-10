@@ -107,7 +107,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             Instance.UseFullMouseEmulation = false;
 
-            if (!ProjectSettingsDataStore.ProfilesDirectory.Exists) ProjectSettingsDataStore.ProfilesDirectory.Create();
+            if (!ProjectKeeper.ProfilesDirectory.Exists) ProjectKeeper.ProfilesDirectory.Create();
 
             long oldSize = 0, newSize = 0;
 
@@ -118,17 +118,16 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                     case ProfileWalkingMode.WalkingNewProfile:
                         var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
-                        ProfileInfo = new FileInfo($@"{ProjectSettingsDataStore.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+                        ProfileInfo = new FileInfo($@"{ProjectKeeper.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
-                        ProjectSettingsDataStore.ResourcesCurrentThread.Add(ProfileInfo.FullName);
-                        ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(ProfileInfo.FullName);
+                        Program.AddResourceToCache(ProfileInfo.FullName, true, true);
 
                         Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
                     case ProfileWalkingMode.WalkingOldProfile:
-                        var profiles = ProjectSettingsDataStore.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+                        var profiles = ProjectKeeper.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
                         if (profiles.Count == 0)
                         {
@@ -149,10 +148,9 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                             var profile = profiles.First();
 
-                            if (!ProjectSettingsDataStore.ResourcesAllThreadsInWork.Any(x => x == profile.FullName))
+                            if (!Program.CheckResourceInWork(profile.FullName))
                             {
-                                ProjectSettingsDataStore.ResourcesCurrentThread.Add(profile.FullName);
-                                ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(profile.FullName);
+                                Program.AddResourceToCache(profile.FullName, true, true);
 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;

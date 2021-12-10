@@ -462,7 +462,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                     return null;
                 }
 
-                var phoneLog = $"[Sms service dll: {ProjectSettingsDataStore.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                var phoneLog = $"[Sms service dll: {ProjectKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                 // Ввод номера телефона и отправка sms кода
                 heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
@@ -550,7 +550,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 bindingPhoneToChannel.TimeAction = new TimeData();
                 bindingPhoneToChannel.Phone = Phone;
                 bindingPhoneToChannel.JobId = job_id;
-                bindingPhoneToChannel.ServiceDll = ProjectSettingsDataStore.PhoneService.Dll;
+                bindingPhoneToChannel.ServiceDll = ProjectKeeper.PhoneService.Dll;
             }
 
             return bindingPhoneToChannel;
@@ -1576,8 +1576,7 @@ namespace Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
-                ProjectSettingsDataStore.ResourcesCurrentThread.Add(Login);
-                ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(Login);
+                Program.AddResourceToCache(Login, true, true);
                 Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                 return true;
             }

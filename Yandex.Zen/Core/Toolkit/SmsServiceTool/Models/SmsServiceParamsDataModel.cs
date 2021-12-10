@@ -53,7 +53,9 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool.Models
         /// Пример: SmsActivate.dll - Россия
         /// </param>
         public SmsServiceParamsDataModel(string serviceDllAndCountry)
-            => ServiceDllAndCountry = serviceDllAndCountry;
+        {
+            ServiceDllAndCountry = serviceDllAndCountry;
+        }
 
         /// <summary>
         /// Получение и установка параметров для получения номера.

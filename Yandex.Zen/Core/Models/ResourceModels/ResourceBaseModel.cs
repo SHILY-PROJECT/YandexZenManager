@@ -25,7 +25,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
     public class ResourceBaseModel
     {
         private static readonly object _locker = new object();
-        private ProjectComponents Project { get => ProjectComponents.Project; }
+        private DataManager Project { get => DataManager.Data; }
 
         public string Login { get; set; }
         public string Password { get; set; }
@@ -90,7 +90,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 if (Program.CheckResourceInWork(Login)) return false;
 
                 this.Login = result;
-                this.Directory = new DirectoryInfo(Path.Combine(ProjectSettingsDataStore.AccountsDirectory.FullName, Login));
+                this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.AccountsDirectory.FullName, Login));
 
                 if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
                     this.Directory.Create();

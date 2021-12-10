@@ -20,8 +20,8 @@ namespace Yandex.Zen.Core.Services.Components
 
         #region=====================================================================
         private static Instance Browser { get => Project.Browser; }
-        private static ProjectComponents Project { get => ProjectComponents.Project; }
-        private static ResourceBaseModel Account { get => Project.ResourceObject; }
+        private static DataManager Project { get => DataManager.Data; }
+        private static ResourceBaseModel Account { get => Project.Resource; }
         private static SmsService SmsService { get => Account.SmsService; }
         private static Random Rnd { get; set; } = new Random();
         #endregion==================================================================

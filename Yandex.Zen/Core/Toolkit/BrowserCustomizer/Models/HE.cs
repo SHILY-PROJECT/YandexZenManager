@@ -14,7 +14,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
     public class HE
     {
         #region====================================================================
-        private Instance Browser { get => ProjectComponents.Project.Browser; }
+        private Instance Browser { get => DataManager.Data.Browser; }
         #endregion=================================================================
 
         private List<HtmlElement> _collection;

@@ -982,8 +982,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     //var additionalLog = IpInfo != null ? $" | proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 
                     // Успешное получение ресурса
-                    ProjectSettingsDataStore.ResourcesCurrentThread.Add(Login);
-                    ProjectSettingsDataStore.ResourcesAllThreadsInWork.Add(Login);
+                    Program.AddResourceToCache(Login, true, true);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт/донор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

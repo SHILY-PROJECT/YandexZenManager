@@ -24,11 +24,11 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         [ThreadStatic] private static FileInfo _generalLog;
         [ThreadStatic] private static string _textObjectForLog;
 
-        private static IZennoPosterProjectModel Zenno { get => ProjectSettingsDataStore.Zenno; }
-        private static Instance Browser { get => ProjectSettingsDataStore.Browser; }
-        private static DirectoryInfo ResourceDirectory { get => ProjectSettingsDataStore.ResourceObject?.Directory; }
+        private static IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
+        private static Instance Browser { get => ProjectKeeper.Browser; }
+        private static DirectoryInfo ResourceDirectory { get => ProjectKeeper.Resource?.Directory; }
 
-        public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[ProjectSettingsDataStore.ProgramMode])) : _generalLog; }
+        public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[ProjectKeeper.CurrentProgramMode])) : _generalLog; }
 
         public static void SetCurrentObjectForLogText(string currentObject)
             => _textObjectForLog = $"[{currentObject}]\t";
@@ -287,14 +287,14 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 new Dictionary<ProgramModeEnum, string>
                 {
-                    [ProgramModeEnum.WalkingProfile] = $"[{ProjectSettingsDataStore.ProgramMode}]                  " ,
-                    [ProgramModeEnum.WalkingOnZen] = $"[{ProjectSettingsDataStore.ProgramMode}]                    " ,
-                    [ProgramModeEnum.InstanceAccountManagement] = $"[{ProjectSettingsDataStore.ProgramMode}]       " ,
-                    [ProgramModeEnum.YandexAccountRegistration] = $"[{ProjectSettingsDataStore.ProgramMode}]       " ,
-                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{ProjectSettingsDataStore.ProgramMode}]     " ,
-                    [ProgramModeEnum.ZenArticlePublication] = $"[{ProjectSettingsDataStore.ProgramMode}]           " ,
+                    [ProgramModeEnum.WalkingProfile] = $"[{ProjectKeeper.CurrentProgramMode}]                  " ,
+                    [ProgramModeEnum.WalkingOnZen] = $"[{ProjectKeeper.CurrentProgramMode}]                    " ,
+                    [ProgramModeEnum.InstanceAccountManagement] = $"[{ProjectKeeper.CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.YandexAccountRegistration] = $"[{ProjectKeeper.CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{ProjectKeeper.CurrentProgramMode}]     " ,
+                    [ProgramModeEnum.ZenArticlePublication] = $"[{ProjectKeeper.CurrentProgramMode}]           " ,
                 }
-                .TryGetValue(ProjectSettingsDataStore.ProgramMode, out string modeForAccountLog);
+                .TryGetValue(ProjectKeeper.CurrentProgramMode, out string modeForAccountLog);
 
                 WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_textObjectForLog}{textToLog}", loggerType, dateTime);
             }

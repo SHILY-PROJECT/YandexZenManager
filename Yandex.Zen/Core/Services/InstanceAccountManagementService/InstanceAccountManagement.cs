@@ -119,7 +119,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
                 }
                 else
                 {
-                    ProjectSettingsDataStore.ResourcesCurrentThread.Add("first_thread_in_work");
+                    Program.AddResourceToCache("first_thread_in_work", true, false);
                     ThreadInWork = true;
                     _launchIsAllowed = true;
                 }
@@ -157,15 +157,15 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
             Instance.NavigateInNewTab(Login, url);
             Instance.AllTabs.ToList().ForEach(x => { if (x.Name != Login) x.Close(); });
 
-            IntPtr hWnd = FindWindowByCaption(IntPtr.Zero, uniqueTitle);
+            IntPtr hWnd = InstanceWinAPI.FindWindowByCaption(IntPtr.Zero, uniqueTitle);
             new Thread(() =>
             {
                 Thread.Sleep(1000);
-                SetForegroundWindow(hWnd);
+                InstanceWinAPI.SetForegroundWindow(hWnd);
 
                 //Logger.LoggerWrite($"{Logger.LogStartsWith}Выполнение SetForeground для тайтла: {uniqueTitle}", LoggerType.Info, true,false, false);
 
-                SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP.NOMOVE | SWP.NOSIZE);
+                InstanceWinAPI.SetWindowPos(hWnd, InstanceWinAPI.HWND_TOPMOST, 0, 0, 0, 0, InstanceWinAPI.SWP.NOMOVE | InstanceWinAPI.SWP.NOSIZE);
             })
             .Start();
 
@@ -280,38 +280,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
             return false;
         }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int uFlags);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
-        private static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
-
-        private static IntPtr HWND_TOPMOST { get; set; } = new IntPtr(-1);
-
-        private static class SWP
-        {
-            public static readonly int
-            NOSIZE = 0x0001,
-            NOMOVE = 0x0002,
-            NOZORDER = 0x0004,
-            NOREDRAW = 0x0008,
-            NOACTIVATE = 0x0010,
-            DRAWFRAME = 0x0020,
-            FRAMECHANGED = 0x0020,
-            SHOWWINDOW = 0x0040,
-            HIDEWINDOW = 0x0080,
-            NOCOPYBITS = 0x0100,
-            NOOWNERZORDER = 0x0200,
-            NOREPOSITION = 0x0200,
-            NOSENDCHANGING = 0x0400,
-            DEFERERASE = 0x2000,
-            ASYNCWINDOWPOS = 0x4000;
-        }
+        
 
     }
 }

@@ -16,7 +16,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
     public class ProfileDataModel
     {
         #region====================================================================
-        private IZennoPosterProjectModel Zenno { get => ProjectComponents.Project.Zenno; }
+        private IZennoPosterProjectModel Zenno { get => DataManager.Data.Zenno; }
         private FileInfo _profile;
         #endregion=================================================================
 
