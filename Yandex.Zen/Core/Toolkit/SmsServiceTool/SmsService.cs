@@ -20,9 +20,11 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 
         #endregion======================================================
 
-        public SmsServiceSettingsModel Settings { get; private set; }
-        public SmsServiceParamsDataModel Params { get; private set; }
-        public SmsServiceDataModel Data { get; private set; } = new SmsServiceDataModel();
+        public SmsServiceSettingsModel Settings { get; set; }
+        public SmsServiceParamsDataModel Params { get; set; }
+        public SmsServiceDataModel Data { get; set; } = new SmsServiceDataModel();
+
+        public SmsService() { }
 
         public SmsService(SmsServiceSettingsModel smsServiceSettings, SmsServiceParamsDataModel smsServiceParams)
         {

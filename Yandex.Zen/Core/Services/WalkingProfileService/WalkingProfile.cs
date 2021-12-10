@@ -107,7 +107,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             Instance.UseFullMouseEmulation = false;
 
-            if (!ProjectKeeper.ProfilesDirectory.Exists) ProjectKeeper.ProfilesDirectory.Create();
+            if (!ProjectKeeper.SharedDirectoryOfProfiles.Exists) ProjectKeeper.SharedDirectoryOfProfiles.Create();
 
             long oldSize = 0, newSize = 0;
 
@@ -118,7 +118,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                     case ProfileWalkingMode.WalkingNewProfile:
                         var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
-                        ProfileInfo = new FileInfo($@"{ProjectKeeper.ProfilesDirectory.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+                        ProfileInfo = new FileInfo($@"{ProjectKeeper.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
                         Program.AddResourceToCache(ProfileInfo.FullName, true, true);
 
@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                         break;
                     case ProfileWalkingMode.WalkingOldProfile:
-                        var profiles = ProjectKeeper.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+                        var profiles = ProjectKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
                         if (profiles.Count == 0)
                         {

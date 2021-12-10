@@ -42,7 +42,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         public SmsService SmsService { get; set; }
         public ResourceSettingsModel ActionSettings  { get; set; }
 
-        public void SetAccount()
+        public void SetResource()
         {
             var tb = Project.ModeTable;
 
@@ -66,9 +66,6 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 }
             }
 
-
-            
-
             throw new Exception($"Отсутствуют свободные/подходящие аккаунты: {tb.FileName}");
         }
 
@@ -90,7 +87,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 if (Program.CheckResourceInWork(Login)) return false;
 
                 this.Login = result;
-                this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.AccountsDirectory.FullName, Login));
+                this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
                 if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
                     this.Directory.Create();

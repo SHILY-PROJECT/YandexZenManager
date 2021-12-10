@@ -18,6 +18,9 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 
 namespace Yandex.Zen
 {
+    /// <summary>
+    /// Класс для хранения, инициализации данных и конфигурации проекта.
+    /// </summary>
     public class ProjectKeeper
     {
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
@@ -29,8 +32,8 @@ namespace Yandex.Zen
         [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
 
         private static readonly List<string> _resourcesAllThreadsInWork = new List<string>();
-        private static DirectoryInfo _profilesDirectory;
-        private static DirectoryInfo _accountsDirectory;
+        private static DirectoryInfo _sharedDirectoryOfProfiles;
+        private static DirectoryInfo _sharedDirectoryOfAccounts;
 
         /// <summary>
         /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
@@ -55,26 +58,26 @@ namespace Yandex.Zen
         /// <summary>
         /// Общая директория со всеми аккаунтами.
         /// </summary>
-        public static DirectoryInfo AccountsDirectory
+        public static DirectoryInfo SharedDirectoryOfAccounts
         {
             get
             {
-                if (_accountsDirectory.Exists is false)
-                    _accountsDirectory.Create();
-                return _accountsDirectory;
+                var dir = _sharedDirectoryOfAccounts ?? (_sharedDirectoryOfAccounts = new DirectoryInfo($@"{Zenno.Directory}\accounts"));
+                if (dir.Exists is false) dir.Create();
+                return dir;
             }
         }
 
         /// <summary>
         /// Общая директория со всеми профилями.
         /// </summary>
-        public static DirectoryInfo ProfilesDirectory
+        public static DirectoryInfo SharedDirectoryOfProfiles
         { 
             get
-            { 
-                if (_profilesDirectory.Exists is false)
-                    _accountsDirectory.Create();
-                return _accountsDirectory;
+            {
+                var dir = _sharedDirectoryOfProfiles ?? (_sharedDirectoryOfProfiles = new DirectoryInfo($@"{Zenno.Directory}\profiles"));
+                if (dir.Exists is false) dir.Create();
+                return dir;
             }
         }
         
@@ -108,15 +111,14 @@ namespace Yandex.Zen
         /// </summary>
         /// <param name="instance"></param>
         /// <param name="zenno"></param>
-        public void ConfigureProject(Instance instance, IZennoPosterProjectModel zenno, out bool configurationStatus)
+        public static void Configure(Instance instance, IZennoPosterProjectModel zenno, out bool configurationStatus)
         {
-            configurationStatus = true;
-
             try
             {
                 _browser = instance;
                 _zenno = zenno;
-                InitializingProjectData();
+                InitializationDataAndConfiguration();
+                configurationStatus = true;
             }
             catch (Exception ex)
             {
@@ -129,90 +131,52 @@ namespace Yandex.Zen
         /// Инициализация свойств проекта.
         /// </summary>
         /// <returns></returns>
-        private void InitializingProjectData()
+        private static void InitializationDataAndConfiguration()
         {
             SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
 
-            _profilesDirectory = new DirectoryInfo($@"{Zenno.Directory}\profiles");
-            _accountsDirectory = new DirectoryInfo($@"{Zenno.Directory}\accounts");
-
-            // Режим работы шаблона
-            _programMode = new Dictionary<string, ProgramModeEnum>()
-            {
-                ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
-                ["Нагуливание профилей"] =                          ProgramModeEnum.WalkingProfile,
-                ["Нагуливание аккаунтов/доноров по zen.yandex"] =   ProgramModeEnum.WalkingOnZen,
-                ["Регистрация аккаунтов yandex"] =                  ProgramModeEnum.YandexAccountRegistration,
-                ["Создание и оформление канала zen.yandex"] =       ProgramModeEnum.ZenChannelCreationAndDesign,
-                ["Публикация статей на канале zen.yandex"] =        ProgramModeEnum.ZenArticlePublication,
-                ["Накрутка активности"] =                           ProgramModeEnum.CheatActivity,
-                ["Posting - second wind (new theme)"] =             ProgramModeEnum.PostingSecondWind
-            }
-            [Zenno.Variables["cfgScriptServices"].Value];
-
-            // Установка таблиц
+            _programMode = Dictionaries.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
+            _modeTable = Dictionaries.ModeTables[_programMode];
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
-            _modeTable = new Dictionary<ProgramModeEnum, TableModel>
-            {
-                [ProgramModeEnum.InstanceAccountManagement] =   new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
-                [ProgramModeEnum.YandexAccountRegistration] =   new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
-                [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
-                [ProgramModeEnum.ZenArticlePublication] =       new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
-                [ProgramModeEnum.CheatActivity] =               new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
-                [ProgramModeEnum.PostingSecondWind] =           new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
-            }
-            [_programMode];
 
             // Настройка режимов работы сервисов
             switch (CurrentProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
-                    PostingSecondWind.CurrentMode = new Dictionary<string, PostingSecondWindModeEnum>
-                    {
-                        ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
-                        ["Постинг"] =                       PostingSecondWindModeEnum.Posting
-                    }
-                    [Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+                    PostingSecondWind.CurrentMode = Dictionaries.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
                     break;
 
                 default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");
             }
 
-            // Установка сервисов капчи и телефонных номеров
-            var captchaService = new CaptchaService
-            {
-                ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value
-            };
-            var smsService = new SmsService(
-                new SmsServiceSettingsModel(
-                    Zenno.Variables["cfgNumbAttempsGetPhone"].Value.Split(' ')[0].ExtractNumber(),
-                    Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.ExtractNumber(),
-                    Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()),
-                new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value));
-            var profile = new ProfileDataModel()
-            {
-                UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
-                MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
-            };
-
-            var resourceSettings = new ResourceSettingsModel()
-            {
-                CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value)
-            };
+            // Настройка и получение ресурса
             _resourceBaseModel = new ResourceBaseModel
             {
-                CaptchaService = captchaService,
-                SmsService = smsService,
-                ActionSettings  = resourceSettings,
-                ProfileData = profile
+                ProfileData = new ProfileDataModel()
+                {
+                    UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
+                    MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
+                },
+                SmsService = new SmsService
+                {
+                    Settings = new SmsServiceSettingsModel
+                    {
+                        TimeToSecondsWaitPhone =    Zenno.Variables["cfgNumbAttempsGetPhone"].Value.Split(' ')[0].ExtractNumber(),
+                        MinutesWaitSmsCode =        Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.ExtractNumber(),
+                        AttemptsReSendSmsCode =     Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
+                    },
+                    Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
+                },
+                CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
+                ActionSettings  = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) }
             };
-            _resourceBaseModel.SetAccount();
+            _resourceBaseModel.SetResource();
         }
 
         /// <summary>
         /// Установка настроек браузера.
         /// </summary>
-        private void SetBrowserSettings(string instanceWindowSize)
+        private static void SetBrowserSettings(string instanceWindowSize)
         {
             _browser.SetWindowSize
             (

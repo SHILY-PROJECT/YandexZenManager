@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using Yandex.Zen.Core;
+using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.CheatActivityService;
 using Yandex.Zen.Core.Services.InstanceAccountManagementService;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
@@ -11,25 +15,20 @@ using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.YandexAccountRegistrationService;
 using Yandex.Zen.Core.Services.ZenArticlePublicationService;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService;
-using Yandex.Zen.Core.Toolkit.LoggerTool;
-using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen
 {
     /// <summary>
     /// Класс для запуска выполнения скрипта
     /// </summary>
-    public class Program : ProjectKeeper, IZennoExternalCode
+    public class Program : IZennoExternalCode
     {
         private static readonly object _locker = new object();
 
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => DataManager.Data.CurrentProgramMode; }
+        public static ProgramModeEnum CurrentMode { get => ProjectKeeper.CurrentProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -39,12 +38,12 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            ConfigureProject(instance, zenno, out var configurationStatus);
+            ProjectKeeper.Configure(instance, zenno, out var configurationStatus);
             if (configurationStatus is false) return 0;
 
             try
             {
-                switch (CurrentProgramMode)
+                switch (CurrentMode)
                 {
                     case ProgramModeEnum.WalkingProfile:                new WalkingProfile().Start();               break;
                     case ProgramModeEnum.YandexAccountRegistration:     new YandexAccountRegistration().Start();    break;
@@ -69,8 +68,8 @@ namespace Yandex.Zen
         /// </summary>
         public static void AddResourceToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
         {
-            if (addToResourcesCurrentThread) ResourcesCurrentThread.Add(obj);
-            if (addToResourcesAllThreadsInWork) ResourcesAllThreadsInWork.Add(obj);
+            if (addToResourcesCurrentThread) ProjectKeeper.ResourcesCurrentThread.Add(obj);
+            if (addToResourcesAllThreadsInWork) ProjectKeeper.ResourcesAllThreadsInWork.Add(obj);
         }
 
         /// <summary>
@@ -79,13 +78,13 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpResourcesFromCache()
         {
-            if (ResourcesCurrentThread.Any())
+            if (ProjectKeeper.ResourcesCurrentThread.Any())
             {
                 lock (_locker)
                 {
-                    if (CurrentProgramMode == ProgramModeEnum.InstanceAccountManagement)
+                    if (CurrentMode == ProgramModeEnum.InstanceAccountManagement)
                         InstanceAccountManagement.ThreadInWork = false;
-                    ResourcesCurrentThread.ForEach(res => ResourcesAllThreadsInWork.RemoveAll(x => x == res));
+                    ProjectKeeper.ResourcesCurrentThread.ForEach(res => ProjectKeeper.ResourcesAllThreadsInWork.RemoveAll(x => x == res));
                 }
             }
         }
@@ -94,7 +93,7 @@ namespace Yandex.Zen
         /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
         /// </summary>
         public static bool CheckResourceInWork(string resource)
-            => ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
+            => ProjectKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
         
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).

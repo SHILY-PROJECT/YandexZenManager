@@ -181,6 +181,7 @@
     <Compile Include="Core\Toolkit\ProfileWorker.cs" />
     <Compile Include="Core\Toolkit\TableHandler.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
+    <Compile Include="Dictionaries.cs" />
     <Compile Include="ProjectKeeper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -139,13 +139,13 @@ namespace Yandex.Zen.Core.Toolkit
         /// <returns></returns>
         private static FileInfo GetProfileFromCommonFolder(int minSizeProfile)
         {
-            if (ProjectKeeper.ProfilesDirectory == null) return null;
+            if (ProjectKeeper.SharedDirectoryOfProfiles == null) return null;
 
-            var profiles = ProjectKeeper.ProfilesDirectory.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+            var profiles = ProjectKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
             if (profiles.Count == 0)
             {
-                Logger.Write($"[Папка с профилями: {ProjectKeeper.ProfilesDirectory.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка с профилями: {ProjectKeeper.SharedDirectoryOfProfiles.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 return null;
             }
 
@@ -155,7 +155,7 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (profiles.Count == 0)
                 {
-                    Logger.Write($"[Папка с профилями: {ProjectKeeper.ProfilesDirectory.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"[Папка с профилями: {ProjectKeeper.SharedDirectoryOfProfiles.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return null;
                 }
 

@@ -2,9 +2,11 @@
 {
     public class SmsServiceSettingsModel
     {
-        public int TimeToSecondsWaitPhone { get; private set; }
-        public int MinutesWaitSmsCode { get; private set; }
-        public int AttemptsReSendSmsCode { get; private set; }
+        public int TimeToSecondsWaitPhone { get; set; }
+        public int MinutesWaitSmsCode { get; set; }
+        public int AttemptsReSendSmsCode { get; set; }
+
+        public SmsServiceSettingsModel() { }
 
         public SmsServiceSettingsModel(int timeToSecondsWaitPhone, int minutesWaitSmsCode, int attemptsReSendSmsCode)
         {
