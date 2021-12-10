@@ -143,13 +143,13 @@ namespace Yandex.Zen
             switch (CurrentProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
-                    PostingSecondWind.CurrentMode = Dictionaries.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+                    PostingSecondWindBase.CurrentMode = Dictionaries.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
                     break;
 
                 default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");
             }
 
-            // Настройка и получение ресурса
+            // Конфигурирование ресурса
             _resourceBaseModel = new ResourceBaseModel
             {
                 ProfileData = new ProfileDataModel()

@@ -17,7 +17,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         private Instance Browser { get => DataManager.Data.Browser; }
         #endregion=================================================================
 
-        private List<HtmlElement> _collection;
+        private List<HtmlElement> _collection = new List<HtmlElement>();
 
         public string XPath { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;

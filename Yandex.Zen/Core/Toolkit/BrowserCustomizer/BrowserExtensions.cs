@@ -256,7 +256,6 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         public static void Navigate(this Tab tab, string url, string referrer, bool ifBusyThenWait = true)
         {
             tab.Navigate(url, referrer);
-
             if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
         }
 

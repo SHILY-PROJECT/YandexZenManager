@@ -140,7 +140,7 @@
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
-    <Compile Include="Core\Services\PostingSecondWindService\PostingSecondWind.cs" />
+    <Compile Include="Core\Services\PostingSecondWindService\PostingSecondWindBase.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Toolkit\Extensions\FormattingExtensions.cs" />

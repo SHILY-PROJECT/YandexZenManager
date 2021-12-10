@@ -89,7 +89,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
-                if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
+                if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
                     this.Directory.Create();
             }
             else throw new Exception($"'{nameof(colLogin)}' - value is void or null");
@@ -120,7 +120,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.PhoneNumber = result;
             }
-            else if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
+            else if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
@@ -128,7 +128,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.ChannelData.NumberPhone = result;
             }
-            else if (PostingSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
+            else if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourceToCache(Login, true, true);

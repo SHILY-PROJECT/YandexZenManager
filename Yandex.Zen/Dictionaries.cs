@@ -14,7 +14,10 @@ namespace Yandex.Zen
     {
         private static IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
 
-        public static Dictionary<string, ProgramModeEnum> ProgramModes = new Dictionary<string, ProgramModeEnum>()
+        /// <summary>
+        /// Режимы работы шаблона.
+        /// </summary>
+        public static Dictionary<string, ProgramModeEnum> ProgramModes => new Dictionary<string, ProgramModeEnum>()
         {
             ["Ручное управление аккаунтом в инстансе"] =        ProgramModeEnum.InstanceAccountManagement,
             ["Нагуливание профилей"] =                          ProgramModeEnum.WalkingProfile,
@@ -26,7 +29,10 @@ namespace Yandex.Zen
             ["Posting - second wind (new theme)"] =             ProgramModeEnum.PostingSecondWind
         };
 
-        public static Dictionary<ProgramModeEnum, TableModel> ModeTables = new Dictionary<ProgramModeEnum, TableModel>
+        /// <summary>
+        /// Таблицы режимов.
+        /// </summary>
+        public static Dictionary<ProgramModeEnum, TableModel> ModeTables => new Dictionary<ProgramModeEnum, TableModel>
         {
             [ProgramModeEnum.InstanceAccountManagement] =   new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
             [ProgramModeEnum.YandexAccountRegistration] =   new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
@@ -36,10 +42,13 @@ namespace Yandex.Zen
             [ProgramModeEnum.PostingSecondWind] =           new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
         };
 
-        public static Dictionary<string, PostingSecondWindModeEnum> PostingSecondWindModes = new Dictionary<string, PostingSecondWindModeEnum>
+        /// <summary>
+        /// Режимы сервиса PostingSecondWindModes.
+        /// </summary>
+        public static Dictionary<string, PostingSecondWindModeEnum> PostingSecondWindModes => new Dictionary<string, PostingSecondWindModeEnum>
         {
             ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
-            ["Постинг"] = PostingSecondWindModeEnum.Posting
+            ["Постинг"] =                       PostingSecondWindModeEnum.Posting
         };
 
     }
