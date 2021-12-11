@@ -1,8 +1,8 @@
 ﻿namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums
 {
-    public enum PostingSecondWindModeEnum
+    public enum PublicationManagerSecondWindModeEnum
     {
-        AuthorizationAndLinkPhone,
+        AuthAndBindingPhone,
         Posting
     }
 }

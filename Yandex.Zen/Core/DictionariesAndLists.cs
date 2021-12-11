@@ -41,10 +41,10 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Режимы сервиса PostingSecondWindModes.
         /// </summary>
-        public static Dictionary<string, PostingSecondWindModeEnum> PostingSecondWindModes => new Dictionary<string, PostingSecondWindModeEnum>
+        public static Dictionary<string, PublicationManagerSecondWindModeEnum> PostingSecondWindModes => new Dictionary<string, PublicationManagerSecondWindModeEnum>
         {
-            ["Авторизация и привязка номера"] = PostingSecondWindModeEnum.AuthorizationAndLinkPhone,
-            ["Постинг"] = PostingSecondWindModeEnum.Posting
+            ["Авторизация и привязка номера"] = PublicationManagerSecondWindModeEnum.AuthAndBindingPhone,
+            ["Постинг"] = PublicationManagerSecondWindModeEnum.Posting
         };
 
         /// <summary>

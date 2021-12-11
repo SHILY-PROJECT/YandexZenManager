@@ -46,14 +46,14 @@ namespace Yandex.Zen
             {
                 switch (CurrentMode)
                 {
-                    case ProgramModeEnum.WalkingProfile:                new MainWalkingProfile().Start();               break;
-                    case ProgramModeEnum.YandexAccountRegistration:     new MainAccounRegister().Start();    break;
-                    case ProgramModeEnum.ZenChannelCreationAndDesign:   new MainChannelManager().Start();  break;
-                    case ProgramModeEnum.ZenArticlePublication:         new MainPublicationManager().Start();        break;
-                    case ProgramModeEnum.WalkingOnZen:                  new MainWalkingOnZen().Start();                 break;
-                    case ProgramModeEnum.InstanceAccountManagement:     new MainBrowserAccountManager().Start();    break;
-                    case ProgramModeEnum.CheatActivity:                 new MainActivityManager().Start();                break;
-                    case ProgramModeEnum.PostingSecondWind:             new MainPublicationManagerSecondWind().Start();            break;
+                    case ProgramModeEnum.WalkingProfile: new MainWalkingProfile().Start(); break;
+                    case ProgramModeEnum.YandexAccountRegistration: new MainAccounRegister().Start(); break;
+                    case ProgramModeEnum.ZenChannelCreationAndDesign: new MainChannelManager().Start(); break;
+                    case ProgramModeEnum.ZenArticlePublication: new MainPublicationManager().Start(); break;
+                    case ProgramModeEnum.WalkingOnZen: new MainWalkingOnZen().Start(); break;
+                    case ProgramModeEnum.InstanceAccountManagement: new MainBrowserAccountManager().Start(); break;
+                    case ProgramModeEnum.CheatActivity: new MainActivityManager().Start(); break;
+                    case ProgramModeEnum.PostingSecondWind: new MainPublicationManagerSecondWind().Start(); break;
                 }
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace Yandex.Zen
         /// </summary>
         public static bool CheckResourceInWork(string resource)
             => ProjectKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
-        
+
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).
         /// </summary>

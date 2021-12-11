@@ -161,7 +161,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
 
             // Получение и ввод заголовка статьи (вызов события Enter после установки значения)
             heFieldTitle = Instance.FindFirstElement(xpathFieldTitle[0], xpathFieldTitle[1], true, false, 7);
-            heFieldTitle.SetValue(Instance.ActiveTab, article.TitleArticle, LevelEmulation.Full, Rnd.Next(500, 1000), false, false, true, Rnd.Next(1000, 1500));
+            heFieldTitle.SetValue(Instance.ActiveTab, article.TitleArticle, LevelEmulation.Full, Rnd.Next(500, 1000), false, true, Rnd.Next(1000, 1500));
 
             // Ввод статьи
             foreach (var lineText in article.TextArticle)
@@ -193,7 +193,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 }
 
                 // Ввод текста (вызов события Enter после установки значения)
-                heFieldText.SetValue(Instance.ActiveTab, setText, LevelEmulation.Full, Rnd.Next(500, 1000), false, true, true, Rnd.Next(1000, 1500));
+                heFieldText.SetValue(Instance.ActiveTab, setText, LevelEmulation.Full, Rnd.Next(500, 1000), true, true, Rnd.Next(1000, 1500));
             }
 
             // Переход к форме публикации статьи

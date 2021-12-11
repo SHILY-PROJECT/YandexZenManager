@@ -88,7 +88,7 @@
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\InstanceWinAPI.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
+    <Compile Include="Core\Services\PublicationManagerSecondWindService\Enums\PublicationManagerSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\ActionOnItem.cs" />
     <Compile Include="Core\Models\ResourceModels\ResourceSettingsModel.cs" />
@@ -146,6 +146,7 @@
     <Compile Include="Core\Toolkit\Extensions\FormattingExtensions.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ErrorAnalysisData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\LogItem.cs" />
+    <Compile Include="Core\Services\PublicationManagerSecondWindService\Models\LogSettings.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ResourceData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\TimeData.cs" />
     <Compile Include="Core\Toolkit\Obsolete_PhoneService.cs" />

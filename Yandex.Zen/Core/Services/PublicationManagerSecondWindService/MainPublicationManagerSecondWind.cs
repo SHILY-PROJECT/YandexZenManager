@@ -9,15 +9,15 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static PostingSecondWindModeEnum _currentMode;
+        [ThreadStatic] private static PublicationManagerSecondWindModeEnum _currentMode;
         [ThreadStatic] private static bool _currentModeSetted;
 
-        private ResourceBaseModel Account { get => DataManager.Data.Resource ?? null; }
+        private ResourceBaseModel Account { get => DataManager.Data.Resource; }
 
         /// <summary>
         /// Текущий режим работы сервиса.
         /// </summary>
-        public static PostingSecondWindModeEnum CurrentMode
+        public static PublicationManagerSecondWindModeEnum CurrentMode
         {
             get => _currentMode;
             set
@@ -29,22 +29,16 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
 
         public void Start()
         {
-            if (Account is null) throw new Exception($"Account object is null");
             if (_currentModeSetted is false) throw new Exception($"The current operating mode is not set");
 
             switch (CurrentMode)
             {
-                case PostingSecondWindModeEnum.AuthorizationAndLinkPhone:
-                    AuthorizationAndLinkPhone();
-                    break;
-
-                case PostingSecondWindModeEnum.Posting:
-
-                    break;
+                case PublicationManagerSecondWindModeEnum.AuthAndBindingPhone: BindingPhone(); break;
+                case PublicationManagerSecondWindModeEnum.Posting: break;
             }
         }
 
-        private void AuthorizationAndLinkPhone()
+        private void BindingPhone()
         {
             AuthorizationNew.AuthNew(out var status);
 

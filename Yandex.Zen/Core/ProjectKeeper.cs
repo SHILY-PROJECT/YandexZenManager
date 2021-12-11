@@ -42,7 +42,15 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static ResourceBaseModel Resource { get => _resourceBaseModel; }
+        public static ResourceBaseModel Resource
+        {
+            get
+            {
+                if (_resourceBaseModel is null)
+                    throw new Exception($"'{Resource}' - object cannot is null");
+                return _resourceBaseModel;
+            }
+        }
 
         /// <summary>
         /// Общая таблица с аккаунтами.

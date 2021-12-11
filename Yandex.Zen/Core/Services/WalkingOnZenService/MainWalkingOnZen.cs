@@ -745,7 +745,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         heFieldCity.SetValue
                         (
                             Instance.ActiveTab, DictionariesAndLists.ListOfRussianCities.GetLine(LineOptions.Random),
-                            LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, false, true, Rnd.Next(3000, 3500)
+                            LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, true, Rnd.Next(3000, 3500)
                         );
 
                         // Получаем активный чекбокс, если он не деактивирован сам и обрабатываем его

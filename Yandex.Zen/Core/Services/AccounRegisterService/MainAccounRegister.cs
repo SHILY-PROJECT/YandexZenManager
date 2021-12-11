@@ -204,7 +204,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     return false;
                 }
 
-                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, false, true, Rnd.Next(150, 500));
+                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, true, Rnd.Next(150, 500));
 
                 var heItems = Instance.FindElements(xpathItemsPage, false, false, 5);
 

@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                     var xpathFieldCaptcha = new[] { "//input[contains(@name, 'captcha_answer')]", "Поле - Разгадка капчи" };
                     var xpathImgCaptcha = new[] { "//div[@class='captcha__container']/descendant::img[@src!='']", "Изображение капчи" };
-                    var xpathButtonCaptchaNext = new[] { "//div[contains(@data-t, 'submit')]", "Кнопка - Далее" };
+                    var xpathButtonCaptchaNext = new[] { "//div[contains(@data-t, 'submit-captcha')]", "Кнопка - Далее" };
                     var xpathFieldAnswer = new[] { "//input[contains(@name, 'answer')]", "Поле - Ответа на контрольный вопрос" };
                     var xpathBottonSubmitAnswer = new[] { "//div[contains(@data-t, 'submit')]", "Кнопка - Далее" };
                     var xpathFieldPhone = new[] { "//input[contains(@name, 'phone')]", "Поле - Номер" };

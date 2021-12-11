@@ -318,7 +318,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                 var key = searchKeys.GetLine(LineOptions.RandomWithRemoved);
 
-                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, false, true, Rnd.Next(150, 500));
+                heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, true, Rnd.Next(150, 500));
 
                 if (Instance.ActiveTab.IsBusy) Instance.ActiveTab.WaitDownloading();
 

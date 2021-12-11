@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
 {
@@ -52,12 +54,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// Установить значение.
         /// </summary>
         public void SetValue(string value, LevelEmulation levelEmulation, int msTimeoutAfterAction,
-            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, bool logger = true)
+            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, LogSettings log = null)
         {
             if (Element.IsNullOrVoid() && autoFindElement)
-                FindElement(attemptsFindElement, exceptionIfNotFind, logger);
-            //else if (Element.IsNullOrVoid() && autoFindElement is false) throw new Exception($"'{nameof(Element)}' - is null");
-
+                FindElement(attemptsFindElement, exceptionIfNotFind, log);
             Element.SetValue(Browser.ActiveTab, value, levelEmulation, msTimeoutAfterAction);
         }
 
@@ -65,11 +65,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// Клик по элементу.
         /// </summary>
         public void Click(int msTimeoutAfterAction = 0, bool waitPageLoad = true,
-            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, bool logError = true)
+            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, LogSettings log = null)
         {
             if (Element.IsNullOrVoid() && autoFindElement)
-                FindElement(attemptsFindElement, exceptionIfNotFind, logError);
-
+                FindElement(attemptsFindElement, exceptionIfNotFind, log);
             Element.Click(Browser.ActiveTab, msTimeoutAfterAction, waitPageLoad);
         }
 
@@ -79,11 +78,11 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="attemptsFindElement"></param>
         /// <param name="logError"></param>
         /// <returns></returns>
-        public bool TryFindElement(int attemptsFindElement = 3, bool logError = true)
+        public bool TryFindElement(int attemptsFindElement = 3, LogSettings log = null)
         {
             Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
             if (Element.IsNullOrVoid() is false) return true;
-            if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+            if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
             return false;
         }
 
@@ -93,11 +92,11 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="attemptsFindElement"></param>
         /// <param name="logError"></param>
         /// <returns></returns>
-        public bool TryFindElements(int attemptsFindElement = 3, bool logError = true)
+        public bool TryFindElements(int attemptsFindElement = 3, LogSettings log = null)
         {
             Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
             if (Collection.Any() is false) return true;
-            if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+            if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
             return false;
         }
 
@@ -107,13 +106,13 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="attemptsFindElement"></param>
         /// <param name="throwExceptionIfNotFind"></param>
         /// <param name="logError"></param>
-        public void FindElement(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, bool logError = true)
+        public void FindElement(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, LogSettings log = null)
         {
             Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
 
             if (Element.IsNullOrVoid())
             {
-                if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+                if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
                 if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
             }
         }
@@ -124,13 +123,13 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="attemptsFindElement"></param>
         /// <param name="throwExceptionIfNotFind"></param>
         /// <param name="logError"></param>
-        public void FindElements(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, bool logError = true)
+        public void FindElements(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, LogSettings log = null)
         {
             Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
 
             if (Collection.Any() is false)
             {
-                if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+                if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
                 if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
             }
         }

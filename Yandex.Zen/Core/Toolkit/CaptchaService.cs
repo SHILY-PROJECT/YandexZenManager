@@ -40,21 +40,21 @@ namespace Yandex.Zen.Core.Toolkit
         /// </summary>
         public string Recognizing(HtmlElement htmlElementImgCaptcha, bool logger = true)
         {
-            TryRecognizing(htmlElementImgCaptcha, out var result, logger);
+            TryRecognize(htmlElementImgCaptcha, out var result, logger);
             return result;
         }
 
         /// <summary>
         /// Отправка капчи на распознание.
         /// </summary>
-        public bool TryRecognizing(HtmlElement htmlElementImgCaptcha, out string captchaResult, bool logger = true)
+        public bool TryRecognize(HtmlElement htmlElementImgCaptcha, out string captchaResult, bool logger = true)
         {
             try
             {
                 // Скачивание капчи в байтики для отправки на распознавание
                 var btImg = new System.Net.WebClient().DownloadData(htmlElementImgCaptcha.GetAttribute("src"));
 
-                if (logger) Logger.Write($"Отправка капчи на распознавание", LoggerType.Info, true, false, true, LogColor.Default);
+                if (logger) Logger.Write($"Отправка капчи на разгадывание", LoggerType.Info, true, false, true, LogColor.Default);
 
                 // Отправка капчи на распознание
                 var captchaResponse = ZennoPoster.CaptchaRecognition(ServiceDll, Convert.ToBase64String(btImg), "");
@@ -69,7 +69,7 @@ namespace Yandex.Zen.Core.Toolkit
                     return false;
                 }
 
-                if (logger) Logger.Write($"Результат распознавания: {captchaResult}", LoggerType.Info, true, false, true, LogColor.Default);
+                if (logger) Logger.Write($"Результат разгадывания: {captchaResult}", LoggerType.Info, true, false, true, LogColor.Default);
                 return true;
             }
             catch (Exception ex)
