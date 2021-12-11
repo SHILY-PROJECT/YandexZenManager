@@ -11,10 +11,10 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using Yandex.Zen.Core.Services.PostingSecondWindService;
-using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
 
 namespace Yandex.Zen
 {
@@ -143,7 +143,7 @@ namespace Yandex.Zen
             switch (CurrentProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
-                    PostingSecondWindBase.CurrentMode = DictionariesAndLists.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+                    MainPublicationManagerSecondWind.CurrentMode = DictionariesAndLists.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
                     break;
 
                 default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");

@@ -8,12 +8,12 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.ActivityManagerService;
-using Yandex.Zen.Core.Services.PostingSecondWindService;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
-using Yandex.Zen.Core.Services.ChannelHandlerService;
+using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 
 namespace Yandex.Zen
@@ -45,14 +45,14 @@ namespace Yandex.Zen
             {
                 switch (CurrentMode)
                 {
-                    case ProgramModeEnum.WalkingProfile:                new WalkingProfile().Start();               break;
-                    case ProgramModeEnum.YandexAccountRegistration:     new AccounRegister().Start();    break;
-                    case ProgramModeEnum.ZenChannelCreationAndDesign:   new ChannelHandler().Start();  break;
-                    case ProgramModeEnum.ZenArticlePublication:         new PublicationManager().Start();        break;
-                    case ProgramModeEnum.WalkingOnZen:                  new WalkingOnZen().Start();                 break;
-                    case ProgramModeEnum.InstanceAccountManagement:     new BrowserAccountManager().Start();    break;
-                    case ProgramModeEnum.CheatActivity:                 new ActivityManager().Start();                break;
-                    case ProgramModeEnum.PostingSecondWind:             new PostingSecondWindBase().Start();            break;
+                    case ProgramModeEnum.WalkingProfile:                new MainWalkingProfile().Start();               break;
+                    case ProgramModeEnum.YandexAccountRegistration:     new MainAccounRegister().Start();    break;
+                    case ProgramModeEnum.ZenChannelCreationAndDesign:   new MainChannelManager().Start();  break;
+                    case ProgramModeEnum.ZenArticlePublication:         new MainPublicationManager().Start();        break;
+                    case ProgramModeEnum.WalkingOnZen:                  new MainWalkingOnZen().Start();                 break;
+                    case ProgramModeEnum.InstanceAccountManagement:     new MainBrowserAccountManager().Start();    break;
+                    case ProgramModeEnum.CheatActivity:                 new MainActivityManager().Start();                break;
+                    case ProgramModeEnum.PostingSecondWind:             new MainPublicationManagerSecondWind().Start();            break;
                 }
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace Yandex.Zen
                 lock (_locker)
                 {
                     if (CurrentMode == ProgramModeEnum.InstanceAccountManagement)
-                        BrowserAccountManager.ThreadInWork = false;
+                        MainBrowserAccountManager.ThreadInWork = false;
                     ProjectKeeper.ResourcesCurrentThread.ForEach(res => ProjectKeeper.ResourcesAllThreadsInWork.RemoveAll(x => x == res));
                 }
             }

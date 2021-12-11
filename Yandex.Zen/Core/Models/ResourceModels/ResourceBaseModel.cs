@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.PostingSecondWindService;
-using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -89,7 +89,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
-                if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
+                if (MainPublicationManagerSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.AuthorizationAndLinkPhone) && this.Directory.Exists is false)
                     this.Directory.Create();
             }
             else throw new Exception($"'{nameof(colLogin)}' - value is void or null");
@@ -120,7 +120,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.PhoneNumber = result;
             }
-            else if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
+            else if (MainPublicationManagerSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
@@ -128,7 +128,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.ChannelData.NumberPhone = result;
             }
-            else if (PostingSecondWindBase.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
+            else if (MainPublicationManagerSecondWind.CurrentMode.Equals(PostingSecondWindModeEnum.Posting))
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourceToCache(Login, true, true);
