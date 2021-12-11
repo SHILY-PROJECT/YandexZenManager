@@ -25,7 +25,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 namespace Yandex.Zen.Core.Services.AccounRegisterService
 {
 
-    public class MainAccounRegister : ServicesDataAndComponents
+    public class MainAccounRegister : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -196,7 +196,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                 AcceptingPrivacyPolicyCookie();
 
-                var heFieldSearch = Instance.FuncGetFirstHe(xpathFieldSearch, false, false);
+                var heFieldSearch = Instance.FindFirstElement(xpathFieldSearch, false, false);
 
                 if (heFieldSearch.IsNullOrVoid())
                 {
@@ -206,7 +206,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                 heFieldSearch.SetValue(Instance.ActiveTab, key, LevelEmulation.SuperEmulation, Rnd.Next(150, 500), false, false, true, Rnd.Next(150, 500));
 
-                var heItems = Instance.FuncGetHeCollection(xpathItemsPage, false, false, 5);
+                var heItems = Instance.FindElements(xpathItemsPage, false, false, 5);
 
                 if (heItems == null || heItems.Count == 0)
                 {
@@ -272,14 +272,14 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                             AcceptingPrivacyPolicyCookie();
 
-                            Instance.FuncGetFirstHe($"//a[contains(@href, 'https://yandex.{Domain}/all')]", "Все сервисы яндекс", false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                            Instance.FindFirstElement($"//a[contains(@href, 'https://yandex.{Domain}/all')]", "Все сервисы яндекс", false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
-                            Instance.FuncGetFirstHe("//div[@class='main']/descendant::a[@id='tab-mail']|//li[contains(@class, 'services')]/descendant::a[contains(@data-id, 'mail')]", "Tab Почта", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
-                            Instance.FuncGetFirstHe("//div[contains(@class, 'HeadBanne')]/descendant::a[contains(@href, 'registration')]/span", "Создать аккаунт", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                            Instance.FindFirstElement("//div[@class='main']/descendant::a[@id='tab-mail']|//li[contains(@class, 'services')]/descendant::a[contains(@data-id, 'mail')]", "Tab Почта", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                            Instance.FindFirstElement("//div[contains(@class, 'HeadBanne')]/descendant::a[contains(@href, 'registration')]/span", "Создать аккаунт", true, true, 10).Click(Instance.ActiveTab, Rnd.Next(150, 500));
                         }
                         catch { continue; }
 
-                        if (!Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
+                        if (!Instance.FindFirstElement("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
                         {
                             Logger.Write($"Форма регистрации успешно загружена. Переход к заполнению формы", LoggerType.Info, true, false, true);
                             break;
@@ -293,7 +293,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                     Instance.ActiveTab.Navigate(urlReg, true);
 
-                    if (!Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
+                    if (!Instance.FindFirstElement("//input[@id='firstname']", "Имя", true, true, 7).IsNullOrVoid())
                         Logger.Write($"Форма регистрации успешно загружена. Переход к заполнению формы", LoggerType.Info, true, false, true);
                     break;
             }
@@ -310,13 +310,13 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                 try
                 {
-                    heFieldFirstName = Instance.FuncGetFirstHe("//input[@id='firstname']", "Имя", true, true, 7);
-                    heFieldLastName = Instance.FuncGetFirstHe("//input[@id='lastname']", "Фамилия");
-                    heFieldPassword = Instance.FuncGetFirstHe("//input[@id='password']", "Пароль");
-                    heFieldPasswordConfirm = Instance.FuncGetFirstHe("//input[@id='password_confirm']", "Подтверждение пароля");
-                    heFieldLogin = Instance.FuncGetFirstHe("//input[@id='login']", "Логин");
-                    heButtonNoPhone = Instance.FuncGetFirstHe("//div[contains(@class, 'no-phone')]/span[text()!='']", "У меня нет телефона");
-                    heButtonSubmit = Instance.FuncGetFirstHe("//div[contains(@class, 'submit')]/descendant::button[@type='submit']", "Зарегистрироваться");
+                    heFieldFirstName = Instance.FindFirstElement("//input[@id='firstname']", "Имя", true, true, 7);
+                    heFieldLastName = Instance.FindFirstElement("//input[@id='lastname']", "Фамилия");
+                    heFieldPassword = Instance.FindFirstElement("//input[@id='password']", "Пароль");
+                    heFieldPasswordConfirm = Instance.FindFirstElement("//input[@id='password_confirm']", "Подтверждение пароля");
+                    heFieldLogin = Instance.FindFirstElement("//input[@id='login']", "Логин");
+                    heButtonNoPhone = Instance.FindFirstElement("//div[contains(@class, 'no-phone')]/span[text()!='']", "У меня нет телефона");
+                    heButtonSubmit = Instance.FindFirstElement("//div[contains(@class, 'submit')]/descendant::button[@type='submit']", "Зарегистрироваться");
                 }
                 catch { continue; }
 
@@ -339,7 +339,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                         }
 
                         heFieldLogin.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
-                        heLoginsList = Instance.FuncGetHeCollection(xpathLoginList, false);
+                        heLoginsList = Instance.FindElements(xpathLoginList, false);
 
                         if (heLoginsList == null) continue;
 
@@ -361,9 +361,9 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
                 try
                 {
-                    heQuestion = Instance.FuncGetFirstHe(xpathQuestion);
-                    heQuestionOptions = Instance.FuncGetHeCollection(xpathQuestionOptions, true, true, 7);
-                    heFieldAnswer = Instance.FuncGetFirstHe(xpathFieldAnswer);
+                    heQuestion = Instance.FindFirstElement(xpathQuestion);
+                    heQuestionOptions = Instance.FindElements(xpathQuestionOptions, true, true, 7);
+                    heFieldAnswer = Instance.FindFirstElement(xpathFieldAnswer);
                 }
                 catch { continue; }
 
@@ -385,8 +385,8 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                             throw new Exception(textLog);
                         }
 
-                        heFieldCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha);
-                        heImgCaptcha = Instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10);
+                        heFieldCaptcha = Instance.FindFirstElement(xpathFieldCaptcha);
+                        heImgCaptcha = Instance.FindFirstElement(xpathImgCaptcha, true, true, 10);
 
                         try
                         {
@@ -415,10 +415,10 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                             {
                                 if (++counterWaitEndRegistration > 30) throw new Exception($"Превышено время ожидания окончания регистрации");
 
-                                if (!Instance.FuncGetFirstHe(xpathCheckElementsGoodRegistration, false, false).IsNullOrVoid())
+                                if (!Instance.FindFirstElement(xpathCheckElementsGoodRegistration, false, false).IsNullOrVoid())
                                 {
                                     // Пропустить предложение о загрузку аватара после регистрации
-                                    Instance.FuncGetFirstHe(xptahSkipUploadAvatar, false, false, 0).Click(Instance.ActiveTab, Rnd.Next(1000, 1500)); ;
+                                    Instance.FindFirstElement(xptahSkipUploadAvatar, false, false, 0).Click(Instance.ActiveTab, Rnd.Next(1000, 1500)); ;
 
                                     // Сохранение данных аккаунта
                                     SaveAccountData();
@@ -438,13 +438,13 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                                     return;
                                 }
 
-                                if (Instance.FuncGetFirstHe(xpathCaptchaError, false, false, 1) != null)
+                                if (Instance.FindFirstElement(xpathCaptchaError, false, false, 1) != null)
                                 {
-                                    Instance.FuncGetFirstHe(xpathImgCaptcha, true, true, 10).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                                    Instance.FindFirstElement(xpathImgCaptcha, true, true, 10).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
                                     throw new Exception($"Капча введена неверно");
                                 }
 
-                                hePrivacyPolicy = Instance.FuncGetFirstHe("//div[contains(@class, 'eula-popup-wrapper')]/descendant::button", "Privacy Policy and Terms of Use", false, false, 1);
+                                hePrivacyPolicy = Instance.FindFirstElement("//div[contains(@class, 'eula-popup-wrapper')]/descendant::button", "Privacy Policy and Terms of Use", false, false, 1);
 
                                 if (hePrivacyPolicy != null) hePrivacyPolicy.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
@@ -491,7 +491,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
             });
 
             // Сохранение профиля
-            ProfileWorker.SaveProfile(true);
+            Obsolete_ProfileWorker.SaveProfile(true);
         }
 
         /// <summary>
@@ -624,7 +624,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     if (_uploadAvatarAfterRegistration && GetAvatar() is false) continue;
 
                     // Получение и загрузка профиля
-                    if (ProfileWorker.LoadProfile(true) is false) return false;
+                    if (Obsolete_ProfileWorker.LoadProfile(true) is false) return false;
 
                     // Получение прокси
                     if (SetProxy((int)TableColumnEnum.Inst.Proxy, row, true) is false) continue;

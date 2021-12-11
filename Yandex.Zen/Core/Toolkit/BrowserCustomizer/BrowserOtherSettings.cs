@@ -76,6 +76,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
             browser.BackGroundSoundsPlay = otherSettings.BackGroundSoundsPlay;  // Воспроизведение фоновых звуков
         }
 
+        /// <summary>
+        /// Установить настройки браузера по умолчанию.
+        /// </summary>
+        /// <param name="browser"></param>
         public static void BrowserSetDefaultOtherSettings(this Instance browser)
         {
             browser.LoadPictures = true;         // Загрузка картинок

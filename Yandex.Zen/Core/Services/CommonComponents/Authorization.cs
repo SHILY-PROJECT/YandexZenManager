@@ -15,13 +15,13 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
-namespace Yandex.Zen.Core.Services.Components
+namespace Yandex.Zen.Core.Services.CommonComponents
 {
     [Obsolete]
-    public class Authorization : ServicesDataAndComponents
+    public class Authorization : Obsolete_ServicesDataAndComponents
     {
         [ThreadStatic]
-        private static InstanceSettings.BusySettings BusyMode = InstanceSettings.BusySettings.GetCurrentBusySettings();
+        private static Obsolete_InstanceSettings.Obsolete_BusySettings BusyMode = Obsolete_InstanceSettings.Obsolete_BusySettings.GetCurrentBusySettings();
 
         /// <summary>
         /// Стартовая страница - авторизация.
@@ -29,7 +29,7 @@ namespace Yandex.Zen.Core.Services.Components
         /// <returns></returns>
         public static bool Auth(bool bindingPhoneToAccountIfRequaid, string[] checkByXpathOfElement)
         {
-            InstanceSettings.BusySettings.SetDefaultBusySettings();
+            Obsolete_InstanceSettings.Obsolete_BusySettings.SetDefaultBusySettings();
 
             if (Instance.ActiveTab.IsBusy)
                 Instance.ActiveTab.WaitDownloading();
@@ -59,22 +59,22 @@ namespace Yandex.Zen.Core.Services.Components
                 }
 
                 // Определение типа авторизации
-                if (!Instance.FuncGetFirstHe(xpathFieldLogin, false, false, 3).IsNullOrVoid())
+                if (!Instance.FindFirstElement(xpathFieldLogin, false, false, 3).IsNullOrVoid())
                 {
                     // Полная авторизация
                     try
                     {
-                        Instance.FuncGetFirstHe(xpathFieldLogin).SetValue(Instance.ActiveTab, Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                        Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                        Instance.FindFirstElement(xpathFieldLogin).SetValue(Instance.ActiveTab, Login, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Instance.FindFirstElement(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                        Instance.FindFirstElement(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                        Instance.FindFirstElement(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(150, 500));
                     }
                     catch { continue; }
                 }
-                else if (!Instance.FuncGetFirstHe(xpathAuthAccountList).IsNullOrVoid())
+                else if (!Instance.FindFirstElement(xpathAuthAccountList).IsNullOrVoid())
                 {
                     // Авторизация, когда нужно выбрать аккаунт из списка
-                    var heAccountFormList = Instance.FuncGetFirstHe(xpathAuthAccountList).FindChildByXPath(xpathItemAccount[0], 0);
+                    var heAccountFormList = Instance.FindFirstElement(xpathAuthAccountList).FindChildByXPath(xpathItemAccount[0], 0);
 
                     if (heAccountFormList.IsNullOrVoid())
                     {
@@ -91,13 +91,13 @@ namespace Yandex.Zen.Core.Services.Components
                     else heAccountFormList.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                     // Ввод пароля и вход
-                    Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
-                    Instance.FuncGetFirstHe(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                    Instance.FindFirstElement(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(1000, 1500));
+                    Instance.FindFirstElement(xpathButtonSubmit).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
                 }
                 else continue;
 
                 // Проверка на наличие формы смены пароля
-                if (!Instance.FuncGetFirstHe(xpathChangePassword, false, false, 5).IsNullOrVoid())
+                if (!Instance.FindFirstElement(xpathChangePassword, false, false, 5).IsNullOrVoid())
                 {
                     if (!bindingPhoneToAccountIfRequaid)
                     {
@@ -110,7 +110,7 @@ namespace Yandex.Zen.Core.Services.Components
                     Logger.Write($"[Binding phone: {bindingPhoneToAccountIfRequaid}]\tДоступ к аккаунту ограничен, требуется привязка номера. Переход к привязке номера к аккаунту", LoggerType.Info, true, false, true);
 
                     // Получение для перехода к разгадыванию капчи
-                    var heButtonChangePasswordNext = Instance.FuncGetFirstHe(xpathButtonChangePasswordNext, false, true);
+                    var heButtonChangePasswordNext = Instance.FindFirstElement(xpathButtonChangePasswordNext, false, true);
 
                     if (heButtonChangePasswordNext.IsNullOrVoid())
                     {
@@ -158,8 +158,8 @@ namespace Yandex.Zen.Core.Services.Components
                         }
 
                         // Разгадывание капчи
-                        var heFieldCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha, false, true, 5);
-                        var heImgCaptcha = Instance.FuncGetFirstHe(xpathImgCaptcha, false, true, 5);
+                        var heFieldCaptcha = Instance.FindFirstElement(xpathFieldCaptcha, false, true, 5);
+                        var heImgCaptcha = Instance.FindFirstElement(xpathImgCaptcha, false, true, 5);
 
                         // Проверка наличия капчи и поля для её ввода
                         if (heFieldCaptcha.IsNullOrVoid() || heImgCaptcha.IsNullOrVoid() || string.IsNullOrWhiteSpace(heImgCaptcha.GetAttribute("src")))
@@ -198,10 +198,10 @@ namespace Yandex.Zen.Core.Services.Components
 
                         // Ввод капчи
                         heFieldCaptcha.SetValue(Instance.ActiveTab, captchaResult, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                        Instance.FuncGetFirstHe(xpathButtonCaptchaNext, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
+                        Instance.FindFirstElement(xpathButtonCaptchaNext, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 2000));
 
                         // Проверка наличия поля контрольного вопроса
-                        if (Instance.FuncGetFirstHe(xpathFieldAnswer, false, false, 5).IsNullOrVoid())
+                        if (Instance.FindFirstElement(xpathFieldAnswer, false, false, 5).IsNullOrVoid())
                         {
                             var statusCaptcha = default(string);
                             var traffic = Instance.ActiveTab.GetTraffic().Where(x => x.Url.Contains("registration-validations/checkHuman")).ToList();
@@ -210,7 +210,7 @@ namespace Yandex.Zen.Core.Services.Components
                             {
                                 var responseBody = traffic.Last().ResponseBody;
                                 statusCaptcha = Regex.Match(Encoding.UTF8.GetString(responseBody, 0, responseBody.Length), "(?<=\"status\":\").*?(?=\")").Value;
-                                heImgCaptcha = Instance.FuncGetFirstHe(xpathFieldCaptcha, false, false);
+                                heImgCaptcha = Instance.FindFirstElement(xpathFieldCaptcha, false, false);
 
                                 if (statusCaptcha == "error")
                                 {
@@ -248,12 +248,12 @@ namespace Yandex.Zen.Core.Services.Components
                     if (refreshPage) continue;
 
                     // Ввод ответа на контрольный вопрос и переход к полю ввода номера
-                    Instance.FuncGetFirstHe(xpathFieldAnswer, false).SetValue(Instance.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                    Instance.FuncGetFirstHe(xpathBottonSubmitAnswer, false).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
+                    Instance.FindFirstElement(xpathFieldAnswer, false).SetValue(Instance.ActiveTab, Answer, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathBottonSubmitAnswer, false).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
 
                     // Обработка номера
-                    var heFieldPhone = Instance.FuncGetFirstHe(xpathFieldPhone, false, true, 10);
-                    var heButtonPhoneNext = Instance.FuncGetFirstHe(xpathButtonPhoneNext, false, true);
+                    var heFieldPhone = Instance.FindFirstElement(xpathFieldPhone, false, true, 10);
+                    var heButtonPhoneNext = Instance.FindFirstElement(xpathButtonPhoneNext, false, true);
 
                     // Проверка наличия поля для ввода телефона (рефреш, если не нашли)
                     if (new[] { heFieldPhone, heButtonPhoneNext }.Any(x => x.IsNullOrVoid()))
@@ -276,7 +276,7 @@ namespace Yandex.Zen.Core.Services.Components
                     }
 
                     // Получение номера
-                    Phone = PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
+                    Phone = Obsolete_PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
 
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
@@ -288,14 +288,14 @@ namespace Yandex.Zen.Core.Services.Components
                     heButtonPhoneNext.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение элементов для ввода и отправки sms кода
-                    var heFieldSmsCode = Instance.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
-                    var heButtonSmsCodeNext = Instance.FuncGetFirstHe(xpathButtonSmsCodeNext, false, true);
-                    var heButtonReSendCode = Instance.FuncGetFirstHe(xpathButtonReSendCode, false, true);
+                    var heFieldSmsCode = Instance.FindFirstElement(xpathFieldSmsCode, false, true, 5);
+                    var heButtonSmsCodeNext = Instance.FindFirstElement(xpathButtonSmsCodeNext, false, true);
+                    var heButtonReSendCode = Instance.FindFirstElement(xpathButtonReSendCode, false, true);
 
                     // Проверка наличия полученных элементов для обработки номера (если нет, то отмена номера и выход из метода)
                     if (new[] { heFieldSmsCode, heButtonSmsCodeNext, heButtonReSendCode }.Any(x => x.IsNullOrVoid()))
                     {
-                        PhoneService.CancelPhone(job_id, phoneLog);
+                        Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
 
                         var heElements = new List<string>();
 
@@ -314,12 +314,12 @@ namespace Yandex.Zen.Core.Services.Components
                     }
 
                     // Получение sms кода
-                    var sms_code = PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
+                    var sms_code = Obsolete_PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
 
                     // Проверка наличия sms кода (если кода нет нет, то отмена номера и выход из метода)
                     if (string.IsNullOrWhiteSpace(sms_code))
                     {
-                        PhoneService.CancelPhone(job_id, phoneLog);
+                        Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
                         return false;
                     }
 
@@ -330,9 +330,9 @@ namespace Yandex.Zen.Core.Services.Components
                     //heButtonSmsCodeNext.Click(instance.ActiveTab, rnd.Next(1000, 2000));
 
                     // Смена пароля
-                    var heRefreshedPassword = Instance.FuncGetFirstHe(xpathRefreshedPassword, false, true, 10);
-                    var heRefreshedPasswordConfirm = Instance.FuncGetFirstHe(xpathRefreshedPasswordConfirm, false, true);
-                    var heRefreshedPasswordNext = Instance.FuncGetFirstHe(xpathRefreshedPasswordNext, false, true);
+                    var heRefreshedPassword = Instance.FindFirstElement(xpathRefreshedPassword, false, true, 10);
+                    var heRefreshedPasswordConfirm = Instance.FindFirstElement(xpathRefreshedPasswordConfirm, false, true);
+                    var heRefreshedPasswordNext = Instance.FindFirstElement(xpathRefreshedPasswordNext, false, true);
 
                     // Проверка наличия элементов
                     if (new[] { heRefreshedPassword, heRefreshedPasswordConfirm, heRefreshedPasswordNext }.Any(x => x.IsNullOrVoid()))
@@ -371,8 +371,8 @@ namespace Yandex.Zen.Core.Services.Components
                     true);
 
                     // Получение формы для проверки
-                    var heFormaChangePasswordIsGood = Instance.FuncGetFirstHe(xpathFormaChangePasswordIsGood, false, true, 10);
-                    var heButtonSubmitFinish = Instance.FuncGetFirstHe(xpathButtonSubmitFinish, false, true);
+                    var heFormaChangePasswordIsGood = Instance.FindFirstElement(xpathFormaChangePasswordIsGood, false, true, 10);
+                    var heButtonSubmitFinish = Instance.FindFirstElement(xpathButtonSubmitFinish, false, true);
 
                     // Проверка формы
                     if (heFormaChangePasswordIsGood.IsNullOrVoid() && heButtonSubmitFinish.IsNullOrVoid())
@@ -412,7 +412,7 @@ namespace Yandex.Zen.Core.Services.Components
                     });
 
                     // Сохранение профиля
-                    ProfileWorker.SaveProfile(true);
+                    Obsolete_ProfileWorker.SaveProfile(true);
 
                     // Завершение авторизации
                     if (heButtonSubmitFinish.IsNullOrVoid())
@@ -433,8 +433,8 @@ namespace Yandex.Zen.Core.Services.Components
                 }
                 else
                 {
-                    var heButtonSkipPhone = Instance.FuncGetFirstHe(xpathButtonSkipPhone, false, false, 10);
-                    var heCheckElement = Instance.FuncGetFirstHe(checkByXpathOfElement, false, false, 10);
+                    var heButtonSkipPhone = Instance.FindFirstElement(xpathButtonSkipPhone, false, false, 10);
+                    var heCheckElement = Instance.FindFirstElement(checkByXpathOfElement, false, false, 10);
 
                     if (heButtonSkipPhone.IsNullOrVoid() && heCheckElement.IsNullOrVoid())
                     {
@@ -452,7 +452,7 @@ namespace Yandex.Zen.Core.Services.Components
                             string.Empty
                         });
 
-                        ProfileWorker.SaveProfile(true);
+                        Obsolete_ProfileWorker.SaveProfile(true);
 
                         return false;
                     }
@@ -495,12 +495,12 @@ namespace Yandex.Zen.Core.Services.Components
                 }
 
                 // Успешный выход из метода, если нужный элемент обнаружен
-                if (!Instance.FuncGetFirstHe(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
+                if (!Instance.FindFirstElement(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Успешная авторизация аккаунта{endLog}", LoggerType.Info, true, false, true, LogColor.Blue);
 
-                    InstanceSettings.BusySettings.SetBusySettings(BusyMode);
-                    ProfileWorker.SaveProfile(true);
+                    Obsolete_InstanceSettings.Obsolete_BusySettings.SetBusySettings(BusyMode);
+                    Obsolete_ProfileWorker.SaveProfile(true);
 
                     return true;
                 }

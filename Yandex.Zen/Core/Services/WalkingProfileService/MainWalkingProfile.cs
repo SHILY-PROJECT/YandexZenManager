@@ -17,13 +17,13 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.WalkingProfileService
 {
-    public class MainWalkingProfile : ServicesDataAndComponents
+    public class MainWalkingProfile : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
         private readonly ProfileWalkingMode _walkingMode;
         private readonly SourceSearchKeysTypeEnum _sourceSearchKeysType;
-        private readonly InstanceSettings.BusySettings _individualStateBusy;
+        private readonly Obsolete_InstanceSettings.Obsolete_BusySettings _individualStateBusy;
         private readonly bool _individualStateBusyEnabled;
         private SaveProfileModeEnum _saveMode;
 
@@ -65,16 +65,16 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             if (individualSettings.Contains("Индивидуальные настройки инстанса"))
             {
-                var otherSettings = InstanceSettings.OtherSettings.ExtractOtherSettingsFromVariable(Zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
+                var otherSettings = Obsolete_InstanceSettings.Obsolete_OtherSettings.ExtractOtherSettingsFromVariable(Zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
 
-                InstanceSettings.OtherSettings.SetOtherSettings(otherSettings);
+                Obsolete_InstanceSettings.Obsolete_OtherSettings.SetOtherSettings(otherSettings);
             }
 
             // Индивидуальные настройки состояния занятости
             _individualStateBusyEnabled = individualSettings.Contains("Индивидуальные настройки состояния занятости на сайтах");
 
             if (_individualStateBusyEnabled)
-                _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
+                _individualStateBusy = Obsolete_InstanceSettings.Obsolete_BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                 // Сохранять профиль по завершению обработки поисковой системы
                 if (_saveMode == SaveProfileModeEnum.SaveAfterEverySearchSystem)
                 {
-                    ProfileWorker.SaveProfile(true);
+                    Obsolete_ProfileWorker.SaveProfile(true);
                     Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки поисковой системы: {service}", LoggerType.Info, false, false, true, LogColor.Blue);
                 }
             });
@@ -191,7 +191,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
             // Сохранять профиль по завершению задачи
             if (_saveMode == SaveProfileModeEnum.SaveOnTaskCompletion)
             {
-                ProfileWorker.SaveProfile(true);
+                Obsolete_ProfileWorker.SaveProfile(true);
                 Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля по завершению задачи", LoggerType.Info, false, false, true, LogColor.Blue);
             }
 
@@ -308,7 +308,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                 // Переходим к поисковой системе
                 Instance.ActiveTab.Navigate(url, DictionariesAndLists.ReferenceLinks.GetLine(LineOptions.Random), true);
 
-                var heFieldSearch = Instance.FuncGetFirstHe(xpathFieldSearch, "Поле - Поиск", false, false);
+                var heFieldSearch = Instance.FindFirstElement(xpathFieldSearch, "Поле - Поиск", false, false);
 
                 if (!heFieldSearch.IsNullOrVoid())
                 {
@@ -337,7 +337,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                     // Переход по страницам поисковой системы
                     if (counterPage != 1)
                     {
-                        var heNextPage = Instance.FuncGetFirstHe(xpathNextPage, "", false, false);
+                        var heNextPage = Instance.FindFirstElement(xpathNextPage, "", false, false);
 
                         if (heNextPage.IsNullOrVoid()) break;
 
@@ -357,7 +357,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                         Instance.ActiveTab.NavigateTimeout = 15;
 
                         // Индивидуальное состояние занятости
-                        if (_individualStateBusyEnabled) InstanceSettings.BusySettings.SetBusySettings(_individualStateBusy);
+                        if (_individualStateBusyEnabled) Obsolete_InstanceSettings.Obsolete_BusySettings.SetBusySettings(_individualStateBusy);
 
                         Instance.ActiveTab.FindElementByXPath(xpathItemsPage, i).Click(Instance.ActiveTab);
 
@@ -383,7 +383,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                         // Состояние занятости по умолчанию
                         if (_individualStateBusyEnabled)
-                            InstanceSettings.BusySettings.SetDefaultBusySettings();
+                            Obsolete_InstanceSettings.Obsolete_BusySettings.SetDefaultBusySettings();
 
                         // Установка времени ожидания загрузки страницы
                         Instance.ActiveTab.NavigateTimeout = 120;
@@ -398,7 +398,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                         // Сохранение профиля после каждого сайта
                         if (_saveMode == SaveProfileModeEnum.SaveAfterEverySite)
                         {
-                            ProfileWorker.SaveProfile(true);
+                            Obsolete_ProfileWorker.SaveProfile(true);
                             Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки сайта", LoggerType.Info, false, false, true, LogColor.Blue);
                         }
                     }

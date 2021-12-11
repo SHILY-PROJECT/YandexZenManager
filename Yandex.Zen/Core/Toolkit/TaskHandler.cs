@@ -111,7 +111,7 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 taskList.Add(new TaskItemModel
                 {
-                    TaskId = ServicesDataAndComponents.Rnd.Next(100000000, 999999999).ToString(),
+                    TaskId = Obsolete_ServicesDataAndComponents.Rnd.Next(100000000, 999999999).ToString(),
                     GoToArticle = true,
                     SecondsWatchArticle = secondsWatchArticleSettings.ExtractNumber(),
                     Like = totalLikes != 0,

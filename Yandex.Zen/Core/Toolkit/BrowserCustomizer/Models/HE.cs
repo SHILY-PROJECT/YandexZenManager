@@ -17,57 +17,121 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         private Instance Browser { get => DataManager.Data.Browser; }
         #endregion=================================================================
 
-        private List<HtmlElement> _collection = new List<HtmlElement>();
-
+        /// <summary>
+        /// XPath путь к элементу.
+        /// </summary>
         public string XPath { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
-        public HtmlElement Element { get => _collection.FirstOrDefault(); set { _collection = new List<HtmlElement> { value }; } }
-        public List<HtmlElement> Collection { get => _collection; set { _collection = value; } }
-        public string InformationLog => $"'{nameof(XPath)}:{XPath} | {Title}' - Не найден элемент по заданному пути...";
+
+        /// <summary>
+        /// Информация об элементе (название).
+        /// </summary>
+        public string Info { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Экземпляр  html элемента.
+        /// </summary>
+        public HtmlElement Element { get; set; }
+
+        /// <summary>
+        /// Экземпляр списка html элементов.
+        /// </summary>
+        public List<HtmlElement> Collection { get; set; }
+
+        /// <summary>
+        /// Информация для логирования. 'XPath' и 'Info' в форматированном виде.
+        /// </summary>
+        public string InformationForLog => $"'{nameof(XPath)}:{XPath} | {Info}' - Не найден элемент по заданному пути...";
 
         public HE(string xpath) => XPath = xpath;
-        public HE(string xpath, string title) : this(xpath) => Title = title;
-        public HE(string xpath, string title, HtmlElement htmlElement) : this(xpath, title) => Element = htmlElement;
-        public HE(string xpath, string title, List<HtmlElement> htmlElementCollection) : this(xpath, title) => Collection = htmlElementCollection;
+        public HE(string xpath, string info) : this(xpath) => Info = info;
+        public HE(string xpath, string info, HtmlElement htmlElement) : this(xpath, info) => Element = htmlElement;
+        public HE(string xpath, string info, List<HtmlElement> htmlElementCollection) : this(xpath, info) => Collection = htmlElementCollection;
 
 
         /// <summary>
         /// Установить значение.
         /// </summary>
-        public void SetValue(string value, LevelEmulation levelEmulation, int timeoutMillisecondsAfterAction,
-            bool findElement = true, int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
+        public void SetValue(string value, LevelEmulation levelEmulation, int msTimeoutAfterAction,
+            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, bool logger = true)
         {
-            if (Element.IsNullOrVoid() && findElement)
-                Find(attemptsFindElement, throwExceptionIfElementNoFind, logger);
-            Element.SetValue(Browser.ActiveTab, value, levelEmulation, timeoutMillisecondsAfterAction);
+            if (Element.IsNullOrVoid() && autoFindElement)
+                FindElement(attemptsFindElement, exceptionIfNotFind, logger);
+            //else if (Element.IsNullOrVoid() && autoFindElement is false) throw new Exception($"'{nameof(Element)}' - is null");
+
+            Element.SetValue(Browser.ActiveTab, value, levelEmulation, msTimeoutAfterAction);
         }
 
         /// <summary>
         /// Клик по элементу.
         /// </summary>
-        public void Click(int timeoutMillisecondsAfterAction = 0, bool ifBusyThenWait = true,
-            bool findElement = true, int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
+        public void Click(int msTimeoutAfterAction = 0, bool waitPageLoad = true,
+            bool autoFindElement = true, int attemptsFindElement = 3, bool exceptionIfNotFind = true, bool logError = true)
         {
-            if (Element.IsNullOrVoid() && findElement)
-                Find(attemptsFindElement, throwExceptionIfElementNoFind, logger);
-            Element.Click(Browser.ActiveTab, timeoutMillisecondsAfterAction, ifBusyThenWait);
+            if (Element.IsNullOrVoid() && autoFindElement)
+                FindElement(attemptsFindElement, exceptionIfNotFind, logError);
+
+            Element.Click(Browser.ActiveTab, msTimeoutAfterAction, waitPageLoad);
+        }
+
+        /// <summary>
+        /// Пытаться найти элемент.
+        /// </summary>
+        /// <param name="attemptsFindElement"></param>
+        /// <param name="logError"></param>
+        /// <returns></returns>
+        public bool TryFindElement(int attemptsFindElement = 3, bool logError = true)
+        {
+            Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
+            if (Element.IsNullOrVoid() is false) return true;
+            if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+            return false;
+        }
+
+        /// <summary>
+        /// Пытаться найти элементы.
+        /// </summary>
+        /// <param name="attemptsFindElement"></param>
+        /// <param name="logError"></param>
+        /// <returns></returns>
+        public bool TryFindElements(int attemptsFindElement = 3, bool logError = true)
+        {
+            Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
+            if (Collection.Any() is false) return true;
+            if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+            return false;
         }
 
         /// <summary>
         /// Поиск элемента.
         /// </summary>
         /// <param name="attemptsFindElement"></param>
-        /// <param name="throwExceptionIfElementNoFind"></param>
-        /// <param name="logger"></param>
-        public void Find(int attemptsFindElement = 3, bool throwExceptionIfElementNoFind = true, bool logger = true)
+        /// <param name="throwExceptionIfNotFind"></param>
+        /// <param name="logError"></param>
+        public void FindElement(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, bool logError = true)
         {
-            //Element = Browser.FuncGetFirstHe(this, false, false, attemptsFindElement);
-            Collection = Browser.FuncGetHeCollection(this, false, false, attemptsFindElement).ToList();
+            Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
 
             if (Element.IsNullOrVoid())
             {
-                if (logger) Logger.Write(InformationLog, LoggerType.Warning, true, false, false);
-                if (throwExceptionIfElementNoFind) throw new Exception(InformationLog);
+                if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+                if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
+            }
+        }
+
+        /// <summary>
+        /// Поиск элементов.
+        /// </summary>
+        /// <param name="attemptsFindElement"></param>
+        /// <param name="throwExceptionIfNotFind"></param>
+        /// <param name="logError"></param>
+        public void FindElements(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, bool logError = true)
+        {
+            Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
+
+            if (Collection.Any() is false)
+            {
+                if (logError) Logger.Write(InformationForLog, LoggerType.Warning, true, false, false);
+                if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
             }
         }
     }

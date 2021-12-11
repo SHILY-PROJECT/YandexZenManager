@@ -82,7 +82,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 var httpResponse = ZennoPoster.HTTP.Request
                 (
                     HttpMethod.GET, $"https://ipinfo.io/{ip}", "", "", "", "UTF-8",
-                    ResponceType.BodyOnly, 20000, "", ServicesDataAndComponents.Zenno.Profile.UserAgent, true, 5
+                    ResponceType.BodyOnly, 20000, "", Obsolete_ServicesDataAndComponents.Zenno.Profile.UserAgent, true, 5
                 );
 
                 countryFullName = ZennoPoster.Parser.ParseByXpath(httpResponse, "//a[contains(@href, '/countries/')]", "innerhtml").First();

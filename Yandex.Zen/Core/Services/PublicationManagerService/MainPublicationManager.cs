@@ -19,7 +19,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
-    public class MainPublicationManager : ServicesDataAndComponents
+    public class MainPublicationManager : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -86,33 +86,33 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
             while (true)
             {
                 // Открыть меню с добавлением публикаций
-                Instance.FuncGetFirstHe(xpathButtonAddPublication[0], xpathButtonAddPublication[1], true, true, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                Instance.FindFirstElement(xpathButtonAddPublication[0], xpathButtonAddPublication[1], true, true, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 // Закрыть окно помощника, если оно открыто
-                Instance.FuncGetFirstHe(xpathButtonCloseHelper[0], xpathButtonCloseHelper[1], false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                Instance.FindFirstElement(xpathButtonCloseHelper[0], xpathButtonCloseHelper[1], false, false).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                 // Создание публикации
                 var statusMakePublication = MakePublication(_articlesList[0]);
 
                 // Проверка формы заполнения профиля после 3-х публикаций
-                var heButtonShowProfile = Instance.FuncGetFirstHe(xpathButtonShowProfile[0], xpathButtonShowProfile[1], false, false);
+                var heButtonShowProfile = Instance.FindFirstElement(xpathButtonShowProfile[0], xpathButtonShowProfile[1], false, false);
 
                 if (!heButtonShowProfile.IsNullOrVoid())
                 {
                     // Заполнение поля с описанием канала
-                    Instance.FuncGetFirstHe(xpathFieldDescriptionChannel[0], xpathFieldDescriptionChannel[1], true, true, 5).SetValue(Instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathFieldDescriptionChannel[0], xpathFieldDescriptionChannel[1], true, true, 5).SetValue(Instance.ActiveTab, DescriptionChannel, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Logger.Write($"Описание канала успешно установлено", LoggerType.Info, true, false, true);
 
                     // Заполнение поля с сайтом
-                    Instance.FuncGetFirstHe(xpathFieldSite[0], xpathFieldSite[1]).SetValue(Instance.ActiveTab, InstagramUrl, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathFieldSite[0], xpathFieldSite[1]).SetValue(Instance.ActiveTab, InstagramUrl, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
                     Logger.Write($"Сайт канала успешно установлен", LoggerType.Info, true, false, true);
 
                     // Включение личных сообщений
-                    var heElementForCheckMessageStatus = Instance.FuncGetFirstHe(xpathElementMessageStatus[0], xpathElementMessageStatus[1], true, true);
+                    var heElementForCheckMessageStatus = Instance.FindFirstElement(xpathElementMessageStatus[0], xpathElementMessageStatus[1], true, true);
 
                     if (!heElementForCheckMessageStatus.GetAttribute("class").Contains("allowed"))
                     {
-                        Instance.FuncGetFirstHe(xpathButtonMessageOn[0], xpathButtonMessageOn[1]).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                        Instance.FindFirstElement(xpathButtonMessageOn[0], xpathButtonMessageOn[1]).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                         Logger.Write($"Получение сообщений успешно включено", LoggerType.Info, true, false, true);
                     }
                     else Logger.Write($"Получение сообщений уже включено", LoggerType.Info, true, false, false);
@@ -160,7 +160,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
             var counterAttemptsPublication = 0;
 
             // Получение и ввод заголовка статьи (вызов события Enter после установки значения)
-            heFieldTitle = Instance.FuncGetFirstHe(xpathFieldTitle[0], xpathFieldTitle[1], true, false, 7);
+            heFieldTitle = Instance.FindFirstElement(xpathFieldTitle[0], xpathFieldTitle[1], true, false, 7);
             heFieldTitle.SetValue(Instance.ActiveTab, article.TitleArticle, LevelEmulation.Full, Rnd.Next(500, 1000), false, false, true, Rnd.Next(1000, 1500));
 
             // Ввод статьи
@@ -169,7 +169,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 var setText = lineText;
 
                 // Поиск последнего поля для ввода текста
-                var heFieldText = Instance.FuncGetHeCollection(xpathParagraphForFieldText[0], xpathParagraphForFieldText[1], true, false, 5).Last().FindChildByXPath(xpathChildFieldText[0], 0);
+                var heFieldText = Instance.FindElements(xpathParagraphForFieldText[0], xpathParagraphForFieldText[1], true, false, 5).Last().FindChildByXPath(xpathChildFieldText[0], 0);
 
                 // Обработка обычных изображений
                 if (rxSimpleImage.IsMatch(setText))
@@ -197,7 +197,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
             }
 
             // Переход к форме публикации статьи
-            Instance.FuncGetFirstHe(xpathButtonPublish[0], xpathButtonPublish[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+            Instance.FindFirstElement(xpathButtonPublish[0], xpathButtonPublish[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
             while (true)
             {
@@ -207,13 +207,13 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     return false;
                 }
 
-                if (!Instance.FuncGetFirstHe(xpathFormPublicationSettings[0], xpathFormPublicationSettings[1], false, false).IsNullOrVoid())
+                if (!Instance.FindFirstElement(xpathFormPublicationSettings[0], xpathFormPublicationSettings[1], false, false).IsNullOrVoid())
                 {
                     Logger.Write($"Заполнение формы настройки публикации...", LoggerType.Info, false, true, true);
 
                     FillOnFormPublicationSettings();
                 }
-                else if (!Instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], false, false).IsNullOrVoid())
+                else if (!Instance.FindFirstElement(xpathFormPrePublish[0], xpathFormPrePublish[1], false, false).IsNullOrVoid())
                 {
                     Logger.Write($"Обнаружена форма PrePublish. Переход к её заполнению...", LoggerType.Info, false, true, true);
 
@@ -223,13 +223,13 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 }
 
                 // Выход из цикла при успешной публикации
-                if (!Instance.FuncGetFirstHe(xpathForCheck, "", false, false, 5).IsNullOrVoid()) break;
+                if (!Instance.FindFirstElement(xpathForCheck, "", false, false, 5).IsNullOrVoid()) break;
             }
 
             Logger.Write($"[Publication unixtime: {Logger.GetUnixtime()}]\t[ArticleDirectory:{article.ArticleDirectory.FullName}]\tСтатья успешно опубликована", LoggerType.Info, true, false, true, LogColor.Blue);
 
             // Закрываем форму "Вы создали первую публикацию", если она есть
-            var heButtonFirstPublication = Instance.FuncGetFirstHe(xpathButtonFirstPublication[0], "", false, false, 0);
+            var heButtonFirstPublication = Instance.FindFirstElement(xpathButtonFirstPublication[0], "", false, false, 0);
 
             if (!heButtonFirstPublication.IsNullOrVoid())
             {
@@ -254,8 +254,8 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
 
             try
             {
-                var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit[0], xpathButtonSubmit[1], true, true, 5);
-                var heTags = Instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, false, 5).ToList();
+                var heButtonSubmit = Instance.FindFirstElement(xpathButtonSubmit[0], xpathButtonSubmit[1], true, true, 5);
+                var heTags = Instance.FindElements(xpathTagItem[0], xpathTagItem[1], false, false, 5).ToList();
 
                 // Выбираем случайные теги
                 if (heTags.Count != 0)
@@ -263,12 +263,12 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     var counterSetTags = CalculateNumberOfTags(heTags);
 
                     while (counterSetTags-- > 0)
-                        Instance.FuncGetHeCollection(xpathTagItem[0], xpathTagItem[1], false, true).ToList().GetLine(LineOptions.Random).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                        Instance.FindElements(xpathTagItem[0], xpathTagItem[1], false, true).ToList().GetLine(LineOptions.Random).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
                 }
                 else Logger.Write($"Не найдено рекомендованных тегов", LoggerType.Warning, true, true, true, LogColor.Yellow);
 
                 // Проверяем наличие добавленных тегов
-                var addedTags = Instance.FuncGetHeCollection(xpathAddedTags[0], xpathAddedTags[1], false, false, 5);
+                var addedTags = Instance.FindElements(xpathAddedTags[0], xpathAddedTags[1], false, false, 5);
 
                 if (addedTags == null || addedTags.Count == 0)
                 {
@@ -320,7 +320,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 }
 
                 // Получаем общий div селектора
-                var heSelectorEmail = Instance.FuncGetFirstHe(xpathFormPrePublish, false, false).FindChildByXPath(xpathChildSelectorEmail[0], 0);
+                var heSelectorEmail = Instance.FindFirstElement(xpathFormPrePublish, false, false).FindChildByXPath(xpathChildSelectorEmail[0], 0);
 
                 if (heSelectorEmail.IsNullOrVoid())
                 {
@@ -354,12 +354,12 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
             }
 
             // Обработка чекбоксов
-            Instance.FuncGetFirstHe(xpathFormPrePublish[0], xpathFormPrePublish[1], true, false, 5).FindChildrenByXPath(xpathChildCheckbox[0]).ToList().ForEach(x =>
+            Instance.FindFirstElement(xpathFormPrePublish[0], xpathFormPrePublish[1], true, false, 5).FindChildrenByXPath(xpathChildCheckbox[0]).ToList().ForEach(x =>
             {
                 if (!x.GetAttribute("class").Contains("is-checked")) x.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
             });
 
-            Instance.FuncGetFirstHe(xpathChildButtonSubmit[0], xpathChildButtonSubmit[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+            Instance.FindFirstElement(xpathChildButtonSubmit[0], xpathChildButtonSubmit[1], true, false).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     try
                     {
                         // Поиск элемента для добавления изображения
-                        var heButtonAddImg = Instance.FuncGetFirstHe(xpathButtonAddImg[0], xpathButtonAddImg[1], true, false, 5);
+                        var heButtonAddImg = Instance.FindFirstElement(xpathButtonAddImg[0], xpathButtonAddImg[1], true, false, 5);
 
                         // Проверка активности элемента
                         if (!heButtonAddImg.ParentElement.GetAttribute("style").Contains("none"))
@@ -398,7 +398,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     catch { continue; }
                 }
 
-                Instance.FuncGetFirstHe(xpathButtonUploadImg[0], xpathButtonUploadImg[1], true, false, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                Instance.FindFirstElement(xpathButtonUploadImg[0], xpathButtonUploadImg[1], true, false, 5).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
             }
             catch (Exception ex)
             {
@@ -562,7 +562,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     }
 
                     // Получение и загрузка профиля
-                    if (!ProfileWorker.LoadProfile(true)) return false;
+                    if (!Obsolete_ProfileWorker.LoadProfile(true)) return false;
 
                     // Получение прокси для регистрации
                     if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;

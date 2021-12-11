@@ -4,7 +4,7 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 
-namespace Yandex.Zen
+namespace Yandex.Zen.Core
 {
     public class DictionariesAndLists
     {

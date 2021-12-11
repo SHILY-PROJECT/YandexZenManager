@@ -23,7 +23,7 @@ using Yandex.Zen.Core.Services.ActivityManagerService.Enums;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService
 {
-    public class MainActivityManager : ServicesDataAndComponents
+    public class MainActivityManager : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -254,8 +254,8 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
             var xpathButtonSendComment = new[] { "//div[contains(@class, 'comment-editor') and contains(@class, 'editor-controls')]/descendant::button[contains(@class, 'send')]", "Кнопка - Отправить комментарий" };
 
             // Получение элементов
-            var heFieldComment = Instance.FuncGetFirstHe(xpathFieldComment, false, true);
-            var heButtonSendComment = Instance.FuncGetFirstHe(xpathButtonSendComment, false, true);
+            var heFieldComment = Instance.FindFirstElement(xpathFieldComment, false, true);
+            var heButtonSendComment = Instance.FindFirstElement(xpathButtonSendComment, false, true);
 
             // Проверка элементов
             if (new[] { heFieldComment, heButtonSendComment }.Any(x => x.IsNullOrVoid()))
@@ -454,7 +454,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                 }
 
                 // Получение и загрузка профиля
-                if (!ProfileWorker.LoadProfile(true)) continue;
+                if (!Obsolete_ProfileWorker.LoadProfile(true)) continue;
 
                 // Получение прокси
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;

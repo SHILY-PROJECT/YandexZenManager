@@ -3,10 +3,10 @@
 namespace Yandex.Zen.Core.Toolkit
 {
     [Obsolete]
-    public class InstanceSettings
+    public class Obsolete_InstanceSettings
     {
         [Obsolete]
-        public class OtherSettings
+        public class Obsolete_OtherSettings
         {
             //Добавить в выводные настройки
             //Настройки инстанса:{Загрузка картинок|Загрузка ActiveX|Запуск ActiveX|Загрузка Frame|Загрузка CSS|Использование JavaApplets|Использование JavaScript|Использование плагинов|Использование плагинов Wmode (загрузка плагинов в том-же окне)|Использование Media|Реклама|Загрузка видео|Разрешить всплывающее окно|Воспроизведение фоновых звуков}
@@ -68,9 +68,9 @@ namespace Yandex.Zen.Core.Toolkit
             /// </summary>
             public bool BackGroundSoundsPlay { get; private set; }
 
-            public static OtherSettings ExtractOtherSettingsFromVariable(string variable)
+            public static Obsolete_OtherSettings ExtractOtherSettingsFromVariable(string variable)
             {
-                var instanceSettings = new OtherSettings
+                var instanceSettings = new Obsolete_OtherSettings
                 {
                     LoadPictures = variable.Contains("Загрузка картинок"),
                     DownloadActiveX = variable.Contains("Загрузка ActiveX"),
@@ -91,11 +91,11 @@ namespace Yandex.Zen.Core.Toolkit
                 return instanceSettings;
             }
 
-            public static OtherSettings GetCurrentOtherSettings()
+            public static Obsolete_OtherSettings GetCurrentOtherSettings()
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
-                var instanceSettings = new OtherSettings
+                var instanceSettings = new Obsolete_OtherSettings
                 {
                     LoadPictures = instance.LoadPictures,                   // Загрузка картинок
                     DownloadActiveX = instance.DownloadActiveX,             // Загрузка ActiveX
@@ -116,9 +116,9 @@ namespace Yandex.Zen.Core.Toolkit
                 return instanceSettings;
             }
 
-            public static void SetOtherSettings(OtherSettings otherSettings)
+            public static void SetOtherSettings(Obsolete_OtherSettings otherSettings)
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
                 instance.LoadPictures = otherSettings.LoadPictures;                  // Загрузка картинок
                 instance.DownloadActiveX = otherSettings.DownloadActiveX;            // Загрузка ActiveX
@@ -138,7 +138,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             public static void SetDefaultOtherSettings()
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
                 instance.LoadPictures = true;         // Загрузка картинок
                 instance.DownloadActiveX = true;      // Загрузка ActiveX
@@ -158,21 +158,21 @@ namespace Yandex.Zen.Core.Toolkit
         }
 
         [Obsolete]
-        public class BusySettings
+        public class Obsolete_BusySettings
         {
             public bool IgnoreAdditionalRequests { get; set; }
             public bool IgnoreAjaxRequests { get; set; }
             public bool IgnoreFrameRequests { get; set; }
             public bool IgnoreFlashRequests { get; set; }
 
-            public BusySettings()
+            public Obsolete_BusySettings()
             {
 
             }
 
-            public static BusySettings ExtractBusySettingsFromVariable(string variable)
+            public static Obsolete_BusySettings ExtractBusySettingsFromVariable(string variable)
             {
-                var busySettings = new BusySettings
+                var busySettings = new Obsolete_BusySettings
                 {
                     IgnoreAdditionalRequests = variable.Contains("Игнорировать Post/Get-запросы"),
                     IgnoreAjaxRequests = variable.Contains("Игнорировать Ajax-запросы"),
@@ -183,11 +183,11 @@ namespace Yandex.Zen.Core.Toolkit
                 return busySettings;
             }
 
-            public static BusySettings GetCurrentBusySettings()
+            public static Obsolete_BusySettings GetCurrentBusySettings()
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
-                var instanceSettings = new BusySettings
+                var instanceSettings = new Obsolete_BusySettings
                 {
                     IgnoreAdditionalRequests = instance.IgnoreAdditionalRequests,
                     IgnoreAjaxRequests = instance.IgnoreAjaxRequests,
@@ -198,9 +198,9 @@ namespace Yandex.Zen.Core.Toolkit
                 return instanceSettings;
             }
 
-            public static void SetBusySettings(BusySettings busySettings)
+            public static void SetBusySettings(Obsolete_BusySettings busySettings)
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = busySettings.IgnoreAdditionalRequests;
                 instance.IgnoreAjaxRequests = busySettings.IgnoreAjaxRequests;
@@ -210,7 +210,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             public static void SetDefaultBusySettings()
             {
-                var instance = ServicesDataAndComponents.Instance;
+                var instance = Obsolete_ServicesDataAndComponents.Instance;
 
                 instance.IgnoreAdditionalRequests = false;  // Игнорировать Post/Get-запросы
                 instance.IgnoreAjaxRequests = false;        // Игнорировать Ajax-запросы

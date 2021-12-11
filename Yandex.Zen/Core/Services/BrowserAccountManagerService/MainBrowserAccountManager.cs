@@ -17,7 +17,7 @@ using Yandex.Zen.Core.Services.BrowseArccountManagerService;
 
 namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
 {
-    public class MainBrowserAccountManager : ServicesDataAndComponents
+    public class MainBrowserAccountManager : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -167,7 +167,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
             Logger.Write("Запускается инстанс для ручного управления...", LoggerType.Info, true, false, true, LogColor.Blue);
 
             Instance.WaitForUserAction(waitSec);
-            ProfileWorker.SaveProfile(true);
+            Obsolete_ProfileWorker.SaveProfile(true);
 
             Logger.Write("Обработка аккаунта в ручном режиме успешно завершена", LoggerType.Info, true, false, true, LogColor.Green);
         }
@@ -241,7 +241,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
                         }
 
                         // Получение и загрузка профиля
-                        if (!ProfileWorker.LoadProfile(true)) return false;
+                        if (!Obsolete_ProfileWorker.LoadProfile(true)) return false;
 
                         // Проверка директории на существование (создать, если требуется)
                         if (!ResourceDirectoryExists()) return false;

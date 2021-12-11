@@ -15,9 +15,9 @@ using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
-namespace Yandex.Zen.Core.Services.Components
+namespace Yandex.Zen.Core.Services.CommonComponents
 {
-    public class UnBindingPhoneAccount : ServicesDataAndComponents
+    public class UnBindingPhoneAccount : Obsolete_ServicesDataAndComponents
     {
         /// <summary>
         /// Отвязать номер от аккаунта яндекс.
@@ -57,16 +57,16 @@ namespace Yandex.Zen.Core.Services.Components
                     Instance.ActiveTab.Navigate("https://passport.yandex.ru/profile", refferer, true);
 
                     // Проверяем наличие нужного элемента и раскрытие блока с редактированием номера, а так же, переход к самому редактированию
-                    Instance.FuncGetFirstHe(xpathShowPhone, "Кнопка - Раскрыть информацию о номере", true, true, 7);
+                    Instance.FindFirstElement(xpathShowPhone, "Кнопка - Раскрыть информацию о номере", true, true, 7);
 
-                    heShowPhoneIsHidden = Instance.FuncGetFirstHe(xpathShowPhoneIsHidden, "Кнопка - Раскрыть информацию о номере", false, false);
+                    heShowPhoneIsHidden = Instance.FindFirstElement(xpathShowPhoneIsHidden, "Кнопка - Раскрыть информацию о номере", false, false);
 
                     if (!heShowPhoneIsHidden.IsNullOrVoid()) heShowPhoneIsHidden.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
-                    Instance.FuncGetFirstHe(xpathEditPhone, "Кнопка - Изменить список").Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathEditPhone, "Кнопка - Изменить список").Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                     // Удаление номера
-                    Instance.FuncGetFirstHe(xpathButtonRemove, "Кнопка - Удалить номер", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                    Instance.FindFirstElement(xpathButtonRemove, "Кнопка - Удалить номер", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение ID задания
                     var fileInfoLogAccount = Logger.GetLogAccountFileInfo(ObjectDirectory.FullName);
@@ -93,10 +93,10 @@ namespace Yandex.Zen.Core.Services.Components
                             statusRetryGet = ZennoPoster.Sms.SetStatus(ProjectKeeper.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, ProjectKeeper.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
-                            Instance.FuncGetFirstHe(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                            Instance.FindFirstElement(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                             // Получение кода
-                            sms_code = PhoneService.GetSmsCode(job_id, 1, Instance.FuncGetFirstHe(xpathButtonReSendSmsCode, true, true), 3);
+                            sms_code = Obsolete_PhoneService.GetSmsCode(job_id, 1, Instance.FindFirstElement(xpathButtonReSendSmsCode, true, true), 3);
                         }
                         catch (Exception ex)
                         {
@@ -105,11 +105,11 @@ namespace Yandex.Zen.Core.Services.Components
                         }
                     }
 
-                    Instance.FuncGetFirstHe(xpathFieldSmsCode).SetValue(Instance.ActiveTab, sms_code, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                    Instance.FuncGetFirstHe(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
-                    Instance.FuncGetFirstHe(xpathButtonConfirm).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
+                    Instance.FindFirstElement(xpathFieldSmsCode).SetValue(Instance.ActiveTab, sms_code, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    Instance.FindFirstElement(xpathFieldPassword).SetValue(Instance.ActiveTab, Password, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
+                    Instance.FindFirstElement(xpathButtonConfirm).Click(Instance.ActiveTab, Rnd.Next(2000, 3000));
 
-                    var heButtonCloseGoodWindow = Instance.FuncGetFirstHe(xpathButtonCloseGoodWindow, false, false, 5);
+                    var heButtonCloseGoodWindow = Instance.FindFirstElement(xpathButtonCloseGoodWindow, false, false, 5);
 
                     if (!heButtonCloseGoodWindow.IsNullOrVoid() || !CheckPhoneInPassportYandex())
                     {

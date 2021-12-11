@@ -16,13 +16,13 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingOnZenService.Enums;
-using Yandex.Zen.Core.Services.Components;
+using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
 namespace Yandex.Zen.Core.Services.WalkingOnZenService
 {
-    public class MainWalkingOnZen : ServicesDataAndComponents
+    public class MainWalkingOnZen : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -35,7 +35,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         private List<ActionOnItem> _actionList;
         private StartPageWalkingOnZen _startPage;
         private UseObjectTypeInWorkEnum _useResourceTypeInWork;
-        private InstanceSettings.BusySettings _individualStateBusy;
+        private Obsolete_InstanceSettings.Obsolete_BusySettings _individualStateBusy;
 
         private readonly bool _launchIsAllowed;
         private bool _individualStateBusyEnabled;
@@ -110,7 +110,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
             _actionList = new List<ActionOnItem>();
 
             _individualStateBusyEnabled = bool.Parse(Zenno.Variables["cfgIndividualPolicyOfIgnoringEnabledForWalkingOnZen"].Value);
-            _individualStateBusy = InstanceSettings.BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingOnZen"].Value);
+            _individualStateBusy = Obsolete_InstanceSettings.Obsolete_BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingOnZen"].Value);
 
             _changeGeoIfMenuIsVoid = bool.Parse(Zenno.Variables["cfgChangeGeoIfMenuIsVoidForWalkingZen"].Value);
             _timeOnPageArticleZen = Zenno.Variables["cfgTimeOnPageArticleForWalkingOnZen"].Value;
@@ -202,7 +202,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         AcceptingPrivacyPolicyCookie();
 
                         // Получение кнопки для перехода в дзен
-                        var heButtonGoToZen = Instance.FuncGetFirstHe(xpathButtonGoToZen, false, true, 5);
+                        var heButtonGoToZen = Instance.FindFirstElement(xpathButtonGoToZen, false, true, 5);
 
                         // Проверка наличия кнопки для перехода в дзен
                         if (heButtonGoToZen.IsNullOrVoid())
@@ -221,7 +221,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                 }
 
                 // Проверка наличия элементов
-                if (Instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
+                if (Instance.FindElements(xpathItems, false, true, 5).Count == 0) continue;
 
                 // Смена geo при отсутствии бокового меню
                 if (_changeGeoIfMenuIsVoid)
@@ -233,13 +233,13 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     }
 
                     // Проверка наличия элементов
-                    if (Instance.FuncGetHeCollection(xpathItems, false, true, 5).Count == 0) continue;
+                    if (Instance.FindElements(xpathItems, false, true, 5).Count == 0) continue;
                 }
 
                 // Проверка авторизации перед прогулкой (для аккаунта)
-                if (_useAuthorizationForAccounts && CurrentObjectAtWork == ResourceTypeEnum.Account && Instance.FuncGetFirstHe(xpathAvatarProfile, false, false).IsNullOrVoid())
+                if (_useAuthorizationForAccounts && CurrentObjectAtWork == ResourceTypeEnum.Account && Instance.FindFirstElement(xpathAvatarProfile, false, false).IsNullOrVoid())
                 {
-                    var heButtonAuth = Instance.FuncGetFirstHe(xpathButtonAuth, false, true);
+                    var heButtonAuth = Instance.FindFirstElement(xpathButtonAuth, false, true);
 
                     if (heButtonAuth.IsNullOrVoid())
                     {
@@ -272,7 +272,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
 
                 try
                 {
-                    var items = Instance.FuncGetHeCollection(xpathItems);
+                    var items = Instance.FindElements(xpathItems);
                     var numbItem = default(int);
                     var numbStepItem = default(int);
 
@@ -329,7 +329,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     // Остановить счетчик
                     stopwatchFullProgram.Stop();
 
-                    ProfileWorker.SaveProfile(true);
+                    Obsolete_ProfileWorker.SaveProfile(true);
 
                     // Сохранение результата в таблицу режима и общую таблицу
                     switch (CurrentObjectAtWork)
@@ -423,7 +423,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
 
             // Индивидуальное состояние занятости
             if (_individualStateBusyEnabled)
-                InstanceSettings.BusySettings.SetBusySettings(_individualStateBusy);
+                Obsolete_InstanceSettings.Obsolete_BusySettings.SetBusySettings(_individualStateBusy);
 
             // Обработка ошибки, если элемент не найден
             if (heItemLabel.IsNullOrVoid() && _skipErrorOpenArticles)
@@ -566,7 +566,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                 }
 
                 // Закрыть видео
-                Instance.FuncGetFirstHe(xpathButtonCloseVideo, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
+                Instance.FindFirstElement(xpathButtonCloseVideo, false, true).Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
             }
             else
             {
@@ -678,7 +678,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
 
             // Состояние занятости по умолчанию
             if (_individualStateBusyEnabled)
-                InstanceSettings.BusySettings.SetDefaultBusySettings();
+                Obsolete_InstanceSettings.Obsolete_BusySettings.SetDefaultBusySettings();
 
             var referrer = Instance.ActiveTab.URL;
 
@@ -707,7 +707,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
             var xpathCheckboxAutoCity = new[] { "//div[contains(@class, 'checkbox') and contains(@class, 'city')]/descendant::span[contains(@class, 'checkbox_checked_yes')]", "Чекбокс автоматического определения страны" };
             var xpathButtonSave = new[] { "//button[contains(@class, 'save')]", "Кнопка - Сохранить" };
 
-            if (!Instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
+            if (!Instance.FindFirstElement(xpathMenuItem, false, false).IsNullOrVoid())
             {
                 Logger.Write($"Боковое меню \"zen.yandex\" найдено", LoggerType.Info, false, false, false);
                 return true;
@@ -731,12 +731,12 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         return false;
                     }
 
-                    if (Instance.FuncGetFirstHe(xpathMenuItem, false, false).IsNullOrVoid())
+                    if (Instance.FindFirstElement(xpathMenuItem, false, false).IsNullOrVoid())
                     {
                         Instance.ActiveTab.Navigate("https://yandex.ru/tune/geo", true);
 
                         // Получаем поле страны
-                        var heFieldCity = Instance.FuncGetFirstHe(xpathFieldCity, true, true, 5);
+                        var heFieldCity = Instance.FindFirstElement(xpathFieldCity, true, true, 5);
 
                         // Очистить поле со страной
                         if (heFieldCity.GetAttribute("value") != "") heFieldCity.SetAttribute("value", "");
@@ -749,7 +749,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         );
 
                         // Получаем активный чекбокс, если он не деактивирован сам и обрабатываем его
-                        var heCheckboxAutoCity = Instance.FuncGetFirstHe(xpathCheckboxAutoCity, false, false);
+                        var heCheckboxAutoCity = Instance.FindFirstElement(xpathCheckboxAutoCity, false, false);
 
                         if (!heCheckboxAutoCity.IsNullOrVoid())
                         {
@@ -759,7 +759,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         }
 
                         // Получаем кнопку сохранения изменений и обрабатываем её
-                        var heButtonSave = Instance.FuncGetFirstHe(xpathButtonSave);
+                        var heButtonSave = Instance.FindFirstElement(xpathButtonSave);
 
                         if (!heButtonSave.GetAttribute("disabled").Contains("disabled"))
                         {
@@ -772,7 +772,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     else
                     {
                         Logger.Write($"Geo успешно изменено и боковое меню \"zen.yandex\" на месте", LoggerType.Info, true, false, true);
-                        ProfileWorker.SaveProfile(true);
+                        Obsolete_ProfileWorker.SaveProfile(true);
                         return true;
                     }
                 }
@@ -974,7 +974,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                     }
 
                     // Получение и загрузка профиля
-                    if (!ProfileWorker.LoadProfile(true)) continue;
+                    if (!Obsolete_ProfileWorker.LoadProfile(true)) continue;
 
                     // Получение прокси
                     if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;

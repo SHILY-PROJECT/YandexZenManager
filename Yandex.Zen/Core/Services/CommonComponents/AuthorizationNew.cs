@@ -12,7 +12,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 
-namespace Yandex.Zen.Core.Services.Components
+namespace Yandex.Zen.Core.Services.CommonComponents
 {
     public class AuthorizationNew
     {
@@ -533,12 +533,12 @@ namespace Yandex.Zen.Core.Services.Components
                 }
 
                 // Успешный выход из метода, если нужный элемент обнаружен
-                if (!Browser.FuncGetFirstHe(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
+                if (!Browser.FindFirstElement(checkByXpathOfElement, false, false, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Успешная авторизация аккаунта{endLog}", LoggerType.Info, true, false, true, LogColor.Blue);
 
                     Browser.BrowserSetBusySettings(_settingsMode);
-                    ProfileWorker.SaveProfile(true);
+                    Obsolete_ProfileWorker.SaveProfile(true);
 
                     return true;
                 }

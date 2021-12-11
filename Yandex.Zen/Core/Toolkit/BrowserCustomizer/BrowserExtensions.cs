@@ -23,9 +23,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="name"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="attemptsFindElement"></param>
+        /// <param name="attemptsFind"></param>
         /// <returns></returns>
-        public static HtmlElement FuncGetFirstHe(this Instance instance, string xpath, string name = "", bool throwException = true, bool logger = true, int attemptsFindElement = 3)
+        public static HtmlElement FindFirstElement(this Instance instance, string xpath, string name = "",
+            bool throwException = true, bool logger = true, int attemptsFind = 3)
         {
             var counter = 0;
 
@@ -35,7 +36,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
                 if (he.IsNullOrVoid())
                 {
-                    if (++counter < attemptsFindElement)
+                    if (++counter < attemptsFind)
                     {
                         Thread.Sleep(1000);
 
@@ -63,16 +64,18 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="xpathAndName"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="attemptsFindElement"></param>
+        /// <param name="attemptsFind"></param>
         /// <returns></returns>
-        public static HtmlElement FuncGetFirstHe(this Instance instance, string[] xpathAndName, bool throwException = true, bool logger = true, int attemptsFindElement = 3) =>
-            instance.FuncGetFirstHe(xpathAndName[0], xpathAndName[1], throwException, logger, attemptsFindElement);
+        public static HtmlElement FindFirstElement(this Instance instance,
+            string[] xpathAndName, bool throwException = true, bool logger = true, int attemptsFind = 3) =>
+            instance.FindFirstElement(xpathAndName[0], xpathAndName[1], throwException, logger, attemptsFind);
 
         /// <summary>
         /// Получение первого HtmlElement.
         /// </summary>
-        public static HtmlElement FuncGetFirstHe(this Instance instance, HE htmlElement, bool throwException = true, bool logger = true, int attemptsFindElement = 3)
-            => instance.FuncGetFirstHe(htmlElement.XPath, htmlElement.Title, throwException, logger, attemptsFindElement);
+        public static HtmlElement FindFirstElement(this Instance instance, HE htmlElement,
+            bool throwException = true, bool logger = true, int attemptsFind = 3)
+            => instance.FindFirstElement(htmlElement.XPath, htmlElement.Info, throwException, logger, attemptsFind);
 
         /// <summary>
         /// Получение HtmlElement.
@@ -81,9 +84,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="name"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="numberSecondsWaitElement"></param>
+        /// <param name="secWaitElement"></param>
         /// <returns></returns>
-        public static HtmlElement FuncGetHeByNumb(this Instance instance, string xpath, int numbElement, string name = "", bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3)
+        public static HtmlElement FindElementByNumber(this Instance instance, string xpath,
+            int numbElement, string name = "", bool throwException = true, bool logger = true, int secWaitElement = 3)
         {
             var counter = 0;
 
@@ -93,7 +97,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
                 if (he.IsNullOrVoid())
                 {
-                    if (++counter < numberSecondsWaitElement)
+                    if (++counter < secWaitElement)
                     {
                         Thread.Sleep(1000);
 
@@ -121,12 +125,24 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="xpathAndName"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="numberSecondsWaitElement"></param>
+        /// <param name="secWaitElement"></param>
         /// <returns></returns>
-        public static HtmlElementCollection FuncGetHeCollection(this Instance instance, string[] xpathAndName, bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3) =>
-            instance.FuncGetHeCollection(xpathAndName[0], xpathAndName[1], throwException, logger, numberSecondsWaitElement);
-        public static HtmlElementCollection FuncGetHeCollection(this Instance instance, HE htmlElement, bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3) =>
-            instance.FuncGetHeCollection(htmlElement.XPath, htmlElement.Title, throwException, logger, numberSecondsWaitElement);
+        public static HtmlElementCollection FindElements(this Instance instance, string[] xpathAndName,
+            bool throwException = true, bool logger = true, int secWaitElement = 3) =>
+            instance.FindElements(xpathAndName[0], xpathAndName[1], throwException, logger, secWaitElement);
+
+        /// <summary>
+        /// Получение HtmlElementCollection.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="htmlElement"></param>
+        /// <param name="throwException"></param>
+        /// <param name="logger"></param>
+        /// <param name="secWaitElement"></param>
+        /// <returns></returns>
+        public static HtmlElementCollection FindElements(this Instance instance, HE htmlElement,
+            bool throwException = true, bool logger = true, int secWaitElement = 3) =>
+            instance.FindElements(htmlElement.XPath, htmlElement.Info, throwException, logger, secWaitElement);
 
         /// <summary>
         /// Получение HtmlElementCollection.
@@ -135,9 +151,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="name"></param>
         /// <param name="throwException"></param>
         /// <param name="logger"></param>
-        /// <param name="numberSecondsWaitElement"></param>
+        /// <param name="secWaitElement"></param>
         /// <returns></returns>
-        public static HtmlElementCollection FuncGetHeCollection(this Instance instance, string xpath, string name = "", bool throwException = true, bool logger = true, int numberSecondsWaitElement = 3)
+        public static HtmlElementCollection FindElements(this Instance instance, string xpath,
+            string name = "", bool throwException = true, bool logger = true, int secWaitElement = 3)
         {
             var counter = 0;
 
@@ -147,7 +164,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
                 if (heCollection.Count == 0)
                 {
-                    if (++counter < numberSecondsWaitElement)
+                    if (++counter < secWaitElement)
                     {
                         Thread.Sleep(1000);
 
@@ -221,31 +238,35 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="key"></param>
         /// <param name="keyEvent"></param>
         /// <param name="keyModifer"></param>
-        /// <param name="ifBusyAfterActionThenWait"></param>
-        /// <param name="timeoutMillisecondsAfterAction"></param>
-        public static void KeyEvent(this Tab tab, string key, string keyEvent, string keyModifer, bool ifBusyAfterActionThenWait = true, int timeoutMillisecondsAfterAction = 0)
+        /// <param name="waitPageLoad"></param>
+        /// <param name="msTimeoutAfterAction"></param>
+        public static void KeyEvent(this Tab tab, string key, string keyEvent, string keyModifer, bool waitPageLoad = true, int msTimeoutAfterAction = 0)
         {
             tab.KeyEvent(key, keyEvent, keyModifer);
 
-            if (ifBusyAfterActionThenWait && tab.IsBusy) tab.WaitDownloading();
+            if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
 
-            if (timeoutMillisecondsAfterAction != 0)
+            if (msTimeoutAfterAction != 0)
             {
-                Thread.Sleep(timeoutMillisecondsAfterAction);
-
-                if (ifBusyAfterActionThenWait && tab.IsBusy) tab.WaitDownloading();
+                Thread.Sleep(msTimeoutAfterAction);
+                if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
             }
         }
 
-        public static void Refresh(this Tab tab, TypeRefreshEnum typeRefresh)
+        /// <summary>
+        /// Перезагрузка страницы.
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="typeRefresh"></param>
+        public static void Refresh(this Tab tab, RefreshTypeEnum typeRefresh)
         {
             switch (typeRefresh)
             {
-                case TypeRefreshEnum.JavaScript:
+                case RefreshTypeEnum.JavaScript:
                     tab.MainDocument.EvaluateScript("location.reload(true)");
                     tab.MainDocument.EvaluateScript("history.go(0)");
                     break;
-                case TypeRefreshEnum.Navigate:
+                case RefreshTypeEnum.Navigate:
                     tab.Navigate(tab.URL);
                     break;
             }
@@ -253,24 +274,39 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
             if (tab.IsBusy) tab.WaitDownloading();
         }
 
-        public static void Navigate(this Tab tab, string url, string referrer, bool ifBusyThenWait = true)
+        /// <summary>
+        /// Переход по указанной ссылке.
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="url"></param>
+        /// <param name="referrer"></param>
+        /// <param name="waitPageLoad"></param>
+        public static void Navigate(this Tab tab, string url, string referrer, bool waitPageLoad = true)
         {
             tab.Navigate(url, referrer);
-            if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
+            if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
         }
 
-        public static void Navigate(this Tab tab, string url, bool ifBusyThenWait)
+        /// <summary>
+        /// Переход по указанной ссылке.
+        /// </summary>
+        public static void Navigate(this Tab tab, string url, bool waitPageLoad)
         {
             tab.Navigate(url);
-
-            if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
+            if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
         }
 
-        public static void FullEmulationMouseMoveAboveHtmlElement(this Tab tab, HtmlElement he, int sizeOfType, bool ifBusyThenWait = true)
+        /// <summary>
+        /// Эмуляция ведения мышки по элементу.
+        /// </summary>
+        /// <param name="tab"></param>
+        /// <param name="he"></param>
+        /// <param name="sizeOfType"></param>
+        /// <param name="waitPageLoad"></param>
+        public static void FullEmulationMouseMoveAboveHtmlElement(this Tab tab, HtmlElement he, int sizeOfType, bool waitPageLoad = true)
         {
             tab.FullEmulationMouseMoveAboveHtmlElement(he, sizeOfType);
-
-            if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
+            if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
         }
 
         /// <summary>
@@ -283,8 +319,10 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="timeoutAfterAction">Таймаут после действия.</param>
         /// <param name="useSelectedItems">true, если нужно использовать стандартные поля "select" с автоматическим заполнением; в противном случае - false.</param>
         /// <param name="append">true, если вам нужно добавить значение к существующему содержимому; в противном случае - false.</param>
-        public static void SetValue(this HtmlElement he, Tab tab, string value, LevelEmulation levelEmulation, int timeoutMillisecondsAfterAction = 0, bool useSelectedItems = false, bool append = false, bool useKeyEventEnterAfterSetValue = false, int timeoutMillisecondsAfterKeyEventEnter = 0) =>
-            he.SetValue(tab, value, levelEmulation.ToString(), timeoutMillisecondsAfterAction, useSelectedItems, append, useKeyEventEnterAfterSetValue, timeoutMillisecondsAfterKeyEventEnter);
+        public static void SetValue(this HtmlElement he, Tab tab, string value, LevelEmulation levelEmulation,
+            int msTimeoutAfterAction = 0, bool append = false,
+            bool useKeyEventEnter = false, int msTimeoutAfterKeyEvent = 0)
+            => he.SetValue(tab, value, levelEmulation.ToString(), msTimeoutAfterAction, append, useKeyEventEnter, msTimeoutAfterKeyEvent);
 
         /// <summary>
         /// Устанавливает значение элемента html.
@@ -293,34 +331,36 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <param name="tab">Активная вкладка Tab (instance.ActiveTab).</param>
         /// <param name="value">Новое значение для этого элемента html.</param>
         /// <param name="emulationLevel">Уровень эмуляции. Может быть: "None", "Middle", "Full" или "SuperEmulation".</param>
-        /// <param name="timeoutMillisecondsAfterAction">Таймаут после действия.</param>
+        /// <param name="msTimeoutAfterAction">Таймаут после действия.</param>
         /// <param name="useSelectedItems">true, если нужно использовать стандартные поля "select" с автоматическим заполнением; в противном случае - false.</param>
         /// <param name="append">true, если вам нужно добавить значение к существующему содержимому; в противном случае - false.</param>
-        private static void SetValue(this HtmlElement he, Tab tab, string value, string emulationLevel, int timeoutMillisecondsAfterAction = 0, bool useSelectedItems = false, bool append = false, bool useKeyEventEnterAfterSetValue = false, int timeoutMillisecondsAfterKeyEventEnter = 0)
+        private static void SetValue(this HtmlElement he, Tab tab, string value, string emulationLevel,
+            int msTimeoutAfterAction = 0, bool append = false,
+            bool useKeyEventEnter = false, int msTimeoutAfterKeyEvent = 0)
         {
             if (he.IsNullOrVoid()) return;
 
             // Установка значения в поле
-            he.SetValue(value, emulationLevel, useSelectedItems, append);
+            he.SetValue(value, emulationLevel, false, append);
 
             if (tab.IsBusy) tab.WaitDownloading();
 
-            if (timeoutMillisecondsAfterAction != 0)
+            if (msTimeoutAfterAction != 0)
             {
-                Thread.Sleep(timeoutMillisecondsAfterAction);
+                Thread.Sleep(msTimeoutAfterAction);
                 if (tab.IsBusy) tab.WaitDownloading();
             }
 
             // Вызов события Enter
-            if (useKeyEventEnterAfterSetValue)
+            if (useKeyEventEnter)
             {
                 tab.KeyEvent("Enter", "press", "");
 
                 if (tab.IsBusy) tab.WaitDownloading();
 
-                if (timeoutMillisecondsAfterKeyEventEnter != 0)
+                if (msTimeoutAfterKeyEvent != 0)
                 {
-                    Thread.Sleep(timeoutMillisecondsAfterKeyEventEnter);
+                    Thread.Sleep(msTimeoutAfterKeyEvent);
 
                     if (tab.IsBusy) tab.WaitDownloading();
                 }
@@ -332,20 +372,20 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// </summary>
         /// <param name="he">Объект типа HtmlElement.</param>
         /// <param name="tab">Активная вкладка Tab (instance.ActiveTab).</param>
-        /// <param name="timeoutMillisecondsAfterAction">Таймаут после действия.</param>
-        public static void Click(this HtmlElement he, Tab tab, int timeoutMillisecondsAfterAction = 0, bool ifBusyThenWait = true)
+        /// <param name="msTimeoutAfterAction">Таймаут после действия.</param>
+        public static void Click(this HtmlElement he, Tab tab, int msTimeoutAfterAction = 0, bool waitPageLoad = true)
         {
             if (he.IsNullOrVoid()) return;
 
             he.Click();
 
-            if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
+            if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
 
-            if (timeoutMillisecondsAfterAction != 0)
+            if (msTimeoutAfterAction != 0)
             {
-                Thread.Sleep(timeoutMillisecondsAfterAction);
+                Thread.Sleep(msTimeoutAfterAction);
 
-                if (ifBusyThenWait && tab.IsBusy) tab.WaitDownloading();
+                if (waitPageLoad && tab.IsBusy) tab.WaitDownloading();
             }
         }
 

@@ -30,7 +30,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 
         public ArticleBasicModel(IZennoTable table, int row, string totalGoToArticleSettings, string secondsWatchArticleSettings, string totalLikesSettings, string totalCommentsSettings)
         {
-            var zenno = ServicesDataAndComponents.Zenno;
+            var zenno = Obsolete_ServicesDataAndComponents.Zenno;
 
             Login = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Login, row);
             Login = !string.IsNullOrWhiteSpace(Login) ? Login : null;

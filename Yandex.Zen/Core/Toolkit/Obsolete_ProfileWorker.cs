@@ -9,7 +9,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 namespace Yandex.Zen.Core.Toolkit
 {
     [Obsolete]
-    public class ProfileWorker : ServicesDataAndComponents
+    public class Obsolete_ProfileWorker : Obsolete_ServicesDataAndComponents
     {
         /// <summary>
         /// Получение и загрузка профиля (если в рабочей папке нет профиля, то он будет получен из общей папки).

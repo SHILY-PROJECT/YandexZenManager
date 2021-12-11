@@ -1,7 +1,7 @@
 ﻿using System;
 using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
-using Yandex.Zen.Core.Services.Components;
+using Yandex.Zen.Core.Services.CommonComponents;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
 {

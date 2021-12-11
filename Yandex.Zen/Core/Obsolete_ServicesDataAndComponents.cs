@@ -18,7 +18,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 namespace Yandex.Zen.Core
 {
     [Obsolete]
-    public class ServicesDataAndComponents
+    public class Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -153,7 +153,7 @@ namespace Yandex.Zen.Core
                     if (!Regex.IsMatch(Instance.ActiveTab.URL, @"https://passport\.yandex\.[a-zA-Z]+/profile.*?$"))
                         Instance.ActiveTab.Navigate($"https://passport.yandex.{Domain}/profile", Instance.ActiveTab.URL, true);
 
-                    var heAvatarCheck = Instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар", true, true, 7);
+                    var heAvatarCheck = Instance.FindFirstElement("//span[@class='avatar']", "Аватар", true, true, 7);
 
                     if (!Regex.IsMatch(heAvatarCheck.GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
                     {
@@ -161,31 +161,31 @@ namespace Yandex.Zen.Core
                         return;
                     }
 
-                    Instance.FuncGetFirstHe("//div[contains(@class, 'personal')]/descendant::div[contains(@class, 'add-avatar')]").Click(Instance.ActiveTab, Rnd.Next(150, 500));
-                    var heUpload = Instance.FuncGetFirstHe("//span[contains(@id, 'load_avatar')]/descendant::input[contains(@name, 'attachment')]", "Загрузить");
+                    Instance.FindFirstElement("//div[contains(@class, 'personal')]/descendant::div[contains(@class, 'add-avatar')]").Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                    var heUpload = Instance.FindFirstElement("//span[contains(@id, 'load_avatar')]/descendant::input[contains(@name, 'attachment')]", "Загрузить");
 
                     Instance.SetFilesForUpload(AvatarInfo, true);
 
                     heUpload.Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
-                    Instance.FuncGetFirstHe("//span[contains(@class, 'Attach-Holder')]/descendant::label[text()!='']", "Загруженный аватар", true, true, 10);
+                    Instance.FindFirstElement("//span[contains(@class, 'Attach-Holder')]/descendant::label[text()!='']", "Загруженный аватар", true, true, 10);
 
                     Instance.ActiveTab.NavigateTimeout = 90;
 
-                    Instance.FuncGetFirstHe("//div[contains(@class, 'avatar-buttons')]/descendant::span[contains(@id, 'save')]/button", "Сохранить изменения", true, true, 7).Click(Instance.ActiveTab, 5000);
+                    Instance.FindFirstElement("//div[contains(@class, 'avatar-buttons')]/descendant::span[contains(@id, 'save')]/button", "Сохранить изменения", true, true, 7).Click(Instance.ActiveTab, 5000);
 
-                    if (!Regex.IsMatch(Instance.FuncGetFirstHe("//span[@class='avatar']", "Аватар").GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
+                    if (!Regex.IsMatch(Instance.FindFirstElement("//span[@class='avatar']", "Аватар").GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
                     {
                         Logger.Write($"[Файл: {AvatarInfo.FullName}]\tАватар аккаунта yandex успешно установлен", LoggerType.Info, true, false, true, LogColor.Blue);
-                        ProfileWorker.SaveProfile(true);
+                        Obsolete_ProfileWorker.SaveProfile(true);
 
                         return;
                     }
-                    else Instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
+                    else Instance.ActiveTab.Refresh(RefreshTypeEnum.JavaScript);
                 }
                 catch
                 {
-                    Instance.ActiveTab.Refresh(TypeRefreshEnum.JavaScript);
+                    Instance.ActiveTab.Refresh(RefreshTypeEnum.JavaScript);
                     continue;
                 }
             }
@@ -311,8 +311,8 @@ namespace Yandex.Zen.Core
             var xpathButtonCookieWhiteForm = new[] { "//a[contains(@href, 'privacy')]/../following-sibling::div[contains(@class, 'controls')]/descendant::button[contains(@class, 'type_ok')]", "Белая форма справа" };
             var xpathButtonCookieMulticoloredForm = new[] { "//td/descendant::table/descendant::button[contains(@data-text, 'Accept all')]", "Разноцветная форма внизу" };
 
-            var heButtonCookieWhiteForm = Instance.FuncGetFirstHe(xpathButtonCookieWhiteForm[0], "", false, false, 0);
-            var heButtonCookieMulticoloredForm = Instance.FuncGetFirstHe(xpathButtonCookieMulticoloredForm[0], "", false, false, 0);
+            var heButtonCookieWhiteForm = Instance.FindFirstElement(xpathButtonCookieWhiteForm[0], "", false, false, 0);
+            var heButtonCookieMulticoloredForm = Instance.FindFirstElement(xpathButtonCookieMulticoloredForm[0], "", false, false, 0);
 
             if (!heButtonCookieWhiteForm.IsNullOrVoid()) heButtonCookieWhiteForm.Click(Instance.ActiveTab, Rnd.Next(150, 500));
             if (!heButtonCookieMulticoloredForm.IsNullOrVoid()) heButtonCookieMulticoloredForm.Click(Instance.ActiveTab, Rnd.Next(150, 500));

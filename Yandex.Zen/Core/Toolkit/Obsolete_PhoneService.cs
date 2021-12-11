@@ -13,14 +13,14 @@ using ZennoLab.InterfacesLibrary.SmsService.Enums;
 namespace Yandex.Zen.Core.Toolkit
 {
     [Obsolete]
-    public class PhoneService : ServicesDataAndComponents
+    public class Obsolete_PhoneService : Obsolete_ServicesDataAndComponents
     {
         public string Dll { get; set; }
         public string YandexService { get; set; }
         public string CountryParam { get; set; }
         public bool StatusGetCountry { get; set; }
 
-        public PhoneService(string serviceDllAndCountry)
+        public Obsolete_PhoneService(string serviceDllAndCountry)
         {
             var service = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[0];
             var country = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[1];

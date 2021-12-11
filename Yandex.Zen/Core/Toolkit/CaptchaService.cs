@@ -36,18 +36,25 @@ namespace Yandex.Zen.Core.Toolkit
         }
 
         /// <summary>
-        /// Отправка капчи на распознание (ошибки логирует автоматически).
+        /// Отправка капчи на распознание.
         /// </summary>
-        /// <param name="htmlElementImgCaptcha"></param>
-        /// <returns>Возвращение результата распознавания.</returns>
-        public bool TryRecognizing(HtmlElement htmlElementImgCaptcha, out string captchaResult)
+        public string Recognizing(HtmlElement htmlElementImgCaptcha, bool logger = true)
+        {
+            TryRecognizing(htmlElementImgCaptcha, out var result, logger);
+            return result;
+        }
+
+        /// <summary>
+        /// Отправка капчи на распознание.
+        /// </summary>
+        public bool TryRecognizing(HtmlElement htmlElementImgCaptcha, out string captchaResult, bool logger = true)
         {
             try
             {
                 // Скачивание капчи в байтики для отправки на распознавание
                 var btImg = new System.Net.WebClient().DownloadData(htmlElementImgCaptcha.GetAttribute("src"));
 
-                Logger.Write($"Отправка капчи на распознавание", LoggerType.Info, true, false, true, LogColor.Default);
+                if (logger) Logger.Write($"Отправка капчи на распознавание", LoggerType.Info, true, false, true, LogColor.Default);
 
                 // Отправка капчи на распознание
                 var captchaResponse = ZennoPoster.CaptchaRecognition(ServiceDll, Convert.ToBase64String(btImg), "");
@@ -58,16 +65,16 @@ namespace Yandex.Zen.Core.Toolkit
                 // Проверка результата распознавания
                 if (string.IsNullOrWhiteSpace(captchaResult))
                 {
-                    Logger.Write($"'{nameof(captchaResponse)}' - response is void", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    if (logger) Logger.Write($"'{nameof(captchaResponse)}' - response is void", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return false;
                 }
 
-                Logger.Write($"Результат распознавания: {captchaResult}", LoggerType.Info, true, false, true, LogColor.Default);
+                if (logger) Logger.Write($"Результат распознавания: {captchaResult}", LoggerType.Info, true, false, true, LogColor.Default);
                 return true;
             }
             catch (Exception ex)
             {
-                Logger.Write($"'{nameof(ex.Message)}:{ex.Message}' - exception error", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                if (logger) Logger.Write($"'{nameof(ex.Message)}:{ex.Message}' - exception error", LoggerType.Warning, true, true, true, LogColor.Yellow);
             }
 
             captchaResult = null;

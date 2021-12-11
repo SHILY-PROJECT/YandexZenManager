@@ -16,7 +16,7 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
 
-namespace Yandex.Zen
+namespace Yandex.Zen.Core
 {
     /// <summary>
     /// Класс для хранения, инициализации данных и конфигурации проекта.
@@ -30,7 +30,6 @@ namespace Yandex.Zen
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
         [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
-
         private static readonly List<string> _resourcesAllThreadsInWork = new List<string>();
         private static DirectoryInfo _sharedDirectoryOfProfiles;
         private static DirectoryInfo _sharedDirectoryOfAccounts;
@@ -38,13 +37,13 @@ namespace Yandex.Zen
         /// <summary>
         /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
         /// </summary>
-        [Obsolete] public static PhoneService PhoneService { get; private set; }
+        [Obsolete] public static Obsolete_PhoneService PhoneService { get; private set; }
 
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
         public static ResourceBaseModel Resource { get => _resourceBaseModel; }
-        
+
         /// <summary>
         /// Общая таблица с аккаунтами.
         /// </summary>
@@ -72,7 +71,7 @@ namespace Yandex.Zen
         /// Общая директория со всеми профилями.
         /// </summary>
         public static DirectoryInfo SharedDirectoryOfProfiles
-        { 
+        {
             get
             {
                 var dir = _sharedDirectoryOfProfiles ?? (_sharedDirectoryOfProfiles = new DirectoryInfo($@"{Zenno.Directory}\profiles"));
@@ -80,7 +79,7 @@ namespace Yandex.Zen
                 return dir;
             }
         }
-        
+
         /// <summary>
         /// Режим работы скрипта (программы).
         /// </summary>
@@ -161,14 +160,14 @@ namespace Yandex.Zen
                 {
                     Settings = new SmsServiceSettingsModel
                     {
-                        TimeToSecondsWaitPhone =    Zenno.Variables["cfgNumbAttempsGetPhone"].Value.Split(' ')[0].ExtractNumber(),
-                        MinutesWaitSmsCode =        Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.ExtractNumber(),
-                        AttemptsReSendSmsCode =     Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
+                        TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.Split(' ')[0].ExtractNumber(),
+                        MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.ExtractNumber(),
+                        AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
                     },
                     Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
                 },
                 CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                ActionSettings  = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) }
+                ActionSettings = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) }
             };
             _resourceBaseModel.SetResource();
         }

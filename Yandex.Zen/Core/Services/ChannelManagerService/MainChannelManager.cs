@@ -15,14 +15,14 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
-using Yandex.Zen.Core.Services.Components;
+using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.ChannelManagerService.Enums;
 using Yandex.Zen.Core.Services.ChannelManagerService.Models.ChannelSettings.DataModels;
 
 namespace Yandex.Zen.Core.Services.ChannelManagerService
 {
-    public class MainChannelManager : ServicesDataAndComponents
+    public class MainChannelManager : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -171,7 +171,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 {
                     try
                     {
-                        var heHrefZen = Instance.FuncGetFirstHe(xpathHrefZen, true, true, 5);
+                        var heHrefZen = Instance.FindFirstElement(xpathHrefZen, true, true, 5);
 
                         // Модифицируем ссылку кнопки ru на com
                         if (_modifyButtonYandexZenMediaIfProxyUsa && Domain == "com")
@@ -195,19 +195,19 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 // Поиск элементов страницы авторизации, либо авторизованного профиля
                 for (int i = 0; i < 5; i++)
                 {
-                    if (!Instance.FuncGetFirstHe(xpathLoginFormAuth, false, false, 2).IsNullOrVoid() || !Instance.FuncGetFirstHe(xpathAuthAccountList, false, false, 2).IsNullOrVoid())
+                    if (!Instance.FindFirstElement(xpathLoginFormAuth, false, false, 2).IsNullOrVoid() || !Instance.FindFirstElement(xpathAuthAccountList, false, false, 2).IsNullOrVoid())
                     {
                         Logger.Write($"Переход к авторизации", LoggerType.Info, true, false, true);
 
                         startPageIsOpen = true;
                         break;
                     }
-                    else if (!Instance.FuncGetFirstHe(xpathSettingsChannel, false, false, 2).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("profile/editor/id"))
+                    else if (!Instance.FindFirstElement(xpathSettingsChannel, false, false, 2).IsNullOrVoid() || Instance.ActiveTab.URL.Contains("profile/editor/id"))
                     {
                         Logger.Write($"Кабинет канала открыт", LoggerType.Info, true, false, true);
 
                         // Клик по окну приветствия (начать прямо сейчас)
-                        var heButtonStartNow = Instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
+                        var heButtonStartNow = Instance.FindFirstElement(xpathButtonStartNow, false, false, 5);
 
                         if (!heButtonStartNow.IsNullOrVoid())
                         {
@@ -231,7 +231,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             if (authorizationIsGood)
             {
                 // Клик по окну приветствия (начать прямо сейчас)
-                var heButtonStartNow = Instance.FuncGetFirstHe(xpathButtonStartNow, false, false, 5);
+                var heButtonStartNow = Instance.FindFirstElement(xpathButtonStartNow, false, false, 5);
 
                 if (!heButtonStartNow.IsNullOrVoid())
                 {
@@ -286,7 +286,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             });
 
             // Сохранение профиля
-            ProfileWorker.SaveProfile(true);
+            Obsolete_ProfileWorker.SaveProfile(true);
 
             Logger.Write($"[Channel created: {ZenChannel}]\tКанал успешно создан", LoggerType.Info, true, true, true, LogColor.Green);
             return true;
@@ -379,8 +379,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             var xpathButtonConfirmSmsCode = new[] { "//form[contains(@class, 'phone-validate')]/descendant::div[contains(@class, 'button') and contains(@class, 'phone')]/descendant::button[contains(@type, 'submit')]", "Кнопка - Подтвердить введенный код" };
             var xpathCheckmark = new[] { "//form[contains(@class, 'phone-validate')]/descendant::div[contains(@class, 'phone-validate') and contains(@class, 'checkmark')]", "Галка - Номер привязан" };
 
-            var heFieldPhone = Instance.FuncGetFirstHe(xpathFieldPhone, false, true);
-            var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
+            var heFieldPhone = Instance.FindFirstElement(xpathFieldPhone, false, true);
+            var heButtonSubmit = Instance.FindFirstElement(xpathButtonSubmit, false, true);
 
             // Проверка наличия элемента
             if (heFieldPhone.IsNullOrVoid())
@@ -420,7 +420,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                 // Проверка наличия checkmark
-                if (Instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
+                if (Instance.FindFirstElement(xpathCheckmark, false, true, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Не найден checkmark подтверждающий, что номер привязался", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
@@ -454,7 +454,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             else
             {
                 // Получение номера
-                Phone = PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
+                Phone = Obsolete_PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
 
                 // Выход из метода, если не удалось получить номер
                 if (string.IsNullOrWhiteSpace(Phone))
@@ -469,7 +469,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 heButtonSubmit.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                 // Получение кнопки для повторной отправки sms кода
-                var heButtonReSendCode = Instance.FuncGetFirstHe(xpathButtonReSendCode, false, true);
+                var heButtonReSendCode = Instance.FindFirstElement(xpathButtonReSendCode, false, true);
 
                 if (heButtonReSendCode.IsNullOrVoid())
                 {
@@ -484,20 +484,20 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение sms кода
-                var sms_code = PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
+                var sms_code = Obsolete_PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
 
                 // Проверка наличия sms кода (если кода нет нет, то отмена номера и выход из метода)
                 if (string.IsNullOrWhiteSpace(sms_code))
                 {
-                    PhoneService.CancelPhone(job_id, phoneLog);
+                    Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
                     return null;
                 }
 
                 Logger.Write($"{phoneLog}Код успешно получен: {sms_code}", LoggerType.Info, true, false, true, LogColor.Blue);
 
                 // Получение элементов для ввода sms кода
-                var heFieldSmsCode = Instance.FuncGetFirstHe(xpathFieldSmsCode, false, true, 5);
-                var heButtonConfirmSmsCode = Instance.FuncGetFirstHe(xpathButtonConfirmSmsCode, false, true);
+                var heFieldSmsCode = Instance.FindFirstElement(xpathFieldSmsCode, false, true, 5);
+                var heButtonConfirmSmsCode = Instance.FindFirstElement(xpathButtonConfirmSmsCode, false, true);
 
                 // Проверка наличия элементов для ввода sms кода
                 if (new[] { heFieldSmsCode, heButtonConfirmSmsCode }.Any(x => x.IsNullOrVoid()))
@@ -525,7 +525,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 heButtonConfirmSmsCode.Click(Instance.ActiveTab, Rnd.Next(1000, 1500));
 
                 // Проверка наличия checkmark
-                if (Instance.FuncGetFirstHe(xpathCheckmark, false, true, 5).IsNullOrVoid())
+                if (Instance.FindFirstElement(xpathCheckmark, false, true, 5).IsNullOrVoid())
                 {
                     Logger.Write($"Не найден checkmark подтверждающий, что номер привязался", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
@@ -587,7 +587,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение элементов для изменения изображения канала
-                var heMenuAvatar = Instance.FuncGetFirstHe(xpathMenuAvatar, false, true, 5);
+                var heMenuAvatar = Instance.FindFirstElement(xpathMenuAvatar, false, true, 5);
                 var heElementForCheck = heMenuAvatar.FindChildByXPath(xpathElementForCheck[0], 0);
                 var heButtonChangeImage = heMenuAvatar.FindChildByXPath(xpathButtonChangeImage[0], 0);
 
@@ -661,7 +661,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение поля с описанием канала
-                var heFieldChannelName = Instance.FuncGetFirstHe(xpathFieldChannelName, false, true, 5);
+                var heFieldChannelName = Instance.FindFirstElement(xpathFieldChannelName, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heFieldChannelName.IsNullOrVoid())
@@ -767,7 +767,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение поля с описанием канала
-                var heFieldDescription = Instance.FuncGetFirstHe(xpathFieldDescription, false, true, 5);
+                var heFieldDescription = Instance.FindFirstElement(xpathFieldDescription, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heFieldDescription.IsNullOrVoid())
@@ -834,7 +834,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение поля с описанием канала
-                var heSocialLinkElement = Instance.FuncGetFirstHe(xpathSocialLinkElement, false, true, 5);
+                var heSocialLinkElement = Instance.FindFirstElement(xpathSocialLinkElement, false, true, 5);
                 var heButtonAddSocialLink = heSocialLinkElement.FindChildByXPath(xpathButtonAddSocialLink[0], 0);
                 var heFieldItemSocialLink = heSocialLinkElement.FindChildByXPath(xpathFieldItemSocialLink[0], 0);
                 var heErrorSocialLink = heSocialLinkElement.FindChildByXPath(xpathErrorSocialLink[0], 0);
@@ -941,8 +941,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение элементов обработки личных сообщений
-                var heButtonMessageEnable = Instance.FuncGetFirstHe(xpathButtonMessageEnable, false, true, 5);
-                var heElementForCheckMessageStatus = Instance.FuncGetFirstHe(xpathElementMessageStatus, false, true);
+                var heButtonMessageEnable = Instance.FindFirstElement(xpathButtonMessageEnable, false, true, 5);
+                var heElementForCheckMessageStatus = Instance.FindFirstElement(xpathElementMessageStatus, false, true);
 
                 // Проверка наличия элемента
                 if (heButtonMessageEnable.IsNullOrVoid())
@@ -1020,7 +1020,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение селектора почты
-                var heSelectMail = Instance.FuncGetFirstHe(xpathSelectMail, false, true, 5);
+                var heSelectMail = Instance.FindFirstElement(xpathSelectMail, false, true, 5);
 
                 // Проверка наличия элемента
                 if (heSelectMail.IsNullOrVoid())
@@ -1095,7 +1095,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение элементов
-                var heCheckElement = Instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
+                var heCheckElement = Instance.FindFirstElement(xpathCheckElement, false, true, 5);
                 var heChildCheckbox = heCheckElement.FindChildByXPath(xpathChildCheckbox[0], 0);
 
                 // Проверка наличия элемента
@@ -1166,8 +1166,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение поля с описанием канала
-                var heFieldSite = Instance.FuncGetFirstHe(xpathFieldSite, false, true, 5);
-                var heFieldSiteStatus = Instance.FuncGetFirstHe(xpathFieldSiteStatus, false, true);
+                var heFieldSite = Instance.FindFirstElement(xpathFieldSite, false, true, 5);
+                var heFieldSiteStatus = Instance.FindFirstElement(xpathFieldSiteStatus, false, true);
 
                 // Проверка наличия элемента
                 if (heFieldSite.IsNullOrVoid())
@@ -1259,9 +1259,9 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Включение метрики
-                if (Instance.FuncGetFirstHe(xpathCurrentMetrikaId).GetAttribute("href").Contains("add"))
+                if (Instance.FindFirstElement(xpathCurrentMetrikaId).GetAttribute("href").Contains("add"))
                 {
-                    Instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(150, 500));
+                    Instance.FindFirstElement(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                     // Получение ID счетчика для метрики
                     counterIdForMetrika = GetCounterIdForMetrika();
@@ -1269,9 +1269,9 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     // Завершение публикации, если не удалось настроить метрику
                     if (counterIdForMetrika == null) return null;
 
-                    Instance.FuncGetFirstHe(xpathFieldMetrikaId).SetValue(Instance.ActiveTab, counterIdForMetrika, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
-                    Instance.FuncGetFirstHe(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
-                    Instance.FuncGetFirstHe(xpathButtonLinkedMetrikaOk).Click(Instance.ActiveTab, Rnd.Next(1500, 2000));
+                    Instance.FindFirstElement(xpathFieldMetrikaId).SetValue(Instance.ActiveTab, counterIdForMetrika, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathButtonAddMetrika).Click(Instance.ActiveTab, Rnd.Next(500, 1000));
+                    Instance.FindFirstElement(xpathButtonLinkedMetrikaOk).Click(Instance.ActiveTab, Rnd.Next(1500, 2000));
 
                     setted = true;
                 }
@@ -1325,12 +1325,12 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             }
 
             // Получение элементов для обработки счетчика
-            var heFieldCounterName = Instance.FuncGetFirstHe(xpathFieldCounterName, false, true);
-            var heFieldCounterSite = Instance.FuncGetFirstHe(xpathFieldCounterSite, false, true);
-            var heFieldEmail = Instance.FuncGetFirstHe(xpathFieldEmail, false, true);
-            var heCheckboxConditions = Instance.FuncGetFirstHe(xpathCheckboxConditions, false, true);
-            var heCheckboxSubscriptions = Instance.FuncGetFirstHe(xpathCheckboxSubscriptions, false, true);
-            var heButtonSubmit = Instance.FuncGetFirstHe(xpathButtonSubmit, false, true);
+            var heFieldCounterName = Instance.FindFirstElement(xpathFieldCounterName, false, true);
+            var heFieldCounterSite = Instance.FindFirstElement(xpathFieldCounterSite, false, true);
+            var heFieldEmail = Instance.FindFirstElement(xpathFieldEmail, false, true);
+            var heCheckboxConditions = Instance.FindFirstElement(xpathCheckboxConditions, false, true);
+            var heCheckboxSubscriptions = Instance.FindFirstElement(xpathCheckboxSubscriptions, false, true);
+            var heButtonSubmit = Instance.FindFirstElement(xpathButtonSubmit, false, true);
 
             // Проверка наличия элементов
             if (new[] { heFieldCounterName, heFieldCounterSite, heFieldEmail, heCheckboxConditions, heCheckboxSubscriptions }.Any(x => x.IsNullOrVoid()))
@@ -1434,7 +1434,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение элементов
-                var heCheckElement = Instance.FuncGetFirstHe(xpathCheckElement, false, true, 5);
+                var heCheckElement = Instance.FindFirstElement(xpathCheckElement, false, true, 5);
                 var heChildCheckbox = heCheckElement.FindChildByXPath(xpathChildCheckbox[0], 0);
 
                 // Проверка наличия элемента
@@ -1570,7 +1570,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 if (!ResourceDirectoryExists()) continue;
 
                 // Получение и загрузка профиля
-                if (!ProfileWorker.LoadProfile(true)) continue;
+                if (!Obsolete_ProfileWorker.LoadProfile(true)) continue;
 
                 // Получение прокси
                 if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
