@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Global.ZennoLab.Json;
-using Yandex.Zen.Core.Services.CheatActivityService.Models;
+using Yandex.Zen.Core.Services.ActivityManagerService.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
