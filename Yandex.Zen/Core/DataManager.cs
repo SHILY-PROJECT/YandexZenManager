@@ -2,7 +2,7 @@
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.Models;
+using Yandex.Zen.Core.Models;
 
 namespace Yandex.Zen.Core
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.ProjectModel.Collections;
 
-namespace Yandex.Zen.Core.Services.Models
+namespace Yandex.Zen.Core.Models
 {
     public class TableModel
     {
@@ -49,6 +49,6 @@ namespace Yandex.Zen.Core.Services.Models
             Table = Zenno.Tables[nameTable];
             TableName = nameTable;
             File = new FileInfo(Zenno.ExecuteMacro(path));
-        }       
+        }
     }
 }

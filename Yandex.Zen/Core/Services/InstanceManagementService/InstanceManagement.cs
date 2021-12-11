@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.SmsService.Enums;
-using ZennoLab.InterfacesLibrary.Enums.Http;
 using Global.ZennoExtensions;
 using System.Threading;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Runtime.InteropServices;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Services.InstanceAccountManagementService.Enums;
+using Yandex.Zen.Core.Services.InstanceManagementService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
-namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
+namespace Yandex.Zen.Core.Services.InstanceManagementService
 {
-    public class InstanceAccountManagement : ServicesDataAndComponents
+    public class InstanceManagement : ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
@@ -37,7 +31,7 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
         /// <summary>
         /// Конструктор для скрипта (настройка лога, проверка и установка прочих данных).
         /// </summary>
-        public InstanceAccountManagement()
+        public InstanceManagement()
         {
             AccountsTable = Zenno.Tables["AccountsShared"];
 
@@ -279,8 +273,6 @@ namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
             Logger.Write($"[Login: {login}]\tВ общей таблице отсутствует аккаунт", LoggerType.Info, false, true, true, LogColor.Yellow);
             return false;
         }
-
-        
 
     }
 }

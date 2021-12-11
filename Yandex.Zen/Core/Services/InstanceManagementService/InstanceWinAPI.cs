@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Yandex.Zen.Core.Services.InstanceAccountManagementService
+namespace Yandex.Zen.Core.Services.InstanceManagementService
 {
     internal class InstanceWinAPI
     {

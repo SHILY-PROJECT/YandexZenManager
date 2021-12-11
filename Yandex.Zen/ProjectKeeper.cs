@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.Models;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -15,6 +14,7 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.PostingSecondWindService.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Models;
 
 namespace Yandex.Zen
 {
@@ -135,15 +135,15 @@ namespace Yandex.Zen
         {
             SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
 
-            _programMode = Dictionaries.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
-            _modeTable = Dictionaries.ModeTables[_programMode];
+            _programMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
+            _modeTable = DictionariesAndLists.ModeTables[_programMode];
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
             // Настройка режимов работы сервисов
             switch (CurrentProgramMode)
             {
                 case ProgramModeEnum.PostingSecondWind:
-                    PostingSecondWindBase.CurrentMode = Dictionaries.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
+                    PostingSecondWindBase.CurrentMode = DictionariesAndLists.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
                     break;
 
                 default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");

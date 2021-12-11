@@ -307,7 +307,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                 if (Instance.AllTabs.Count() != 0) Instance.AllTabs.ToList().ForEach(x => x.Close());
 
                 // Переходим к поисковой системе
-                Instance.ActiveTab.Navigate(url, DataLists.ReferenceLinks.GetLine(LineOptions.Random), true);
+                Instance.ActiveTab.Navigate(url, DictionariesAndLists.ReferenceLinks.GetLine(LineOptions.Random), true);
 
                 var heFieldSearch = Instance.FuncGetFirstHe(xpathFieldSearch, "Поле - Поиск", false, false);
 

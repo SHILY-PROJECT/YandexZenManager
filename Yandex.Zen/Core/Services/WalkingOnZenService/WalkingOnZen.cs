@@ -744,7 +744,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         // Устанавливаем случайный русский город в поле со страной и вызываем событие "Enter"
                         heFieldCity.SetValue
                         (
-                            Instance.ActiveTab, DataLists.ListOfRussianCities.GetLine(LineOptions.Random),
+                            Instance.ActiveTab, DictionariesAndLists.ListOfRussianCities.GetLine(LineOptions.Random),
                             LevelEmulation.SuperEmulation, Rnd.Next(3000, 3500), false, false, true, Rnd.Next(3000, 3500)
                         );
 

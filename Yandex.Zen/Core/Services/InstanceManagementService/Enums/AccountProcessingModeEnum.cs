@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Services.InstanceAccountManagementService.Enums
+﻿namespace Yandex.Zen.Core.Services.InstanceManagementService.Enums
 {
     /// <summary>
     /// Режим обработки аккаунтов.

@@ -8,13 +8,13 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.CheatActivityService;
-using Yandex.Zen.Core.Services.InstanceAccountManagementService;
 using Yandex.Zen.Core.Services.PostingSecondWindService;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.YandexAccountRegistrationService;
 using Yandex.Zen.Core.Services.ZenArticlePublicationService;
 using Yandex.Zen.Core.Services.ZenChannelCreationAndDesignService;
+using Yandex.Zen.Core.Services.InstanceManagementService;
 
 namespace Yandex.Zen
 {
@@ -50,7 +50,7 @@ namespace Yandex.Zen
                     case ProgramModeEnum.ZenChannelCreationAndDesign:   new ZenChannelCreationAndDesign().Start();  break;
                     case ProgramModeEnum.ZenArticlePublication:         new ZenArticlePublication().Start();        break;
                     case ProgramModeEnum.WalkingOnZen:                  new WalkingOnZen().Start();                 break;
-                    case ProgramModeEnum.InstanceAccountManagement:     new InstanceAccountManagement().Start();    break;
+                    case ProgramModeEnum.InstanceAccountManagement:     new InstanceManagement().Start();    break;
                     case ProgramModeEnum.CheatActivity:                 new CheatActivity().Start();                break;
                     case ProgramModeEnum.PostingSecondWind:             new PostingSecondWindBase().Start();            break;
                 }
@@ -83,7 +83,7 @@ namespace Yandex.Zen
                 lock (_locker)
                 {
                     if (CurrentMode == ProgramModeEnum.InstanceAccountManagement)
-                        InstanceAccountManagement.ThreadInWork = false;
+                        InstanceManagement.ThreadInWork = false;
                     ProjectKeeper.ResourcesCurrentThread.ForEach(res => ProjectKeeper.ResourcesAllThreadsInWork.RemoveAll(x => x == res));
                 }
             }

@@ -84,9 +84,9 @@
     <Compile Include="Core\Services\CheatActivityService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\CheatActivityService\Enums\AccountActionTypeEnum.cs" />
     <Compile Include="Core\Services\CheatActivityService\Enums\CommentsSourceEnum.cs" />
-    <Compile Include="Core\Services\InstanceAccountManagementService\Enums\AccountProcessingModeEnum.cs" />
-    <Compile Include="Core\Services\InstanceAccountManagementService\Enums\StartPageInstanceEnum.cs" />
-    <Compile Include="Core\Services\InstanceAccountManagementService\InstanceWinAPI.cs" />
+    <Compile Include="Core\Services\InstanceManagementService\Enums\AccountProcessingModeEnum.cs" />
+    <Compile Include="Core\Services\InstanceManagementService\Enums\StartPageInstanceEnum.cs" />
+    <Compile Include="Core\Services\InstanceManagementService\InstanceWinAPI.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
     <Compile Include="Core\Services\PostingSecondWindService\Enums\PostingSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
@@ -157,9 +157,8 @@
     <Compile Include="Core\Toolkit\Extensions\ZennoTableExtensions.cs" />
     <Compile Include="Core\Toolkit\Macros\DirectoryMacros.cs" />
     <Compile Include="Core\Services\ZenChannelCreationAndDesignService\ZenChannelCreationAndDesign.cs" />
-    <Compile Include="Core\Services\InstanceAccountManagementService\InstanceAccountManagement.cs" />
+    <Compile Include="Core\Services\InstanceManagementService\InstanceManagement.cs" />
     <Compile Include="Core\Services\ZenArticlePublicationService\Models\Article.cs" />
-    <Compile Include="Core\Toolkit\DataLists.cs" />
     <Compile Include="Core\Toolkit\InstanceSettings.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\WalkingOnZen.cs" />
     <Compile Include="Core\Services\ZenArticlePublicationService\ZenArticlePublication.cs" />
@@ -181,7 +180,7 @@
     <Compile Include="Core\Toolkit\ProfileWorker.cs" />
     <Compile Include="Core\Toolkit\TableHandler.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
-    <Compile Include="Dictionaries.cs" />
+    <Compile Include="DictionariesAndLists.cs" />
     <Compile Include="ProjectKeeper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
