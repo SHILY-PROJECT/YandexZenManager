@@ -95,7 +95,6 @@
     <Compile Include="Core\Models\ResourceModels\ProfileDataModel.cs" />
     <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\Services\CommonComponents\AuthorizationNew.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\Models\PostingSecondWindSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserBusySettingsModel.cs" />

@@ -19,19 +19,22 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 {
     public class AuthorizationNew
     {
-        [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
-        private static Random Rnd { get; set; } = new Random();
-
-
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private static DataManager Data { get => DataManager.Data; }
         private static Instance Browser { get => Data.Browser; }
         private static ResourceBaseModel Account { get => Data.Resource; }
         private static CaptchaService CaptchaService { get => Account.CaptchaService; }
         private static SmsService SmsService { get => Account.SmsService; }
-
         #endregion =================================================================
 
+        [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
+        [ThreadStatic] private static bool _statusAuth;
+        [ThreadStatic] private static bool _endExecution;
+        private static Random Rnd { get; set; } = new Random();
+
+
+
+        public static void AuthNew() => AuthNew(out _);      
 
         public static void AuthNew(out bool statusAuth)
         {
@@ -41,11 +44,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             HE xFieldPass = new HE("//input[contains(@type, 'password')]", "Пароль");
             HE xButtonSubmit = new HE("//button[@type='submit']", "Подтвердить вход");
             HE xFormChangePass = new HE("//div[contains(@class, 'change-password-page') and contains(@class, 'passp-auth-screen')]", "Доступ к аккаунту ограничен");
-            HE xButtonChangePassNext = new HE("//div[contains(@data-t, 'submit-change-pwd')]/descendant::button[contains(@data-t, 'action')]", "Подтвердить смену пароля");
-            
+            HE xButtonChangePassNext = new HE("//div[contains(@data-t, 'submit-change-pwd')]/descendant::button[contains(@data-t, 'action')]", "Подтвердить смену пароля");           
             HE xFieldAnswer = new HE("//input[contains(@name, 'answer')]", "Ответа на контрольный вопрос");
             HE xButtonAnswer = new HE("//div[contains(@data-t, 'submit-check-answer')]/button", "Подтвердить ввод ответа на контрольный вопрос");
-
 
             var log = new LogSettings(false, true, true);
             var attemptsAuth = 0;
@@ -54,9 +55,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             {
                 if (++attemptsAuth > 3)
                 {
-                    Logger.Write($"Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
-                    statusAuth = false;
+                    statusAuth = _statusAuth = false;
                     return;
                 }
 
@@ -82,7 +83,6 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonChangePassNext.TryFindElement(3, log)) continue;
                     else xButtonChangePassNext.Click(Rnd.Next(250, 500));
 
-                    // Разгадывание капчи
                     Browser.UseTrafficMonitoring = true;
                     if (!TryRecognizeCaptcha()) continue;
                     Browser.UseTrafficMonitoring = false;
@@ -93,18 +93,15 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonAnswer.TryFindElement(3, log)) continue;
                     else xButtonAnswer.Click(Rnd.Next(250, 500));
 
-                    // Привязка телефона
                     if (!TryBindNumberPhone())
                     {
-                        statusAuth = false;
+                        if (_endExecution is false) continue;
+
+                        statusAuth = _statusAuth = false;
                         return;
                     }
-
+                    
                 }
-
-
-
-
 
             }
         }
@@ -121,6 +118,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
             var log = new LogSettings(false, true, true);
             var attempts = 0;
+            _ = Browser.ActiveTab.GetTraffic();
 
             while (true)
             {
@@ -176,14 +174,14 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             }
         }
 
-        /*
-         * todo доделать привязку номера
+        /* todo доделать привязку номера
          */
         private static bool TryBindNumberPhone()
         {
             HE xFieldPhone = new HE("//input[contains(@name, 'phone')]", "Номер телефона");
             HE xButtonPhone = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
 
+            _endExecution = false;
             var log = new LogSettings(false, true, true);
             var attempts = 0;
 
@@ -195,11 +193,13 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 if (++attempts > 3)
                 {
                     Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    _endExecution = true;
                     return false;
                 }
-
+                if (SmsService.GetNumberPhone())
                 
             }
         }
+
     }
 }

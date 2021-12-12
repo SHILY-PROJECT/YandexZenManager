@@ -14,11 +14,10 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
     public class SmsService
     {
-        #region=========================================================
+        #region [ВНЕШНИЕ РЕСУРСЫ]========================================
         private Instance Browser { get => DataManager.Data.Browser; }
         private Random Rnd { get; set; } = new Random();
-
-        #endregion======================================================
+        #endregion ======================================================
 
         public SmsServiceSettingsModel Settings { get; set; }
         public SmsServiceParamsDataModel Params { get; set; }
