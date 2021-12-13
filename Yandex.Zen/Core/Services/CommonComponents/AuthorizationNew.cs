@@ -30,8 +30,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
         [ThreadStatic] private static bool _statusAuth;
         [ThreadStatic] private static bool _endExecution;
-        private static Random Rnd { get; set; } = new Random();
 
+        private static Random Rnd { get; set; } = new Random();
 
 
         public static void AuthNew() => AuthNew(out _);      
@@ -196,7 +196,11 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     _endExecution = true;
                     return false;
                 }
-                if (SmsService.GetNumberPhone())
+                if (!SmsService.TryGetPhoneNumber())
+                {
+                    _endExecution = true;
+                    return false;
+                }
                 
             }
         }

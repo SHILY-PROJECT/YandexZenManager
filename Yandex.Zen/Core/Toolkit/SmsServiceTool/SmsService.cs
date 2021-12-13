@@ -14,10 +14,8 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
     public class SmsService
     {
-        #region [ВНЕШНИЕ РЕСУРСЫ]========================================
-        private Instance Browser { get => DataManager.Data.Browser; }
-        private Random Rnd { get; set; } = new Random();
-        #endregion ======================================================
+        [ThreadStatic] private static bool _statusGetNumberPhone;
+        [ThreadStatic] private static bool _statusGetSmsCode;
 
         public SmsServiceSettingsModel Settings { get; set; }
         public SmsServiceParamsDataModel Params { get; set; }
@@ -32,88 +30,56 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
         }
 
         /// <summary>
-        /// Получение номера (Ошибки логируются автоматически)
+        /// Получение номера телефона (полученные номер телефона хранится в данных сервиса - 'Data').
         /// </summary>
-        public bool GetPhone()
+        public bool TryGetPhoneNumber()
         {
-            string log, phone, jobId;
-
-            var secondsWaitPhone = Settings.TimeToSecondsWaitPhone;
-            var stopwatch = new Stopwatch();
-
-            stopwatch.Start();
-            {
-                while (true)
-                {
-                    jobId = ZennoPoster.Sms.GetNumber(Params.Dll, out phone, Params.NetworkService, "any", null, Params.Country);
-
-                    if (phone == "No numbers" && secondsWaitPhone < stopwatch.ElapsedMilliseconds / 60)
-                    {
-                        Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tНомеров нет", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                        return false;
-                    }
-                    else if (phone == "No numbers")
-                    {
-                        Thread.Sleep(500);
-                        continue;
-                    }
-                    else
-                    {
-                        log = $"[{nameof(Params.Dll)}:{Params.Dll}]\t[{nameof(jobId)}:{jobId}]\t[{nameof(phone)}:{phone}]\t";
-                        break;
-                    }
-                }
-            }
-            stopwatch.Stop();
-
-            if (jobId == "-1" || !string.IsNullOrWhiteSpace(phone) && Regex.IsMatch(phone, @"[0-9]{5,}(?=$)") is false)
-            {
-                Logger.Write($"{log}Во время получения номера что-то пошло не так...", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                return false;
-            }
-            else Logger.Write($"{log}[{stopwatch.ElapsedMilliseconds / 60} sec]\tНомер успешно получен", LoggerType.Info, true, false, true, LogColor.Blue);
-
-            Data.JobID = jobId;
-            Data.NumberPhone = phone;
-            Data.NumberPhoneForServiceView = phone.Contains("+") ? phone : $"+{phone}";
-
-            return true;
+            GetPhoneNumber();
+            return _statusGetNumberPhone;
         }
 
         /// <summary>
-        /// Получение номера телефона.
+        /// Получение номера телефона (полученные номер телефона хранится в данных сервиса - 'Data').
         /// </summary>
-        public bool GetNumberPhone()
+        public void GetPhoneNumber()
         {
+            _statusGetNumberPhone = false;
+
             var stopwatch = new Stopwatch();
             var secondsWaitPhone = Settings.TimeToSecondsWaitPhone;
+            var dll = Params.Dll;
+            var networkService = Params.NetworkService;
+            var country = Params.Country;
             stopwatch.Start();
 
             while (true)
             {
                 var jobID = ZennoPoster.Sms.GetNumber
                 (
-                    serviceDll: Params.Dll,
-                    service: Params.NetworkService,
-                    param: Params.Country,
+                    serviceDll: dll,
+                    service: networkService,
+                    param: country,
                     oper: "any",
                     number: out string phone,
                     forward: null
                 );
 
-                if (string.IsNullOrWhiteSpace(phone) is false && Regex.IsMatch(phone, @"[0-5]{5,}"))
+                if (!string.IsNullOrWhiteSpace(phone)&& Regex.IsMatch(phone, @"[0-5]{5,}"))
                 {
-                    Logger.Write($"[{nameof(Params.Dll)}:{Params.Dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t" +
-                        $"[{stopwatch.ElapsedMilliseconds / 60} sec]\tНомер успешно получен", LoggerType.Info, true, false, true, LogColor.Blue);
+                    Logger.Write($"[{nameof(dll)}:{dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t" +
+                        $"[{stopwatch.ElapsedMilliseconds / 1000} sec]\tPhone number received successfully", LoggerType.Info, true, false, true, LogColor.Blue);
+                    
                     Data.JobID = jobID;
                     Data.NumberPhone = phone;
                     Data.NumberPhoneForServiceView = phone.Contains("+") ? phone : $"+{phone}";
-                    return true;
+
+                    _statusGetNumberPhone = true;
+                    break;
                 }
-                else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase) && secondsWaitPhone < (stopwatch.ElapsedMilliseconds / 60))
+                else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase) && secondsWaitPhone < (stopwatch.ElapsedMilliseconds / 1000))
                 {
-                    Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tНомеров нет", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    return false;
+                    Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tWaiting limit getting a number phone reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    return;
                 }
                 else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase))
                 {
@@ -122,83 +88,67 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
                 }
                 else
                 {
-                    Logger.Write($"[{nameof(jobID)}:{jobID}]\t[{new StackTrace().GetFrame(0).GetMethod().Name}]\tUnknown error", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    return false;
+                    Logger.Write($"[{nameof(jobID)}:{jobID}]\tUnknown error while getting phone number", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    return;
                 }
             }
         }
 
         /// <summary>
-        /// Получение sms кода (ошибки логирует автоматически).
+        /// Получение SMS-код (лог пишется автоматически).
         /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="minutesWaitSmsCode"></param>
-        /// <param name="heReSendSmsCode"></param>
-        /// <param name="attemptsReSendCode"></param>
-        /// <param name="phoneLog"></param>
-        /// <returns></returns>
-        public bool GetSmsCode(HtmlElement heReSendSmsCode = null)
+        public bool TryGetSmsCode(bool cancelNumberPhoneIfСodeIsNotReceived)
         {
-            var counterAttemptsReSendCode = default(int);
-            var attemptsReSendCode = Settings.AttemptsReSendSmsCode;
-            var minutesWaitSmsCode = Settings.MinutesWaitSmsCode;
+            GetSmsCode(cancelNumberPhoneIfСodeIsNotReceived);
+            return _statusGetSmsCode;
+        }
+
+        /// <summary>
+        /// Получение SMS-код (лог пишется автоматически).
+        /// </summary>
+        public void GetSmsCode(bool cancelNumberPhoneIfСodeIsNotReceived)
+        {
+            _statusGetSmsCode = default;
+
+            var minWaitSmsCode = Settings.MinutesWaitSmsCode;
             var jobID = Data.JobID;
             var phone = Data.NumberPhone;
+            var dll = Params.Dll;
 
-            while (true)
+            var smsCodeOrStatus = ZennoPoster.Sms.GetStatus(dll, jobID, "", minWaitSmsCode);
+            var logCode = $"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]\t";
+
+            if (Regex.IsMatch(smsCodeOrStatus, @"[0-9]{4,}"))
             {
-                var smsCodeOrStatus = ZennoPoster.Sms.GetStatus(Params.Dll, jobID, "", minutesWaitSmsCode);
-                var logCode = $"[{nameof(smsCodeOrStatus)}:{smsCodeOrStatus}]";
+                Logger.Write($"{logCode}[{nameof(phone)}:{phone}]\tSMS code received successfully", LoggerType.Info, true, false, true, LogColor.Default);
 
-                if (Regex.IsMatch(smsCodeOrStatus, @"[0-9]{4,}"))
-                {
-                    Logger.Write($"[{nameof(Params.Dll)}:{Params.Dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t{logCode}\tКод успешно получен", LoggerType.Info, true, false, true, LogColor.Default);
-                    Data.SmsCodeOrStatus = smsCodeOrStatus;
-                    return true;
-                }
-                else if (string.IsNullOrWhiteSpace(smsCodeOrStatus))
-                {
-                    Logger.Write($"{logCode}\tError reply to SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    return false;
-                }
-                else if (smsCodeOrStatus.Equals("Error", StringComparison.OrdinalIgnoreCase))
-                {
-                    Logger.Write($"{logCode}\t[{nameof(minutesWaitSmsCode)}:{minutesWaitSmsCode}]\tLimit min wait sms code", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    return false;
-                }
-                else if (smsCodeOrStatus.Equals("Wait", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (++counterAttemptsReSendCode > attemptsReSendCode)
-                    {
-                        Logger.Write($"{logCode}\t[{attemptsReSendCode}]\tLimit attempts resend code", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                        return false;
-                    }
-                    else if (!heReSendSmsCode.IsNullOrVoid())
-                    {
-                        Logger.Write($"{logCode}\tNew attempt to resend code ", LoggerType.Info, true, false);
-                        heReSendSmsCode.Click(Browser.ActiveTab, Rnd.Next(150, 500));
-                        continue;
-                    }
-                }
-                else
-                {
-                    Logger.Write($"[{nameof(jobID)}:{jobID}]\t{logCode}\t[{new StackTrace().GetFrame(0).GetMethod().Name}]\tUnknown error", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    return false;
-                }
+                _statusGetSmsCode = true;
+                Data.SmsCodeOrStatus = smsCodeOrStatus;
+
+                return;
             }
+            else if (string.IsNullOrWhiteSpace(smsCodeOrStatus)) Logger.Write($"Response to the SMS code request is empty or null", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            else if ("Error".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}[{nameof(minWaitSmsCode)}:{minWaitSmsCode}]\tStatus SMS code is error", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            else if ("Wait".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}SMS code waiting limit reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            else Logger.Write($"{logCode}Unknown error while getting SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
+
+            if (cancelNumberPhoneIfСodeIsNotReceived) CancelPhoneNumber();
         }
 
         /// <summary>
         /// Отмена номера.
         /// </summary>
         /// <param name="jobID"></param>
-        public void CancelPhone()
+        public void CancelPhoneNumber()
         {
+            var jobID = Data.JobID;
+            var dll = Params.Dll;
+
             try
             {
-                if (Data.JobID != "-1")
+                if (!jobID.Equals("-1"))
                 {
-                    var responseCancel = ZennoPoster.Sms.SetStatus(Params.Dll, Data.JobID, SmsServiceStatus.Cancel);
+                    var responseCancel = ZennoPoster.Sms.SetStatus(dll, jobID, SmsServiceStatus.Cancel);
                     Logger.Write($"[{nameof(responseCancel)}:{responseCancel}]\tPhone number canceled", LoggerType.Info, true, false, true);
                 }
             }
