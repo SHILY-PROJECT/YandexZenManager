@@ -37,7 +37,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
         public static void AuthNew() => AuthNew(out _);      
 
-        public static void AuthNew(out bool statusAuth)
+        public static void AuthNew(out bool isSuccessful)
         {
             _settingsMode = Browser.BrowserGetCurrentBusySettings();
 
@@ -58,7 +58,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
-                    statusAuth = _statusAuth = false;
+                    isSuccessful = _statusAuth = false;
                     return;
                 }
 
@@ -84,7 +84,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonChangePassNext.TryFindElement(3, log)) continue;
                     else xButtonChangePassNext.Click(Rnd.Next(250, 500));
 
-                    // Распознавание капчи
+                    // распознавание капчи
                     Browser.UseTrafficMonitoring = true;
                     if (!TryRecognizeCaptcha()) continue;
                     Browser.UseTrafficMonitoring = false;
@@ -95,11 +95,12 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonAnswer.TryFindElement(3, log)) continue;
                     else xButtonAnswer.Click(Rnd.Next(250, 500));
 
+                    // привязка номера
                     if (!TryBindNumberPhone())
                     {
                         if (_endExecution is false) continue;
 
-                        statusAuth = _statusAuth = false;
+                        isSuccessful = _statusAuth = false;
                         return;
                     }
                     
@@ -184,32 +185,54 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             _endExecution = false;
 
             HE xFieldPhone = new HE("//input[contains(@name, 'phone')]", "Номер телефона");
-            HE xButtonPhone = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
+            HE xButtonPhoneNext = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
+            
+            HE xFieldSmsCode = new HE("//input[contains(@data-t, 'phoneCode')]", "SMS Код");
+            HE xButtonSmsCodeNext = new HE("//div[contains(@class, 'PhoneConfirmationCode')]/button[contains(@data-t, 'action')]", "Подтвердить ввод sms кода");
+            HE xButtonSmsCodeReSend = new HE("//button[contains(@data-t, 'retry-to-request-code')]", "Отправить ещё sms код");
 
             var log = new LogSettings(false, true, true);
-            var attempts = 0;
+            //var attempts = 0;
 
             if (!xFieldPhone.TryFindElement(3, log)) return false;
-            if (!xButtonPhone.TryFindElement(3, log)) return false;
+            if (!xButtonPhoneNext.TryFindElement(3, log)) return false;
 
-            while (true)
+            // получение номера
+            if (!SmsService.TryGetPhoneNumber())
             {
-                if (++attempts > 3)
-                {
-                    Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, false, true, LogColor.Yellow);
-                    _endExecution = true;
-                    return false;
-                }
-
-                if (!SmsService.TryGetPhoneNumber())
-                {
-                    Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
-                    _endExecution = true;
-                    return false;
-                }
-                else Logger.Write(SmsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
-                
+                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
+                _endExecution = true;
+                return false;
             }
+            else Logger.Write(SmsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
+
+            xFieldPhone.SetValue(SmsService.Data.NumberPhone, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
+            xButtonPhoneNext.Click(Rnd.Next(250, 500));
+
+            if (!xFieldSmsCode.TryFindElement(3, log) ||
+                !xButtonSmsCodeNext.TryFindElement(3, log) ||
+                !xButtonSmsCodeReSend.TryFindElement(3, log))
+            {
+                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
+                SmsService.CancelPhoneNumber();
+                _endExecution = true;
+                return false;
+            }
+
+
+
+            //while (true)
+            //{
+            //    if (++attempts > 3)
+            //    {
+            //        Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, false, true, LogColor.Yellow);
+            //        _endExecution = true;
+            //        return false;
+            //    }
+
+
+            //}
+
         }
 
     }

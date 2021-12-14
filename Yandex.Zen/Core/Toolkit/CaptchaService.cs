@@ -56,32 +56,21 @@ namespace Yandex.Zen.Core.Toolkit
 
             try
             {
-                // Скачивание капчи в байтики для отправки на распознавание
                 var btImg = new System.Net.WebClient().DownloadData(htmlElementImgCaptcha.GetAttribute("src"));
-
-                //if (logger) Logger.Write($"Отправка капчи на разгадывание", LoggerType.Info, true, false, true, LogColor.Default);
-
-                // Отправка капчи на распознание
                 var captchaResponse = ZennoPoster.CaptchaRecognition(ServiceDll, Convert.ToBase64String(btImg), "");
-
-                // Получение результата распознавания
                 captchaResult = captchaResponse.Split(new[] { "-|-" }, StringSplitOptions.None)[0];
 
-                // Проверка результата распознавания
                 if (string.IsNullOrWhiteSpace(captchaResult))
                 {
-                    //if (logger) Logger.Write($"'{nameof(captchaResponse)}' - response is void", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     _logMessage = $"'{nameof(captchaResponse)}' - response is void";
                     return false;
                 }
 
-                //if (logger) Logger.Write($"Результат разгадывания: {captchaResult}", LoggerType.Info, true, false, true, LogColor.Default);
                 _logMessage = $"Результат разгадывания: {captchaResult}";
                 return true;
             }
             catch (Exception ex)
             {
-                //if (logger) Logger.Write($"'{nameof(ex.Message)}:{ex.Message}' - exception error", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 _logMessage = $"'{nameof(ex.Message)}:{ex.Message}' - exception error";
             }
 

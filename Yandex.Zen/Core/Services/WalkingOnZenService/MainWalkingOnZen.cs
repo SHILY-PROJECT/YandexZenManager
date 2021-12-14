@@ -211,7 +211,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                             Logger.ErrorAnalysis(true, true, true, new List<string>
                             {
                                 Instance.ActiveTab.URL,
-                                xpathButtonGoToZen.XPathToStandardView(),
+                                xpathButtonGoToZen.FormatXPathForLog(),
                                 string.Empty
                             });
                             continue;
@@ -249,7 +249,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
                             Instance.ActiveTab.URL,
-                            xpathButtonAuth.XPathToStandardView(),
+                            xpathButtonAuth.FormatXPathForLog(),
                             "Не найдена кнопка для авторизации...",
                             string.Empty
                         });

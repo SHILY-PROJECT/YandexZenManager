@@ -100,6 +100,7 @@
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserBusySettingsModel.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserOtherSettingsModel.cs" />
     <Compile Include="Core\Toolkit\CaptchaService.cs" />
+    <Compile Include="Core\Toolkit\FormattingHandler.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\BackupFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
@@ -142,7 +143,6 @@
     <Compile Include="Core\Services\PublicationManagerSecondWindService\MainPublicationManagerSecondWind.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
-    <Compile Include="Core\Toolkit\Extensions\FormattingExtensions.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ErrorAnalysisData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\LogItem.cs" />
     <Compile Include="Core\Services\PublicationManagerSecondWindService\Models\LogSettings.cs" />

@@ -40,7 +40,8 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
 
         private void AuthAndBindingPhone()
         {
-            AuthorizationNew.AuthNew(out var status);
+            AuthorizationNew.AuthNew(out var isSuccessful);
+            if (!isSuccessful) return;
 
 
         }

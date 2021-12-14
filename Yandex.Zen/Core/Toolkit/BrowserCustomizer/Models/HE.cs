@@ -27,7 +27,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <summary>
         /// Информация об элементе (название).
         /// </summary>
-        public string Info { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         /// <summary>
         /// Экземпляр  html элемента.
@@ -42,12 +42,12 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <summary>
         /// Информация для логирования. 'XPath' и 'Info' в форматированном виде.
         /// </summary>
-        public string InformationForLog => $"'{nameof(XPath)}:{XPath} | {Info}' - Не найден элемент по заданному пути...";
+        public string InformationForLog => $"'{nameof(XPath)}:{XPath} | {Description}' - Не найден элемент по заданному пути...";
 
         public HE(string xpath) => XPath = xpath;
-        public HE(string xpath, string info) : this(xpath) => Info = info;
-        public HE(string xpath, string info, HtmlElement htmlElement) : this(xpath, info) => Element = htmlElement;
-        public HE(string xpath, string info, List<HtmlElement> htmlElementCollection) : this(xpath, info) => Collection = htmlElementCollection;
+        public HE(string xpath, string description) : this(xpath) => Description = description;
+        public HE(string xpath, string description, HtmlElement htmlElement) : this(xpath, description) => Element = htmlElement;
+        public HE(string xpath, string description, List<HtmlElement> htmlElementCollection) : this(xpath, description) => Collection = htmlElementCollection;
 
 
         /// <summary>

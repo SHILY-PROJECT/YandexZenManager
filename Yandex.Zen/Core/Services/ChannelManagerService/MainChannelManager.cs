@@ -390,7 +390,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 {
                     Instance.ActiveTab.URL,
                     $"Не найдено поле для указания телефона",
-                    xpathFieldPhone.XPathToStandardView(),
+                    xpathFieldPhone.FormatXPathForLog(),
                     string.Empty
                 });
                 return null;
@@ -427,7 +427,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найден checkmark подтверждающий, что номер привязался",
-                        xpathCheckmark.XPathToStandardView(),
+                        xpathCheckmark.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -478,7 +478,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдена кнопка для повторной отправки sms кода",
-                        xpathFieldPhone.XPathToStandardView(),
+                        xpathFieldPhone.FormatXPathForLog(),
                         string.Empty
                     });
                 }
@@ -506,8 +506,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
                     var heElements = new List<string>();
 
-                    if (heFieldSmsCode.IsNullOrVoid()) heElements.Add(xpathFieldSmsCode.XPathToStandardView());
-                    if (heButtonConfirmSmsCode.IsNullOrVoid()) heElements.Add(xpathButtonConfirmSmsCode.XPathToStandardView());
+                    if (heFieldSmsCode.IsNullOrVoid()) heElements.Add(xpathFieldSmsCode.FormatXPathForLog());
+                    if (heButtonConfirmSmsCode.IsNullOrVoid()) heElements.Add(xpathButtonConfirmSmsCode.FormatXPathForLog());
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
@@ -532,7 +532,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найден checkmark подтверждающий, что номер привязался",
-                        xpathCheckmark.XPathToStandardView(),
+                        xpathCheckmark.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -598,9 +598,9 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
                     var heElements = new List<string>();
 
-                    if (heMenuAvatar.IsNullOrVoid()) heElements.Add(xpathMenuAvatar.XPathToStandardView());
-                    if (heElementForCheck.IsNullOrVoid()) heElements.Add(xpathElementForCheck.XPathToStandardView());
-                    if (heButtonChangeImage.IsNullOrVoid()) heElements.Add(xpathButtonChangeImage.XPathToStandardView());
+                    if (heMenuAvatar.IsNullOrVoid()) heElements.Add(xpathMenuAvatar.FormatXPathForLog());
+                    if (heElementForCheck.IsNullOrVoid()) heElements.Add(xpathElementForCheck.FormatXPathForLog());
+                    if (heButtonChangeImage.IsNullOrVoid()) heElements.Add(xpathButtonChangeImage.FormatXPathForLog());
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
@@ -671,7 +671,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдено поле с названием канала",
-                        xpathFieldChannelName.XPathToStandardView(),
+                        xpathFieldChannelName.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -777,7 +777,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдено поле с описанием канала",
-                        xpathFieldDescription.XPathToStandardView(),
+                        xpathFieldDescription.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -847,7 +847,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найден родительский элемент для установки ссылки на соц.сеть",
-                        xpathSocialLinkElement.XPathToStandardView(),
+                        xpathSocialLinkElement.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -895,8 +895,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 {
                     var heElements = new List<string>();
 
-                    if (heButtonAddSocialLink.IsNullOrVoid()) heElements.Add(xpathButtonAddSocialLink.XPathToStandardView());
-                    if (heFieldItemSocialLink.IsNullOrVoid()) heElements.Add(xpathFieldItemSocialLink.XPathToStandardView());
+                    if (heButtonAddSocialLink.IsNullOrVoid()) heElements.Add(xpathButtonAddSocialLink.FormatXPathForLog());
+                    if (heFieldItemSocialLink.IsNullOrVoid()) heElements.Add(xpathFieldItemSocialLink.FormatXPathForLog());
 
                     Logger.Write($"Не найдены элементы для установки соц.сети", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string>
@@ -952,7 +952,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдена кнопка для включения личных сообщений",
-                        xpathButtonMessageEnable.XPathToStandardView(),
+                        xpathButtonMessageEnable.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -966,7 +966,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найден элемент для проверки включения личных сообщений",
-                        xpathElementMessageStatus.XPathToStandardView(),
+                        xpathElementMessageStatus.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -1030,7 +1030,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найден селектор с выбором почты",
-                        xpathSelectMail.XPathToStandardView(),
+                        xpathSelectMail.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -1105,8 +1105,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
                     var heElements = new List<string>();
 
-                    if (heCheckElement.IsNullOrVoid()) heElements.Add(xpathCheckElement.XPathToStandardView());
-                    if (heChildCheckbox.IsNullOrVoid()) heElements.Add(xpathChildCheckbox.XPathToStandardView());
+                    if (heCheckElement.IsNullOrVoid()) heElements.Add(xpathCheckElement.FormatXPathForLog());
+                    if (heChildCheckbox.IsNullOrVoid()) heElements.Add(xpathChildCheckbox.FormatXPathForLog());
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {
@@ -1177,7 +1177,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдено поле с сайтом",
-                        xpathFieldSite.XPathToStandardView(),
+                        xpathFieldSite.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -1191,7 +1191,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Не найдено поле с сайтом",
-                        xpathFieldSiteStatus.XPathToStandardView(),
+                        xpathFieldSiteStatus.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -1208,7 +1208,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     {
                         Instance.ActiveTab.URL,
                         $"Поле с сайтом заполнено некорректно",
-                        xpathFieldSiteStatus.XPathToStandardView(),
+                        xpathFieldSiteStatus.FormatXPathForLog(),
                         string.Empty
                     });
                     return null;
@@ -1339,12 +1339,12 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
                 var heElements = new List<string>();
 
-                if (heFieldCounterName.IsNullOrVoid()) heElements.Add(xpathFieldCounterName.XPathToStandardView());
-                if (heFieldCounterSite.IsNullOrVoid()) heElements.Add(xpathFieldCounterSite.XPathToStandardView());
-                if (heFieldEmail.IsNullOrVoid()) heElements.Add(xpathFieldEmail.XPathToStandardView());
-                if (heCheckboxConditions.IsNullOrVoid()) heElements.Add(xpathCheckboxConditions.XPathToStandardView());
-                if (heCheckboxSubscriptions.IsNullOrVoid()) heElements.Add(xpathCheckboxSubscriptions.XPathToStandardView());
-                if (heButtonSubmit.IsNullOrVoid()) heElements.Add(xpathButtonSubmit.XPathToStandardView());
+                if (heFieldCounterName.IsNullOrVoid()) heElements.Add(xpathFieldCounterName.FormatXPathForLog());
+                if (heFieldCounterSite.IsNullOrVoid()) heElements.Add(xpathFieldCounterSite.FormatXPathForLog());
+                if (heFieldEmail.IsNullOrVoid()) heElements.Add(xpathFieldEmail.FormatXPathForLog());
+                if (heCheckboxConditions.IsNullOrVoid()) heElements.Add(xpathCheckboxConditions.FormatXPathForLog());
+                if (heCheckboxSubscriptions.IsNullOrVoid()) heElements.Add(xpathCheckboxSubscriptions.FormatXPathForLog());
+                if (heButtonSubmit.IsNullOrVoid()) heElements.Add(xpathButtonSubmit.FormatXPathForLog());
 
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
@@ -1444,8 +1444,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
                     var heElements = new List<string>();
 
-                    if (heCheckElement.IsNullOrVoid()) heElements.Add(xpathCheckElement.XPathToStandardView());
-                    if (heChildCheckbox.IsNullOrVoid()) heElements.Add(xpathChildCheckbox.XPathToStandardView());
+                    if (heCheckElement.IsNullOrVoid()) heElements.Add(xpathCheckElement.FormatXPathForLog());
+                    if (heChildCheckbox.IsNullOrVoid()) heElements.Add(xpathChildCheckbox.FormatXPathForLog());
 
                     Logger.ErrorAnalysis(true, true, true, new List<string>
                     {

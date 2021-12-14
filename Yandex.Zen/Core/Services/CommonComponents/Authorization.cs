@@ -83,7 +83,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         {
                             Instance.ActiveTab.URL,
                             $"Не найдена форма с листом аккаунтов...",
-                            xpathAuthAccountList.XPathToStandardView(),
+                            xpathAuthAccountList.FormatXPathForLog(),
                             string.Empty
                         });
                         continue;
@@ -118,7 +118,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
                             Instance.ActiveTab.URL,
-                            xpathButtonChangePasswordNext.XPathToStandardView(),
+                            xpathButtonChangePasswordNext.FormatXPathForLog(),
                             string.Empty
                         });
                         return false;
@@ -168,8 +168,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                             var heElements = new List<string>();
 
-                            if (heFieldCaptcha.IsNullOrVoid()) heElements.Add(xpathFieldCaptcha.XPathToStandardView());
-                            if (heImgCaptcha.IsNullOrVoid()) heElements.Add(xpathImgCaptcha.XPathToStandardView());
+                            if (heFieldCaptcha.IsNullOrVoid()) heElements.Add(xpathFieldCaptcha.FormatXPathForLog());
+                            if (heImgCaptcha.IsNullOrVoid()) heElements.Add(xpathImgCaptcha.FormatXPathForLog());
 
                             Logger.ErrorAnalysis(true, true, true, new List<string>
                             {
@@ -262,8 +262,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                         var elements = new List<string>();
 
-                        if (heFieldPhone.IsNullOrVoid()) elements.Add(xpathFieldPhone.XPathToStandardView());
-                        if (heButtonPhoneNext.IsNullOrVoid()) elements.Add(xpathButtonPhoneNext.XPathToStandardView());
+                        if (heFieldPhone.IsNullOrVoid()) elements.Add(xpathFieldPhone.FormatXPathForLog());
+                        if (heButtonPhoneNext.IsNullOrVoid()) elements.Add(xpathButtonPhoneNext.FormatXPathForLog());
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
@@ -299,9 +299,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                         var heElements = new List<string>();
 
-                        if (heFieldSmsCode.IsNullOrVoid()) heElements.Add(xpathFieldSmsCode.XPathToStandardView());
-                        if (heButtonSmsCodeNext.IsNullOrVoid()) heElements.Add(xpathButtonSmsCodeNext.XPathToStandardView());
-                        if (heButtonReSendCode.IsNullOrVoid()) heElements.Add(xpathButtonReSendCode.XPathToStandardView());
+                        if (heFieldSmsCode.IsNullOrVoid()) heElements.Add(xpathFieldSmsCode.FormatXPathForLog());
+                        if (heButtonSmsCodeNext.IsNullOrVoid()) heElements.Add(xpathButtonSmsCodeNext.FormatXPathForLog());
+                        if (heButtonReSendCode.IsNullOrVoid()) heElements.Add(xpathButtonReSendCode.FormatXPathForLog());
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
@@ -341,9 +341,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                         var heElements = new List<string>();
 
-                        if (heRefreshedPassword.IsNullOrVoid()) heElements.Add(xpathRefreshedPassword.XPathToStandardView());
-                        if (heRefreshedPasswordConfirm.IsNullOrVoid()) heElements.Add(xpathRefreshedPasswordConfirm.XPathToStandardView());
-                        if (heRefreshedPasswordNext.IsNullOrVoid()) heElements.Add(xpathRefreshedPasswordNext.XPathToStandardView());
+                        if (heRefreshedPassword.IsNullOrVoid()) heElements.Add(xpathRefreshedPassword.FormatXPathForLog());
+                        if (heRefreshedPasswordConfirm.IsNullOrVoid()) heElements.Add(xpathRefreshedPasswordConfirm.FormatXPathForLog());
+                        if (heRefreshedPasswordNext.IsNullOrVoid()) heElements.Add(xpathRefreshedPasswordNext.FormatXPathForLog());
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
@@ -381,8 +381,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
                             Instance.ActiveTab.URL,
-                            xpathFormaChangePasswordIsGood.XPathToStandardView(),
-                            xpathButtonSubmitFinish.XPathToStandardView(),
+                            xpathFormaChangePasswordIsGood.FormatXPathForLog(),
+                            xpathButtonSubmitFinish.FormatXPathForLog(),
                             string.Empty
                         });
 
@@ -422,7 +422,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         {
                             Instance.ActiveTab.URL,
                             "На форме с уведомлением о успешном изменении пароля не найдена кнопка \"Далее\"",
-                            xpathButtonSubmitFinish.XPathToStandardView(),
+                            xpathButtonSubmitFinish.FormatXPathForLog(),
                             string.Empty
                         });
                         return false;
@@ -442,8 +442,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                         var heElements = new List<string>();
 
-                        if (heButtonSkipPhone.IsNullOrVoid()) heElements.Add(xpathButtonSkipPhone.XPathToStandardView());
-                        if (heCheckElement.IsNullOrVoid()) heElements.Add(checkByXpathOfElement.XPathToStandardView());
+                        if (heButtonSkipPhone.IsNullOrVoid()) heElements.Add(xpathButtonSkipPhone.FormatXPathForLog());
+                        if (heCheckElement.IsNullOrVoid()) heElements.Add(checkByXpathOfElement.FormatXPathForLog());
 
                         Logger.ErrorAnalysis(true, true, true, new List<string>
                         {
@@ -488,7 +488,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     {
                         Instance.ActiveTab.URL,
                         $"Что-то пошло не так во время авторизации...",
-                        checkByXpathOfElement.XPathToStandardView(),
+                        checkByXpathOfElement.FormatXPathForLog(),
                         string.Empty
                     });
                     return false;

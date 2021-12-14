@@ -75,7 +75,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// </summary>
         public static HtmlElement FindFirstElement(this Instance instance, HE htmlElement,
             bool throwException = true, bool logger = true, int attemptsFind = 3)
-            => instance.FindFirstElement(htmlElement.XPath, htmlElement.Info, throwException, logger, attemptsFind);
+            => instance.FindFirstElement(htmlElement.XPath, htmlElement.Description, throwException, logger, attemptsFind);
 
         /// <summary>
         /// Получение HtmlElement.
@@ -142,7 +142,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <returns></returns>
         public static HtmlElementCollection FindElements(this Instance instance, HE htmlElement,
             bool throwException = true, bool logger = true, int secWaitElement = 3) =>
-            instance.FindElements(htmlElement.XPath, htmlElement.Info, throwException, logger, secWaitElement);
+            instance.FindElements(htmlElement.XPath, htmlElement.Description, throwException, logger, secWaitElement);
 
         /// <summary>
         /// Получение HtmlElementCollection.

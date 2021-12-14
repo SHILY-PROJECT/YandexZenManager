@@ -262,8 +262,8 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
             {
                 var heElements = new List<string>();
 
-                if (heFieldComment.IsNullOrVoid()) heElements.Add(xpathFieldComment.XPathToStandardView());
-                if (heButtonSendComment.IsNullOrVoid()) heElements.Add(xpathButtonSendComment.XPathToStandardView());
+                if (heFieldComment.IsNullOrVoid()) heElements.Add(xpathFieldComment.FormatXPathForLog());
+                if (heButtonSendComment.IsNullOrVoid()) heElements.Add(xpathButtonSendComment.FormatXPathForLog());
 
                 Logger.ErrorAnalysis(true, true, true, new List<string>
                 {
