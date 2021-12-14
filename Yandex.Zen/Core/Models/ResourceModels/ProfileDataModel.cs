@@ -15,12 +15,12 @@ namespace Yandex.Zen.Core.Models.ResourceModels
     /// </summary>
     public class ProfileDataModel
     {
-        #region====================================================================
+        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private IZennoPosterProjectModel Zenno { get => DataManager.Data.Zenno; }
+
+        #endregion =================================================================
+
         private FileInfo _profile;
-        #endregion=================================================================
-
-
 
         /// <summary>
         /// Файл профиля.
@@ -68,6 +68,12 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
             MinProfileSizeToUse = minProfileSizeToUse;
         }
+
+        /// <summary>
+        /// Установка профиля.
+        /// </summary>
+        public void SetProfile(FileInfo file)
+            => File = file;
 
         /// <summary>
         /// Модель с данными профиля.

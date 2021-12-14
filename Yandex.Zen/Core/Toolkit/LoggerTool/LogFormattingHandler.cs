@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 
-namespace Yandex.Zen.Core.Toolkit
+namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
-    public static class FormattingHandler
+    public static class LogFormattingHandler
     {
-        public static string FormatExceptionForLog(this Exception ex, string additionalMessage = "")
+        public static string FormatException(this Exception ex, string additionalMessage = "")
             => $"[Exception message:{ex.Message}]{Environment.NewLine}" +
             $"[{ex.StackTrace}]{Environment.NewLine}{additionalMessage}";
 

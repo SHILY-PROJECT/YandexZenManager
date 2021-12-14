@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Yandex.Zen.Core.Toolkit.LoggerTool;
-using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Toolkit
 {
     public class CaptchaService
     {
-        private string _logMessage = string.Empty;
         private string _serviceDll;
+        private string _logMessage = string.Empty;
 
+        /// <summary>
+        /// Информация для лога (может быть как гуд ответ, так и бэд)
+        /// </summary>
         public string LogMessage { get => _logMessage; }
 
         /// <summary>

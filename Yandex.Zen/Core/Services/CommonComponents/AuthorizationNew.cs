@@ -14,6 +14,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Models;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
+using Yandex.Zen.Core.Toolkit.Macros;
 
 namespace Yandex.Zen.Core.Services.CommonComponents
 {
@@ -32,15 +33,32 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         [ThreadStatic] private static bool _endExecution;
 
         private static Random Rnd { get; set; } = new Random();
+        private static int MS(int from, int to) => Rnd.Next(from, to);
 
+        /// <summary>
+        /// Состояние авторизации.
+        /// </summary>
         public static bool AuthIsSuccessful { get => _statusAuth; }
 
-        public static void AuthNew() => AuthNew(out _);      
+        /// <summary>
+        /// Авторизация.
+        /// </summary>
+        public static void AuthNew()
+            => AuthNew(out _);      
 
+        /// <summary>
+        /// Авторизация.
+        /// </summary>
+        /// <param name="isSuccessful"></param>
         public static void AuthNew(out bool isSuccessful)
         {
             _settingsMode = Browser.BrowserGetCurrentBusySettings();
 
+            var log = new LogSettings(false, true, true);
+            var firstStart = true;
+            var attemptsAuth = 0;
+
+            HE xAvatar = new HE("//div[contains(@class, 'desk-notif-card')]/descendant::a[contains(@class, 'avatar')]", "Аватар пользователя");
             HE xFieldLogin = new HE("//input[@name='login']", "Логин");
             HE xFieldPass = new HE("//input[contains(@type, 'password')]", "Пароль");
             HE xButtonSubmit = new HE("//button[@type='submit']", "Подтвердить вход");
@@ -49,11 +67,21 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             HE xFieldAnswer = new HE("//input[contains(@name, 'answer')]", "Ответа на контрольный вопрос");
             HE xButtonAnswer = new HE("//div[contains(@data-t, 'submit-check-answer')]/button", "Подтвердить ввод ответа на контрольный вопрос");
 
-            var log = new LogSettings(false, true, true);
-            var attemptsAuth = 0;
-
             while (true)
             {
+                if (firstStart)
+                {
+                    Browser.ActiveTab.Navigate("https://yandex.ru/", true);
+
+                    if (xAvatar.TryFindElement(3))
+                    {
+                        Logger.Write("Аккаунт уже авторизирован", LoggerType.Info, true, false, false);
+                        isSuccessful = _statusAuth = true;
+                        break;
+                    }
+                    else firstStart = false;
+                }
+
                 if (++attemptsAuth > 3)
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
@@ -95,7 +123,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonAnswer.TryFindElement(3, log)) continue;
                     else xButtonAnswer.Click(Rnd.Next(250, 500));
 
-                    // привязка номера
+                    // привязка номера к аккаунту
                     if (!TryBindNumberPhone())
                     {
                         if (_endExecution is false) continue;
@@ -103,10 +131,15 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         isSuccessful = _statusAuth = false;
                         return;
                     }
-                    
+                    else
+                    {
+                        isSuccessful = _statusAuth = true;
+                        break;
+                    }
                 }
-
             }
+
+            /* todo Добавить привязку к каналу */
         }
 
         /// <summary>
@@ -178,8 +211,10 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             }
         }
 
-        /* todo доделать привязку номера
-         */
+        /// <summary>
+        /// Привязка номера.
+        /// </summary>
+        /// <returns></returns>
         private static bool TryBindNumberPhone()
         {
             _endExecution = false;
@@ -188,14 +223,18 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             HE xButtonPhoneNext = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
             
             HE xFieldSmsCode = new HE("//input[contains(@data-t, 'phoneCode')]", "SMS Код");
-            HE xButtonSmsCodeNext = new HE("//div[contains(@class, 'PhoneConfirmationCode')]/button[contains(@data-t, 'action')]", "Подтвердить ввод sms кода");
+            HE xButtonSmsCodeNext = new HE("//div[contains(@class, 'PhoneConfirmationCode')]/button[contains(@data-t, 'action')]", "Подтвердить ввод кода");
             HE xButtonSmsCodeReSend = new HE("//button[contains(@data-t, 'retry-to-request-code')]", "Отправить ещё sms код");
 
-            var log = new LogSettings(false, true, true);
-            //var attempts = 0;
+            HE xFieldNewPass = new HE("//input[contains(@data-t, 'input-password') and not(contains(@data-t, 'confirm'))]", "Новый пароль");
+            HE xFieldNewPassConfirm = new HE("//input[contains(@data-t, 'input-password_confirm')]", "Новый пароль");
+            HE xButtonNewPassNext = new HE("//div[contains(@data-t, 'commit-password')]/descendant::button[contains(@data-t, 'action')]", "Пдтвердить новый пароль");
+            HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
+            HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
 
-            if (!xFieldPhone.TryFindElement(3, log)) return false;
-            if (!xButtonPhoneNext.TryFindElement(3, log)) return false;
+            var log = new LogSettings(false, true, true);
+
+            if (!xFieldPhone.TryFindElement(3, log) || !xButtonPhoneNext.TryFindElement(3, log)) return false;
 
             // получение номера
             if (!SmsService.TryGetPhoneNumber())
@@ -206,6 +245,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             }
             else Logger.Write(SmsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
 
+            // ввод номера и отправка кода
             xFieldPhone.SetValue(SmsService.Data.NumberPhone, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
             xButtonPhoneNext.Click(Rnd.Next(250, 500));
 
@@ -213,26 +253,54 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 !xButtonSmsCodeNext.TryFindElement(3, log) ||
                 !xButtonSmsCodeReSend.TryFindElement(3, log))
             {
-                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
                 SmsService.CancelPhoneNumber();
+                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
                 _endExecution = true;
                 return false;
             }
 
+            // получение и ввод кода
+            if (!SmsService.TryGetSmsCode(false))
+            {
+                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
+                SmsService.CancelPhoneNumber();
+                Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
+                _endExecution = true;
+                return false;
+            }
+            xFieldSmsCode.SetValue(SmsService.Data.SmsCodeOrStatus, LevelEmulation.SuperEmulation, Rnd.Next(1500, 3000));
 
+            // генерация и установка нового пароля
+            if (!xFieldNewPass.TryFindElement(3, log) ||
+                !xFieldNewPassConfirm.TryFindElement(3, log) ||
+                !xButtonNewPassNext.TryFindElement(3, log))
+            {
+                _endExecution = true;
+                return false;
+            }
 
-            //while (true)
-            //{
-            //    if (++attempts > 3)
-            //    {
-            //        Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, false, true, LogColor.Yellow);
-            //        _endExecution = true;
-            //        return false;
-            //    }
+            Account.GenerateNewPassword();
+            xFieldNewPass.SetValue(Account.Password, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
+            xFieldNewPassConfirm.SetValue(Account.Password, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
+            xButtonNewPassNext.Click(Rnd.Next(1500, 3000));
 
+            if (!xButtonFinish.TryFindElement(3, log))
+            {
+                Account.SaveProfile();
+                Logger.Write("Не удалось определить успешность завершения смены пароля", LoggerType.Info, true, false, true, LogColor.Yellow);
+                _endExecution = true;
+                return false;
+            }
+            else
+            {
+                xButtonFinish.Click(Rnd.Next(4000, 5000));
+                if (xButtonConfirmAccountDetails.TryFindElement(3, log))
+                    xButtonConfirmAccountDetails.Click(Rnd.Next(1500, 3000));
+                Account.SaveProfile();
+                Logger.Write("Пароль успешно изменен/номер успешно привязан к аккаунту", LoggerType.Info, true, false, true, LogColor.Green);
+            }
 
-            //}
-
+            return true;
         }
 
     }

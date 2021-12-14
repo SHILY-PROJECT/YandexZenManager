@@ -46,19 +46,42 @@ namespace Yandex.Zen
             {
                 switch (CurrentMode)
                 {
-                    case ProgramModeEnum.WalkingProfile: new MainWalkingProfile().Start(); break;
-                    case ProgramModeEnum.YandexAccountRegistration: new MainAccounRegister().Start(); break;
-                    case ProgramModeEnum.ZenChannelCreationAndDesign: new MainChannelManager().Start(); break;
-                    case ProgramModeEnum.ZenArticlePublication: new MainPublicationManager().Start(); break;
-                    case ProgramModeEnum.WalkingOnZen: new MainWalkingOnZen().Start(); break;
-                    case ProgramModeEnum.InstanceAccountManagement: new MainBrowserAccountManager().Start(); break;
-                    case ProgramModeEnum.CheatActivity: new MainActivityManager().Start(); break;
-                    case ProgramModeEnum.PostingSecondWind: new MainPublicationManagerSecondWind().Start(); break;
+                    case ProgramModeEnum.WalkingProfile:
+                        new MainWalkingProfile().Start();
+                        break;
+
+                    case ProgramModeEnum.YandexAccountRegistration:
+                        new MainAccounRegister().Start();
+                        break;
+
+                    case ProgramModeEnum.ZenChannelCreationAndDesign:
+                        new MainChannelManager().Start();
+                        break;
+
+                    case ProgramModeEnum.ZenArticlePublication:
+                        new MainPublicationManager().Start();
+                        break;
+
+                    case ProgramModeEnum.WalkingOnZen:
+                        new MainWalkingOnZen().Start();
+                        break;
+
+                    case ProgramModeEnum.InstanceAccountManagement:
+                        new MainBrowserAccountManager().Start();
+                        break;
+
+                    case ProgramModeEnum.CheatActivity:
+                        new MainActivityManager().Start();
+                        break;
+
+                    case ProgramModeEnum.PostingSecondWind:
+                        new MainPublicationManagerSecondWind().Start();
+                        break;
                 }
             }
             catch (Exception ex)
             {
-                Logger.Write($"[Exception message:{ex.Message}]{Environment.NewLine}Exception stack trace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}", LoggerType.Error, false, true, true, LogColor.Red);
+                Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
             }
             CleanUpResourcesFromCache();
             return 0;

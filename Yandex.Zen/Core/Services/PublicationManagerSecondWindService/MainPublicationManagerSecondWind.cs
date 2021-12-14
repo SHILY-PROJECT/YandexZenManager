@@ -33,8 +33,12 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
 
             switch (CurrentMode)
             {
-                case PublicationManagerSecondWindModeEnum.AuthAndBindingPhone: AuthAndBindingPhone(); break;
-                case PublicationManagerSecondWindModeEnum.Posting: break;
+                case PublicationManagerSecondWindModeEnum.AuthAndBindingPhone:
+                    AuthAndBindingPhone();
+                    break;
+
+                case PublicationManagerSecondWindModeEnum.Posting:
+                    break;
             }
         }
 

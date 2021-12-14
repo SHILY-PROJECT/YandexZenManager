@@ -3,28 +3,39 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Threading;
 using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.LoggerTool;
-using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
 
 namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
     public class SmsService
     {
         private string _logMessage = string.Empty;
-        private  bool _statusGetNumberPhone;
-        private  bool _statusGetSmsCode;
-        private  int _counterAttemptsGetSmsCode;
+        private bool _statusGetNumberPhone;
+        private bool _statusGetSmsCode;
+        private int _counterAttemptsGetSmsCode;
 
+        /// <summary>
+        /// Настройки для работы (время запроса номера, попытки запроса sms кода и т.д.).
+        /// </summary>
         public SmsServiceSettingsModel Settings { get; set; }
+
+        /// <summary>
+        /// Параметры для получения номера (dll, страна и т.д.).
+        /// </summary>
         public SmsServiceParamsDataModel Params { get; set; }
+
+        /// <summary>
+        /// Данные полученные в ходе работы (id задания, номер и т.д.).
+        /// </summary>
         public SmsServiceDataModel Data { get; set; } = new SmsServiceDataModel();
 
+        /// <summary>
+        /// Информация для лога (может быть как гуд ответ, так и бэд)
+        /// </summary>
         public string LogMessage { get => _logMessage; }
+
 
         public SmsService() { }
 
@@ -101,7 +112,7 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
             }
             catch (Exception ex)
             {
-                _logMessage = ex.FormatExceptionForLog();
+                _logMessage = ex.FormatException();
             }
         }
 

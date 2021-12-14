@@ -81,12 +81,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Models\ResourceModels\BackupDTO\PasswordDTO.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\AccountActionTypeEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\CommentsSourceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\InstanceWinAPI.cs" />
+    <Compile Include="Core\Services\PublicationManagerSecondWindService\PublicationManager.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
     <Compile Include="Core\Services\PublicationManagerSecondWindService\Enums\PublicationManagerSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
@@ -100,7 +102,7 @@
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserBusySettingsModel.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\BrowserOtherSettingsModel.cs" />
     <Compile Include="Core\Toolkit\CaptchaService.cs" />
-    <Compile Include="Core\Toolkit\FormattingHandler.cs" />
+    <Compile Include="Core\Toolkit\LoggerTool\LogFormattingHandler.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\BackupFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
