@@ -14,12 +14,16 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 {
     public class SmsService
     {
-        [ThreadStatic] private static bool _statusGetNumberPhone;
-        [ThreadStatic] private static bool _statusGetSmsCode;
+        private string _logMessage = string.Empty;
+        private  bool _statusGetNumberPhone;
+        private  bool _statusGetSmsCode;
+        private  int _counterAttemptsGetSmsCode;
 
         public SmsServiceSettingsModel Settings { get; set; }
         public SmsServiceParamsDataModel Params { get; set; }
         public SmsServiceDataModel Data { get; set; } = new SmsServiceDataModel();
+
+        public string LogMessage { get => _logMessage; }
 
         public SmsService() { }
 
@@ -43,6 +47,7 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
         /// </summary>
         public void GetPhoneNumber()
         {
+            _logMessage = string.Empty;
             _statusGetNumberPhone = false;
 
             var stopwatch = new Stopwatch();
@@ -66,29 +71,32 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 
                 if (!string.IsNullOrWhiteSpace(phone)&& Regex.IsMatch(phone, @"[0-5]{5,}"))
                 {
-                    Logger.Write($"[{nameof(dll)}:{dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t" +
-                        $"[{stopwatch.ElapsedMilliseconds / 1000} sec]\tPhone number received successfully", LoggerType.Info, true, false, true, LogColor.Blue);
-                    
+                    //Logger.Write($"[{nameof(dll)}:{dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t" +
+                    //    $"[{stopwatch.ElapsedMilliseconds / 1000} sec]\tPhone number received successfully", LoggerType.Info, true, false, true, LogColor.Blue);
+                    _logMessage = $"[{nameof(dll)}:{dll}]\t[{nameof(jobID)}:{jobID}]\t[{nameof(phone)}:{phone}]\t[{stopwatch.ElapsedMilliseconds / 1000} sec]\tPhone number received successfully";
+
                     Data.JobID = jobID;
                     Data.NumberPhone = phone;
                     Data.NumberPhoneForServiceView = phone.Contains("+") ? phone : $"+{phone}";
 
                     _statusGetNumberPhone = true;
-                    break;
-                }
-                else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase) && secondsWaitPhone < (stopwatch.ElapsedMilliseconds / 1000))
-                {
-                    Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tWaiting limit getting a number phone reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return;
                 }
                 else if (phone.Equals("No numbers", StringComparison.OrdinalIgnoreCase))
                 {
-                    Thread.Sleep(500);
-                    continue;
+                    if ((stopwatch.ElapsedMilliseconds / 1000) < secondsWaitPhone)
+                    {
+                        Thread.Sleep(500);
+                        continue;
+                    }
+                    //Logger.Write($"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tWaiting limit getting a number phone reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    _logMessage = $"[{nameof(secondsWaitPhone)}:{secondsWaitPhone}]\tWaiting limit getting a number phone reached";
+                    return;
                 }
                 else
                 {
-                    Logger.Write($"[{nameof(jobID)}:{jobID}]\tUnknown error while getting phone number", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    //Logger.Write($"[{nameof(jobID)}:{jobID}]\tUnknown error while getting phone number", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    _logMessage = $"[{nameof(jobID)}:{jobID}]\tUnknown error while getting phone number";
                     return;
                 }
             }
@@ -108,7 +116,9 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
         /// </summary>
         public void GetSmsCode(bool cancelNumberPhoneIfСodeIsNotReceived)
         {
+            _logMessage = string.Empty;
             _statusGetSmsCode = default;
+            _counterAttemptsGetSmsCode += 1;
 
             var minWaitSmsCode = Settings.MinutesWaitSmsCode;
             var jobID = Data.JobID;
@@ -120,17 +130,23 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
 
             if (Regex.IsMatch(smsCodeOrStatus, @"[0-9]{4,}"))
             {
-                Logger.Write($"{logCode}[{nameof(phone)}:{phone}]\tSMS code received successfully", LoggerType.Info, true, false, true, LogColor.Default);
-
+                //Logger.Write($"{logCode}[{nameof(phone)}:{phone}]\tSMS code received successfully", LoggerType.Info, true, false, true, LogColor.Default);
+                _logMessage = $"{logCode}[{nameof(phone)}:{phone}]\tSMS code received successfully";
                 _statusGetSmsCode = true;
+
                 Data.SmsCodeOrStatus = smsCodeOrStatus;
 
                 return;
             }
-            else if (string.IsNullOrWhiteSpace(smsCodeOrStatus)) Logger.Write($"Response to the SMS code request is empty or null", LoggerType.Warning, true, true, true, LogColor.Yellow);
-            else if ("Error".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}[{nameof(minWaitSmsCode)}:{minWaitSmsCode}]\tStatus SMS code is error", LoggerType.Warning, true, true, true, LogColor.Yellow);
-            else if ("Wait".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}SMS code waiting limit reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
-            else Logger.Write($"{logCode}Unknown error while getting SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            else if (string.IsNullOrWhiteSpace(smsCodeOrStatus)) _logMessage = $"Response to the SMS code request is empty or null";
+            else if ("Error".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) _logMessage = $"{logCode}[{nameof(minWaitSmsCode)}:{minWaitSmsCode}]\tStatus SMS code is error";
+            else if ("Wait".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) _logMessage = $"{logCode}SMS code waiting limit reached";
+            else _logMessage = $"{logCode}Unknown error while getting SMS code";
+
+            //else if (string.IsNullOrWhiteSpace(smsCodeOrStatus)) Logger.Write($"Response to the SMS code request is empty or null", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            //else if ("Error".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}[{nameof(minWaitSmsCode)}:{minWaitSmsCode}]\tStatus SMS code is error", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            //else if ("Wait".Equals(smsCodeOrStatus, StringComparison.OrdinalIgnoreCase)) Logger.Write($"{logCode}SMS code waiting limit reached", LoggerType.Warning, true, true, true, LogColor.Yellow);
+            //else Logger.Write($"{logCode}Unknown error while getting SMS code", LoggerType.Warning, true, true, true, LogColor.Yellow);
 
             if (cancelNumberPhoneIfСodeIsNotReceived) CancelPhoneNumber();
         }
@@ -149,12 +165,14 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool
                 if (!jobID.Equals("-1"))
                 {
                     var responseCancel = ZennoPoster.Sms.SetStatus(dll, jobID, SmsServiceStatus.Cancel);
-                    Logger.Write($"[{nameof(responseCancel)}:{responseCancel}]\tPhone number canceled", LoggerType.Info, true, false, true);
+                    _logMessage = $"[{nameof(responseCancel)}:{responseCancel}]\tPhone number canceled";
+                    //Logger.Write($"[{nameof(responseCancel)}:{responseCancel}]\tPhone number canceled", LoggerType.Info, true, false, true);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Write($"[{nameof(ex.Message)}:{ex.Message}]", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                _logMessage = $"[{nameof(ex.Message)}:{ex.Message}]";
+                //Logger.Write($"[{nameof(ex.Message)}:{ex.Message}]", LoggerType.Warning, true, true, true, LogColor.Yellow);
             }
         }
     }

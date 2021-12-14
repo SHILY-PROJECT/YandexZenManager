@@ -33,6 +33,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
         private static Random Rnd { get; set; } = new Random();
 
+        public static bool AuthIsSuccessful { get => _statusAuth; }
 
         public static void AuthNew() => AuthNew(out _);      
 
@@ -83,6 +84,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonChangePassNext.TryFindElement(3, log)) continue;
                     else xButtonChangePassNext.Click(Rnd.Next(250, 500));
 
+                    // Распознавание капчи
                     Browser.UseTrafficMonitoring = true;
                     if (!TryRecognizeCaptcha()) continue;
                     Browser.UseTrafficMonitoring = false;
@@ -124,7 +126,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             {
                 if (++attempts > 3)
                 {
-                    Logger.Write("Слишком много ошибок во время разгадывания капчи", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write("Слишком много ошибок во время разгадывания капчи", LoggerType.Warning, true, false, true, LogColor.Yellow);
                     return false;
                 }
 
@@ -135,6 +137,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 // Разгадывание и ввод капчи
                 if (CaptchaService.TryRecognize(xImgCaptcha.Element, out var result))
                 {
+                    Logger.Write(CaptchaService.LogMessage, LoggerType.Info, true, false, true);
                     xFieldCaptcha.SetValue(result, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
                     xButtonCaptchaNext.Click(Rnd.Next(250, 500));
                 }
@@ -168,7 +171,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 }
                 else
                 {
-                    Logger.Write("В трафике не найден ответ от 'yandex' на разгадывание капчи", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write("В трафике не найден ответ от 'yandex' на разгадывание капчи", LoggerType.Warning, true, false, true, LogColor.Yellow);
                     return false;
                 }
             }
@@ -178,10 +181,11 @@ namespace Yandex.Zen.Core.Services.CommonComponents
          */
         private static bool TryBindNumberPhone()
         {
+            _endExecution = false;
+
             HE xFieldPhone = new HE("//input[contains(@name, 'phone')]", "Номер телефона");
             HE xButtonPhone = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
 
-            _endExecution = false;
             var log = new LogSettings(false, true, true);
             var attempts = 0;
 
@@ -192,15 +196,18 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             {
                 if (++attempts > 3)
                 {
-                    Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write("Слишком много ошибок во время привязки телефона", LoggerType.Warning, true, false, true, LogColor.Yellow);
                     _endExecution = true;
                     return false;
                 }
+
                 if (!SmsService.TryGetPhoneNumber())
                 {
+                    Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
                     _endExecution = true;
                     return false;
                 }
+                else Logger.Write(SmsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
                 
             }
         }
