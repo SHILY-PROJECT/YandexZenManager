@@ -26,6 +26,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         private static ResourceBaseModel Account { get => Data.Resource; }
         private static CaptchaService CaptchaService { get => Account.CaptchaService; }
         private static SmsService SmsService { get => Account.SmsService; }
+
         #endregion =================================================================
 
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
@@ -33,7 +34,6 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         [ThreadStatic] private static bool _endExecution;
 
         private static Random Rnd { get; set; } = new Random();
-        private static int MS(int from, int to) => Rnd.Next(from, to);
 
         /// <summary>
         /// Состояние авторизации.
@@ -58,6 +58,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             var firstStart = true;
             var attemptsAuth = 0;
 
+            #region ====[XPATH]=============================================================
             HE xAvatar = new HE("//div[contains(@class, 'desk-notif-card')]/descendant::a[contains(@class, 'avatar')]", "Аватар пользователя");
             HE xFieldLogin = new HE("//input[@name='login']", "Логин");
             HE xFieldPass = new HE("//input[contains(@type, 'password')]", "Пароль");
@@ -66,6 +67,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             HE xButtonChangePassNext = new HE("//div[contains(@data-t, 'submit-change-pwd')]/descendant::button[contains(@data-t, 'action')]", "Подтвердить смену пароля");           
             HE xFieldAnswer = new HE("//input[contains(@name, 'answer')]", "Ответа на контрольный вопрос");
             HE xButtonAnswer = new HE("//div[contains(@data-t, 'submit-check-answer')]/button", "Подтвердить ввод ответа на контрольный вопрос");
+            #endregion =====================================================================
 
             while (true)
             {
@@ -104,7 +106,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 if (!xButtonSubmit.TryFindElement(3, log)) continue;
                 else xButtonSubmit.Click(Rnd.Next(250, 500));
 
-                // Ограничение доступа и смена пароля
+                #region ====[ОГРАНИЧЕНИЕ ДОСТУПА И СМЕНА ПАРОЛЯ]===============================
                 if (xFormChangePass.TryFindElement(3, null))
                 {
                     Logger.Write("Восстановление доступа", LoggerType.Info, true, false, true);
@@ -112,7 +114,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!xButtonChangePassNext.TryFindElement(3, log)) continue;
                     else xButtonChangePassNext.Click(Rnd.Next(250, 500));
 
-                    // распознавание капчи
+                    #region ====[РАСПОЗНАВАНИЕ КАПЧИ]==================
                     Browser.UseTrafficMonitoring = true;
                     if (!TryRecognizeCaptcha()) continue;
                     Browser.UseTrafficMonitoring = false;
@@ -122,12 +124,12 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
                     if (!xButtonAnswer.TryFindElement(3, log)) continue;
                     else xButtonAnswer.Click(Rnd.Next(250, 500));
+                    #endregion ========================================
 
-                    // привязка номера к аккаунту
+                    #region ====[ПРИВЯЗКА НОМЕРА К АККАУНТУ]===========
                     if (!TryBindNumberPhone())
                     {
                         if (_endExecution is false) continue;
-
                         isSuccessful = _statusAuth = false;
                         return;
                     }
@@ -136,7 +138,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         isSuccessful = _statusAuth = true;
                         break;
                     }
+                    #endregion ========================================
                 }
+                #endregion ==================================================================
             }
 
             /* todo Добавить привязку к каналу */
@@ -218,7 +222,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         private static bool TryBindNumberPhone()
         {
             _endExecution = false;
+            var log = new LogSettings(false, true, true);
 
+            #region ====[XPATH]=============================================================
             HE xFieldPhone = new HE("//input[contains(@name, 'phone')]", "Номер телефона");
             HE xButtonPhoneNext = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
             
@@ -231,12 +237,11 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             HE xButtonNewPassNext = new HE("//div[contains(@data-t, 'commit-password')]/descendant::button[contains(@data-t, 'action')]", "Пдтвердить новый пароль");
             HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
             HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
-
-            var log = new LogSettings(false, true, true);
+            #endregion ======================================================================
 
             if (!xFieldPhone.TryFindElement(3, log) || !xButtonPhoneNext.TryFindElement(3, log)) return false;
 
-            // получение номера
+            #region ====[ПОЛУЧЕНИЕ И ВВОД НОМЕРА + ОТПРАВКА КОДА]============
             if (!SmsService.TryGetPhoneNumber())
             {
                 Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
@@ -245,7 +250,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             }
             else Logger.Write(SmsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
 
-            // ввод номера и отправка кода
+            // 
             xFieldPhone.SetValue(SmsService.Data.NumberPhone, LevelEmulation.SuperEmulation, Rnd.Next(250, 500));
             xButtonPhoneNext.Click(Rnd.Next(250, 500));
 
@@ -258,8 +263,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 _endExecution = true;
                 return false;
             }
+            #endregion =======================================================
 
-            // получение и ввод кода
+            #region ====[ПОЛУЧЕНИЕ И ВВОД КОДА]===============================
             if (!SmsService.TryGetSmsCode(false))
             {
                 Logger.Write(SmsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
@@ -269,8 +275,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 return false;
             }
             xFieldSmsCode.SetValue(SmsService.Data.SmsCodeOrStatus, LevelEmulation.SuperEmulation, Rnd.Next(1500, 3000));
+            #endregion =======================================================
 
-            // генерация и установка нового пароля
+            #region ====[ГЕНЕРАЦИЯ И УСТАНОВКА НОВОГО ПАРОЛЯ]=================
             if (!xFieldNewPass.TryFindElement(3, log) ||
                 !xFieldNewPassConfirm.TryFindElement(3, log) ||
                 !xButtonNewPassNext.TryFindElement(3, log))
@@ -287,8 +294,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             if (!xButtonFinish.TryFindElement(3, log))
             {
                 Account.SaveProfile();
-                Logger.Write("Не удалось определить успешность завершения смены пароля", LoggerType.Info, true, false, true, LogColor.Yellow);
                 _endExecution = true;
+                Logger.Write("Не удалось определить успешность завершения смены пароля", LoggerType.Info, true, false, true, LogColor.Yellow);
                 return false;
             }
             else
@@ -299,8 +306,8 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 Account.SaveProfile();
                 Logger.Write("Пароль успешно изменен/номер успешно привязан к аккаунту", LoggerType.Info, true, false, true, LogColor.Green);
             }
-
             return true;
+            #endregion ========================================================
         }
 
     }

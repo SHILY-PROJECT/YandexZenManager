@@ -73,7 +73,10 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         /// Установка профиля.
         /// </summary>
         public void SetProfile(FileInfo file)
-            => File = file;
+        {
+            File = file;
+            if (File.Exists) Load();
+        }
 
         /// <summary>
         /// Модель с данными профиля.

@@ -102,13 +102,18 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpResourcesFromCache()
         {
-            if (ProjectKeeper.ResourcesCurrentThread.Any())
+            var curRes = ProjectKeeper.ResourcesCurrentThread;
+            var allRes = ProjectKeeper.ResourcesAllThreadsInWork;
+
+            if (curRes.Any())
             {
                 lock (_locker)
                 {
                     if (CurrentMode == ProgramModeEnum.InstanceAccountManagement)
                         MainBrowserAccountManager.ThreadInWork = false;
-                    ProjectKeeper.ResourcesCurrentThread.ForEach(res => ProjectKeeper.ResourcesAllThreadsInWork.RemoveAll(x => x == res));
+
+                    curRes.ForEach(res
+                        => allRes.RemoveAll(x => x == res));
                 }
             }
         }
