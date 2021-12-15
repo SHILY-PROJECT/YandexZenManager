@@ -1,47 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
-using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
-using Yandex.Zen.Core.Toolkit.Macros;
+using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {
     /// <summary>
     /// Класс для хранения данных аккаунта.
     /// </summary>
-    public class ResourceBaseModel
+    public partial class ResourceBaseModel
     {
-        private static readonly object _locker = new object();
-        private DataManager Project { get => DataManager.Data; }
-
         public string Login { get; set; }
         public string Password { get; set; }
         public string AnswerQuestion { get; set; }
         public string PhoneNumber { get; set; }
         public Uri Instagram { get; set; }
-        public ChannelDataModel ChannelData { get; set; } = new ChannelDataModel();
-
+        public ChannelDataModel Channel { get; set; }
         public ResourceTypeEnum Type { get; set; }
         public DirectoryInfo Directory { get; set; }
         public ProfileDataModel ProfileData { get; set; }
         public ProxyDataModel ProxyData { get; set; }
         public CaptchaService CaptchaService { get; set; }
         public SmsService SmsService { get; set; }
-        public ResourceSettingsModel ActionSettings  { get; set; }
+        public ResourceSettingsModel Settings  { get; set; }
+    }
+
+    /// <summary>
+    /// Класс для обработки свойств класса.
+    /// </summary>
+    public partial class ResourceBaseModel
+    {
+        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
+        private DataManager Project { get => DataManager.Data; }
+
+        #endregion ====================================================================
+
+        private static readonly object _locker = new object();
 
         /// <summary>
         /// Сохранение профиля.
@@ -75,20 +79,24 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             if (tb.Table.RowCount == 0)
                 throw new Exception($"Таблица пуста: {tb.FileName}");
 
-            lock (_locker) for (int row = 0; row < tb.Table.RowCount; row++)
+            lock (_locker)
             {
-                try
+                for (int row = 0; row < tb.Table.RowCount; row++)
                 {
-                    switch (Program.CurrentMode)
+                    try
                     {
-                        case ProgramModeEnum.PostingSecondWind:
-                            if (ConfigurePostingSecondWind(tb.Table, row)) return;
-                            break;
+                        switch (Program.CurrentMode)
+                        {
+                            case ProgramModeEnum.PostingSecondWind:
+                                if (ConfigurePostingSecondWind(tb.Table, row)) return;
+                                break;
+
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Write(ex.Message, LoggerType.Warning, this.Directory.Exists, true, true, LogColor.Yellow);
+                    catch (Exception ex)
+                    {
+                        Logger.Write(ex.Message, LoggerType.Warning, this.Directory.Exists, true, true, LogColor.Yellow);
+                    }
                 }
             }
 
@@ -156,16 +164,16 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             // номер телефона канала
             if (table.ParseValueFromCell(colChannelPhone, row, out result))
             {
-                this.ChannelData.NumberPhone = result;
+                this.Channel.NumberPhone = result;
             }
             else if (secondWindMode == PublicationManagerSecondWindModeEnum.Posting)
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourceToCache(Login, true, true);
-            
+            Logger.SetCurrentResourceForLog(Login, ResourceTypeEnum.Account);
+
             return true;
         }
-
-
     }
+
 }

@@ -16,36 +16,26 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
     public class Logger
     {
-        private static readonly object _locker = new object();
-        private static readonly string _logAccountFileName = @"_logger\account.log";
-        private static readonly string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
-        private static readonly string _generalDirectoryOfMainLog = Path.Combine(Zenno.Directory, @"_logger");
-
-        [ThreadStatic] private static FileInfo _generalLog;
-        [ThreadStatic] private static string _textObjectForLog;
-
+        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private static IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
         private static Instance Browser { get => ProjectKeeper.Browser; }
         private static DirectoryInfo ResourceDirectory { get => ProjectKeeper.Resource?.Directory; }
 
-        public static FileInfo GeneralLogFile { get => _generalLog is null ? _generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, NameMainLogFile[ProjectKeeper.CurrentProgramMode])) : _generalLog; }
+        #endregion =================================================================
 
-        public static void SetCurrentObjectForLogText(string currentObject)
-            => _textObjectForLog = $"[{currentObject}]\t";
+        private static readonly object _locker = new object();
+        private static readonly string _logAccountFileName = @"_logger\account.log";
+        private static readonly string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
+        private static readonly string _generalDirectoryOfMainLog = Path.Combine(Zenno.Directory, @"_logger");
+        [ThreadStatic] private static FileInfo _generalLog;
+        [ThreadStatic] private static string _textObjectForLog;
 
-        public static void SetCurrentObjectForLogText(string currentObject, ResourceTypeEnum objectType)
-        {
-            switch (objectType)
-            {
-                case ResourceTypeEnum.Account: _textObjectForLog = $"[Login: {currentObject}]\t"; break;
-                case ResourceTypeEnum.Donor: _textObjectForLog = $"[Donor: {currentObject}]\t"; break;
-            }
-        }
+        public static FileInfo GeneralLogFile { get => _generalLog ?? (_generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, MainLogFileName[ProjectKeeper.CurrentProgramMode]))); }
 
         /// <summary>
         /// Лог режима.
         /// </summary>
-        private static Dictionary<ProgramModeEnum, string> NameMainLogFile => new Dictionary<ProgramModeEnum, string>
+        private static Dictionary<ProgramModeEnum, string> MainLogFileName => new Dictionary<ProgramModeEnum, string>
         {
             [ProgramModeEnum.WalkingProfile] =              "walking_profile.log",
             [ProgramModeEnum.WalkingOnZen] =                "walking_on_zen.log",
@@ -55,6 +45,20 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             [ProgramModeEnum.ZenArticlePublication] =       "zen_posting.log",
             [ProgramModeEnum.PostingSecondWind] =           "posting_second_wind.log"
         };
+
+        /// <summary>
+        /// Установка ресурса в лог.
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="objectType"></param>
+        public static void SetCurrentResourceForLog(string resource, ResourceTypeEnum objectType)
+            => _textObjectForLog = new Dictionary<ResourceTypeEnum, string>
+            {
+                [ResourceTypeEnum.Account] = $"[Login: {resource}]\t",
+                [ResourceTypeEnum.Donor] = $"[Donor: {resource}]\t",
+                [ResourceTypeEnum.Profile] = $"[{resource}]\t"
+            }
+            [objectType];
 
         /// <summary>
         /// Получение текущий даты.

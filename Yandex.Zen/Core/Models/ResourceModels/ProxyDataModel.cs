@@ -12,59 +12,61 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {
-    public class ProxyDataModel
+    /// <summary>
+    /// Класс для хранения данных IP.
+    /// </summary>
+    public partial class ProxyDataModel
     {
-        private string _countryFullName;
-        private string _countryShortName;
-        private string _proxy;
+        public string CountryFullName { get; set; }
+        public string CountryShortName { get; set; }
+        public string Proxy { get; set; }
 
-        public string CountryFullName { get => _countryFullName; }
-        public string CountryShortName { get => _countryShortName; }
-        public string Proxy { get => _proxy; }
+        public ProxyDataModel() { }
+    }
+
+    /// <summary>
+    /// Класс для обработки свойст IP.
+    /// </summary>
+    public partial class ProxyDataModel
+    {
+        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
+        private string UserAgent { get => DataManager.Data.Zenno.Profile.UserAgent; }
+
+        #endregion ====================================================================
 
         public ProxyDataModel(string proxy, bool defineIpCountryInfo)
         {
-            if (proxy.Equals("none", StringComparison.OrdinalIgnoreCase) || proxy.Equals("-", StringComparison.OrdinalIgnoreCase))
-            {
-                _proxy = string.Empty;
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(proxy) || proxy.Contains(":") is false)
-                throw new ArgumentException($"'{nameof(proxy)}' - Некорректный аргумент");
-
-            if (defineIpCountryInfo)
-            {
-                GetIpCountryInfo(proxy, out var countryFullName, out var countryShortName);
-                _countryFullName = countryFullName;
-                _countryShortName = countryShortName;
-            }
-
-            _proxy = proxy;
+            this.Configure(proxy, defineIpCountryInfo);
         }
 
+        /// <summary>
+        /// Конфигурирование данных IP (установка и валидация IP; определение страны, если нужно).
+        /// </summary>
         public void Configure(string proxy, bool defineIpCountryInfo)
         {
             if (proxy.Equals("none", StringComparison.OrdinalIgnoreCase) || proxy.Equals("-", StringComparison.OrdinalIgnoreCase))
             {
-                _proxy = string.Empty;
+                Proxy = string.Empty;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(proxy) || proxy.Contains(":") is false)
-                throw new ArgumentException($"'{nameof(proxy)}' - Некорректный аргумент");
+                throw new ArgumentException($"'{nameof(proxy)}:{proxy}' - Некорректный аргумент");
 
             if (defineIpCountryInfo)
             {
-                GetIpCountryInfo(proxy, out var countryFullName, out var countryShortName);
-                _countryFullName = countryFullName;
-                _countryShortName = countryShortName;
+                DefineIpCountry(proxy, out var countryFullName, out var countryShortName);
+                CountryFullName = countryFullName;
+                CountryShortName = countryShortName;
             }
 
-            _proxy = proxy;
+            Proxy = proxy;
         }
 
-        public void GetIpCountryInfo(string ip, out string countryFullName, out string countryShortName)
+        /// <summary>
+        /// Определение страны IP.
+        /// </summary>
+        public void DefineIpCountry(string ip, out string countryFullName, out string countryShortName)
         {
             countryFullName = null;
             countryShortName = null;
@@ -82,7 +84,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 var httpResponse = ZennoPoster.HTTP.Request
                 (
                     HttpMethod.GET, $"https://ipinfo.io/{ip}", "", "", "", "UTF-8",
-                    ResponceType.BodyOnly, 20000, "", Obsolete_ServicesDataAndComponents.Zenno.Profile.UserAgent, true, 5
+                    ResponceType.BodyOnly, 20000, "", UserAgent, true, 5
                 );
 
                 countryFullName = ZennoPoster.Parser.ParseByXpath(httpResponse, "//a[contains(@href, '/countries/')]", "innerhtml").First();
@@ -96,5 +98,6 @@ namespace Yandex.Zen.Core.Models.ResourceModels
 
             return;
         }
+
     }
 }

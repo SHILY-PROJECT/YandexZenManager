@@ -415,7 +415,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                Logger.SetCurrentObjectForLogText(Login, ResourceTypeEnum.Account);
+                Logger.SetCurrentResourceForLog(Login, ResourceTypeEnum.Account);
 
                 // Проверка на наличия ресурса и его занятость
                 if (!ResourceIsAvailable(Login, row)) continue;

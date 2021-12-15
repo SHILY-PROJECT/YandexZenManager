@@ -8,7 +8,10 @@ namespace Yandex.Zen.Core
 {
     public class DictionariesAndLists
     {
+        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private static IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
+
+        #endregion =================================================================
 
         /// <summary>
         /// Таблицы режимов.

@@ -175,7 +175,8 @@ namespace Yandex.Zen.Core
                     Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
                 },
                 CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                ActionSettings = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) }
+                Settings = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+                Channel = new ChannelDataModel()
             };
             _resourceBaseModel.SetResource();
         }

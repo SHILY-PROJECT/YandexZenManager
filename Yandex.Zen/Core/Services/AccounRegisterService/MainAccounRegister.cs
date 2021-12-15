@@ -560,8 +560,8 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
                     ObjectDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstagramUrl, @"(?<=com/).*?(?=/)").Value}"));
 
-                    if (ShorDonorNameForLog) Logger.SetCurrentObjectForLogText(ObjectDirectory.Name, ResourceTypeEnum.Donor);
-                    else Logger.SetCurrentObjectForLogText(InstagramUrl, ResourceTypeEnum.Donor);
+                    if (ShorDonorNameForLog) Logger.SetCurrentResourceForLog(ObjectDirectory.Name, ResourceTypeEnum.Donor);
+                    else Logger.SetCurrentResourceForLog(InstagramUrl, ResourceTypeEnum.Donor);
 
                     // Проверка на наличия ресурса и его занятость
                     if (!ResourceIsAvailable(InstagramUrl, row)) continue;

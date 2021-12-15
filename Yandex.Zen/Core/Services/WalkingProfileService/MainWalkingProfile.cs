@@ -14,6 +14,7 @@ using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkingProfileService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Enums;
 
 namespace Yandex.Zen.Core.Services.WalkingProfileService
 {
@@ -121,7 +122,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                         Program.AddResourceToCache(ProfileInfo.FullName, true, true);
 
-                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
+                        Logger.SetCurrentResourceForLog(ProfileInfo.Name, ResourceTypeEnum.Profile);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
@@ -161,7 +162,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
                         Zenno.Profile.Load(ProfileInfo.FullName, true);
 
-                        Logger.SetCurrentObjectForLogText(ProfileInfo.Name);
+                        Logger.SetCurrentResourceForLog(ProfileInfo.Name, ResourceTypeEnum.Profile);
                         Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
 
                         break;
