@@ -17,20 +17,23 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
     public class Logger
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private static IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
-        private static Instance Browser { get => ProjectKeeper.Browser; }
-        private static DirectoryInfo ResourceDirectory { get => ProjectKeeper.Resource?.Directory; }
+        private static IZennoPosterProjectModel Zenno { get => StateKeeper.Zenno; }
+        private static Instance Browser { get => StateKeeper.Browser; }
+        private static DirectoryInfo ResourceDirectory { get => StateKeeper.Resource?.Directory; }
 
         #endregion =================================================================
 
         private static readonly object _locker = new object();
         private static readonly string _logAccountFileName = @"_logger\account.log";
         private static readonly string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
-        private static readonly string _generalDirectoryOfMainLog = Path.Combine(Zenno.Directory, @"_logger");
-        [ThreadStatic] private static FileInfo _generalLog;
-        [ThreadStatic] private static string _textObjectForLog;
+        private static readonly string _generalDirectoryOfMainLog = $@"{Zenno.Directory}\_logger";
+        [ThreadStatic] private static FileInfo _generalLog = new FileInfo($@"{_generalDirectoryOfMainLog}\{MainLogFileName[StateKeeper.CurrentProgramMode]}");
+        [ThreadStatic] private static string _resourceForLog;
 
-        public static FileInfo GeneralLogFile { get => _generalLog ?? (_generalLog = new FileInfo(Path.Combine(_generalDirectoryOfMainLog, MainLogFileName[ProjectKeeper.CurrentProgramMode]))); }
+        /// <summary>
+        /// Получение основного лог файла режима.
+        /// </summary>
+        public static FileInfo GeneralLogFile { get => _generalLog; }
 
         /// <summary>
         /// Лог режима.
@@ -52,7 +55,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// <param name="resource"></param>
         /// <param name="objectType"></param>
         public static void SetCurrentResourceForLog(string resource, ResourceTypeEnum objectType)
-            => _textObjectForLog = new Dictionary<ResourceTypeEnum, string>
+            => _resourceForLog = new Dictionary<ResourceTypeEnum, string>
             {
                 [ResourceTypeEnum.Account] = $"[Login: {resource}]\t",
                 [ResourceTypeEnum.Donor] = $"[Donor: {resource}]\t",
@@ -291,25 +294,25 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 new Dictionary<ProgramModeEnum, string>
                 {
-                    [ProgramModeEnum.WalkingProfile] = $"[{ProjectKeeper.CurrentProgramMode}]                  " ,
-                    [ProgramModeEnum.WalkingOnZen] = $"[{ProjectKeeper.CurrentProgramMode}]                    " ,
-                    [ProgramModeEnum.InstanceAccountManagement] = $"[{ProjectKeeper.CurrentProgramMode}]       " ,
-                    [ProgramModeEnum.YandexAccountRegistration] = $"[{ProjectKeeper.CurrentProgramMode}]       " ,
-                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{ProjectKeeper.CurrentProgramMode}]     " ,
-                    [ProgramModeEnum.ZenArticlePublication] = $"[{ProjectKeeper.CurrentProgramMode}]           " ,
+                    [ProgramModeEnum.WalkingProfile] = $"[{StateKeeper.CurrentProgramMode}]                  " ,
+                    [ProgramModeEnum.WalkingOnZen] = $"[{StateKeeper.CurrentProgramMode}]                    " ,
+                    [ProgramModeEnum.InstanceAccountManagement] = $"[{StateKeeper.CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.YandexAccountRegistration] = $"[{StateKeeper.CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.ZenChannelCreationAndDesign] = $"[{StateKeeper.CurrentProgramMode}]     " ,
+                    [ProgramModeEnum.ZenArticlePublication] = $"[{StateKeeper.CurrentProgramMode}]           " ,
                 }
-                .TryGetValue(ProjectKeeper.CurrentProgramMode, out string modeForAccountLog);
+                .TryGetValue(StateKeeper.CurrentProgramMode, out string modeForAccountLog);
 
-                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_textObjectForLog}{textToLog}", loggerType, dateTime);
+                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_resourceForLog}{textToLog}", loggerType, dateTime);
             }
 
             // Запись в основной лог режима
             if (writeToGeneralLog)
-                WriteToGeneralLog($"{_textObjectForLog}{textToLog}", loggerType, dateTime);
+                WriteToGeneralLog($"{_resourceForLog}{textToLog}", loggerType, dateTime);
 
             // Отправка сообщения в zp/pm
             if (Zenno != null)
-                Zenno.SendToLog($"[{ProgramModeEnum.WalkingProfile}]\t{_textObjectForLog}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+                Zenno.SendToLog($"[{ProgramModeEnum.WalkingProfile}]\t{_resourceForLog}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>

@@ -137,13 +137,13 @@ namespace Yandex.Zen.Core.Toolkit
         /// <returns></returns>
         private static FileInfo GetProfileFromCommonFolder(int minSizeProfile)
         {
-            if (ProjectKeeper.SharedDirectoryOfProfiles == null) return null;
+            if (StateKeeper.SharedDirectoryOfProfiles == null) return null;
 
-            var profiles = ProjectKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+            var profiles = StateKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
             if (profiles.Count == 0)
             {
-                Logger.Write($"[Папка с профилями: {ProjectKeeper.SharedDirectoryOfProfiles.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка с профилями: {StateKeeper.SharedDirectoryOfProfiles.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 return null;
             }
 
@@ -153,13 +153,13 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (profiles.Count == 0)
                 {
-                    Logger.Write($"[Папка с профилями: {ProjectKeeper.SharedDirectoryOfProfiles.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"[Папка с профилями: {StateKeeper.SharedDirectoryOfProfiles.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return null;
                 }
 
                 var firstProfile = profiles.First();
 
-                if (!ProjectKeeper.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
+                if (!StateKeeper.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
                     Program.AddResourceToCache(firstProfile.FullName, true, true);
                     return firstProfile;

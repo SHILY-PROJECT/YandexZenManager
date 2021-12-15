@@ -12,7 +12,7 @@ namespace Yandex.Zen.Core.Models
     public class TableModel
     {
         #region===================================================================
-        private IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
+        private IZennoPosterProjectModel Zenno { get => StateKeeper.Zenno; }
         #endregion================================================================
 
 

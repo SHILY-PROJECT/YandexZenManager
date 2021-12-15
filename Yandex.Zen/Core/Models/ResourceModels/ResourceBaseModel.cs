@@ -108,7 +108,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         /// </summary>
         private bool ConfigurePostingSecondWind(IZennoTable table, int row)
         {
-            var secondWindMode = MainPublicationManagerSecondWind.CurrentMode;
+            var mode = MainPublicationManagerSecondWind.CurrentMode;
 
             var colLogin = (int)TableColumnEnum.PostingSecondWind.Login;
             var colPassword = (int)TableColumnEnum.PostingSecondWind.Password;
@@ -123,9 +123,9 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 if (Program.CheckResourceInWork(Login)) return false;
 
                 this.Login = result;
-                this.Directory = new DirectoryInfo(Path.Combine(ProjectKeeper.SharedDirectoryOfAccounts.FullName, Login));
+                this.Directory = new DirectoryInfo(Path.Combine(StateKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
-                if (secondWindMode == PublicationManagerSecondWindModeEnum.AuthAndBindingPhone && this.Directory.Exists is false)
+                if (mode == PublicationManagerSecondWindModeEnum.AuthAndBindingPhone && this.Directory.Exists is false)
                     this.Directory.Create();
 
                 ProfileData.SetProfile(new FileInfo(Path.Combine(Directory.FullName, $"{Login.Split('@').First()}.zpprofile")));
@@ -158,7 +158,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.PhoneNumber = result;
             }
-            else if (secondWindMode == PublicationManagerSecondWindModeEnum.Posting)
+            else if (mode == PublicationManagerSecondWindModeEnum.Posting)
                 throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
@@ -166,7 +166,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.Channel.NumberPhone = result;
             }
-            else if (secondWindMode == PublicationManagerSecondWindModeEnum.Posting)
+            else if (mode == PublicationManagerSecondWindModeEnum.Posting)
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourceToCache(Login, true, true);

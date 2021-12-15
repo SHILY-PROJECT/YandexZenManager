@@ -29,7 +29,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => ProjectKeeper.CurrentProgramMode; }
+        public static ProgramModeEnum CurrentMode { get => StateKeeper.CurrentProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -39,7 +39,7 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            ProjectKeeper.Configure(instance, zenno, out var configurationStatus);
+            StateKeeper.Configure(instance, zenno, out var configurationStatus);
             if (configurationStatus is false) return 0;
 
             try
@@ -92,8 +92,8 @@ namespace Yandex.Zen
         /// </summary>
         public static void AddResourceToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
         {
-            if (addToResourcesCurrentThread) ProjectKeeper.ResourcesCurrentThread.Add(obj);
-            if (addToResourcesAllThreadsInWork) ProjectKeeper.ResourcesAllThreadsInWork.Add(obj);
+            if (addToResourcesCurrentThread) StateKeeper.ResourcesCurrentThread.Add(obj);
+            if (addToResourcesAllThreadsInWork) StateKeeper.ResourcesAllThreadsInWork.Add(obj);
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpResourcesFromCache()
         {
-            var curRes = ProjectKeeper.ResourcesCurrentThread;
-            var allRes = ProjectKeeper.ResourcesAllThreadsInWork;
+            var curRes = StateKeeper.ResourcesCurrentThread;
+            var allRes = StateKeeper.ResourcesAllThreadsInWork;
 
             if (curRes.Any())
             {
@@ -122,7 +122,7 @@ namespace Yandex.Zen
         /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
         /// </summary>
         public static bool CheckResourceInWork(string resource)
-            => ProjectKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
+            => StateKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).

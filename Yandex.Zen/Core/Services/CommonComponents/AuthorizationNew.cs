@@ -15,6 +15,8 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Models;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.Macros;
+using ZennoLab.InterfacesLibrary.Enums.Http;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Services.CommonComponents
 {
@@ -22,6 +24,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private static DataManager Data { get => DataManager.Data; }
+        private static IZennoPosterProjectModel Zenno { get => DataManager.Data.Zenno; }
         private static Instance Browser { get => Data.Browser; }
         private static ResourceBaseModel Account { get => Data.Resource; }
         private static CaptchaService CaptchaService { get => Account.CaptchaService; }
@@ -56,7 +59,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
 
             var log = new LogSettings(false, true, true);
             var firstStart = true;
-            var attemptsAuth = 0;
+            var counterAttempts = 0;
 
             #region ====[XPATH]=============================================================
             HE xAvatar = new HE("//div[contains(@class, 'desk-notif-card')]/descendant::a[contains(@class, 'avatar')]", "Аватар пользователя");
@@ -84,7 +87,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     else firstStart = false;
                 }
 
-                if (++attemptsAuth > 3)
+                if (++counterAttempts > 3)
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
@@ -143,7 +146,20 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 #endregion ==================================================================
             }
 
-            /* todo Добавить привязку к каналу */
+            if (string.IsNullOrWhiteSpace(Account.PhoneNumber) && !CheckPhoneNumberBinding())
+            {
+                Logger.Write("К аккаунту не привязан номер", LoggerType.Info, true, false, true, LogColor.Yellow);
+            }
+            else if (string.IsNullOrWhiteSpace(Account.PhoneNumber))
+            {
+                Logger.Write("К аккаунту привязан номер, но сам номер отсутствует в таблице", LoggerType.Info, true, false, true);
+            }
+            else
+            {
+                Logger.Write("К аккаунту привязан номер", LoggerType.Info, true, false, true);
+            }
+
+            Browser.BrowserSetBusySettings(_settingsMode);
         }
 
         /// <summary>
@@ -310,5 +326,21 @@ namespace Yandex.Zen.Core.Services.CommonComponents
             #endregion ========================================================
         }
 
+        /// <summary>
+        /// Проверка привязки номера к аккаунту.
+        /// </summary>
+        /// <returns>true - номер привязан; иначе - false.</returns>
+        public static bool CheckPhoneNumberBinding()
+        {
+            var httpResponse = ZennoPoster.HTTP.Request
+            (
+                HttpMethod.GET, "https://passport.yandex.ru/profile",
+                UserAgent: Zenno.Profile.UserAgent,
+                proxy: Browser.GetProxy(),
+                respType: ResponceType.BodyOnly,
+                cookieContainer: Zenno.Profile.CookieContainer
+            );
+            return !string.IsNullOrWhiteSpace(Regex.Match(httpResponse, "(?<=\"number\":\").*?(?=\")").Value);
+        }
     }
 }

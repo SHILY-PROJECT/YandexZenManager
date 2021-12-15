@@ -462,7 +462,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     return null;
                 }
 
-                var phoneLog = $"[Sms service dll: {ProjectKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                var phoneLog = $"[Sms service dll: {StateKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                 // Ввод номера телефона и отправка sms кода
                 heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
@@ -550,7 +550,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 bindingPhoneToChannel.TimeAction = new TimeData();
                 bindingPhoneToChannel.Phone = Phone;
                 bindingPhoneToChannel.JobId = job_id;
-                bindingPhoneToChannel.ServiceDll = ProjectKeeper.PhoneService.Dll;
+                bindingPhoneToChannel.ServiceDll = StateKeeper.PhoneService.Dll;
             }
 
             return bindingPhoneToChannel;

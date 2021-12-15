@@ -11,13 +11,13 @@ namespace Yandex.Zen.Core
     /// </summary>
     public class DataManager
     {
-        [ThreadStatic] private static DataManager _data;
-        public static DataManager Data { get => _data ?? (_data = _data = new DataManager()); }
+        [ThreadStatic] private static DataManager _data = new DataManager();
+        public static DataManager Data { get => _data; }
 
-        public ResourceBaseModel Resource { get => ProjectKeeper.Resource; }
-        public IZennoPosterProjectModel Zenno { get => ProjectKeeper.Zenno; }
-        public Instance Browser { get => ProjectKeeper.Browser; }
-        public TableModel MainTable { get => ProjectKeeper.MainTable; }
-        public TableModel ModeTable { get => ProjectKeeper.ModeTable; }
+        public ResourceBaseModel Resource { get => StateKeeper.Resource; }
+        public IZennoPosterProjectModel Zenno { get => StateKeeper.Zenno; }
+        public Instance Browser { get => StateKeeper.Browser; }
+        public TableModel MainTable { get => StateKeeper.MainTable; }
+        public TableModel ModeTable { get => StateKeeper.ModeTable; }
     }
 }

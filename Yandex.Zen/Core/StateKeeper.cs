@@ -21,7 +21,7 @@ namespace Yandex.Zen.Core
     /// <summary>
     /// Класс для хранения, инициализации данных и конфигурации проекта.
     /// </summary>
-    public class ProjectKeeper
+    public class StateKeeper
     {
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;

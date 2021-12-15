@@ -181,7 +181,7 @@
     <Compile Include="Core\Toolkit\TableHandler.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
     <Compile Include="Core\DictionariesAndLists.cs" />
-    <Compile Include="Core\ProjectKeeper.cs" />
+    <Compile Include="Core\StateKeeper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
