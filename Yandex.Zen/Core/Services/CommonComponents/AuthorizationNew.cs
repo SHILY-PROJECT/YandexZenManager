@@ -33,7 +33,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         #endregion =================================================================
 
         [ThreadStatic] private static BrowserBusySettingsModel _settingsMode;
-        [ThreadStatic] private static bool _statusAuth;
+        [ThreadStatic] private static bool _statusIsSuccessful;
         [ThreadStatic] private static bool _endExecution;
 
         private static Random Rnd { get; set; } = new Random();
@@ -41,7 +41,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         /// <summary>
         /// Состояние авторизации.
         /// </summary>
-        public static bool AuthIsSuccessful { get => _statusAuth; }
+        public static bool IsSuccessful { get => _statusIsSuccessful; }
 
         /// <summary>
         /// Авторизация.
@@ -81,7 +81,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (xAvatar.TryFindElement(3))
                     {
                         Logger.Write("Аккаунт уже авторизирован", LoggerType.Info, true, false, false);
-                        isSuccessful = _statusAuth = true;
+                        isSuccessful = _statusIsSuccessful = true;
                         break;
                     }
                     else firstStart = false;
@@ -91,7 +91,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
-                    isSuccessful = _statusAuth = false;
+                    isSuccessful = _statusIsSuccessful = false;
                     return;
                 }
 
@@ -133,26 +133,54 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     if (!TryBindNumberPhone())
                     {
                         if (_endExecution is false) continue;
-                        isSuccessful = _statusAuth = false;
+                        isSuccessful = _statusIsSuccessful = false;
                         return;
                     }
                     else
                     {
-                        isSuccessful = _statusAuth = true;
+                        isSuccessful = _statusIsSuccessful = true;
                         break;
                     }
                     #endregion ========================================
                 }
+                else
+                {
+                    /*
+                     * TODO: Доработать гуд авторизацию, если нет формы восстановления доступа
+                     */
+                }    
                 #endregion ==================================================================
             }
 
-            if (string.IsNullOrWhiteSpace(Account.PhoneNumber) && !CheckPhoneNumberBinding())
+            /* TODO: Добавить условие, если пароль был только что привязан
+                     Если есть номер в таблице, то не проверять его в настройках
+             */
+            var phoneBilded = default(bool);
+
+            if (string.IsNullOrWhiteSpace(Account.PhoneNumber) && !(phoneBilded = CheckPhoneNumberBinding()))
             {
                 Logger.Write("К аккаунту не привязан номер", LoggerType.Info, true, false, true, LogColor.Yellow);
+                isSuccessful = _statusIsSuccessful = false;
+
+                /* 
+                 * TODO: -Временно помечать аккаунты, что они авторизированы, но требуется привязка номера.
+                 *      - вносить в таблицу: 'AuthYesPhoneNo'
+                 * 
+                 *       -Идти привязывать номер
+                 * 
+                 *       !(возможно нужно проверять номер в дзен)
+                 * 
+                 *       Task level: very-low
+                 */
             }
-            else if (string.IsNullOrWhiteSpace(Account.PhoneNumber))
+            else if (string.IsNullOrWhiteSpace(Account.PhoneNumber) && phoneBilded)
             {
                 Logger.Write("К аккаунту привязан номер, но сам номер отсутствует в таблице", LoggerType.Info, true, false, true);
+                isSuccessful = _statusIsSuccessful = false;
+                /* 
+                 * TODO: Нужно реализовать поиск по файлу лога аккаунта и внести этот номер в таблицу
+                 *       Пока мы не реализовали эту логику - вносить в таблицу: 'Search'
+                 */
             }
             else
             {
@@ -320,6 +348,9 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                 if (xButtonConfirmAccountDetails.TryFindElement(3, log))
                     xButtonConfirmAccountDetails.Click(Rnd.Next(1500, 3000));
                 Account.SaveProfile();
+                /*
+                 * TODO: Сохранить номер аккаунта в таблицу и новый пароль
+                 */
                 Logger.Write("Пароль успешно изменен/номер успешно привязан к аккаунту", LoggerType.Info, true, false, true, LogColor.Green);
             }
             return true;
