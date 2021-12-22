@@ -9,11 +9,11 @@ using System.Text.RegularExpressions;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Models.TableHandler;
-using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Services.CommonComponents
 {

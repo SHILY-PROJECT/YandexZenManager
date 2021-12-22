@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Enums
+﻿namespace Yandex.Zen.Core.Toolkit.TableTool.Enums
 {
     /// <summary>
     /// Столбцы.

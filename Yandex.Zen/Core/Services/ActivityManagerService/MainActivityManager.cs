@@ -20,6 +20,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.ActivityManagerService.Models;
 using Yandex.Zen.Core.Services.ActivityManagerService.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Models.TableHandler
 {

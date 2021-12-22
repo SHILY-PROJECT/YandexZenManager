@@ -19,6 +19,7 @@ using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.ChannelManagerService.Enums;
 using Yandex.Zen.Core.Services.ChannelManagerService.Models.ChannelSettings.DataModels;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Services.ChannelManagerService
 {

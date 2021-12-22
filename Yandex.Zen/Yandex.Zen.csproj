@@ -170,7 +170,7 @@
     <Compile Include="Core\Toolkit\Extensions\ZennoListExtensions.cs" />
     <Compile Include="Core\Services\WalkingProfileService\MainWalkingProfile.cs" />
     <Compile Include="Core\Services\AccounRegisterService\MainAccounRegister.cs" />
-    <Compile Include="Core\Enums\TableColumnEnum.cs" />
+    <Compile Include="Core\Toolkit\TableTool\Enums\TableColumnEnum.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
     <Compile Include="Core\Obsolete_ServicesDataAndComponents.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceDataModel.cs" />
@@ -179,6 +179,9 @@
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceParamsDataModel.cs" />
     <Compile Include="Core\Toolkit\Obsolete_ProfileWorker.cs" />
     <Compile Include="Core\Toolkit\TableHandler.cs" />
+    <Compile Include="Core\Toolkit\TableTool\Enums\MainTableColumns.cs" />
+    <Compile Include="Core\Toolkit\TableTool\Enums\ModeTableColumnsEnum.cs" />
+    <Compile Include="Core\Toolkit\TableTool\TableManager.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
     <Compile Include="Core\DictionariesAndLists.cs" />
     <Compile Include="Core\StateKeeper.cs" />
@@ -197,7 +200,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Toolkit\TableTool\Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="ValidateZennoPosterDllPath" BeforeTargets="BeforeBuild">
     <Error Text="Environment variable ZennoPosterDllPath must be set to ZennoPoster installation folder, try to launch ProjectMaker or ZennoPoster" Condition="'$(ZennoPosterDllPath)' == ''" />

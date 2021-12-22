@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Enums;
 using Global.ZennoExtensions;
 using Global.ZennoLab.Json;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Services.ActivityManagerService.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 {

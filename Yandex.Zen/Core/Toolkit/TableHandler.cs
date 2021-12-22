@@ -3,9 +3,9 @@ using Global.ZennoExtensions;
 using System.Threading;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Models.TableHandler;
-using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Toolkit
 {

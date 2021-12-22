@@ -12,6 +12,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
 using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
+using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {
@@ -110,12 +111,12 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         {
             var mode = MainPublicationManagerSecondWind.CurrentMode;
 
-            var colLogin = (int)TableColumnEnum.PostingSecondWind.Login;
-            var colPassword = (int)TableColumnEnum.PostingSecondWind.Password;
-            var colProxy = (int)TableColumnEnum.PostingSecondWind.Proxy;
-            var colAnswerQuestion = (int)TableColumnEnum.PostingSecondWind.AnswerQuestion;
-            var colAccountPhone = (int)TableColumnEnum.PostingSecondWind.AccountNumberPhone;
-            var colChannelPhone = (int)TableColumnEnum.PostingSecondWind.ChannelNumberPhone;
+            var colLogin = (int)ModeTableColumnsEnum.PostingSecondWind.Login;
+            var colPassword = (int)ModeTableColumnsEnum.PostingSecondWind.Password;
+            var colProxy = (int)ModeTableColumnsEnum.PostingSecondWind.Proxy;
+            var colAnswerQuestion = (int)ModeTableColumnsEnum.PostingSecondWind.AnswerQuestion;
+            var colAccountPhone = (int)ModeTableColumnsEnum.PostingSecondWind.AccountNumberPhone;
+            var colChannelPhone = (int)ModeTableColumnsEnum.PostingSecondWind.ChannelNumberPhone;
 
             // логин
             if (table.ParseValueFromCell(colLogin, row, out var result))
