@@ -88,9 +88,7 @@
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\InstanceWinAPI.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\PublicationManager.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\Enums\PublicationManagerSecondWindModeEnum.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkingOnZenService\Enums\ActionOnItem.cs" />
     <Compile Include="Core\Models\ResourceModels\ResourceSettingsModel.cs" />
@@ -142,12 +140,12 @@
     <Compile Include="Core\Models\TableHandler\InstDataItem.cs" />
     <Compile Include="Core\Models\ProxyInfo.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\MainPublicationManagerSecondWind.cs" />
+    <Compile Include="Core\Services\PublicationManagerService\MainPublicationManagerSecondWind.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ErrorAnalysisData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\LogItem.cs" />
-    <Compile Include="Core\Services\PublicationManagerSecondWindService\Models\LogSettings.cs" />
+    <Compile Include="Core\Services\CommonComponents\LogSettings.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ResourceData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\TimeData.cs" />
     <Compile Include="Core\Toolkit\Obsolete_PhoneService.cs" />

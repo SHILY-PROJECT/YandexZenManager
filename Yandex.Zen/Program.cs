@@ -9,7 +9,7 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.ActivityManagerService;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
+using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.WalkingProfileService;
 using Yandex.Zen.Core.Services.AccounRegisterService;

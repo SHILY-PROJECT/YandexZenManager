@@ -18,22 +18,9 @@ namespace Yandex.Zen.Core.Toolkit.TableTool
         private static TableModel MainTable { get => DataManager.Data.MainTable; }
         private static TableModel ModeTable { get => DataManager.Data.ModeTable; }
 
-        public static void SaveToTable<T>(string value, T column, bool saveToMainTable, bool saveTo) where T : struct
+        public static void SaveToTable<T>(int column, string value, bool saveToMainTable, bool saveTo)
         {
-            if (typeof(T) == typeof(TableColumnEnum.PostingSecondWind))
-            {
-                TrySaveToTable(DataManager.Data.Resource.Login, value, (int)(TableColumnEnum.PostingSecondWind)(object)column);
-
-            }
-
-
-            //switch (Program.CurrentMode)
-            //{
-            //    case ProgramModeEnum.PostingSecondWind:
-
-            //        break;
-            //}
-            //if (saveToMainTable)
+            
 
         }
 

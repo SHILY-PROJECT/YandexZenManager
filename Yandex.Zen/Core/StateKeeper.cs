@@ -11,10 +11,10 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerService.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
+using Yandex.Zen.Core.Services.PublicationManagerService;
 
 namespace Yandex.Zen.Core
 {

@@ -2,7 +2,6 @@
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 
 namespace Yandex.Zen.Core
 {
@@ -38,16 +37,6 @@ namespace Yandex.Zen.Core
             ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ZenChannelCreationAndDesign,
             ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.ZenArticlePublication,
             ["Накрутка активности"] = ProgramModeEnum.CheatActivity,
-            ["Posting - second wind (new theme)"] = ProgramModeEnum.PostingSecondWind
-        };
-
-        /// <summary>
-        /// Режимы сервиса PostingSecondWindModes.
-        /// </summary>
-        public static Dictionary<string, PublicationManagerSecondWindModeEnum> PostingSecondWindModes => new Dictionary<string, PublicationManagerSecondWindModeEnum>
-        {
-            ["Авторизация и привязка номера"] = PublicationManagerSecondWindModeEnum.AuthAndBindingPhone,
-            ["Постинг"] = PublicationManagerSecondWindModeEnum.Posting
         };
 
         /// <summary>

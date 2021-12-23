@@ -22,6 +22,12 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
     public class MainPublicationManager : Obsolete_ServicesDataAndComponents
     {
+        /*
+         * TODO: Добавить проверку на ограничения и
+         *       вписать в статус в таблицу 'Ban' если есть ограничения
+         */
+
+
         private static readonly object _locker = new object();
 
         private List<Article> _articlesList;

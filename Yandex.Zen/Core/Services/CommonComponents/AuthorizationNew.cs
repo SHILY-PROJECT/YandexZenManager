@@ -12,7 +12,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Models;
+using Yandex.Zen.Core.Services.PublicationManagerService.Models;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.Macros;
 using ZennoLab.InterfacesLibrary.Enums.Http;

@@ -10,9 +10,9 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerService.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Services.PublicationManagerService;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {

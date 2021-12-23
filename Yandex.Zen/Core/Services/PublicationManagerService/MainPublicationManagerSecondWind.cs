@@ -1,6 +1,5 @@
 ﻿using System;
 using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.PublicationManagerSecondWindService.Enums;
 using Yandex.Zen.Core.Services.CommonComponents;
 using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
@@ -10,8 +9,9 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using System.Collections.Generic;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
+namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
+    [Obsolete]
     public class MainPublicationManagerSecondWind
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
@@ -23,22 +23,10 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
 
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static PublicationManagerSecondWindModeEnum _currentMode;
         [ThreadStatic] private static bool _currentModeSetted;
         [ThreadStatic] private bool _statusBindPhoneNumberToZenChannel;
 
-        /// <summary>
-        /// Текущий режим работы сервиса.
-        /// </summary>
-        public static PublicationManagerSecondWindModeEnum CurrentMode
-        {
-            get => _currentMode;
-            set
-            {
-                _currentMode = value;
-                _currentModeSetted = true;
-            }
-        }
+
 
         /// <summary>
         /// Старт скрипта.
@@ -47,15 +35,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerSecondWindService
         {
             if (_currentModeSetted is false) throw new Exception($"The current operating mode is not set");
 
-            switch (CurrentMode)
-            {
-                case PublicationManagerSecondWindModeEnum.AuthAndBindingPhone:
-                    AuthAndBindingPhone();
-                    break;
 
-                case PublicationManagerSecondWindModeEnum.Posting:
-                    break;
-            }
         }
 
         /// <summary>
