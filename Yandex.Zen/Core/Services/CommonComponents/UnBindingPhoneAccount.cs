@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
@@ -90,13 +91,13 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                         try
                         {
                             // Запрос на повторное принятие sms кода
-                            statusRetryGet = ZennoPoster.Sms.SetStatus(StateKeeper.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, StateKeeper.PhoneService.CountryParam);
+                            statusRetryGet = ZennoPoster.Sms.SetStatus(DataKeeper.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, DataKeeper.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
                             Instance.FindFirstElement(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                             // Получение кода
-                            sms_code = Obsolete_PhoneService.GetSmsCode(job_id, 1, Instance.FindFirstElement(xpathButtonReSendSmsCode, true, true), 3);
+                            sms_code = Obsolete_SmsService.GetSmsCode(job_id, 1, Instance.FindFirstElement(xpathButtonReSendSmsCode, true, true), 3);
                         }
                         catch (Exception ex)
                         {

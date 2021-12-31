@@ -21,10 +21,11 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.ActivityManagerService.Models;
 using Yandex.Zen.Core.Services.ActivityManagerService.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService
 {
-    public class MainActivityManager : Obsolete_ServicesDataAndComponents
+    public class MainActivityManager : Obsolete_ServicesDataAndComponents, IServices
     {
         private static readonly object _locker = new object();
 

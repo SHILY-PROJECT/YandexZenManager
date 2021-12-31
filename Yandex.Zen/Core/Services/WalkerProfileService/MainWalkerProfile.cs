@@ -11,18 +11,19 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
-using Yandex.Zen.Core.Services.WalkingProfileService.Enums;
+using Yandex.Zen.Core.Services.WalkerProfileService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Interfaces;
 
-namespace Yandex.Zen.Core.Services.WalkingProfileService
+namespace Yandex.Zen.Core.Services.WalkerProfileService
 {
-    public class MainWalkingProfile : Obsolete_ServicesDataAndComponents
+    public class MainWalkerProfile : Obsolete_ServicesDataAndComponents, IServices
     {
         private static readonly object _locker = new object();
 
-        private readonly ProfileWalkingMode _walkingMode;
+        private readonly ProfileWalkerMode _walkingMode;
         private readonly SourceSearchKeysTypeEnum _sourceSearchKeysType;
         private readonly Obsolete_InstanceSettings.Obsolete_BusySettings _individualStateBusy;
         private readonly bool _individualStateBusyEnabled;
@@ -31,13 +32,13 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
         /// <summary>
         /// Конструктор для скрипта (настройка лога).
         /// </summary>
-        public MainWalkingProfile()
+        public MainWalkerProfile()
         {
             // Нагуливание профилей - Конвертация режима обработки профилей
-            var statusProfileWalkingMode = new Dictionary<string, ProfileWalkingMode>()
+            var statusProfileWalkingMode = new Dictionary<string, ProfileWalkerMode>()
             {
-                {"Нагуливать новые профиля", ProfileWalkingMode.WalkingNewProfile},
-                {"Нагуливать имеющиеся профиля", ProfileWalkingMode.WalkingOldProfile}
+                {"Нагуливать новые профиля", ProfileWalkerMode.WalkingNewProfile},
+                {"Нагуливать имеющиеся профиля", ProfileWalkerMode.WalkingOldProfile}
             }
             .TryGetValue(Zenno.Variables["cfgModeWalkingProfile"].Value, out _walkingMode);
 
@@ -107,7 +108,7 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             Instance.UseFullMouseEmulation = false;
 
-            if (!StateKeeper.SharedDirectoryOfProfiles.Exists) StateKeeper.SharedDirectoryOfProfiles.Create();
+            if (!DataKeeper.SharedDirectoryOfProfiles.Exists) DataKeeper.SharedDirectoryOfProfiles.Create();
 
             long oldSize = 0, newSize = 0;
 
@@ -115,10 +116,10 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
             {
                 switch (_walkingMode)
                 {
-                    case ProfileWalkingMode.WalkingNewProfile:
+                    case ProfileWalkerMode.WalkingNewProfile:
                         var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
-                        ProfileInfo = new FileInfo($@"{StateKeeper.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+                        ProfileInfo = new FileInfo($@"{DataKeeper.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
                         Program.AddResourceToCache(ProfileInfo.FullName, true, true);
 
@@ -126,8 +127,8 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
-                    case ProfileWalkingMode.WalkingOldProfile:
-                        var profiles = StateKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+                    case ProfileWalkerMode.WalkingOldProfile:
+                        var profiles = DataKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
                         if (profiles.Count == 0)
                         {
@@ -201,10 +202,10 @@ namespace Yandex.Zen.Core.Services.WalkingProfileService
 
             switch (_walkingMode)
             {
-                case ProfileWalkingMode.WalkingNewProfile:
+                case ProfileWalkerMode.WalkingNewProfile:
                     Logger.Write($"[Размер профиля: {newSize} KB]\tУспешное завершение нагуливания профиля", LoggerType.Info, false, false, true, LogColor.Green);
                     break;
-                case ProfileWalkingMode.WalkingOldProfile:
+                case ProfileWalkerMode.WalkingOldProfile:
                     Logger.Write($"[Размер профиля: {newSize} KB]\t[Увеличение за догулку: +{newSize - oldSize} КБ]\tУспешное завершение нагуливания профиля", LoggerType.Info, false, false, true, LogColor.Green);
                     break;
             }

@@ -8,7 +8,7 @@ namespace Yandex.Zen.Core
     public class DictionariesAndLists
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private static IZennoPosterProjectModel Zenno { get => StateKeeper.Zenno; }
+        private static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
 
         #endregion =================================================================
 
@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core
         public static Dictionary<ProgramModeEnum, TableModel> ModeTables => new Dictionary<ProgramModeEnum, TableModel>
         {
             [ProgramModeEnum.InstanceAccountManagement] = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
-            [ProgramModeEnum.YandexAccountRegistration] = new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
+            [ProgramModeEnum.AccountRegistration] = new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
             [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
             [ProgramModeEnum.ZenArticlePublication] = new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
             [ProgramModeEnum.CheatActivity] = new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
@@ -31,9 +31,9 @@ namespace Yandex.Zen.Core
         public static Dictionary<string, ProgramModeEnum> ProgramModes => new Dictionary<string, ProgramModeEnum>()
         {
             ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.InstanceAccountManagement,
-            ["Нагуливание профилей"] = ProgramModeEnum.WalkingProfile,
-            ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkingOnZen,
-            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.YandexAccountRegistration,
+            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfile,
+            ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkerOnZen,
+            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccountRegistration,
             ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ZenChannelCreationAndDesign,
             ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.ZenArticlePublication,
             ["Накрутка активности"] = ProgramModeEnum.CheatActivity,

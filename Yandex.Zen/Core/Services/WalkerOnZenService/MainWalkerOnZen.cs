@@ -15,15 +15,16 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
-using Yandex.Zen.Core.Services.WalkingOnZenService.Enums;
+using Yandex.Zen.Core.Services.WalkerOnZenService.Enums;
 using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Interfaces;
 
-namespace Yandex.Zen.Core.Services.WalkingOnZenService
+namespace Yandex.Zen.Core.Services.WalkerOnZenService
 {
-    public class MainWalkingOnZen : Obsolete_ServicesDataAndComponents
+    public class MainWalkerOnZen : Obsolete_ServicesDataAndComponents, IServices
     {
         private static readonly object _locker = new object();
 
@@ -33,8 +34,8 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         [ThreadStatic] public static int NumbDislikeToZen = default;
         [ThreadStatic] public static string StepBetweenItems = default;
 
-        private List<ActionOnItem> _actionList;
-        private StartPageWalkingOnZen _startPage;
+        private List<ActionOnItemEnum> _actionList;
+        private StartPageWalkerOnZenEnum _startPage;
         private UseObjectTypeInWorkEnum _useResourceTypeInWork;
         private Obsolete_InstanceSettings.Obsolete_BusySettings _individualStateBusy;
 
@@ -58,7 +59,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         /// <summary>
         /// Пустой конструктор для скрипта вызова из других методов.
         /// </summary>
-        public MainWalkingOnZen(ResourceTypeEnum resourceTypeAtWork)
+        public MainWalkerOnZen(ResourceTypeEnum resourceTypeAtWork)
         {
             SetSettingsMode();
 
@@ -73,7 +74,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         /// <summary>
         /// Конструктор для скрипта (настройка лога, проверка и установка прочих данных).
         /// </summary>
-        public MainWalkingOnZen()
+        public MainWalkerOnZen()
         {
             AccountsTable = Zenno.Tables["AccountsForWalkingOnZen"];
 
@@ -108,7 +109,7 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         /// </summary>
         private void SetSettingsMode()
         {
-            _actionList = new List<ActionOnItem>();
+            _actionList = new List<ActionOnItemEnum>();
 
             _individualStateBusyEnabled = bool.Parse(Zenno.Variables["cfgIndividualPolicyOfIgnoringEnabledForWalkingOnZen"].Value);
             _individualStateBusy = Obsolete_InstanceSettings.Obsolete_BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingOnZen"].Value);
@@ -136,17 +137,17 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
             StepBetweenItems = Zenno.Variables["cfgStepBetweenItems"].Value;            // количество статей пропускать.
 
             // Добавляем список действий над элементами страницы
-            if (_openArticlesEnable) for (int i = 0; i < NumbZenItemOpen; i++) _actionList.Add(ActionOnItem.OpenItem);
-            if (_likeEnable) for (int i = 0; i < NumbLikeToZen; i++) _actionList.Add(ActionOnItem.Like);
-            if (_dislikeEnable) for (int i = 0; i < NumbDislikeToZen; i++) _actionList.Add(ActionOnItem.Dislike);
+            if (_openArticlesEnable) for (int i = 0; i < NumbZenItemOpen; i++) _actionList.Add(ActionOnItemEnum.OpenItem);
+            if (_likeEnable) for (int i = 0; i < NumbLikeToZen; i++) _actionList.Add(ActionOnItemEnum.Like);
+            if (_dislikeEnable) for (int i = 0; i < NumbDislikeToZen; i++) _actionList.Add(ActionOnItemEnum.Dislike);
 
             // Перемешиваем список для рандомизации действий
             _actionList.Shuffle();
 
-            new Dictionary<string, StartPageWalkingOnZen>
+            new Dictionary<string, StartPageWalkerOnZenEnum>
             {
-                { "zen.yandex", StartPageWalkingOnZen.ZenYandex },
-                { "zen.yandex/about", StartPageWalkingOnZen.ZenYandexAbout }
+                { "zen.yandex", StartPageWalkerOnZenEnum.ZenYandex },
+                { "zen.yandex/about", StartPageWalkerOnZenEnum.ZenYandexAbout }
             }
             .TryGetValue(Zenno.Variables["cfgStartPageForWalkingZen"].Value, out _startPage);
         }
@@ -194,11 +195,11 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
                 // Переход на стартовую страницу
                 switch (_startPage)
                 {
-                    case StartPageWalkingOnZen.ZenYandex:
+                    case StartPageWalkerOnZenEnum.ZenYandex:
                         Instance.ActiveTab.Navigate($"https://zen.yandex.ru/", true);
                         AcceptingPrivacyPolicyCookie();
                         break;
-                    case StartPageWalkingOnZen.ZenYandexAbout:
+                    case StartPageWalkerOnZenEnum.ZenYandexAbout:
                         Instance.ActiveTab.Navigate("https://zen.yandex/about", true);
                         AcceptingPrivacyPolicyCookie();
 
@@ -388,13 +389,13 @@ namespace Yandex.Zen.Core.Services.WalkingOnZenService
         /// <param name="item"></param>
         /// <param name="actionOnItem"></param>
         /// <returns></returns>
-        private bool GoAction(HtmlElement item, ActionOnItem actionOnItem, int itemNumb)
+        private bool GoAction(HtmlElement item, ActionOnItemEnum actionOnItem, int itemNumb)
         {
             switch (actionOnItem)
             {
-                case ActionOnItem.Like: return ActionLike(item, itemNumb);
-                case ActionOnItem.Dislike: return ActionDislike(item, itemNumb);
-                case ActionOnItem.OpenItem: return ActionOpenItem(item, itemNumb);
+                case ActionOnItemEnum.Like: return ActionLike(item, itemNumb);
+                case ActionOnItemEnum.Dislike: return ActionDislike(item, itemNumb);
+                case ActionOnItemEnum.OpenItem: return ActionOpenItem(item, itemNumb);
             }
 
             Logger.Write($"[Actions left: {_actionList.Count - 1}]\t[Item: {itemNumb}]\tСобытие не определено и пропущено", LoggerType.Info, false, false, true);

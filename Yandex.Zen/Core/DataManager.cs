@@ -14,10 +14,10 @@ namespace Yandex.Zen.Core
         [ThreadStatic] private static DataManager _data = new DataManager();
         public static DataManager Data { get => _data; }
 
-        public ResourceBaseModel Resource { get => StateKeeper.Resource; }
-        public IZennoPosterProjectModel Zenno { get => StateKeeper.Zenno; }
-        public Instance Browser { get => StateKeeper.Browser; }
-        public TableModel MainTable { get => StateKeeper.MainTable; }
-        public TableModel ModeTable { get => StateKeeper.ModeTable; }
+        public ResourceBaseModel Resource { get => DataKeeper.Resource; }
+        public IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
+        public Instance Browser { get => DataKeeper.Browser; }
+        public TableModel MainTable { get => DataKeeper.MainTable; }
+        public TableModel ModeTable { get => DataKeeper.ModeTable; }
     }
 }

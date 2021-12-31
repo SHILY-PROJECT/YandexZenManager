@@ -10,10 +10,9 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.ActivityManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
-using Yandex.Zen.Core.Services.WalkingOnZenService;
-using Yandex.Zen.Core.Services.WalkingProfileService;
+using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.Services.WalkerProfileService;
 using Yandex.Zen.Core.Services.AccounRegisterService;
-using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 
@@ -29,7 +28,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => StateKeeper.CurrentProgramMode; }
+        public static ProgramModeEnum CurrentMode { get => DataKeeper.CurrentProgramMode; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -39,18 +38,18 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            StateKeeper.Configure(instance, zenno, out var configurationStatus);
+            DataKeeper.Configure(instance, zenno, out var configurationStatus);
             if (configurationStatus is false) return 0;
 
             try
             {
                 switch (CurrentMode)
                 {
-                    case ProgramModeEnum.WalkingProfile:
-                        new MainWalkingProfile().Start();
+                    case ProgramModeEnum.WalkerProfile:
+                        new MainWalkerProfile().Start();
                         break;
 
-                    case ProgramModeEnum.YandexAccountRegistration:
+                    case ProgramModeEnum.AccountRegistration:
                         new MainAccounRegister().Start();
                         break;
 
@@ -62,8 +61,8 @@ namespace Yandex.Zen
                         new MainPublicationManager().Start();
                         break;
 
-                    case ProgramModeEnum.WalkingOnZen:
-                        new MainWalkingOnZen().Start();
+                    case ProgramModeEnum.WalkerOnZen:
+                        new MainWalkerOnZen().Start();
                         break;
 
                     case ProgramModeEnum.InstanceAccountManagement:
@@ -72,10 +71,6 @@ namespace Yandex.Zen
 
                     case ProgramModeEnum.CheatActivity:
                         new MainActivityManager().Start();
-                        break;
-
-                    case ProgramModeEnum.PostingSecondWind:
-                        new MainPublicationManagerSecondWind().Start();
                         break;
                 }
             }
@@ -92,8 +87,8 @@ namespace Yandex.Zen
         /// </summary>
         public static void AddResourceToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
         {
-            if (addToResourcesCurrentThread) StateKeeper.ResourcesCurrentThread.Add(obj);
-            if (addToResourcesAllThreadsInWork) StateKeeper.ResourcesAllThreadsInWork.Add(obj);
+            if (addToResourcesCurrentThread) DataKeeper.ResourcesCurrentThread.Add(obj);
+            if (addToResourcesAllThreadsInWork) DataKeeper.ResourcesAllThreadsInWork.Add(obj);
         }
 
         /// <summary>
@@ -102,8 +97,8 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpResourcesFromCache()
         {
-            var curRes = StateKeeper.ResourcesCurrentThread;
-            var allRes = StateKeeper.ResourcesAllThreadsInWork;
+            var curRes = DataKeeper.ResourcesCurrentThread;
+            var allRes = DataKeeper.ResourcesAllThreadsInWork;
 
             if (curRes.Any())
             {
@@ -122,7 +117,7 @@ namespace Yandex.Zen
         /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
         /// </summary>
         public static bool CheckResourceInWork(string resource)
-            => StateKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
+            => DataKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).

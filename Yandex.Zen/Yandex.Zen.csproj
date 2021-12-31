@@ -81,6 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Interfaces\IAccounRegisterService.cs" />
+    <Compile Include="Core\Interfaces\IActivityManagerService.cs" />
+    <Compile Include="Core\Interfaces\IBrowserAccountManagerService.cs" />
+    <Compile Include="Core\Interfaces\IChannelManagerService.cs" />
+    <Compile Include="Core\Interfaces\IPublicationManagerService.cs" />
+    <Compile Include="Core\Interfaces\IServices.cs" />
+    <Compile Include="Core\Interfaces\IWalkerOnZenService.cs" />
     <Compile Include="Core\Models\ResourceModels\BackupDTO\PasswordDTO.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\AccountActionTypeEnum.cs" />
@@ -88,9 +95,10 @@
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\InstanceWinAPI.cs" />
+    <Compile Include="Core\Services\ServiceManager.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
-    <Compile Include="Core\Services\WalkingOnZenService\Enums\ActionOnItem.cs" />
+    <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />
     <Compile Include="Core\Models\ResourceModels\ResourceSettingsModel.cs" />
     <Compile Include="Core\Models\ResourceModels\ProfileDataModel.cs" />
     <Compile Include="Core\DataManager.cs" />
@@ -106,10 +114,10 @@
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
     <Compile Include="Core\Enums\ResourceTypeEnum.cs" />
-    <Compile Include="Core\Services\WalkingOnZenService\Enums\StartPageWalkingOnZen.cs" />
-    <Compile Include="Core\Services\WalkingProfileService\Enums\ProfileWalkingMode.cs" />
-    <Compile Include="Core\Services\WalkingProfileService\Enums\SaveProfileModeEnum.cs" />
-    <Compile Include="Core\Services\WalkingProfileService\Enums\SourceSearchKeysTypeEnum.cs" />
+    <Compile Include="Core\Services\WalkerOnZenService\Enums\StartPageWalkerOnZenEnum.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\Enums\ProfileWalkerMode.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\Enums\SaveProfileModeEnum.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\Enums\SourceSearchKeysTypeEnum.cs" />
     <Compile Include="Core\Services\AccounRegisterService\Enums\RegistrationStartPageEnum.cs" />
     <Compile Include="Core\Services\ChannelManagerService\Enums\StartPageCreateChannelEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ActionModel.cs" />
@@ -148,9 +156,9 @@
     <Compile Include="Core\Services\CommonComponents\LogSettings.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ResourceData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\TimeData.cs" />
-    <Compile Include="Core\Toolkit\Obsolete_PhoneService.cs" />
+    <Compile Include="Core\Toolkit\Obsolete_SmsService.cs" />
     <Compile Include="Core\Enums\ProgramModeEnum.cs" />
-    <Compile Include="Core\Services\WalkingProfileService\Enums\SearchServiceEnum.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\Enums\SearchServiceEnum.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\RefreshTypeEnum.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoTableExtensions.cs" />
@@ -159,14 +167,14 @@
     <Compile Include="Core\Services\BrowserAccountManagerService\MainBrowserAccountManager.cs" />
     <Compile Include="Core\Services\PublicationManagerService\Models\Article.cs" />
     <Compile Include="Core\Toolkit\Obsolete_InstanceSettings.cs" />
-    <Compile Include="Core\Services\WalkingOnZenService\MainWalkingOnZen.cs" />
+    <Compile Include="Core\Services\WalkerOnZenService\MainWalkerOnZen.cs" />
     <Compile Include="Core\Services\PublicationManagerService\MainPublicationManager.cs" />
     <Compile Include="Core\Toolkit\Macros\TextMacros.cs" />
     <Compile Include="Core\Toolkit\Extensions\FileExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ListExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\VariableExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoListExtensions.cs" />
-    <Compile Include="Core\Services\WalkingProfileService\MainWalkingProfile.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\MainWalkerProfile.cs" />
     <Compile Include="Core\Services\AccounRegisterService\MainAccounRegister.cs" />
     <Compile Include="Core\Toolkit\TableTool\Enums\TableColumnEnum.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
@@ -182,7 +190,7 @@
     <Compile Include="Core\Toolkit\TableTool\TableManager.cs" />
     <Compile Include="Core\Toolkit\TaskHandler.cs" />
     <Compile Include="Core\DictionariesAndLists.cs" />
-    <Compile Include="Core\StateKeeper.cs" />
+    <Compile Include="Core\DataKeeper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

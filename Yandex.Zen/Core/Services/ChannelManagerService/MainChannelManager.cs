@@ -16,14 +16,15 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Services.CommonComponents;
-using Yandex.Zen.Core.Services.WalkingOnZenService;
 using Yandex.Zen.Core.Services.ChannelManagerService.Enums;
 using Yandex.Zen.Core.Services.ChannelManagerService.Models.ChannelSettings.DataModels;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Services.WalkerOnZenService;
 
 namespace Yandex.Zen.Core.Services.ChannelManagerService
 {
-    public class MainChannelManager : Obsolete_ServicesDataAndComponents
+    public class MainChannelManager : Obsolete_ServicesDataAndComponents, IServices
     {
         private static readonly object _locker = new object();
 
@@ -131,9 +132,9 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new MainWalkingOnZen(ResourceTypeEnum.Account).Start();
+                    new MainWalkerOnZen(ResourceTypeEnum.Account).Start();
 
-                    if (!MainWalkingOnZen.StatusWalkIsGood) return false;
+                    if (!MainWalkerOnZen.StatusWalkIsGood) return false;
                 }
             }
 
@@ -455,7 +456,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             else
             {
                 // Получение номера
-                Phone = Obsolete_PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
+                Phone = Obsolete_SmsService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
 
                 // Выход из метода, если не удалось получить номер
                 if (string.IsNullOrWhiteSpace(Phone))
@@ -463,7 +464,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                     return null;
                 }
 
-                var phoneLog = $"[Sms service dll: {StateKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                var phoneLog = $"[Sms service dll: {DataKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                 // Ввод номера телефона и отправка sms кода
                 heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(150, 500));
@@ -485,12 +486,12 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение sms кода
-                var sms_code = Obsolete_PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
+                var sms_code = Obsolete_SmsService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
 
                 // Проверка наличия sms кода (если кода нет нет, то отмена номера и выход из метода)
                 if (string.IsNullOrWhiteSpace(sms_code))
                 {
-                    Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
+                    Obsolete_SmsService.CancelPhone(job_id, phoneLog);
                     return null;
                 }
 
@@ -551,7 +552,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 bindingPhoneToChannel.TimeAction = new TimeData();
                 bindingPhoneToChannel.Phone = Phone;
                 bindingPhoneToChannel.JobId = job_id;
-                bindingPhoneToChannel.ServiceDll = StateKeeper.PhoneService.Dll;
+                bindingPhoneToChannel.ServiceDll = DataKeeper.PhoneService.Dll;
             }
 
             return bindingPhoneToChannel;

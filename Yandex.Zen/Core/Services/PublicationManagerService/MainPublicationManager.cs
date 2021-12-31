@@ -17,10 +17,11 @@ using Yandex.Zen.Core.Services.PublicationManagerService.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
-    public class MainPublicationManager : Obsolete_ServicesDataAndComponents
+    public class MainPublicationManager : Obsolete_ServicesDataAndComponents, IServices
     {
         /*
          * TODO: Добавить проверку на ограничения и

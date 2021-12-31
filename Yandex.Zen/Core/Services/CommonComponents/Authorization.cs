@@ -276,12 +276,12 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     }
 
                     // Получение номера
-                    Phone = Obsolete_PhoneService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
+                    Phone = Obsolete_SmsService.GetPhone(out string job_id, TimeToSecondsWaitPhone);
 
                     // Выход из метода, если не удалось получить номер
                     if (string.IsNullOrWhiteSpace(Phone)) return false;
 
-                    var phoneLog = $"[Sms service dll: {StateKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
+                    var phoneLog = $"[Sms service dll: {DataKeeper.PhoneService.Dll}]\t[Sms job id: {job_id}]\t[Phone: {Phone}]\t";
 
                     // Ввод номера
                     heFieldPhone.SetValue(Instance.ActiveTab, Phone, LevelEmulation.SuperEmulation, Rnd.Next(500, 1000));
@@ -295,7 +295,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     // Проверка наличия полученных элементов для обработки номера (если нет, то отмена номера и выход из метода)
                     if (new[] { heFieldSmsCode, heButtonSmsCodeNext, heButtonReSendCode }.Any(x => x.IsNullOrVoid()))
                     {
-                        Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
+                        Obsolete_SmsService.CancelPhone(job_id, phoneLog);
 
                         var heElements = new List<string>();
 
@@ -314,12 +314,12 @@ namespace Yandex.Zen.Core.Services.CommonComponents
                     }
 
                     // Получение sms кода
-                    var sms_code = Obsolete_PhoneService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
+                    var sms_code = Obsolete_SmsService.GetSmsCode(job_id, MinutesWaitSmsCode, heButtonReSendCode, AttemptsReSendSmsCode, phoneLog);
 
                     // Проверка наличия sms кода (если кода нет нет, то отмена номера и выход из метода)
                     if (string.IsNullOrWhiteSpace(sms_code))
                     {
-                        Obsolete_PhoneService.CancelPhone(job_id, phoneLog);
+                        Obsolete_SmsService.CancelPhone(job_id, phoneLog);
                         return false;
                     }
 

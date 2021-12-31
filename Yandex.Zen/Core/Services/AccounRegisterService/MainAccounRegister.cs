@@ -15,18 +15,19 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
-using Yandex.Zen.Core.Services.WalkingOnZenService;
-using Yandex.Zen.Core.Services.WalkingProfileService;
-using Yandex.Zen.Core.Services.WalkingProfileService.Enums;
+using Yandex.Zen.Core.Services.WalkerProfileService.Enums;
 using Yandex.Zen.Core.Services.AccounRegisterService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.Services.WalkerProfileService;
 
 namespace Yandex.Zen.Core.Services.AccounRegisterService
 {
 
-    public class MainAccounRegister : Obsolete_ServicesDataAndComponents
+    public class MainAccounRegister : Obsolete_ServicesDataAndComponents, IAccounRegisterService
     {
         private static readonly object _locker = new object();
 
@@ -163,10 +164,10 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new MainWalkingOnZen(ResourceTypeEnum.Donor).Start();
+                    new MainWalkerOnZen(ResourceTypeEnum.Donor).Start();
 
                     // Проверка прогулки по yandex.zen (если статус false - разгружаем ресурсы и завершаем работу скрипта)
-                    if (!MainWalkingOnZen.StatusWalkIsGood) return;
+                    if (!MainWalkerOnZen.StatusWalkIsGood) return;
                 }
             }
 
@@ -185,7 +186,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                 "https://yandex.com/"
             };
 
-            var key = MainWalkingProfile.GetKeysForSearchService(_sourceSearchKeysType).GetLine(LineOptions.RandomWithRemoved);
+            var key = MainWalkerProfile.GetKeysForSearchService(_sourceSearchKeysType).GetLine(LineOptions.RandomWithRemoved);
 
             var xpathFieldSearch = new[] { "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]", "Поле - Поиск" };
             var xpathItemsPage = new[] { "//li[@class='serp-item']/descendant::h2/a[@href!='']", "" };
@@ -635,8 +636,8 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     Answer = TextMacros.GenerateString(9, "c");
 
                     // Успешное получение ресурса
-                    StateKeeper.ResourcesCurrentThread.Add(InstagramUrl);
-                    StateKeeper.ResourcesAllThreadsInWork.Add(InstagramUrl);
+                    DataKeeper.ResourcesCurrentThread.Add(InstagramUrl);
+                    DataKeeper.ResourcesAllThreadsInWork.Add(InstagramUrl);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[ИФ: {_firstName} {_lastName}]\t[Row: {row + 2}]\tДонор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

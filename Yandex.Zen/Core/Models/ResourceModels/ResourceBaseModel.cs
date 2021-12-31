@@ -124,7 +124,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 if (Program.CheckResourceInWork(Login)) return false;
 
                 this.Login = result;
-                this.Directory = new DirectoryInfo(Path.Combine(StateKeeper.SharedDirectoryOfAccounts.FullName, Login));
+                this.Directory = new DirectoryInfo(Path.Combine(DataKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
                 if (mode == PublicationManagerSecondWindModeEnum.AuthAndBindingPhone && this.Directory.Exists is false)
                     this.Directory.Create();

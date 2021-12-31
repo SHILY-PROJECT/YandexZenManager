@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Services.WalkingProfileService.Enums
+﻿namespace Yandex.Zen.Core.Services.WalkerProfileService.Enums
 {
     /// <summary>
     /// Источник ключевиков.
