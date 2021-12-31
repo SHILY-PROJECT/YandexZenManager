@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Interfaces.Services;
 
 namespace Yandex.Zen.Core.Services
 {
-    public class ServiceManager : IServices
+    public class ServiceManager : IServiceManager
     {
-
-
-        public void StartService(IAccounRegisterService accounRegister)
+        public void StartService(DataManager_new manager, IAccounRegisterService accounRegister)
         {
             throw new NotImplementedException();
         }

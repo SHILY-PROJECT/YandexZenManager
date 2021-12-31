@@ -142,7 +142,7 @@ namespace Yandex.Zen.Core
             SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
 
             _programMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
-            _modeTable = DictionariesAndLists.ModeTables[_programMode];
+            //_modeTable = DictionariesAndLists.ModeTables[_programMode];
             _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
             // Настройка режимов работы сервисов

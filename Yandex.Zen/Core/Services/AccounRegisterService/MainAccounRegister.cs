@@ -20,14 +20,15 @@ using Yandex.Zen.Core.Services.AccounRegisterService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
-using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Services.WalkerProfileService;
+using Yandex.Zen.Core.Interfaces.Services;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.AccounRegisterService
 {
 
-    public class MainAccounRegister : Obsolete_ServicesDataAndComponents, IAccounRegisterService
+    public class MainAccounRegister : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 

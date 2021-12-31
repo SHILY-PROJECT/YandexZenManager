@@ -2,12 +2,12 @@
 {
     public enum ProgramModeEnum
     {
-        WalkerProfile,
-        WalkerOnZen,
-        AccountRegistration,
-        ZenChannelCreationAndDesign,
-        ZenArticlePublication,
-        InstanceAccountManagement,
-        CheatActivity
+        WalkerProfileService,
+        WalkerOnZenService,
+        AccountRegistrationService,
+        ChannelManagerService,
+        PublicationManagerService,
+        BrowserAccountManagerService,
+        ActivityManagerService
     }
 }

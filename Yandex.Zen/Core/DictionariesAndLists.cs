@@ -2,6 +2,13 @@
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
+using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Services.AccounRegisterService;
+using Yandex.Zen.Core.Services.BrowserAccountManagerService;
+using Yandex.Zen.Core.Services.ChannelManagerService;
+using Yandex.Zen.Core.Services.PublicationManagerService;
+using Yandex.Zen.Core.Services.ActivityManagerService;
+using Yandex.Zen.Core.Services.WalkerOnZenService;
 
 namespace Yandex.Zen.Core
 {
@@ -12,17 +19,15 @@ namespace Yandex.Zen.Core
 
         #endregion =================================================================
 
-        /// <summary>
-        /// Таблицы режимов.
-        /// </summary>
-        public static Dictionary<ProgramModeEnum, TableModel> ModeTables => new Dictionary<ProgramModeEnum, TableModel>
+
+        public static Dictionary<ProgramModeEnum, IService> Services => new Dictionary<ProgramModeEnum, IService>
         {
-            [ProgramModeEnum.InstanceAccountManagement] = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]),
-            [ProgramModeEnum.AccountRegistration] = new TableModel("DonorsForRegistration", Zenno.Variables["cfgPathFileDonorsForRegistration"]),
-            [ProgramModeEnum.ZenChannelCreationAndDesign] = new TableModel("AccountsForCreateZenChannel", Zenno.Variables["cfgPathFileAccountsForCreateZenChannel"]),
-            [ProgramModeEnum.ZenArticlePublication] = new TableModel("AccountsForPosting", Zenno.Variables["cfgPathFileAccountsForPosting"]),
-            [ProgramModeEnum.CheatActivity] = new TableModel("AccountsForCheatActivity", Zenno.Variables["cfgAccountsForCheatActivity"]),
-            [ProgramModeEnum.PostingSecondWind] = new TableModel("AccountsPostingSecondWind", Zenno.Variables["cfgPathFileAccountsPostingSecondWind"])
+            [ProgramModeEnum.AccountRegistrationService] = new MainAccounRegister(),
+            [ProgramModeEnum.BrowserAccountManagerService] = new MainBrowserAccountManager(),
+            [ProgramModeEnum.ChannelManagerService] = new MainChannelManager(),
+            [ProgramModeEnum.PublicationManagerService] = new MainPublicationManager(),
+            [ProgramModeEnum.ActivityManagerService] = new MainActivityManager(),
+            [ProgramModeEnum.WalkerOnZenService] = new MainWalkerOnZen()
         };
 
         /// <summary>
@@ -30,13 +35,13 @@ namespace Yandex.Zen.Core
         /// </summary>
         public static Dictionary<string, ProgramModeEnum> ProgramModes => new Dictionary<string, ProgramModeEnum>()
         {
-            ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.InstanceAccountManagement,
-            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfile,
-            ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkerOnZen,
-            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccountRegistration,
-            ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ZenChannelCreationAndDesign,
-            ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.ZenArticlePublication,
-            ["Накрутка активности"] = ProgramModeEnum.CheatActivity,
+            ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.BrowserAccountManagerService,
+            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfileService,
+            ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkerOnZenService,
+            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccountRegistrationService,
+            ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ChannelManagerService,
+            ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.PublicationManagerService,
+            ["Накрутка активности"] = ProgramModeEnum.ActivityManagerService,
         };
 
         /// <summary>

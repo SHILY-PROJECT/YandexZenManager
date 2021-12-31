@@ -81,21 +81,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Interfaces\IAccounRegisterService.cs" />
-    <Compile Include="Core\Interfaces\IActivityManagerService.cs" />
-    <Compile Include="Core\Interfaces\IBrowserAccountManagerService.cs" />
-    <Compile Include="Core\Interfaces\IChannelManagerService.cs" />
-    <Compile Include="Core\Interfaces\IPublicationManagerService.cs" />
-    <Compile Include="Core\Interfaces\IServices.cs" />
-    <Compile Include="Core\Interfaces\IWalkerOnZenService.cs" />
+    <Compile Include="Core\DataManager_new.cs" />
+    <Compile Include="Core\Interfaces\Services\IAccounRegisterService.cs" />
+    <Compile Include="Core\Interfaces\Services\IActivityManagerService.cs" />
+    <Compile Include="Core\Interfaces\Services\IBrowserAccountManagerService.cs" />
+    <Compile Include="Core\Interfaces\Services\IChannelManagerService.cs" />
+    <Compile Include="Core\Interfaces\Services\IPublicationManagerService.cs" />
+    <Compile Include="Core\Interfaces\IService.cs" />
+    <Compile Include="Core\Interfaces\IServiceManager.cs" />
+    <Compile Include="Core\Interfaces\Services\IWalkerOnZenService.cs" />
     <Compile Include="Core\Models\ResourceModels\BackupDTO\PasswordDTO.cs" />
+    <Compile Include="Core\Services\AccounRegisterService\MainAccounRegister_new.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\AccountActionTypeEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\CommentsSourceEnum.cs" />
+    <Compile Include="Core\Services\ActivityManagerService\MainActivityManager_new.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\AccountProcessingModeEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\Enums\StartPageInstanceEnum.cs" />
     <Compile Include="Core\Services\BrowserAccountManagerService\InstanceWinAPI.cs" />
+    <Compile Include="Core\Services\BrowserAccountManagerService\MainBrowserAccountManager_new.cs" />
+    <Compile Include="Core\Services\ChannelManagerService\MainChannelManager_new.cs" />
+    <Compile Include="Core\Services\PublicationManagerService\MainPublicationManager_new.cs" />
     <Compile Include="Core\Services\ServiceManager.cs" />
+    <Compile Include="Core\Services\WalkerOnZenService\MainWalkerOnZen_new.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Models\HE.cs" />
     <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />

@@ -6,6 +6,7 @@ using Yandex.Zen.Core.Models;
 
 namespace Yandex.Zen.Core
 {
+    [Obsolete]
     /// <summary>
     /// Класс-посредник для передачи данных проекта.
     /// </summary>

@@ -19,7 +19,7 @@ using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.WalkerProfileService
 {
-    public class MainWalkerProfile : Obsolete_ServicesDataAndComponents, IServices
+    public class MainWalkerProfile : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 

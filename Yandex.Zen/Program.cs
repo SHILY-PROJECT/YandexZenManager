@@ -45,31 +45,31 @@ namespace Yandex.Zen
             {
                 switch (CurrentMode)
                 {
-                    case ProgramModeEnum.WalkerProfile:
+                    case ProgramModeEnum.WalkerProfileService:
                         new MainWalkerProfile().Start();
                         break;
 
-                    case ProgramModeEnum.AccountRegistration:
+                    case ProgramModeEnum.AccountRegistrationService:
                         new MainAccounRegister().Start();
                         break;
 
-                    case ProgramModeEnum.ZenChannelCreationAndDesign:
+                    case ProgramModeEnum.ChannelManagerService:
                         new MainChannelManager().Start();
                         break;
 
-                    case ProgramModeEnum.ZenArticlePublication:
+                    case ProgramModeEnum.PublicationManagerService:
                         new MainPublicationManager().Start();
                         break;
 
-                    case ProgramModeEnum.WalkerOnZen:
+                    case ProgramModeEnum.WalkerOnZenService:
                         new MainWalkerOnZen().Start();
                         break;
 
-                    case ProgramModeEnum.InstanceAccountManagement:
+                    case ProgramModeEnum.BrowserAccountManagerService:
                         new MainBrowserAccountManager().Start();
                         break;
 
-                    case ProgramModeEnum.CheatActivity:
+                    case ProgramModeEnum.ActivityManagerService:
                         new MainActivityManager().Start();
                         break;
                 }
@@ -104,7 +104,7 @@ namespace Yandex.Zen
             {
                 lock (_locker)
                 {
-                    if (CurrentMode == ProgramModeEnum.InstanceAccountManagement)
+                    if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
                         MainBrowserAccountManager.ThreadInWork = false;
 
                     curRes.ForEach(res

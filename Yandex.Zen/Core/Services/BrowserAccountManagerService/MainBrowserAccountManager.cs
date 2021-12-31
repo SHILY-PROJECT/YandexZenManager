@@ -16,10 +16,11 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Services.BrowseArccountManagerService;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Interfaces.Services;
 
 namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
 {
-    public class MainBrowserAccountManager : Obsolete_ServicesDataAndComponents, IServices
+    public class MainBrowserAccountManager : Obsolete_ServicesDataAndComponents
     {
         private static readonly object _locker = new object();
 
