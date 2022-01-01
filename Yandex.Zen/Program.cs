@@ -25,10 +25,12 @@ namespace Yandex.Zen
     {
         private static readonly object _locker = new object();
 
+        [ThreadStatic] public static ProgramModeEnum _currentMode;
+
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => DataKeeper.CurrentProgramMode; }
+        public static ProgramModeEnum CurrentMode { get => _currentMode; set => Logger.ConfigureModeLog(_currentMode = value); }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -38,8 +40,10 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            DataKeeper.Configure(instance, zenno, out var configurationStatus);
-            if (configurationStatus is false) return 0;
+            //DataKeeper.Configure(instance, zenno, out var configurationStatus);
+            //if (configurationStatus is false) return 0;
+
+            var manager = new DataManager_new(instance, zenno);
 
             try
             {
@@ -49,7 +53,7 @@ namespace Yandex.Zen
                         new MainWalkerProfile().Start();
                         break;
 
-                    case ProgramModeEnum.AccountRegistrationService:
+                    case ProgramModeEnum.AccounRegisterService:
                         new MainAccounRegister().Start();
                         break;
 

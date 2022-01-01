@@ -12,7 +12,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
     /// </summary>
     public class ResourceData
     {
-        public ResourceTypeEnum Type { get; set; }
+        public ObjectTypeEnum Type { get; set; }
         public string Name { get; set; }
         public string Dir { get; set; }
 

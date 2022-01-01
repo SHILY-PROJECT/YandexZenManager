@@ -126,7 +126,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] public static bool BindingPhoneToAccountIfRequaid;
 
         [ThreadStatic] public static string DescriptionChannel;
-        [ThreadStatic] public static ResourceTypeEnum ResourceType;
+        [ThreadStatic] public static ObjectTypeEnum ResourceType;
 
         [ThreadStatic] public static int MinSizeProfileUseInModes;
         [ThreadStatic] public static bool CreateFolderResourceIfNoExist;

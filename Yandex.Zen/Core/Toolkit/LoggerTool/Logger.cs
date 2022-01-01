@@ -16,50 +16,71 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
     public class Logger
     {
-        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
-        private static Instance Browser { get => DataKeeper.Browser; }
-        private static DirectoryInfo ResourceDirectory { get => DataKeeper.Resource?.Directory; }
-
-        #endregion =================================================================
-
         private static readonly object _locker = new object();
-        private static readonly string _logAccountFileName = @"_logger\account.log";
-        private static readonly string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
-        private static readonly string _generalDirectoryOfMainLog = $@"{Zenno.Directory}\_logger";
-        [ThreadStatic] private static FileInfo _generalLog = new FileInfo($@"{_generalDirectoryOfMainLog}\{MainLogFileName[DataKeeper.CurrentProgramMode]}");
-        [ThreadStatic] private static string _resourceForLog;
 
-        /// <summary>
-        /// Получение основного лог файла режима.
-        /// </summary>
-        public static FileInfo GeneralLogFile { get => _generalLog; }
+        [ThreadStatic] private static string _logAccountFileName = @"_logger\account.log";
+        [ThreadStatic] private static string _backupAccountDataFileName = @"_logger\backup_account_data.txt";
+
+        [ThreadStatic] private static DataManager_new _dataManager;
+        [ThreadStatic] private static Instance _browser;
+        [ThreadStatic] private static IZennoPosterProjectModel _zenno;
+        [ThreadStatic] private static ProgramModeEnum _currentProgramMode;
+        [ThreadStatic] private static FileInfo _modeLog;
+        [ThreadStatic] private static DirectoryInfo _currentObjectDirectory;
+        [ThreadStatic] private static string _textObjectForLog;
+
+        private static DataManager_new DataManager { get => _dataManager; }
+        private static Instance Browser { get => DataManager.Browser; }
+        private static IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
+        private static ProgramModeEnum CurrentProgramMode { get => Program.CurrentMode; }
+        private static DirectoryInfo CurrentObjectDirectory { get => DataManager.Resource.Directory; }
+        public static FileInfo ModeLog { get => _modeLog; }
+
+        public Logger()
+        {
+
+        }
+
+        public static void ConfigureMain(DataManager_new manager)
+        {
+            _dataManager = manager;
+        }
+
+        public static void ConfigureModeLog(ProgramModeEnum mode)
+        {
+            _currentProgramMode = mode;
+            _modeLog = new FileInfo($@"{Zenno.Directory}\_logger\{ModeLogFileName[mode]}");
+        }
+
+        public static void ConfigureObjectLog(DirectoryInfo objectDirectory)
+        {
+            _currentObjectDirectory = objectDirectory;
+        }
 
         /// <summary>
         /// Лог режима.
         /// </summary>
-        private static Dictionary<ProgramModeEnum, string> MainLogFileName => new Dictionary<ProgramModeEnum, string>
+        private static Dictionary<ProgramModeEnum, string> ModeLogFileName => new Dictionary<ProgramModeEnum, string>
         {
-            [ProgramModeEnum.WalkerProfileService] =              "walking_profile.log",
-            [ProgramModeEnum.WalkerOnZenService] =                "walking_on_zen.log",
-            [ProgramModeEnum.BrowserAccountManagerService] =   "instance_account_management.log",
-            [ProgramModeEnum.AccountRegistrationService] =   "yandex_account_registration.log",
-            [ProgramModeEnum.ChannelManagerService] = "zen_channel_creation_and_design.log",
-            [ProgramModeEnum.PublicationManagerService] =       "zen_posting.log",
-            [ProgramModeEnum.PostingSecondWind] =           "posting_second_wind.log"
+            [ProgramModeEnum.WalkerProfileService] =            "walker_profile_service.log",
+            [ProgramModeEnum.WalkerOnZenService] =              "walker_on_zen_service.log",
+            [ProgramModeEnum.BrowserAccountManagerService] =    "browser_account_manager_service.log",
+            [ProgramModeEnum.AccounRegisterService] =           "accoun_register_service.log",
+            [ProgramModeEnum.ChannelManagerService] =           "channel_manager_service.log",
+            [ProgramModeEnum.PublicationManagerService] =       "publication_manager_service.log",
         };
 
         /// <summary>
         /// Установка ресурса в лог.
         /// </summary>
-        /// <param name="resource"></param>
+        /// <param name="obj"></param>
         /// <param name="objectType"></param>
-        public static void SetCurrentResourceForLog(string resource, ResourceTypeEnum objectType)
-            => _resourceForLog = new Dictionary<ResourceTypeEnum, string>
+        public static void SetCurrentObjectForLog(string obj, ObjectTypeEnum objectType)
+            => _textObjectForLog = new Dictionary<ObjectTypeEnum, string>
             {
-                [ResourceTypeEnum.Account] = $"[Login: {resource}]\t",
-                [ResourceTypeEnum.Donor] = $"[Donor: {resource}]\t",
-                [ResourceTypeEnum.Profile] = $"[{resource}]\t"
+                [ObjectTypeEnum.Account] = $"[Login: {obj}]\t",
+                [ObjectTypeEnum.Donor] = $"[Donor: {obj}]\t",
+                [ObjectTypeEnum.Profile] = $"[{obj}]\t"
             }
             [objectType];
 
@@ -103,7 +124,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// </summary>
         /// <returns></returns>
         public static FileInfo GetAccountFileLogInfo() =>
-            new FileInfo(Path.Combine(ResourceDirectory.FullName, _logAccountFileName));
+            new FileInfo(Path.Combine(CurrentObjectDirectory.FullName, _logAccountFileName));
 
         /// <summary>
         /// Получение информации о бэкап файле аккаунта.
@@ -112,7 +133,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// <returns></returns>
         public static FileInfo GetInfoBackupAccount(bool CreateLoggerDirectoryIfNotExist = true)
         {
-            var fileInfo = new FileInfo(Path.Combine(ResourceDirectory.FullName, _backupAccountDataFileName));
+            var fileInfo = new FileInfo(Path.Combine(CurrentObjectDirectory.FullName, _backupAccountDataFileName));
             if (CreateLoggerDirectoryIfNotExist && fileInfo.Exists is false) fileInfo.Directory.Create();
             return fileInfo;
         }
@@ -168,7 +189,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// <param name="takeScreenshot"></param>
         /// <param name="otherInfoList"></param>
         public static void ErrorAnalysis(bool saveDomText, bool saveSourceText, bool takeScreenshot, List<string> otherInfoList = null)
-            => ErrorAnalysis(ResourceDirectory, saveDomText, saveSourceText, takeScreenshot, otherInfoList);
+            => ErrorAnalysis(CurrentObjectDirectory, saveDomText, saveSourceText, takeScreenshot, otherInfoList);
 
         /// <summary>
         /// Анализ данных и сохранение результата в отдельную папку в папке логгера аккаунта.
@@ -176,7 +197,8 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// <param name="saveDomText"></param>
         /// <param name="takeScreenshot"></param>
         /// <param name="otherInfoList"></param>
-        public static void ErrorAnalysis(DirectoryInfo resourceDirectory, bool saveDomText, bool saveSourceText, bool takeScreenshot, List<string> otherInfoList = null)
+        public static void ErrorAnalysis(DirectoryInfo resourceDirectory, bool saveDomText,
+            bool saveSourceText, bool takeScreenshot, List<string> otherInfoList = null)
         {
             var datetime = $"{DateTime.Now:yyyy-MM-dd   HH-mm-ss}";
             var errorFolder = new DirectoryInfo(Path.Combine(resourceDirectory.FullName, "_logger", $"error - {datetime}"));
@@ -257,7 +279,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             var pattern = GetRegexPatternForAccountLog(logFilter);
 
             // Получаем информацию о файле лога аккаунта
-            var fileLog = new FileInfo(Path.Combine(ResourceDirectory.FullName, _logAccountFileName));
+            var fileLog = new FileInfo(Path.Combine(CurrentObjectDirectory.FullName, _logAccountFileName));
 
             // Проверка файла лога аккаунта на существование
             if (!fileLog.Exists) return new List<string>();
@@ -280,7 +302,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// </summary>
         /// <param name="textToLog"></param>
         public static void Write(string textToLog, LoggerType loggerType, bool writeToResourceLog = true, bool writeToGeneralLog = true, bool sendToZennoPosterLog = true, LogColor logColor = LogColor.Default) =>
-            Write(ResourceDirectory, textToLog, loggerType, writeToResourceLog, writeToGeneralLog, sendToZennoPosterLog, logColor);
+            Write(CurrentObjectDirectory, textToLog, loggerType, writeToResourceLog, writeToGeneralLog, sendToZennoPosterLog, logColor);
 
         /// <summary>
         /// Записать в лог донора, основной, отправить в лог zp.
@@ -294,25 +316,25 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 new Dictionary<ProgramModeEnum, string>
                 {
-                    [ProgramModeEnum.WalkerProfileService] = $"[{DataKeeper.CurrentProgramMode}]                  " ,
-                    [ProgramModeEnum.WalkerOnZenService] = $"[{DataKeeper.CurrentProgramMode}]                    " ,
-                    [ProgramModeEnum.BrowserAccountManagerService] = $"[{DataKeeper.CurrentProgramMode}]       " ,
-                    [ProgramModeEnum.AccountRegistrationService] = $"[{DataKeeper.CurrentProgramMode}]       " ,
-                    [ProgramModeEnum.ChannelManagerService] = $"[{DataKeeper.CurrentProgramMode}]     " ,
-                    [ProgramModeEnum.PublicationManagerService] = $"[{DataKeeper.CurrentProgramMode}]           " ,
+                    [ProgramModeEnum.WalkerProfileService] = $"[{CurrentProgramMode}]                  " ,
+                    [ProgramModeEnum.WalkerOnZenService] = $"[{CurrentProgramMode}]                    " ,
+                    [ProgramModeEnum.BrowserAccountManagerService] = $"[{CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.AccounRegisterService] = $"[{CurrentProgramMode}]       " ,
+                    [ProgramModeEnum.ChannelManagerService] = $"[{CurrentProgramMode}]     " ,
+                    [ProgramModeEnum.PublicationManagerService] = $"[{CurrentProgramMode}]           " ,
                 }
-                .TryGetValue(DataKeeper.CurrentProgramMode, out string modeForAccountLog);
+                .TryGetValue(CurrentProgramMode, out string modeForAccountLog);
 
-                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_resourceForLog}{textToLog}", loggerType, dateTime);
+                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_textObjectForLog}{textToLog}", loggerType, dateTime);
             }
 
             // Запись в основной лог режима
             if (writeToGeneralLog)
-                WriteToGeneralLog($"{_resourceForLog}{textToLog}", loggerType, dateTime);
+                WriteToGeneralLog($"{_textObjectForLog}{textToLog}", loggerType, dateTime);
 
             // Отправка сообщения в zp/pm
             if (Zenno != null)
-                Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfileService}]\t{_resourceForLog}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+                Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfileService}]\t{_textObjectForLog}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>
@@ -335,16 +357,16 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// <param name="dateTime"></param>
         private static void WriteGeneralLogToFile(string textToLog, LoggerType loggerType, string dateTime = null)
         {
-            if (GeneralLogFile == null)
+            if (ModeLog == null)
                 throw new Exception("Logger.DirectoryGeneralLog  -  Директория проекта не установлена");
 
-            if (!GeneralLogFile.Directory.Exists) GeneralLogFile.Directory.Create();
+            if (!ModeLog.Directory.Exists) ModeLog.Directory.Create();
 
             dateTime = !string.IsNullOrWhiteSpace(dateTime) ? dateTime : $"{DateTime.Now:yyyy-MM-dd   HH-mm-ss}";
             textToLog = GetTextLogByType(dateTime, loggerType, textToLog);
 
             lock (_locker)
-                File.AppendAllLines(GeneralLogFile.FullName, new[] { $"{textToLog}" }, Encoding.UTF8);
+                File.AppendAllLines(ModeLog.FullName, new[] { $"{textToLog}" }, Encoding.UTF8);
         }
 
         /// <summary>

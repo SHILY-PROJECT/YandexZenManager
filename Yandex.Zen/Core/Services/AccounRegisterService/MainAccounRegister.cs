@@ -165,7 +165,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                 {
                     Logger.Write($"[Действия перед регистрацией]\tПереход на \"zen.yandex\" перед регистрацией для прогулки", LoggerType.Info, true, false, true);
 
-                    new MainWalkerOnZen(ResourceTypeEnum.Donor).Start();
+                    new MainWalkerOnZen(ObjectTypeEnum.Donor).Start();
 
                     // Проверка прогулки по yandex.zen (если статус false - разгружаем ресурсы и завершаем работу скрипта)
                     if (!MainWalkerOnZen.StatusWalkIsGood) return;
@@ -563,8 +563,8 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
                     ObjectDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstagramUrl, @"(?<=com/).*?(?=/)").Value}"));
 
-                    if (ShorDonorNameForLog) Logger.SetCurrentResourceForLog(ObjectDirectory.Name, ResourceTypeEnum.Donor);
-                    else Logger.SetCurrentResourceForLog(InstagramUrl, ResourceTypeEnum.Donor);
+                    if (ShorDonorNameForLog) Logger.SetCurrentObjectForLog(ObjectDirectory.Name, ObjectTypeEnum.Donor);
+                    else Logger.SetCurrentObjectForLog(InstagramUrl, ObjectTypeEnum.Donor);
 
                     // Проверка на наличия ресурса и его занятость
                     if (!ResourceIsAvailable(InstagramUrl, row)) continue;

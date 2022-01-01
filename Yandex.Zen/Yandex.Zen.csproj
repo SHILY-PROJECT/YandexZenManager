@@ -121,7 +121,7 @@
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
-    <Compile Include="Core\Enums\ResourceTypeEnum.cs" />
+    <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\StartPageWalkerOnZenEnum.cs" />
     <Compile Include="Core\Services\WalkerProfileService\Enums\ProfileWalkerMode.cs" />
     <Compile Include="Core\Services\WalkerProfileService\Enums\SaveProfileModeEnum.cs" />

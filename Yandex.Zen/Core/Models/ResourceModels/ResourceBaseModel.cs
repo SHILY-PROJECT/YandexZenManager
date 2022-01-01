@@ -27,7 +27,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         public string PhoneNumber { get; set; }
         public Uri Instagram { get; set; }
         public ChannelDataModel Channel { get; set; }
-        public ResourceTypeEnum Type { get; set; }
+        public ObjectTypeEnum Type { get; set; }
         public DirectoryInfo Directory { get; set; }
         public ProfileDataModel ProfileData { get; set; }
         public ProxyDataModel ProxyData { get; set; }
@@ -171,7 +171,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
 
             Program.AddResourceToCache(Login, true, true);
-            Logger.SetCurrentResourceForLog(Login, ResourceTypeEnum.Account);
+            Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
 
             return true;
         }

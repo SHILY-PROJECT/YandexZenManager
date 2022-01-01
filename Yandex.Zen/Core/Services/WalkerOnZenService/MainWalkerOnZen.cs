@@ -55,12 +55,12 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
         private bool _changeGeoIfMenuIsVoid;
         private string _timeOnPageArticleZen;
 
-        public ResourceTypeEnum CurrentObjectAtWork { get; set; }
+        public ObjectTypeEnum CurrentObjectAtWork { get; set; }
 
         /// <summary>
         /// Пустой конструктор для скрипта вызова из других методов.
         /// </summary>
-        public MainWalkerOnZen(ResourceTypeEnum resourceTypeAtWork)
+        public MainWalkerOnZen(ObjectTypeEnum resourceTypeAtWork)
         {
             SetSettingsMode();
 
@@ -240,7 +240,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                 }
 
                 // Проверка авторизации перед прогулкой (для аккаунта)
-                if (_useAuthorizationForAccounts && CurrentObjectAtWork == ResourceTypeEnum.Account && Instance.FindFirstElement(xpathAvatarProfile, false, false).IsNullOrVoid())
+                if (_useAuthorizationForAccounts && CurrentObjectAtWork == ObjectTypeEnum.Account && Instance.FindFirstElement(xpathAvatarProfile, false, false).IsNullOrVoid())
                 {
                     var heButtonAuth = Instance.FindFirstElement(xpathButtonAuth, false, true);
 
@@ -337,10 +337,10 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     // Сохранение результата в таблицу режима и общую таблицу
                     switch (CurrentObjectAtWork)
                     {
-                        case ResourceTypeEnum.Donor:
+                        case ObjectTypeEnum.Donor:
                             TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.InstaUrl, InstagramUrl, new InstDataItem(TableColumnEnum.Inst.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
-                        case ResourceTypeEnum.Account:
+                        case ObjectTypeEnum.Account:
                             TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.Login, Login, new InstDataItem(TableColumnEnum.Inst.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
                     }
@@ -858,7 +858,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                     if (!string.IsNullOrWhiteSpace(login))
                     {
-                        CurrentObjectAtWork = ResourceTypeEnum.Account;
+                        CurrentObjectAtWork = ObjectTypeEnum.Account;
                         Login = login;
                         ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
                     }
@@ -873,7 +873,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                             // Подключаем аккаунт в работу, если он найден в общей таблице
                             if (!string.IsNullOrWhiteSpace(login))
                             {
-                                CurrentObjectAtWork = ResourceTypeEnum.Account;
+                                CurrentObjectAtWork = ObjectTypeEnum.Account;
                                 Login = login;
                                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
                             }
@@ -882,7 +882,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                         // Подключаем донор в работу, если логина нет ни в таблице режима, ни в общей
                         if (string.IsNullOrWhiteSpace(login))
                         {
-                            CurrentObjectAtWork = ResourceTypeEnum.Donor;
+                            CurrentObjectAtWork = ObjectTypeEnum.Donor;
                             Login = donor;
                             InstagramUrl = donor;
                             ObjectDirectory = new DirectoryInfo(Path.Combine(pathSharedFolderDonors, $@"{Regex.Match(Login, @"(?<=com/).*?(?=/)").Value}"));
@@ -890,18 +890,18 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     }
                     else continue;
 
-                    if (CurrentObjectAtWork == ResourceTypeEnum.Account) Logger.SetCurrentResourceForLog(Login, ResourceTypeEnum.Account);
-                    else if (ShorDonorNameForLog) Logger.SetCurrentResourceForLog(ObjectDirectory.Name, ResourceTypeEnum.Donor);
-                    else Logger.SetCurrentResourceForLog(Login, ResourceTypeEnum.Donor);
+                    if (CurrentObjectAtWork == ObjectTypeEnum.Account) Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
+                    else if (ShorDonorNameForLog) Logger.SetCurrentObjectForLog(ObjectDirectory.Name, ObjectTypeEnum.Donor);
+                    else Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Donor);
 
                     // Тип ресурса для работы использовать
                     switch (_useResourceTypeInWork)
                     {
                         case UseObjectTypeInWorkEnum.UseOnlyDonor:
-                            if (CurrentObjectAtWork != ResourceTypeEnum.Donor) continue;
+                            if (CurrentObjectAtWork != ObjectTypeEnum.Donor) continue;
                             else break;
                         case UseObjectTypeInWorkEnum.UseOnlyAccount:
-                            if (CurrentObjectAtWork != ResourceTypeEnum.Account) continue;
+                            if (CurrentObjectAtWork != ObjectTypeEnum.Account) continue;
                             else break;
                     }
 
@@ -933,7 +933,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                         }
                     }
 
-                    if (CurrentObjectAtWork == ResourceTypeEnum.Account)
+                    if (CurrentObjectAtWork == ObjectTypeEnum.Account)
                     {
                         // Получение пароля
                         Password = AccountsTable.GetCell((int)TableColumnEnum.Inst.Password, row);

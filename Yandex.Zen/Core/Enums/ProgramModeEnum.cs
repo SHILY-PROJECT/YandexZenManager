@@ -4,7 +4,7 @@
     {
         WalkerProfileService,
         WalkerOnZenService,
-        AccountRegistrationService,
+        AccounRegisterService,
         ChannelManagerService,
         PublicationManagerService,
         BrowserAccountManagerService,

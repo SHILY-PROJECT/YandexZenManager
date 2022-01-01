@@ -22,12 +22,12 @@ namespace Yandex.Zen.Core
 
         public static Dictionary<ProgramModeEnum, IService> Services => new Dictionary<ProgramModeEnum, IService>
         {
-            [ProgramModeEnum.AccountRegistrationService] = new MainAccounRegister(),
-            [ProgramModeEnum.BrowserAccountManagerService] = new MainBrowserAccountManager(),
-            [ProgramModeEnum.ChannelManagerService] = new MainChannelManager(),
-            [ProgramModeEnum.PublicationManagerService] = new MainPublicationManager(),
-            [ProgramModeEnum.ActivityManagerService] = new MainActivityManager(),
-            [ProgramModeEnum.WalkerOnZenService] = new MainWalkerOnZen()
+            [ProgramModeEnum.AccounRegisterService] = new MainAccounRegister_new(),
+            [ProgramModeEnum.BrowserAccountManagerService] = new MainBrowserAccountManager_new(),
+            [ProgramModeEnum.ChannelManagerService] = new MainChannelManager_new(),
+            [ProgramModeEnum.PublicationManagerService] = new MainPublicationManager_new(),
+            [ProgramModeEnum.ActivityManagerService] = new MainActivityManager_new(),
+            [ProgramModeEnum.WalkerOnZenService] = new MainWalkerOnZen_new()
         };
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Yandex.Zen.Core
             ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.BrowserAccountManagerService,
             ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfileService,
             ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkerOnZenService,
-            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccountRegistrationService,
+            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccounRegisterService,
             ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ChannelManagerService,
             ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.PublicationManagerService,
             ["Накрутка активности"] = ProgramModeEnum.ActivityManagerService,
