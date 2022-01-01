@@ -22,13 +22,13 @@ namespace Yandex.Zen.Core
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static ResourceBaseModel _objectModel;
+        [ThreadStatic] private static ObjectBaseModel _objectModel;
 
         public static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
         public static Instance Instance { get => DataKeeper.Browser; }
         public static ProgramModeEnum ProgramMode { get => DataKeeper.CurrentProgramMode; }
         public static Random Rnd { get; set; } = new Random();
-        public static ResourceBaseModel Object { get => _objectModel; set { _objectModel = value; } }
+        public static ObjectBaseModel Object { get => _objectModel; set { _objectModel = value; } }
 
 
         public static IZennoTable AccountsGeneralTable;

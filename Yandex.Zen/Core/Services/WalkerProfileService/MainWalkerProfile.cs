@@ -123,7 +123,6 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                         Program.AddResourceToCache(ProfileInfo.FullName, true, true);
 
-                        Logger.SetCurrentObjectForLog(ProfileInfo.Name, ObjectTypeEnum.Profile);
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
                         break;
@@ -163,7 +162,6 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                         Zenno.Profile.Load(ProfileInfo.FullName, true);
 
-                        Logger.SetCurrentObjectForLog(ProfileInfo.Name, ObjectTypeEnum.Profile);
                         Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} KB]\tПрофиль взят на догуливание", LoggerType.Info, false, false, true);
 
                         break;

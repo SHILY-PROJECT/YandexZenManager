@@ -15,6 +15,7 @@ using Yandex.Zen.Core.Services.WalkerProfileService;
 using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
+using Yandex.Zen.Core.Services;
 
 namespace Yandex.Zen
 {
@@ -30,7 +31,7 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущий режим работы шаблона.
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => _currentMode; set => Logger.ConfigureModeLog(_currentMode = value); }
+        public static ProgramModeEnum CurrentMode { get => _currentMode; set => _currentMode = value; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -40,49 +41,21 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            //DataKeeper.Configure(instance, zenno, out var configurationStatus);
-            //if (configurationStatus is false) return 0;
-
             var manager = new DataManager_new(instance, zenno);
 
-            try
+            if (manager.TryConfigureProjectSettings())
             {
-                switch (CurrentMode)
+                try
                 {
-                    case ProgramModeEnum.WalkerProfileService:
-                        new MainWalkerProfile().Start();
-                        break;
-
-                    case ProgramModeEnum.AccounRegisterService:
-                        new MainAccounRegister().Start();
-                        break;
-
-                    case ProgramModeEnum.ChannelManagerService:
-                        new MainChannelManager().Start();
-                        break;
-
-                    case ProgramModeEnum.PublicationManagerService:
-                        new MainPublicationManager().Start();
-                        break;
-
-                    case ProgramModeEnum.WalkerOnZenService:
-                        new MainWalkerOnZen().Start();
-                        break;
-
-                    case ProgramModeEnum.BrowserAccountManagerService:
-                        new MainBrowserAccountManager().Start();
-                        break;
-
-                    case ProgramModeEnum.ActivityManagerService:
-                        new MainActivityManager().Start();
-                        break;
+                    new ServiceManager().RunService(manager);
                 }
+                catch (Exception ex)
+                {
+                    Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
+                }
+                CleanUpResourcesFromCache();
             }
-            catch (Exception ex)
-            {
-                Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
-            }
-            CleanUpResourcesFromCache();
+
             return 0;
         }
 

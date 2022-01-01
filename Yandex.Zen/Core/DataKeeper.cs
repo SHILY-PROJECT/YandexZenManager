@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core
     {
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
-        [ThreadStatic] private static ResourceBaseModel _resourceBaseModel;
+        [ThreadStatic] private static ObjectBaseModel _resourceBaseModel;
         [ThreadStatic] private static ProgramModeEnum _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
@@ -41,7 +41,7 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static ResourceBaseModel Resource
+        public static ObjectBaseModel Resource
         {
             get
             {
@@ -148,15 +148,12 @@ namespace Yandex.Zen.Core
             // Настройка режимов работы сервисов
             switch (CurrentProgramMode)
             {
-                case ProgramModeEnum.PostingSecondWind:
-                    MainPublicationManagerSecondWind.CurrentMode = DictionariesAndLists.PostingSecondWindModes[Zenno.Variables["cfgPostingSecondWindModeOfOperation"].Value];
-                    break;
 
                 default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");
             }
 
             // Конфигурирование ресурса
-            _resourceBaseModel = new ResourceBaseModel
+            _resourceBaseModel = new ObjectBaseModel
             {
                 ProfileData = new ProfileDataModel()
                 {

@@ -16,7 +16,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private DataManager Data { get => DataManager.Data; }
-        private ResourceBaseModel Account { get => Data.Resource; }
+        private ObjectBaseModel Account { get => Data.Resource; }
         private Instance Browser { get => Data.Browser; }
 
         #endregion =================================================================

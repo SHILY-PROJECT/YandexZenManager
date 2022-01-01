@@ -10,16 +10,14 @@ using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
-using Yandex.Zen.Core.Services.PublicationManagerService.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
-using Yandex.Zen.Core.Services.PublicationManagerService;
 
 namespace Yandex.Zen.Core.Models.ResourceModels
 {
     /// <summary>
     /// Класс для хранения данных аккаунта.
     /// </summary>
-    public partial class ResourceBaseModel
+    public partial class ObjectBaseModel
     {
         public string Login { get; set; }
         public string Password { get; set; }
@@ -39,7 +37,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
     /// <summary>
     /// Класс для обработки свойств класса.
     /// </summary>
-    public partial class ResourceBaseModel
+    public partial class ObjectBaseModel
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private DataManager Project { get => DataManager.Data; }
@@ -88,9 +86,6 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                     {
                         switch (Program.CurrentMode)
                         {
-                            case ProgramModeEnum.PostingSecondWind:
-                                if (ConfigurePostingSecondWind(tb.Table, row)) return;
-                                break;
 
                         }
                     }
@@ -109,8 +104,6 @@ namespace Yandex.Zen.Core.Models.ResourceModels
         /// </summary>
         private bool ConfigurePostingSecondWind(IZennoTable table, int row)
         {
-            var mode = MainPublicationManagerSecondWind.CurrentMode;
-
             var colLogin = (int)ModeTableColumnsEnum.PostingSecondWind.Login;
             var colPassword = (int)ModeTableColumnsEnum.PostingSecondWind.Password;
             var colProxy = (int)ModeTableColumnsEnum.PostingSecondWind.Proxy;
@@ -126,7 +119,7 @@ namespace Yandex.Zen.Core.Models.ResourceModels
                 this.Login = result;
                 this.Directory = new DirectoryInfo(Path.Combine(DataKeeper.SharedDirectoryOfAccounts.FullName, Login));
 
-                if (mode == PublicationManagerSecondWindModeEnum.AuthAndBindingPhone && this.Directory.Exists is false)
+                if (this.Directory.Exists is false)
                     this.Directory.Create();
 
                 ProfileData.SetProfile(new FileInfo(Path.Combine(Directory.FullName, $"{Login.Split('@').First()}.zpprofile")));
@@ -159,19 +152,15 @@ namespace Yandex.Zen.Core.Models.ResourceModels
             {
                 this.PhoneNumber = result;
             }
-            else if (mode == PublicationManagerSecondWindModeEnum.Posting)
-                throw new Exception($"'{nameof(colAccountPhone)}' - value is void or null");
 
             // номер телефона канала
             if (table.ParseValueFromCell(colChannelPhone, row, out result))
             {
                 this.Channel.NumberPhone = result;
             }
-            else if (mode == PublicationManagerSecondWindModeEnum.Posting)
-                throw new Exception($"'{nameof(colChannelPhone)}' - value is void or null");
+
 
             Program.AddResourceToCache(Login, true, true);
-            Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
 
             return true;
         }

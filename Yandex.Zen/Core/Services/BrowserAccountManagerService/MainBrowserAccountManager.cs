@@ -229,7 +229,6 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
                         Login = login;
                         ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                        Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
 
                         // Проверка наличия zen канала
                         if (_startPageInstance == StartPageInstanceEnum.ZenChannelAccount || _startPageInstance == StartPageInstanceEnum.ZenChannelProfileEditor)

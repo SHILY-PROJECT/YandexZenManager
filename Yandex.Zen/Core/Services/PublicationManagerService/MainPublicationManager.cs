@@ -467,7 +467,6 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     ChannelDescription = new FileInfo(Path.Combine(ObjectDirectory.FullName, channelDescriptionFileName));
                     _articlesDirectory = new DirectoryInfo(Path.Combine(ObjectDirectory.FullName, articlesFolderName));
 
-                    Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
 
                     // Проверка на наличия ресурса и его занятость
                     if (!ResourceIsAvailable(Login, row)) continue;

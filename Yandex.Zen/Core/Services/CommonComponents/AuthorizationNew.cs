@@ -26,7 +26,7 @@ namespace Yandex.Zen.Core.Services.CommonComponents
         private static DataManager Data { get => DataManager.Data; }
         private static IZennoPosterProjectModel Zenno { get => DataManager.Data.Zenno; }
         private static Instance Browser { get => Data.Browser; }
-        private static ResourceBaseModel Account { get => Data.Resource; }
+        private static ObjectBaseModel Account { get => Data.Resource; }
         private static CaptchaService CaptchaService { get => Account.CaptchaService; }
         private static SmsService SmsService { get => Account.SmsService; }
 

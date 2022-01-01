@@ -1490,7 +1490,6 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
-                Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
 
                 // Проверка на наличия ресурса и его занятость
                 if (!ResourceIsAvailable(Login, row)) continue;

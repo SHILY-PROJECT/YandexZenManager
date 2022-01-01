@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core
@@ -28,7 +24,7 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public ResourceBaseModel Resource { get; set; }
+        public ObjectBaseModel Resource { get; set; }
 
         /// <summary>
         /// Таблица текущего режима.
@@ -39,21 +35,33 @@ namespace Yandex.Zen.Core
         {
             Zenno = zenno;
             Browser = instance;
-            Logger.ConfigureMain(this);
         }
 
-        public void ConfigureProjectSettings(out bool status)
+        public bool TryConfigureProjectSettings()
+        {
+            ConfigureProjectSettings(out var configurationStatus);
+            return configurationStatus;
+        }
+
+        public void ConfigureProjectSettings(out bool configurationStatus)
         {
             try
             {
-
-                Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
-                status = true;
+                Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
+                new Logger().Configure(this);
+                this.Configure();
+                configurationStatus = true;
             }
             catch (Exception ex)
             {
-                status = false;
+                Logger.Write(ex.FormatException(), LoggerType.Error, false, false, true, LogColor.Red);
+                configurationStatus = false;
             }
+        }
+
+        private void Configure()
+        {
+
         }
 
         /// <summary>

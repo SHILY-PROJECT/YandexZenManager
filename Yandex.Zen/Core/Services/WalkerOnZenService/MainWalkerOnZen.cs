@@ -890,9 +890,6 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     }
                     else continue;
 
-                    if (CurrentObjectAtWork == ObjectTypeEnum.Account) Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Account);
-                    else if (ShorDonorNameForLog) Logger.SetCurrentObjectForLog(ObjectDirectory.Name, ObjectTypeEnum.Donor);
-                    else Logger.SetCurrentObjectForLog(Login, ObjectTypeEnum.Donor);
 
                     // Тип ресурса для работы использовать
                     switch (_useResourceTypeInWork)

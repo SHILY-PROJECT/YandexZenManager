@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
@@ -22,17 +23,38 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 
         private readonly string _logAccountFileName = @"_logger\account.log";
         private readonly string _backupObjectData = @"_logger\backup_data.txt";
+        private string _infoAboutCurrentObject;
 
         private DataManager_new DataManager { get; set; }
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private ProgramModeEnum CurrentMode { get => Program.CurrentMode; }
-        private DirectoryInfo CurrentObjectDirectory { get => DataManager.Resource.Directory; }
-        private string TextObjectForLog { get; set; }
+        private ObjectBaseModel Obj { get => DataManager.Resource; }
+        private DirectoryInfo CurrentObjectDirectory { get => Obj.Directory; }
+        private FileInfo ModeLog { get; } = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
+        private string InfoAboutCurrentObject
+        {
+            get
+            {
+                if (_instance._infoAboutCurrentObject != null) return _instance._infoAboutCurrentObject;
+                if (Obj != null)
+                {
+                    switch (Obj.Type)
+                    {
+                        case ObjectTypeEnum.Account:
+                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {Obj.Login}]\t") : null;
+                        case ObjectTypeEnum.Donor:
+                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {Obj.Login}]\t") : null;
+                        case ObjectTypeEnum.Profile:
+                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[{Obj.Login}]\t") : null;
+                    }
+                }
+                return null;
+            }
+        }
 
-        public FileInfo ModeLog { get; } = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
 
-        public Logger(DataManager_new manager)
+        public void Configure(DataManager_new manager)
         {
             DataManager = manager;
             _instance = this;
@@ -50,20 +72,6 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             [ProgramModeEnum.ChannelManagerService] =           "channel_manager_service.log",
             [ProgramModeEnum.PublicationManagerService] =       "publication_manager_service.log",
         };
-
-        /// <summary>
-        /// Установка объекта в лог.
-        /// </summary>
-        public static void SetCurrentObjectForLog(string obj, ObjectTypeEnum objectType)
-        {
-            _instance.TextObjectForLog = new Dictionary<ObjectTypeEnum, string>
-            {
-                [ObjectTypeEnum.Account] = $"[Login: {obj}]\t",
-                [ObjectTypeEnum.Donor] = $"[Donor: {obj}]\t",
-                [ObjectTypeEnum.Profile] = $"[{obj}]\t"
-            }
-            [objectType];
-        }
 
         /// <summary>
         /// Получение текущий даты.
@@ -308,16 +316,16 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
                 }
                 .TryGetValue(_instance.CurrentMode, out string modeForAccountLog);
 
-                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_instance.TextObjectForLog}{textToLog}", loggerType, dateTime);
+                WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_instance.InfoAboutCurrentObject}{textToLog}", loggerType, dateTime);
             }
 
             // Запись в основной лог режима
             if (writeToGeneralLog)
-                WriteToGeneralLog($"{_instance.TextObjectForLog}{textToLog}", loggerType, dateTime);
+                WriteToGeneralLog($"{_instance.InfoAboutCurrentObject}{textToLog}", loggerType, dateTime);
 
             // Отправка сообщения в zp/pm
             if (_instance.Zenno != null)
-                _instance.Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfileService}]\t{_instance.TextObjectForLog}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+                _instance.Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfileService}]\t{_instance.InfoAboutCurrentObject}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>

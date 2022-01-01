@@ -1,35 +1,10 @@
 ﻿using System.Collections.Generic;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Interfaces;
-using Yandex.Zen.Core.Services.AccounRegisterService;
-using Yandex.Zen.Core.Services.BrowserAccountManagerService;
-using Yandex.Zen.Core.Services.ChannelManagerService;
-using Yandex.Zen.Core.Services.PublicationManagerService;
-using Yandex.Zen.Core.Services.ActivityManagerService;
-using Yandex.Zen.Core.Services.WalkerOnZenService;
 
 namespace Yandex.Zen.Core
 {
     public class DictionariesAndLists
     {
-        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
-
-        #endregion =================================================================
-
-
-        public static Dictionary<ProgramModeEnum, IService> Services => new Dictionary<ProgramModeEnum, IService>
-        {
-            [ProgramModeEnum.AccounRegisterService] = new MainAccounRegister_new(),
-            [ProgramModeEnum.BrowserAccountManagerService] = new MainBrowserAccountManager_new(),
-            [ProgramModeEnum.ChannelManagerService] = new MainChannelManager_new(),
-            [ProgramModeEnum.PublicationManagerService] = new MainPublicationManager_new(),
-            [ProgramModeEnum.ActivityManagerService] = new MainActivityManager_new(),
-            [ProgramModeEnum.WalkerOnZenService] = new MainWalkerOnZen_new()
-        };
-
         /// <summary>
         /// Режимы работы шаблона.
         /// </summary>

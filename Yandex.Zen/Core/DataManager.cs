@@ -15,7 +15,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] private static DataManager _data = new DataManager();
         public static DataManager Data { get => _data; }
 
-        public ResourceBaseModel Resource { get => DataKeeper.Resource; }
+        public ObjectBaseModel Resource { get => DataKeeper.Resource; }
         public IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
         public Instance Browser { get => DataKeeper.Browser; }
         public TableModel MainTable { get => DataKeeper.MainTable; }
