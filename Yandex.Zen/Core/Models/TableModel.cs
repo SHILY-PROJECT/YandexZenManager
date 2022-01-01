@@ -11,15 +11,10 @@ namespace Yandex.Zen.Core.Models
 {
     public class TableModel
     {
-        #region===================================================================
-        private IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
-        #endregion================================================================
-
-
         /// <summary>
         /// Экземпляр таблицы.
         /// </summary>
-        public IZennoTable Table { get; private set; }
+        public IZennoTable Instance { get; private set; }
 
         /// <summary>
         /// Файл таблицы.
@@ -41,14 +36,15 @@ namespace Yandex.Zen.Core.Models
         /// </summary>
         public string Path => File.FullName;
 
-
-        public TableModel(string nameTable, ILocalVariable path) : this(nameTable, path.Value) { }
-
-        public TableModel(string nameTable, string path)
+        public TableModel(IZennoPosterProjectModel zenno, string nameTable, string path)
         {
-            Table = Zenno.Tables[nameTable];
+            Instance = zenno.Tables[nameTable];
             TableName = nameTable;
-            File = new FileInfo(Zenno.ExecuteMacro(path));
+            File = new FileInfo(zenno.ExecuteMacro(path));
         }
+
+        public TableModel(IZennoPosterProjectModel zenno, string nameTable, ILocalVariable path)
+            : this(zenno, nameTable, path.Value) { }
+
     }
 }

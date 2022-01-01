@@ -1,8 +1,8 @@
 ﻿using System;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Models;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core
 {
@@ -15,7 +15,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] private static DataManager _data = new DataManager();
         public static DataManager Data { get => _data; }
 
-        public ObjectBaseModel Resource { get => DataKeeper.Resource; }
+        public ObjectBase Resource { get => DataKeeper.Resource; }
         public IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
         public Instance Browser { get => DataKeeper.Browser; }
         public TableModel MainTable { get => DataKeeper.MainTable; }

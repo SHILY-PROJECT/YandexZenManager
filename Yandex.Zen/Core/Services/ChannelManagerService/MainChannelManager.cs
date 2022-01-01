@@ -15,11 +15,11 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
-using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Services.ChannelManagerService.Enums;
 using Yandex.Zen.Core.Services.ChannelManagerService.Models.ChannelSettings.DataModels;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.ServiceСomponents;
 
 namespace Yandex.Zen.Core.Services.ChannelManagerService
 {
@@ -226,7 +226,8 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             }
 
             // Авторизация аккаунта
-            var authorizationIsGood = Authorization.Auth(BindingPhoneToAccountIfRequaid, xpathSettingsChannel);
+            var authorizationIsGood = true;
+            //var authorizationIsGood = Authorization.Auth(BindingPhoneToAccountIfRequaid, xpathSettingsChannel);
 
             // Проверка статуса авторизации
             if (authorizationIsGood)

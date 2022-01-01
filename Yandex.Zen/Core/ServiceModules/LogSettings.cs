@@ -1,6 +1,6 @@
 ﻿using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Services.CommonComponents
+namespace Yandex.Zen.Core.ServiceСomponents
 {
     public class LogSettings
     {

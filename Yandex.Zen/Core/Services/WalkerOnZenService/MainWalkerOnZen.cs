@@ -16,12 +16,12 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkerOnZenService.Enums;
-using Yandex.Zen.Core.Services.CommonComponents;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Interfaces.Services;
+using Yandex.Zen.Core.ServiceСomponents;
 
 namespace Yandex.Zen.Core.Services.WalkerOnZenService
 {
@@ -263,7 +263,8 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     heButtonAuth.Click(Instance.ActiveTab, Rnd.Next(500, 1000));
 
                     // Авторизация
-                    var statusAuth = Authorization.Auth(BindingPhoneToAccountIfRequaid, xpathItems);
+                    var statusAuth = true;
+                    //var statusAuth = Authorization.Auth(BindingPhoneToAccountIfRequaid, xpathItems);
 
                     // Проверка авторизации
                     if (!statusAuth)

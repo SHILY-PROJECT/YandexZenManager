@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.ResourceModels;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
@@ -29,24 +29,24 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private ProgramModeEnum CurrentMode { get => Program.CurrentMode; }
-        private ObjectBaseModel Obj { get => DataManager.Resource; }
-        private DirectoryInfo CurrentObjectDirectory { get => Obj.Directory; }
+        private ObjectBase Object { get => DataManager.Object; }
+        private DirectoryInfo CurrentObjectDirectory { get => Object.Directory; }
         private FileInfo ModeLog { get; } = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
         private string InfoAboutCurrentObject
         {
             get
             {
                 if (_instance._infoAboutCurrentObject != null) return _instance._infoAboutCurrentObject;
-                if (Obj != null)
+                if (Object != null)
                 {
-                    switch (Obj.Type)
+                    switch (Object.Type)
                     {
                         case ObjectTypeEnum.Account:
-                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {Obj.Login}]\t") : null;
+                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {Object.Login}]\t") : null;
                         case ObjectTypeEnum.Donor:
-                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {Obj.Login}]\t") : null;
+                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {Object.Login}]\t") : null;
                         case ObjectTypeEnum.Profile:
-                            return Obj.Login != null ? (_instance._infoAboutCurrentObject = $"[{Obj.Login}]\t") : null;
+                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[{Object.Login}]\t") : null;
                     }
                 }
                 return null;

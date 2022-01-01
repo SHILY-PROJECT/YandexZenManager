@@ -8,12 +8,12 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core
 {
@@ -22,13 +22,13 @@ namespace Yandex.Zen.Core
     {
         private static readonly object _locker = new object();
 
-        [ThreadStatic] private static ObjectBaseModel _objectModel;
+        [ThreadStatic] private static ObjectBase _objectModel;
 
         public static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
         public static Instance Instance { get => DataKeeper.Browser; }
         public static ProgramModeEnum ProgramMode { get => DataKeeper.CurrentProgramMode; }
         public static Random Rnd { get; set; } = new Random();
-        public static ObjectBaseModel Object { get => _objectModel; set { _objectModel = value; } }
+        public static ObjectBase Object { get => _objectModel; set { _objectModel = value; } }
 
 
         public static IZennoTable AccountsGeneralTable;

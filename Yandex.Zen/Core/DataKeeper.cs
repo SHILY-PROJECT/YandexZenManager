@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Models.ResourceModels;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -14,6 +13,7 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Services.PublicationManagerService;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core
 {
@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core
     {
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
-        [ThreadStatic] private static ObjectBaseModel _resourceBaseModel;
+        [ThreadStatic] private static ObjectBase _resourceBaseModel;
         [ThreadStatic] private static ProgramModeEnum _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
@@ -41,7 +41,7 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.
         /// </summary>
-        public static ObjectBaseModel Resource
+        public static ObjectBase Resource
         {
             get
             {
@@ -153,7 +153,7 @@ namespace Yandex.Zen.Core
             }
 
             // Конфигурирование ресурса
-            _resourceBaseModel = new ObjectBaseModel
+            _resourceBaseModel = new ObjectBase
             {
                 ProfileData = new ProfileDataModel()
                 {
@@ -171,10 +171,10 @@ namespace Yandex.Zen.Core
                     Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
                 },
                 CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                Settings = new ResourceSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+                Settings = new ObjectSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
                 Channel = new ChannelDataModel()
             };
-            _resourceBaseModel.SetResource();
+            _resourceBaseModel.SetObject();
         }
 
         /// <summary>

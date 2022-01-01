@@ -27,11 +27,11 @@ namespace Yandex.Zen.Core.Toolkit.TableTool
 
         private static void TrySaveToTable(string searchByValue, string setValue, int columnForSetValue)
         {
-            for (int row = 0; row < MainTable.Table.RowCount; row++)
+            for (int row = 0; row < MainTable.Instance.RowCount; row++)
             {
-                if (MainTable.Table.GetRow(row).Any(x => x.Equals(searchByValue, StringComparison.OrdinalIgnoreCase)))
+                if (MainTable.Instance.GetRow(row).Any(x => x.Equals(searchByValue, StringComparison.OrdinalIgnoreCase)))
                 {
-                    MainTable.Table.SetCell(columnForSetValue, row, setValue);
+                    MainTable.Instance.SetCell(columnForSetValue, row, setValue);
 
                     
                     break;

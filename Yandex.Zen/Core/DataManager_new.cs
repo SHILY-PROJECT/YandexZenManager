@@ -1,6 +1,6 @@
 ﻿using System;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Models.ResourceModels;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
@@ -11,24 +11,9 @@ namespace Yandex.Zen.Core
 {
     public class DataManager_new
     {
-        /// <summary>
-        /// Объект зенно постера (project).
-        /// </summary>
         public IZennoPosterProjectModel Zenno { get; set; }
-
-        /// <summary>
-        /// Объект зенно постера (браузер).
-        /// </summary>
         public Instance Browser { get; set; }
-
-        /// <summary>
-        /// Объект типа аккаунта или донора с соответствующими данными.
-        /// </summary>
-        public ObjectBaseModel Resource { get; set; }
-
-        /// <summary>
-        /// Таблица текущего режима.
-        /// </summary>
+        public ObjectBase Object { get; set; }
         public TableModel Table { get; set; }
 
         public DataManager_new(Instance instance, IZennoPosterProjectModel zenno)

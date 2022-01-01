@@ -1,6 +1,4 @@
 ﻿using System;
-using Yandex.Zen.Core.Models.ResourceModels;
-using Yandex.Zen.Core.Services.CommonComponents;
 using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
@@ -8,6 +6,8 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using System.Collections.Generic;
 using ZennoLab.InterfacesLibrary.Enums.Log;
+using Yandex.Zen.Core.ServiceСomponents;
+using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
@@ -16,7 +16,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         private DataManager Data { get => DataManager.Data; }
-        private ObjectBaseModel Account { get => Data.Resource; }
+        private ObjectBase Account { get => Data.Resource; }
         private Instance Browser { get => Data.Browser; }
 
         #endregion =================================================================
@@ -43,8 +43,8 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
         /// </summary>
         private void AuthAndBindingPhone()
         {
-            AuthorizationNew.AuthNew(out var isSuccessful);
-            if (!isSuccessful) return;
+            //new AuthorizationModule().Authorization(out var isSuccessful);
+            //if (!isSuccessful) return;
             BindPhoneNumberToZenChannel(out _);
         }
 
