@@ -2,6 +2,6 @@
 {
     public interface IPublicationManagerService : IService
     {
-
+        IAuthorizationModule Authorization { get; set; }
     }
 }

@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DataManager_new.cs" />
+    <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\ConfigurationsForServices\ConfigurationBase.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\Interfaces\IConfigurationForService.cs" />

@@ -140,40 +140,7 @@ namespace Yandex.Zen.Core
         {
             SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
 
-            _programMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgScriptServices"].Value];
-            //_modeTable = DictionariesAndLists.ModeTables[_programMode];
-            _mainTable = new TableModel("AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
-
-            // Настройка режимов работы сервисов
-            switch (CurrentProgramMode)
-            {
-
-                default: throw new Exception($"'{CurrentProgramMode}' - на текущий момент режим отключен");
-            }
-
-            // Конфигурирование ресурса
-            _resourceBaseModel = new ObjectBase
-            {
-                ProfileData = new ProfileDataModel()
-                {
-                    UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
-                    MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
-                },
-                SmsService = new SmsService
-                {
-                    Settings = new SmsServiceSettingsModel
-                    {
-                        TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
-                        MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
-                        AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
-                    },
-                    Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
-                },
-                CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                Settings = new ObjectSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
-                Channel = new ChannelDataModel()
-            };
-            _resourceBaseModel.SetObject();
+            
         }
 
         /// <summary>

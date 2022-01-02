@@ -3,6 +3,7 @@ using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
 using Yandex.Zen.Core.ServiceModules.ObjectModule.Models;
 using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -38,7 +39,8 @@ namespace Yandex.Zen.Core
             try
             {
                 Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
-                new Logger().Configure(this);
+                Logger.ConfigureGlobalLog(this);
+                HE.ConfigureGlobalBrowse(this);
                 this.SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
                 this.Configure();
                 configurationStatus = true;
@@ -59,7 +61,7 @@ namespace Yandex.Zen.Core
 
             Object = new ObjectBase(this)
             {
-                ProfileData = new ProfileDataModel()
+                ProfileData = new ProfileDataModel(this)
                 {
                     UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
                     MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)

@@ -15,9 +15,8 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
 {
     public class HE
     {
-        #region====================================================================
-        private Instance Browser { get => DataManager.Data.Browser; }
-        #endregion=================================================================
+        [ThreadStatic] private static Instance _browser;
+        [ThreadStatic] private static DataManager_new _dataManager;
 
         /// <summary>
         /// XPath путь к элементу.
@@ -49,6 +48,11 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         public HE(string xpath, string description, HtmlElement htmlElement) : this(xpath, description) => Element = htmlElement;
         public HE(string xpath, string description, List<HtmlElement> htmlElementCollection) : this(xpath, description) => Collection = htmlElementCollection;
 
+        public static void ConfigureGlobalBrowse(DataManager_new manager)
+        {
+            _dataManager = manager;
+            _browser = manager.Browser;
+        }
 
         /// <summary>
         /// Установить значение.
@@ -58,7 +62,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         {
             if (Element.IsNullOrVoid() && autoFindElement)
                 FindElement(attemptsFindElement, exceptionIfNotFind, log);
-            Element.SetValue(Browser.ActiveTab, value, levelEmulation, msTimeoutAfterAction);
+            Element.SetValue(_browser.ActiveTab, value, levelEmulation, msTimeoutAfterAction);
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         {
             if (Element.IsNullOrVoid() && autoFindElement)
                 FindElement(attemptsFindElement, exceptionIfNotFind, log);
-            Element.Click(Browser.ActiveTab, msTimeoutAfterAction, waitPageLoad);
+            Element.Click(_browser.ActiveTab, msTimeoutAfterAction, waitPageLoad);
         }
 
         /// <summary>
@@ -80,7 +84,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <returns></returns>
         public bool TryFindElement(int attemptsFindElement = 3, LogSettings log = null)
         {
-            Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
+            Element = _browser.FindFirstElement(this, false, false, attemptsFindElement);
             if (Element.IsNullOrVoid() is false) return true;
             if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
             return false;
@@ -94,7 +98,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <returns></returns>
         public bool TryFindElements(int attemptsFindElement = 3, LogSettings log = null)
         {
-            Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
+            Collection = _browser.FindElements(this, false, false, attemptsFindElement).ToList();
             if (Collection.Any() is false) return true;
             if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
             return false;
@@ -108,7 +112,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="logError"></param>
         public void FindElement(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, LogSettings log = null)
         {
-            Element = Browser.FindFirstElement(this, false, false, attemptsFindElement);
+            Element = _browser.FindFirstElement(this, false, false, attemptsFindElement);
 
             if (Element.IsNullOrVoid())
             {
@@ -125,7 +129,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         /// <param name="logError"></param>
         public void FindElements(int attemptsFindElement = 3, bool throwExceptionIfNotFind = true, LogSettings log = null)
         {
-            Collection = Browser.FindElements(this, false, false, attemptsFindElement).ToList();
+            Collection = _browser.FindElements(this, false, false, attemptsFindElement).ToList();
 
             if (Collection.Any() is false)
             {

@@ -9,7 +9,14 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
 {
     public class MainWalkerOnZen_new : IWalkerOnZenService
     {
-        public void Start(DataManager_new manager)
+        public DataManager_new DataManager { get; set; }
+
+        public MainWalkerOnZen_new(DataManager_new manager)
+        {
+            DataManager = manager;
+        }
+
+        public void Start()
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,14 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
 {
     public class MainActivityManager_new : IActivityManagerService
     {
-        public void Start(DataManager_new manager)
+        public DataManager_new DataManager { get; set; }
+
+        public MainActivityManager_new(DataManager_new manager)
+        {
+            DataManager = manager;
+        }
+
+        public void Start()
         {
             throw new NotImplementedException();
         }

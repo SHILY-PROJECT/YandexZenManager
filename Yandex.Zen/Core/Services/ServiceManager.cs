@@ -12,24 +12,24 @@ namespace Yandex.Zen.Core.Services
 {
     public class ServiceManager : IServiceManager
     {
-        public void RunService(DataManager_new manager)
+        public void RunService(DataManager_new manager, ProgramModeEnum mode)
         {
-            switch (Program.CurrentMode)
+            switch (mode)
             {
-                case ProgramModeEnum.AccounRegisterService: RunService(manager, new MainAccounRegister_new()); break;
-                case ProgramModeEnum.BrowserAccountManagerService: RunService(manager, new MainBrowserAccountManager_new()); break;
-                case ProgramModeEnum.ChannelManagerService: RunService(manager, new MainChannelManager_new()); break;
-                case ProgramModeEnum.PublicationManagerService: RunService(manager, new MainPublicationManager_new()); break;
-                case ProgramModeEnum.ActivityManagerService: RunService(manager, new MainActivityManager_new()); break;
-                case ProgramModeEnum.WalkerOnZenService: RunService(manager, new MainWalkerOnZen_new()); break;
+                case ProgramModeEnum.AccounRegisterService: RunService(new MainAccounRegister_new(manager)); break;
+                case ProgramModeEnum.BrowserAccountManagerService: RunService(new MainBrowserAccountManager_new(manager)); break;
+                case ProgramModeEnum.ChannelManagerService: RunService(new MainChannelManager_new(manager)); break;
+                case ProgramModeEnum.PublicationManagerService: RunService(new MainPublicationManager_new(manager)); break;
+                case ProgramModeEnum.ActivityManagerService: RunService(new MainActivityManager_new(manager)); break;
+                case ProgramModeEnum.WalkerOnZenService: RunService(new MainWalkerOnZen_new(manager)); break;
             }
         }
 
-        public void RunService(DataManager_new manager, IChannelManagerService channelManager) => channelManager.Start(manager);
-        public void RunService(DataManager_new manager, IPublicationManagerService publicationManager) => publicationManager.Start(manager);
-        public void RunService(DataManager_new manager, IBrowserAccountManagerService browserAccountManager) => browserAccountManager.Start(manager);
-        public void RunService(DataManager_new manager, IAccounRegisterService accounRegister) => accounRegister.Start(manager);
-        public void RunService(DataManager_new manager, IWalkerOnZenService walkerOnZen) => walkerOnZen.Start(manager);
-        public void RunService(DataManager_new manager, IActivityManagerService activityManager) => activityManager.Start(manager);
+        public void RunService(IChannelManagerService channelManager) => channelManager.Start();
+        public void RunService(IPublicationManagerService publicationManager) => publicationManager.Start();
+        public void RunService(IBrowserAccountManagerService browserAccountManager) => browserAccountManager.Start();
+        public void RunService(IAccounRegisterService accounRegister) => accounRegister.Start();
+        public void RunService(IWalkerOnZenService walkerOnZen) => walkerOnZen.Start();
+        public void RunService(IActivityManagerService activityManager) => activityManager.Start();
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IService
     {
-        void Start(DataManager_new manager);
+        void Start();
     }
 }

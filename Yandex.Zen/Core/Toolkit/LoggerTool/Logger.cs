@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -53,11 +52,12 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             }
         }
 
-
-        public void Configure(DataManager_new manager)
+        public static void ConfigureGlobalLog(DataManager_new manager)
         {
-            DataManager = manager;
-            _instance = this;
+            _instance = new Logger
+            {
+                DataManager = manager
+            };
         }
 
         /// <summary>

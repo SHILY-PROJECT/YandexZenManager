@@ -15,12 +15,15 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.ServiceСomponents
 {
-    public class AuthorizationModule
+    public class AuthorizationModule : IAuthorizationModule
     {
-        public bool IsSuccesss { get; private set; }
+        private bool _isSuccesss;
+
+        public bool IsSuccesss { get => _isSuccesss; }
 
         private BrowserBusySettingsModel SettingsMode { get; set; }
         private DataManager_new DataManager { get; set; }
@@ -74,7 +77,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
                     if (xAvatar.TryFindElement(3))
                     {
                         Logger.Write("Аккаунт уже авторизирован", LoggerType.Info, true, false, false);
-                        isSuccessful = IsSuccesss = true;
+                        isSuccessful = _isSuccesss = true;
                         break;
                     }
                     else firstStart = false;
@@ -84,7 +87,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
-                    isSuccessful = IsSuccesss = false;
+                    isSuccessful = _isSuccesss = false;
                     return;
                 }
 
@@ -126,12 +129,12 @@ namespace Yandex.Zen.Core.ServiceСomponents
                     if (!TryBindNumberPhone())
                     {
                         if (EndExecution is false) continue;
-                        isSuccessful = IsSuccesss = false;
+                        isSuccessful = _isSuccesss = false;
                         return;
                     }
                     else
                     {
-                        isSuccessful = IsSuccesss = true;
+                        isSuccessful = _isSuccesss = true;
                         break;
                     }
                     #endregion ========================================
@@ -153,7 +156,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
             if (string.IsNullOrWhiteSpace(Object.PhoneNumber) && !(phoneBilded = CheckPhoneNumberBinding()))
             {
                 Logger.Write("К аккаунту не привязан номер", LoggerType.Info, true, false, true, LogColor.Yellow);
-                isSuccessful = IsSuccesss = false;
+                isSuccessful = _isSuccesss = false;
 
                 /* 
                  * TODO: -Временно помечать аккаунты, что они авторизированы, но требуется привязка номера.
@@ -169,7 +172,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
             else if (string.IsNullOrWhiteSpace(Object.PhoneNumber) && phoneBilded)
             {
                 Logger.Write("К аккаунту привязан номер, но сам номер отсутствует в таблице", LoggerType.Info, true, false, true);
-                isSuccessful = IsSuccesss = false;
+                isSuccessful = _isSuccesss = false;
                 /* 
                  * TODO: Нужно реализовать поиск по файлу лога аккаунта и внести этот номер в таблицу
                  *       Пока мы не реализовали эту логику - вносить в таблицу: 'Search'

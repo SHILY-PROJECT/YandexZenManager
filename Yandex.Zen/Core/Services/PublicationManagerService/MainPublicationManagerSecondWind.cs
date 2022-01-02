@@ -15,9 +15,9 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
     public class MainPublicationManagerSecondWind
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private DataManager Data { get => DataManager.Data; }
-        private ObjectBase Account { get => Data.Resource; }
-        private Instance Browser { get => Data.Browser; }
+        //private DataManager Data { get => DataManager.Data; }
+        //private ObjectBase Account { get => Data.Resource; }
+        //private Instance Browser { get => Data.Browser; }
 
         #endregion =================================================================
 
@@ -65,12 +65,12 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 if (++counterAttempts > 3)
                 {
                     Logger.Write("Слишком много ошибок в время привязки номера к каналу", LoggerType.Warning, true, true, true, LogColor.Yellow);
-                    Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
+                    //Logger.ErrorAnalysis(true, true, true, new List<string> { Browser.ActiveTab.URL });
                     isSuccessful = _statusBindPhoneNumberToZenChannel = false;
                     return;
                 }
 
-                Browser.ActiveTab.Navigate("https://zen.yandex.ru/media/zen/new", "https://zen.yandex.ru/", true);
+                //Browser.ActiveTab.Navigate("https://zen.yandex.ru/media/zen/new", "https://zen.yandex.ru/", true);
 
             }
 

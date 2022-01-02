@@ -9,7 +9,14 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
 {
     public class MainBrowserAccountManager_new : IBrowserAccountManagerService
     {
-        public void Start(DataManager_new manager)
+        public DataManager_new DataManager { get; set; }
+
+        public MainBrowserAccountManager_new(DataManager_new manager)
+        {
+            DataManager = manager;
+        }
+
+        public void Start()
         {
             throw new NotImplementedException();
         }

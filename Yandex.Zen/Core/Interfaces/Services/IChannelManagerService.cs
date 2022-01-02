@@ -2,6 +2,6 @@
 {
     public interface IChannelManagerService : IService
     {
-
+        IAuthorizationModule Authorization { get; set; }
     }
 }

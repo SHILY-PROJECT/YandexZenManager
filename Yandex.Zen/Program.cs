@@ -84,7 +84,7 @@ namespace Yandex.Zen
                 {
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
-                    new ServiceManager().RunService(manager);
+                    new ServiceManager().RunService(manager, CurrentMode);
                 }
                 catch (Exception ex)
                 {

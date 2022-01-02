@@ -11,11 +11,6 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
     /// </summary>
     public class ProfileDataModel
     {
-        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private IZennoPosterProjectModel Zenno { get => DataManager.Data.Zenno; }
-
-        #endregion =================================================================
-
         private FileInfo _profile;
 
         /// <summary>
@@ -51,15 +46,20 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
         /// </summary>
         public int MinProfileSizeToUse { get; set; }
 
-        /// <summary>
-        /// Модель с данными профиля.
-        /// </summary>
-        public ProfileDataModel() { }
+        private DataManager_new DataManager { get; set; }
 
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        public ProfileDataModel(bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse)
+        public ProfileDataModel(DataManager_new manager)
+        {
+            DataManager = manager;
+        }
+
+        /// <summary>
+        /// Модель с данными профиля.
+        /// </summary>
+        public ProfileDataModel(DataManager_new manager, bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse) : this(manager)
         {
             UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
             MinProfileSizeToUse = minProfileSizeToUse;
@@ -75,25 +75,18 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
         }
 
         /// <summary>
-        /// Модель с данными профиля.
-        /// </summary>
-        //public ProfileDataModel(ILocalVariable useWalkedProfileFromSharedFolder, ILocalVariable minProfileSizeToUse) :
-        //    this(bool.Parse(useWalkedProfileFromSharedFolder.Value), int.Parse(minProfileSizeToUse.Value))
-        //{ }
-
-        /// <summary>
         /// Загрузка профиля.
         /// </summary>
         /// <param name="createVariables"></param>
         public void Load(bool createVariables = true)
-            => Zenno.Profile.Load(Path, createVariables);
+            => DataManager.Zenno.Profile.Load(Path, createVariables);
 
         /// <summary>
         /// Сохранение профиля аккаунта.
         /// </summary>
         public void SaveProfile()
         {
-            Zenno.Profile.Save
+            DataManager.Zenno.Profile.Save
             (
                 path: File.FullName,
                 saveProxy: true,

@@ -21,21 +21,11 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
         public string CountryShortName { get; set; }
         public string Proxy { get; set; }
 
-        public ProxyDataModel() { }
-    }
+        private string UserAgent { get; set; }
 
-    /// <summary>
-    /// Класс для обработки свойст IP.
-    /// </summary>
-    public partial class ProxyDataModel
-    {
-        #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
-        private string UserAgent { get => DataManager.Data.Zenno.Profile.UserAgent; }
-
-        #endregion ====================================================================
-
-        public ProxyDataModel(string proxy, bool defineIpCountryInfo)
+        public ProxyDataModel(DataManager_new manager, string proxy, bool defineIpCountryInfo)
         {
+            UserAgent = manager.Zenno.Profile.UserAgent;
             this.Configure(proxy, defineIpCountryInfo);
         }
 
@@ -92,12 +82,11 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
             }
             catch (Exception ex)
             {
-                Logger.Write($"[Exception message: {ex.Message}]\tУпало исключение во время определения IP страны", LoggerType.Warning, true, true, true, LogColor.Red);
+                Logger.Write(ex.FormatException("Упало исключение во время определения IP страны"), LoggerType.Warning, true, true, true, LogColor.Red);
                 return;
             }
 
             return;
         }
-
     }
 }

@@ -3,18 +3,16 @@ using System.IO;
 using System.Linq;
 using Yandex.Zen.Core.ServiceModules.ObjectModule.Interfaces;
 using Yandex.Zen.Core.Toolkit.Extensions;
-using Yandex.Zen.Core.Toolkit.TableTool.Enums;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
 {
     public class ConfigurationPostingSecondWind : ConfigurationBase, IConfigurationForService
     {
-        public ConfigurationPostingSecondWind(ObjectBase obj) : base(obj) { }
+        public ConfigurationPostingSecondWind(DataManager_new manager, ObjectBase obj) : base(manager, obj) { }
 
-        public bool TryConfigure(IZennoTable table, int row)
+        public bool TryConfigure(int row)
         {
-            
+            var table = DataManager.Table.Instance;
 
             // логин
             if (table.ParseValueFromCell(ColLogin, row, out var result))
@@ -47,7 +45,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
             // прокси
             if (table.ParseValueFromCell(ColProxy, row, out result))
             {
-                Object.ProxyData = new ProxyDataModel(result, true);
+                Object.ProxyData = new ProxyDataModel(DataManager, result, true);
             }
             else throw new Exception($"'{nameof(ColProxy)}' - value is void or null");
 
