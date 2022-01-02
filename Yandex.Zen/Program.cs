@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Collections.Generic;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -8,16 +10,8 @@ using Yandex.Zen.Core;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Services.ActivityManagerService;
-using Yandex.Zen.Core.Services.PublicationManagerService;
-using Yandex.Zen.Core.Services.WalkerOnZenService;
-using Yandex.Zen.Core.Services.WalkerProfileService;
-using Yandex.Zen.Core.Services.AccounRegisterService;
-using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Yandex.Zen
 {

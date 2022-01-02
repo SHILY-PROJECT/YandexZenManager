@@ -1,4 +1,5 @@
 ﻿using System;
+using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.ServiceModules.ObjectModule.Models;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -41,7 +42,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
         /// <summary>
         /// Установка ресурса.
         /// </summary>
-        public void SetObject()
+        public void SetObject(ProgramModeEnum mode)
         {
             var tb = DataManager.Table;
 
@@ -54,7 +55,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
                 {
                     try
                     {
-                        switch (Program.CurrentMode)
+                        switch (mode)
                         {
 
                         }

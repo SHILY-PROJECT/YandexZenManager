@@ -1,8 +1,13 @@
 ﻿using System;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
+using Yandex.Zen.Core.ServiceModules.ObjectModule.Models;
+using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -13,7 +18,7 @@ namespace Yandex.Zen.Core
     {
         public IZennoPosterProjectModel Zenno { get; set; }
         public Instance Browser { get; set; }
-        public ObjectBase Object { get; set; }
+        public ObjectBase Object { get; private set; }
         public TableModel Table { get; set; }
 
         public DataManager_new(Instance instance, IZennoPosterProjectModel zenno)
@@ -34,6 +39,7 @@ namespace Yandex.Zen.Core
             {
                 Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
                 new Logger().Configure(this);
+                this.SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
                 this.Configure();
                 configurationStatus = true;
             }
@@ -44,9 +50,36 @@ namespace Yandex.Zen.Core
             }
         }
 
+        /// <summary>
+        /// Конфигурация объекта для работы.
+        /// </summary>
         private void Configure()
         {
+            Table = new TableModel(this.Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
+            Object = new ObjectBase(this)
+            {
+                ProfileData = new ProfileDataModel()
+                {
+                    UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
+                    MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
+                },
+                SmsService = new SmsService
+                {
+                    Settings = new SmsServiceSettingsModel
+                    {
+                        TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
+                        MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
+                        AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
+                    },
+                    Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
+                },
+                CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
+                Settings = new ObjectSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+                Channel = new ChannelDataModel()
+            };
+
+            Object.SetObject(Program.CurrentMode);
         }
 
         /// <summary>
