@@ -28,12 +28,18 @@ namespace Yandex.Zen.Core
             Browser = instance;
         }
 
+        /// <summary>
+        /// Конфигурация проекта.
+        /// </summary>
         public bool TryConfigureProjectSettings()
         {
             ConfigureProjectSettings(out var configurationStatus);
             return configurationStatus;
         }
 
+        /// <summary>
+        /// Конфигурация проекта.
+        /// </summary>
         public void ConfigureProjectSettings(out bool configurationStatus)
         {
             try
