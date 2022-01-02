@@ -578,7 +578,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     //ProfileRetrievedFromSharedFolder
 
                     // Успешное получение ресурса
-                    Program.AddResourceToCache(Login, true, true);
+                    Program.AddObjectToCache(Login, true, true);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

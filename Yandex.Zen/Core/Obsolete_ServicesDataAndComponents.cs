@@ -292,7 +292,7 @@ namespace Yandex.Zen.Core
             }
 
             // Проверка на занятость другим потоком
-            if (Program.CheckResourceInWork(accountOrDonor))
+            if (Program.CheckObjectInWork(accountOrDonor))
             {
                 Logger.Write($"Ресурс используется другим потоком", LoggerType.Info, false, false, false);
                 return false;

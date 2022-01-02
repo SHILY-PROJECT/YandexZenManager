@@ -121,7 +121,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                         ProfileInfo = new FileInfo($@"{DataKeeper.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
-                        Program.AddResourceToCache(ProfileInfo.FullName, true, true);
+                        Program.AddObjectToCache(ProfileInfo.FullName, true, true);
 
                         Logger.Write($"Нагуливание нового профиля", LoggerType.Info, false, false, true);
 
@@ -148,9 +148,9 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                             var profile = profiles.First();
 
-                            if (!Program.CheckResourceInWork(profile.FullName))
+                            if (!Program.CheckObjectInWork(profile.FullName))
                             {
-                                Program.AddResourceToCache(profile.FullName, true, true);
+                                Program.AddObjectToCache(profile.FullName, true, true);
 
                                 ProfileInfo = profile;
                                 oldSize = ProfileInfo.Length / 1024;

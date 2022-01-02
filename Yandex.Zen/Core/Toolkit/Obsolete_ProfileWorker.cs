@@ -161,7 +161,7 @@ namespace Yandex.Zen.Core.Toolkit
 
                 if (!DataKeeper.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
-                    Program.AddResourceToCache(firstProfile.FullName, true, true);
+                    Program.AddObjectToCache(firstProfile.FullName, true, true);
                     return firstProfile;
                 }
                 else profiles.RemoveAt(0);

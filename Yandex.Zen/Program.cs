@@ -16,6 +16,8 @@ using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Yandex.Zen
 {
@@ -25,8 +27,47 @@ namespace Yandex.Zen
     public class Program : IZennoExternalCode
     {
         private static readonly object _locker = new object();
+        private static readonly List<string> _objectsAllThreadsInWork = new List<string>();
+        [ThreadStatic] private static readonly List<string> _objectsCurrentThread = new List<string>();
+        [ThreadStatic] private static ProgramModeEnum _currentMode;
+        [ThreadStatic] private static DirectoryInfo _commonAccountDirectory;
+        [ThreadStatic] private static DirectoryInfo _commonProfileDirectory;
 
-        [ThreadStatic] public static ProgramModeEnum _currentMode;
+        /// <summary>
+        /// Текущие объекты потока.
+        /// </summary>
+        public static List<string> ObjectsCurrentThread { get => _objectsCurrentThread; }
+
+        /// <summary>
+        /// Все объекты всех потоков, которые сейчас в работе.
+        /// </summary>
+        public static List<string> ObjectsAllThreadsInWork { get => _objectsAllThreadsInWork; }
+
+        /// <summary>
+        /// Общая директория со всеми аккаунтами.
+        /// </summary>
+        public static DirectoryInfo CommonAccountDirectory
+        {
+            get
+            {
+                if (!_commonAccountDirectory.Exists)
+                    _commonAccountDirectory.Create();
+                return _commonAccountDirectory;
+            }
+        }
+
+        /// <summary>
+        /// Общая директория со всеми профилями.
+        /// </summary>
+        public static DirectoryInfo CommonProfileDirectory
+        {
+            get
+            {
+                if (!_commonProfileDirectory.Exists)
+                    _commonProfileDirectory.Create();
+                return _commonProfileDirectory;
+            }
+        }
 
         /// <summary>
         /// Текущий режим работы шаблона.
@@ -47,13 +88,15 @@ namespace Yandex.Zen
             {
                 try
                 {
+                    _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
+                    _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
                     new ServiceManager().RunService(manager);
                 }
                 catch (Exception ex)
                 {
                     Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
                 }
-                CleanUpResourcesFromCache();
+                CleanUpObjectsFromCache();
             }
 
             return 0;
@@ -62,30 +105,27 @@ namespace Yandex.Zen
         /// <summary>
         /// Добавление ресурса в списки занятости.
         /// </summary>
-        public static void AddResourceToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
+        public static void AddObjectToCache(string obj, bool addToResourcesCurrentThread, bool addToResourcesAllThreadsInWork)
         {
-            if (addToResourcesCurrentThread) DataKeeper.ResourcesCurrentThread.Add(obj);
-            if (addToResourcesAllThreadsInWork) DataKeeper.ResourcesAllThreadsInWork.Add(obj);
+            if (addToResourcesCurrentThread) ObjectsCurrentThread.Add(obj);
+            if (addToResourcesAllThreadsInWork) ObjectsAllThreadsInWork.Add(obj);
         }
 
         /// <summary>
         /// Очистка кэша проекта.
         /// Очистка ресурсов потока из общего списка.
         /// </summary>
-        public static void CleanUpResourcesFromCache()
+        public static void CleanUpObjectsFromCache()
         {
-            var curRes = DataKeeper.ResourcesCurrentThread;
-            var allRes = DataKeeper.ResourcesAllThreadsInWork;
-
-            if (curRes.Any())
+            if (ObjectsCurrentThread.Any())
             {
                 lock (_locker)
                 {
                     if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
                         MainBrowserAccountManager.ThreadInWork = false;
 
-                    curRes.ForEach(res
-                        => allRes.RemoveAll(x => x == res));
+                    ObjectsCurrentThread.ForEach(res
+                        => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
                 }
             }
         }
@@ -93,8 +133,8 @@ namespace Yandex.Zen
         /// <summary>
         /// Проверка ресурса на занятость другим потоком (аккаунт, донор, профиль).
         /// </summary>
-        public static bool CheckResourceInWork(string resource)
-            => DataKeeper.ResourcesAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
+        public static bool CheckObjectInWork(string resource)
+            => ObjectsAllThreadsInWork.Any(x => x.Equals(resource, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         /// Сброс заданного количества выполнений и остановка скрипта, сохранить лог, бросить исклюение (IZennoPosterProjectModel).

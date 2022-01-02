@@ -12,7 +12,6 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core

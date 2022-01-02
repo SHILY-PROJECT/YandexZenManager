@@ -19,7 +19,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
             // логин
             if (table.ParseValueFromCell(ColLogin, row, out var result))
             {
-                if (Program.CheckResourceInWork(result)) return false;
+                if (Program.CheckObjectInWork(result)) return false;
 
                 Object.Login = result;
                 Object.Directory = new DirectoryInfo(Path.Combine(DataKeeper.SharedDirectoryOfAccounts.FullName, Object.Login));
@@ -64,7 +64,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
             }
 
 
-            Program.AddResourceToCache(Object.Login, true, true);
+            Program.AddObjectToCache(Object.Login, true, true);
 
             return true;
         }

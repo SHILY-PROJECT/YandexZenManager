@@ -983,7 +983,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     //var additionalLog = IpInfo != null ? $" | proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 
                     // Успешное получение ресурса
-                    Program.AddResourceToCache(Login, true, true);
+                    Program.AddObjectToCache(Login, true, true);
                     Logger.Write($"[Proxy table: {Proxy} | Proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}]\t[Row: {row + 2}]\tАккаунт/донор успешно подключен", LoggerType.Info, true, false, true);
                     return true;
                 }

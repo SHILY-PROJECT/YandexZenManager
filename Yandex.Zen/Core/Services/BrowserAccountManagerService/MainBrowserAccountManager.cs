@@ -117,7 +117,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
                 }
                 else
                 {
-                    Program.AddResourceToCache("first_thread_in_work", true, false);
+                    Program.AddObjectToCache("first_thread_in_work", true, false);
                     ThreadInWork = true;
                     _launchIsAllowed = true;
                 }
