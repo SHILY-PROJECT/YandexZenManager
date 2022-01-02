@@ -15,8 +15,8 @@ namespace Yandex.Zen.Core.Toolkit.TableTool
 {
     public class TableManager
     {
-        private static TableModel MainTable { get => DataManager.Data.MainTable; }
-        private static TableModel ModeTable { get => DataManager.Data.ModeTable; }
+        //private static TableModel MainTable { get => DataManager.Data.MainTable; }
+        //private static TableModel ModeTable { get => DataManager.Data.ModeTable; }
 
         public static void SaveToTable<T>(int column, string value, bool saveToMainTable, bool saveTo)
         {
@@ -27,16 +27,16 @@ namespace Yandex.Zen.Core.Toolkit.TableTool
 
         private static void TrySaveToTable(string searchByValue, string setValue, int columnForSetValue)
         {
-            for (int row = 0; row < MainTable.Instance.RowCount; row++)
-            {
-                if (MainTable.Instance.GetRow(row).Any(x => x.Equals(searchByValue, StringComparison.OrdinalIgnoreCase)))
-                {
-                    MainTable.Instance.SetCell(columnForSetValue, row, setValue);
+            //for (int row = 0; row < MainTable.Instance.RowCount; row++)
+            //{
+            //    if (MainTable.Instance.GetRow(row).Any(x => x.Equals(searchByValue, StringComparison.OrdinalIgnoreCase)))
+            //    {
+            //        MainTable.Instance.SetCell(columnForSetValue, row, setValue);
 
                     
-                    break;
-                }
-            }
+            //        break;
+            //    }
+            //}
         }
 
         private static int RowView(int row) => row + 2;

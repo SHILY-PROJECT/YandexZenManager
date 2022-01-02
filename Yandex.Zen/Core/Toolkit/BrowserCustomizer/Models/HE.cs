@@ -16,7 +16,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
     public class HE
     {
         [ThreadStatic] private static Instance _browser;
-        [ThreadStatic] private static DataManager_new _dataManager;
+        [ThreadStatic] private static DataManager _dataManager;
 
         /// <summary>
         /// XPath путь к элементу.
@@ -48,7 +48,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         public HE(string xpath, string description, HtmlElement htmlElement) : this(xpath, description) => Element = htmlElement;
         public HE(string xpath, string description, List<HtmlElement> htmlElementCollection) : this(xpath, description) => Collection = htmlElementCollection;
 
-        public static void ConfigureGlobalBrowse(DataManager_new manager)
+        public static void ConfigureGlobalBrowse(DataManager manager)
         {
             _dataManager = manager;
             _browser = manager.Browser;

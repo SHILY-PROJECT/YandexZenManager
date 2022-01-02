@@ -12,9 +12,9 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
     {
         private static readonly object _locker = new object();
 
-        private DataManager_new DataManager { get; set; }
+        private DataManager DataManager { get; set; }
 
-        public ObjectBase(DataManager_new manager)
+        public ObjectBase(DataManager manager)
         {
             DataManager = manager;
         }

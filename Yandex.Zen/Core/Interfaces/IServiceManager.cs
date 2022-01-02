@@ -5,7 +5,7 @@ namespace Yandex.Zen.Core.Interfaces
 {
     public interface IServiceManager
     {
-        void RunService(DataManager_new manager, ProgramModeEnum mode);
+        void RunService(DataManager manager, ProgramModeEnum mode);
         void RunService(IAccounRegisterService accounRegister);
         void RunService(IActivityManagerService activityManager);
         void RunService(IBrowserAccountManagerService browserAccountManager);

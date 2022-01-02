@@ -9,9 +9,9 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 {
     public class MainAccounRegister_new : IAccounRegisterService
     {
-        public DataManager_new DataManager { get; set; }
+        public DataManager DataManager { get; set; }
 
-        public MainAccounRegister_new(DataManager_new manager)
+        public MainAccounRegister_new(DataManager manager)
         {
             DataManager = manager;
         }

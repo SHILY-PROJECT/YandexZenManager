@@ -6,10 +6,10 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 {
     public class MainChannelManager_new : IChannelManagerService
     {
-        public DataManager_new DataManager { get; set; }
+        public DataManager DataManager { get; set; }
         public IAuthorizationModule Authorization { get; set; }
 
-        public MainChannelManager_new(DataManager_new manager)
+        public MainChannelManager_new(DataManager manager)
         {
             DataManager = manager;
         }

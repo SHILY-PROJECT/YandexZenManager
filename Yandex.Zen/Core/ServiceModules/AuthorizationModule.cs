@@ -26,7 +26,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
         public bool IsSuccesss { get => _isSuccesss; }
 
         private BrowserBusySettingsModel SettingsMode { get; set; }
-        private DataManager_new DataManager { get; set; }
+        private DataManager DataManager { get; set; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private Instance Browser { get => DataManager.Browser; }
         private ObjectBase Object { get => DataManager.Object; }
@@ -35,7 +35,7 @@ namespace Yandex.Zen.Core.ServiceСomponents
         private Random Rnd { get; } = new Random();
         private bool EndExecution { get; set; }
 
-        public AuthorizationModule(DataManager_new manager)
+        public AuthorizationModule(DataManager manager)
         {
             DataManager = manager;
         }

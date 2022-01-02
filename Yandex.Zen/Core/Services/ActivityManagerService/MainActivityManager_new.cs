@@ -9,9 +9,9 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
 {
     public class MainActivityManager_new : IActivityManagerService
     {
-        public DataManager_new DataManager { get; set; }
+        public DataManager DataManager { get; set; }
 
-        public MainActivityManager_new(DataManager_new manager)
+        public MainActivityManager_new(DataManager manager)
         {
             DataManager = manager;
         }

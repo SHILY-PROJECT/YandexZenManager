@@ -46,12 +46,12 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
         /// </summary>
         public int MinProfileSizeToUse { get; set; }
 
-        private DataManager_new DataManager { get; set; }
+        private DataManager DataManager { get; set; }
 
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        public ProfileDataModel(DataManager_new manager)
+        public ProfileDataModel(DataManager manager)
         {
             DataManager = manager;
         }
@@ -59,7 +59,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
         /// <summary>
         /// Модель с данными профиля.
         /// </summary>
-        public ProfileDataModel(DataManager_new manager, bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse) : this(manager)
+        public ProfileDataModel(DataManager manager, bool useWalkedProfileFromSharedFolder, int minProfileSizeToUse) : this(manager)
         {
             UseWalkedProfileFromSharedFolder = useWalkedProfileFromSharedFolder;
             MinProfileSizeToUse = minProfileSizeToUse;

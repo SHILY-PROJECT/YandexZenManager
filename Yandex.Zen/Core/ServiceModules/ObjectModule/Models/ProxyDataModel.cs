@@ -23,7 +23,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
 
         private string UserAgent { get; set; }
 
-        public ProxyDataModel(DataManager_new manager, string proxy, bool defineIpCountryInfo)
+        public ProxyDataModel(DataManager manager, string proxy, bool defineIpCountryInfo)
         {
             UserAgent = manager.Zenno.Profile.UserAgent;
             this.Configure(proxy, defineIpCountryInfo);

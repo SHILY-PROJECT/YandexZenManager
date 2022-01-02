@@ -76,7 +76,7 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            var manager = new DataManager_new(instance, zenno);
+            var manager = new DataManager(instance, zenno);
 
             if (manager.TryConfigureProjectSettings())
             {

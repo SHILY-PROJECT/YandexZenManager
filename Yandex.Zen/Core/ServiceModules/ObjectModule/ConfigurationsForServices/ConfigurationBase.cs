@@ -18,9 +18,9 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
         protected int ColChannelPhone = (int)MainTableColumnsEnum.ChannelNumberPhone;
 
         protected ObjectBase Object { get; set; }
-        protected DataManager_new DataManager { get; set; }
+        protected DataManager DataManager { get; set; }
 
-        public ConfigurationBase(DataManager_new manager, ObjectBase obj)
+        public ConfigurationBase(DataManager manager, ObjectBase obj)
         {
             DataManager = manager;
             Object = obj;

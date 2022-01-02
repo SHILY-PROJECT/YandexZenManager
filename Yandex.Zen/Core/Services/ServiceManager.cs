@@ -12,7 +12,7 @@ namespace Yandex.Zen.Core.Services
 {
     public class ServiceManager : IServiceManager
     {
-        public void RunService(DataManager_new manager, ProgramModeEnum mode)
+        public void RunService(DataManager manager, ProgramModeEnum mode)
         {
             switch (mode)
             {

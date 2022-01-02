@@ -81,7 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DataManager_new.cs" />
+    <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\ConfigurationsForServices\ConfigurationBase.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
@@ -113,7 +113,6 @@
     <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\Models\ObjectSettingsModel.cs" />
     <Compile Include="Core\ServiceModules\ObjectModule\Models\ProfileDataModel.cs" />
-    <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\ServiceModules\AuthorizationModule.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />

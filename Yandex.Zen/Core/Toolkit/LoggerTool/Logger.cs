@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private readonly string _backupObjectData = @"_logger\backup_data.txt";
         private string _infoAboutCurrentObject;
 
-        private DataManager_new DataManager { get; set; }
+        private DataManager DataManager { get; set; }
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private ProgramModeEnum CurrentMode { get => Program.CurrentMode; }
@@ -52,7 +52,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             }
         }
 
-        public static void ConfigureGlobalLog(DataManager_new manager)
+        public static void ConfigureGlobalLog(DataManager manager)
         {
             _instance = new Logger
             {

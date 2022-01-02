@@ -6,10 +6,10 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
     public class MainPublicationManager_new : IPublicationManagerService
     {
-        public DataManager_new DataManager { get; set; }
+        public DataManager DataManager { get; set; }
         public IAuthorizationModule Authorization { get; set; }
 
-        public MainPublicationManager_new(DataManager_new manager)
+        public MainPublicationManager_new(DataManager manager)
         {
             DataManager = manager;
         }

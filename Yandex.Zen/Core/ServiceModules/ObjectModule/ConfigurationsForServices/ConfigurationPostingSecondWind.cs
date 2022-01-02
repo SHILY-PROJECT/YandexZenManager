@@ -8,7 +8,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
 {
     public class ConfigurationPostingSecondWind : ConfigurationBase, IConfigurationForService
     {
-        public ConfigurationPostingSecondWind(DataManager_new manager, ObjectBase obj) : base(manager, obj) { }
+        public ConfigurationPostingSecondWind(DataManager manager, ObjectBase obj) : base(manager, obj) { }
 
         public bool TryConfigure(int row)
         {
