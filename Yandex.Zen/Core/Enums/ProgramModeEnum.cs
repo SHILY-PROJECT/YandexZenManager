@@ -2,7 +2,7 @@
 {
     public enum ProgramModeEnum
     {
-        WalkerProfileService,
+        WalkerProfilesService,
         WalkerOnZenService,
         AccounRegisterService,
         ChannelManagerService,

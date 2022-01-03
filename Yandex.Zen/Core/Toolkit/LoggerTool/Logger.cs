@@ -30,7 +30,8 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private ProgramModeEnum CurrentMode { get => Program.CurrentMode; }
         private ObjectBase Object { get => DataManager.Object; }
         private DirectoryInfo CurrentObjectDirectory { get => Object.Directory; }
-        private FileInfo ModeLog { get; } = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
+        private FileInfo ModeLog { get; set; }
+
         private string InfoAboutCurrentObject
         {
             get
@@ -58,6 +59,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 DataManager = manager
             };
+            _instance.ModeLog = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         /// </summary>
         private static Dictionary<ProgramModeEnum, string> ModeLogFileName => new Dictionary<ProgramModeEnum, string>
         {
-            [ProgramModeEnum.WalkerProfileService] =            "walker_profile_service.log",
+            [ProgramModeEnum.WalkerProfilesService] =            "walker_profile_service.log",
             [ProgramModeEnum.WalkerOnZenService] =              "walker_on_zen_service.log",
             [ProgramModeEnum.BrowserAccountManagerService] =    "browser_account_manager_service.log",
             [ProgramModeEnum.AccounRegisterService] =           "accoun_register_service.log",
@@ -307,7 +309,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 new Dictionary<ProgramModeEnum, string>
                 {
-                    [ProgramModeEnum.WalkerProfileService] = $"[{_instance.CurrentMode}]                  " ,
+                    [ProgramModeEnum.WalkerProfilesService] = $"[{_instance.CurrentMode}]                  " ,
                     [ProgramModeEnum.WalkerOnZenService] = $"[{_instance.CurrentMode}]                    " ,
                     [ProgramModeEnum.BrowserAccountManagerService] = $"[{_instance.CurrentMode}]       " ,
                     [ProgramModeEnum.AccounRegisterService] = $"[{_instance.CurrentMode}]       " ,
@@ -325,7 +327,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 
             // Отправка сообщения в zp/pm
             if (_instance.Zenno != null)
-                _instance.Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfileService}]\t{_instance.InfoAboutCurrentObject}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+                _instance.Zenno.SendToLog($"[{ProgramModeEnum.WalkerProfilesService}]\t{_instance.InfoAboutCurrentObject}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>

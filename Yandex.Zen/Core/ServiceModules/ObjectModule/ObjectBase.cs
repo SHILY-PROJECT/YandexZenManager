@@ -67,6 +67,8 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
                 }
             }
 
+            return;
+
             throw new Exception($"Отсутствуют свободные/подходящие аккаунты: {tb.FileName}");
         }
     }

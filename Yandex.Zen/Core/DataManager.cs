@@ -17,8 +17,8 @@ namespace Yandex.Zen.Core
 {
     public class DataManager
     {
-        public IZennoPosterProjectModel Zenno { get; set; }
         public Instance Browser { get; set; }
+        public IZennoPosterProjectModel Zenno { get; set; }
         public ObjectBase Object { get; private set; }
         public TableModel Table { get; set; }
 

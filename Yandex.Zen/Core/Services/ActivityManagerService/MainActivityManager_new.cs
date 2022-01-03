@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Interfaces.Services;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService
 {
@@ -18,7 +21,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
 
         public void Start()
         {
-            throw new NotImplementedException();
+            Logger.Write("Тест сервиса: MainActivityManager_new", LoggerType.Info, false, false, true, LogColor.Green);
         }
     }
 }

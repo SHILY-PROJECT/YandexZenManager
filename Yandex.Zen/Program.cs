@@ -21,8 +21,9 @@ namespace Yandex.Zen
     public class Program : IZennoExternalCode
     {
         private static readonly object _locker = new object();
-        private static readonly List<string> _objectsAllThreadsInWork = new List<string>();
-        [ThreadStatic] private static readonly List<string> _objectsCurrentThread = new List<string>();
+
+        private static List<string> _objectsAllThreadsInWork;
+        [ThreadStatic] private static List<string> _objectsCurrentThread;
         [ThreadStatic] private static ProgramModeEnum _currentMode;
         [ThreadStatic] private static DirectoryInfo _commonAccountDirectory;
         [ThreadStatic] private static DirectoryInfo _commonProfileDirectory;
@@ -30,12 +31,12 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущие объекты потока.
         /// </summary>
-        public static List<string> ObjectsCurrentThread { get => _objectsCurrentThread; }
+        public static List<string> ObjectsCurrentThread { get => _objectsCurrentThread ?? (_objectsCurrentThread = new List<string>()); }
 
         /// <summary>
         /// Все объекты всех потоков, которые сейчас в работе.
         /// </summary>
-        public static List<string> ObjectsAllThreadsInWork { get => _objectsAllThreadsInWork; }
+        public static List<string> ObjectsAllThreadsInWork { get => _objectsAllThreadsInWork ?? (_objectsAllThreadsInWork = new List<string>()); }
 
         /// <summary>
         /// Общая директория со всеми аккаунтами.
@@ -90,6 +91,7 @@ namespace Yandex.Zen
                 {
                     Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
                 }
+               
                 CleanUpObjectsFromCache();
             }
 
@@ -111,16 +113,23 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpObjectsFromCache()
         {
-            if (ObjectsCurrentThread.Any())
+            try
             {
-                lock (_locker)
+                if (ObjectsCurrentThread.Any())
                 {
-                    if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
-                        MainBrowserAccountManager.ThreadInWork = false;
+                    lock (_locker)
+                    {
+                        if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
+                            MainBrowserAccountManager.ThreadInWork = false;
 
-                    ObjectsCurrentThread.ForEach(res
-                        => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
+                        ObjectsCurrentThread.ForEach(res
+                            => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Write(ex.FormatException("Во время очистки ресурсов что-то пошло не так..."), LoggerType.Error, false, true, true, LogColor.Yellow);
             }
         }
 

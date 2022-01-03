@@ -10,13 +10,13 @@ namespace Yandex.Zen.Core
         /// </summary>
         public static Dictionary<string, ProgramModeEnum> ProgramModes => new Dictionary<string, ProgramModeEnum>()
         {
-            ["Ручное управление аккаунтом в инстансе"] = ProgramModeEnum.BrowserAccountManagerService,
-            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfileService,
-            ["Нагуливание аккаунтов/доноров по zen.yandex"] = ProgramModeEnum.WalkerOnZenService,
-            ["Регистрация аккаунтов yandex"] = ProgramModeEnum.AccounRegisterService,
-            ["Создание и оформление канала zen.yandex"] = ProgramModeEnum.ChannelManagerService,
-            ["Публикация статей на канале zen.yandex"] = ProgramModeEnum.PublicationManagerService,
-            ["Накрутка активности"] = ProgramModeEnum.ActivityManagerService,
+            ["Управление каналом"] = ProgramModeEnum.ChannelManagerService,
+            ["Постинг"] = ProgramModeEnum.PublicationManagerService,
+            ["Ручное управление в браузере"] = ProgramModeEnum.BrowserAccountManagerService,
+            ["Нагуливание по дзен"] = ProgramModeEnum.WalkerOnZenService,
+            ["Регистрация аккаунтов"] = ProgramModeEnum.AccounRegisterService,
+            ["Накручивание активности"] = ProgramModeEnum.ActivityManagerService,
+            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfilesService
         };
 
         /// <summary>

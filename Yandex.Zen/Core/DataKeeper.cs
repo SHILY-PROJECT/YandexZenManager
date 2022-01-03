@@ -6,11 +6,8 @@ using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
-using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
