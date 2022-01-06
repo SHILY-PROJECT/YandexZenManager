@@ -1,12 +1,12 @@
 ﻿using System;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServiceModules.ObjectModule.Models;
+using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.Macros;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule
+namespace Yandex.Zen.Core.Toolkit.ObjectModule
 {
     public class ObjectBase : ObjectBaseModel
     {
@@ -62,7 +62,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
                     }
                     catch (Exception ex)
                     {
-                        Logger.Write(ex.Message, LoggerType.Warning, this.Directory.Exists, true, true, LogColor.Yellow);
+                        Logger.Write(ex.Message, LoggerType.Warning, Directory.Exists, true, true, LogColor.Yellow);
                     }
                 }
             }

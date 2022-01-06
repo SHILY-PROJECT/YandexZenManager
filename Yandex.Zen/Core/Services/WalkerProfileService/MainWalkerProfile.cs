@@ -19,13 +19,13 @@ using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.WalkerProfileService
 {
-    public class MainWalkerProfile : Obsolete_ServicesDataAndComponents
+    public class MainWalkerProfile : ServicesDataAndComponents_obsolete
     {
         private static readonly object _locker = new object();
 
         private readonly ProfileWalkerMode _walkingMode;
         private readonly SourceSearchKeysTypeEnum _sourceSearchKeysType;
-        private readonly Obsolete_InstanceSettings.Obsolete_BusySettings _individualStateBusy;
+        private readonly InstanceSettings_obsolete.Obsolete_BusySettings _individualStateBusy;
         private readonly bool _individualStateBusyEnabled;
         private SaveProfileModeEnum _saveMode;
 
@@ -67,16 +67,16 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             if (individualSettings.Contains("Индивидуальные настройки инстанса"))
             {
-                var otherSettings = Obsolete_InstanceSettings.Obsolete_OtherSettings.ExtractOtherSettingsFromVariable(Zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
+                var otherSettings = InstanceSettings_obsolete.OtherSettings_obsolete.ExtractOtherSettingsFromVariable(Zenno.Variables["cfgIndividualInstanceSettingsForWalkingProfile"].Value);
 
-                Obsolete_InstanceSettings.Obsolete_OtherSettings.SetOtherSettings(otherSettings);
+                InstanceSettings_obsolete.OtherSettings_obsolete.SetOtherSettings(otherSettings);
             }
 
             // Индивидуальные настройки состояния занятости
             _individualStateBusyEnabled = individualSettings.Contains("Индивидуальные настройки состояния занятости на сайтах");
 
             if (_individualStateBusyEnabled)
-                _individualStateBusy = Obsolete_InstanceSettings.Obsolete_BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
+                _individualStateBusy = InstanceSettings_obsolete.Obsolete_BusySettings.ExtractBusySettingsFromVariable(Zenno.Variables["cfgPolicyOfIgnoringForWalkingProfile"].Value);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             Instance.UseFullMouseEmulation = false;
 
-            if (!DataKeeper.SharedDirectoryOfProfiles.Exists) DataKeeper.SharedDirectoryOfProfiles.Create();
+            if (!DataKeeper_obsolete.SharedDirectoryOfProfiles.Exists) DataKeeper_obsolete.SharedDirectoryOfProfiles.Create();
 
             long oldSize = 0, newSize = 0;
 
@@ -119,7 +119,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                     case ProfileWalkerMode.WalkingNewProfile:
                         var countryProfile = addCountryProfileToProfileName ? $"   {Zenno.Profile.Country}" : "";
 
-                        ProfileInfo = new FileInfo($@"{DataKeeper.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
+                        ProfileInfo = new FileInfo($@"{DataKeeper_obsolete.SharedDirectoryOfProfiles.FullName}\profile{countryProfile}   {DateTime.Now:yyyy-MM-dd   HH-mm-ss---fffffff}.zpprofile");
 
                         Program.AddObjectToCache(ProfileInfo.FullName, true, true);
 
@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                         break;
                     case ProfileWalkerMode.WalkingOldProfile:
-                        var profiles = DataKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+                        var profiles = DataKeeper_obsolete.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
                         if (profiles.Count == 0)
                         {
@@ -183,7 +183,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                 // Сохранять профиль по завершению обработки поисковой системы
                 if (_saveMode == SaveProfileModeEnum.SaveAfterEverySearchSystem)
                 {
-                    Obsolete_ProfileWorker.SaveProfile(true);
+                    ProfileWorker_obsolete.SaveProfile(true);
                     Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки поисковой системы: {service}", LoggerType.Info, false, false, true, LogColor.Blue);
                 }
             });
@@ -191,7 +191,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
             // Сохранять профиль по завершению задачи
             if (_saveMode == SaveProfileModeEnum.SaveOnTaskCompletion)
             {
-                Obsolete_ProfileWorker.SaveProfile(true);
+                ProfileWorker_obsolete.SaveProfile(true);
                 Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля по завершению задачи", LoggerType.Info, false, false, true, LogColor.Blue);
             }
 
@@ -357,7 +357,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                         Instance.ActiveTab.NavigateTimeout = 15;
 
                         // Индивидуальное состояние занятости
-                        if (_individualStateBusyEnabled) Obsolete_InstanceSettings.Obsolete_BusySettings.SetBusySettings(_individualStateBusy);
+                        if (_individualStateBusyEnabled) InstanceSettings_obsolete.Obsolete_BusySettings.SetBusySettings(_individualStateBusy);
 
                         Instance.ActiveTab.FindElementByXPath(xpathItemsPage, i).Click(Instance.ActiveTab);
 
@@ -383,7 +383,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
                         // Состояние занятости по умолчанию
                         if (_individualStateBusyEnabled)
-                            Obsolete_InstanceSettings.Obsolete_BusySettings.SetDefaultBusySettings();
+                            InstanceSettings_obsolete.Obsolete_BusySettings.SetDefaultBusySettings();
 
                         // Установка времени ожидания загрузки страницы
                         Instance.ActiveTab.NavigateTimeout = 120;
@@ -398,7 +398,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                         // Сохранение профиля после каждого сайта
                         if (_saveMode == SaveProfileModeEnum.SaveAfterEverySite)
                         {
-                            Obsolete_ProfileWorker.SaveProfile(true);
+                            ProfileWorker_obsolete.SaveProfile(true);
                             Logger.Write($"[Размер профиля: {ProfileInfo.Length / 1024} КБ]\tСохранение профиля после обработки сайта", LoggerType.Info, false, false, true, LogColor.Blue);
                         }
                     }

@@ -18,9 +18,9 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
 
         public ResourceData()
         {
-            Name = Obsolete_ServicesDataAndComponents.Login;
-            Type = Obsolete_ServicesDataAndComponents.ResourceType;
-            Dir = Obsolete_ServicesDataAndComponents.ObjectDirectory.FullName;
+            Name = ServicesDataAndComponents_obsolete.Login;
+            Type = ServicesDataAndComponents_obsolete.ResourceType;
+            Dir = ServicesDataAndComponents_obsolete.ObjectDirectory.FullName;
         }
     }
 }

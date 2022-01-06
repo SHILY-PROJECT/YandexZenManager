@@ -13,20 +13,20 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.ServiceModules.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ObjectModule;
 
 namespace Yandex.Zen.Core
 {
     [Obsolete]
-    public class Obsolete_ServicesDataAndComponents
+    public class ServicesDataAndComponents_obsolete
     {
         private static readonly object _locker = new object();
 
         [ThreadStatic] private static ObjectBase _objectModel;
 
-        public static IZennoPosterProjectModel Zenno { get => DataKeeper.Zenno; }
-        public static Instance Instance { get => DataKeeper.Browser; }
-        public static ProgramModeEnum ProgramMode { get => DataKeeper.CurrentProgramMode; }
+        public static IZennoPosterProjectModel Zenno { get => DataKeeper_obsolete.Zenno; }
+        public static Instance Instance { get => DataKeeper_obsolete.Browser; }
+        public static ProgramModeEnum ProgramMode { get => DataKeeper_obsolete.CurrentProgramMode; }
         public static Random Rnd { get; set; } = new Random();
         public static ObjectBase Object { get => _objectModel; set { _objectModel = value; } }
 
@@ -177,7 +177,7 @@ namespace Yandex.Zen.Core
                     if (!Regex.IsMatch(Instance.FindFirstElement("//span[@class='avatar']", "Аватар").GetAttribute("style"), @"(?<=get-yapic/0/)0-0(?=/)"))
                     {
                         Logger.Write($"[Файл: {AvatarInfo.FullName}]\tАватар аккаунта yandex успешно установлен", LoggerType.Info, true, false, true, LogColor.Blue);
-                        Obsolete_ProfileWorker.SaveProfile(true);
+                        ProfileWorker_obsolete.SaveProfile(true);
 
                         return;
                     }

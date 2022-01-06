@@ -18,7 +18,7 @@ using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
 namespace Yandex.Zen.Core.ServiceСomponents
 {
-    public class UnBindingPhoneAccount : Obsolete_ServicesDataAndComponents
+    public class UnBindingPhoneAccount : ServicesDataAndComponents_obsolete
     {
         /// <summary>
         /// Отвязать номер от аккаунта яндекс.
@@ -91,13 +91,13 @@ namespace Yandex.Zen.Core.ServiceСomponents
                         try
                         {
                             // Запрос на повторное принятие sms кода
-                            statusRetryGet = ZennoPoster.Sms.SetStatus(DataKeeper.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, DataKeeper.PhoneService.CountryParam);
+                            statusRetryGet = ZennoPoster.Sms.SetStatus(DataKeeper_obsolete.PhoneService.Dll, job_id, SmsServiceStatus.RetryGet, null, DataKeeper_obsolete.PhoneService.CountryParam);
 
                             // Подтверждение удаления номера
                             Instance.FindFirstElement(xpathButtonRemoveConfirm, "Кнопка - Да, точно удалить", true, true, 7).Click(Instance.ActiveTab, Rnd.Next(150, 500));
 
                             // Получение кода
-                            sms_code = Obsolete_SmsService.GetSmsCode(job_id, 1, Instance.FindFirstElement(xpathButtonReSendSmsCode, true, true), 3);
+                            sms_code = SmsService_obsolete.GetSmsCode(job_id, 1, Instance.FindFirstElement(xpathButtonReSendSmsCode, true, true), 3);
                         }
                         catch (Exception ex)
                         {

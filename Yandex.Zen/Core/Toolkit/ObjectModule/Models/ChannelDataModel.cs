@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
+namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 {
     public class ChannelDataModel
     {

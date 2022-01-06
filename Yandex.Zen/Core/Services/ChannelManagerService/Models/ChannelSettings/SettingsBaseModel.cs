@@ -22,7 +22,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService.Models.ChannelSettings
 
         public static SettingsBaseModel GetCurrentSettings()
         {
-            var settingsFile = MainChannelManager.SettingsFile;
+            var settingsFile = MainChannelManager_obsolete.SettingsFile;
 
             if (settingsFile.Exists)
             {

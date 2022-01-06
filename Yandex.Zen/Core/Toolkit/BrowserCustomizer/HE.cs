@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.ServiceСomponents;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
+namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 {
     public class HE
     {
@@ -44,9 +43,9 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models
         public string InformationForLog => $"'{nameof(XPath)}:{XPath} | {Description}' - Не найден элемент по заданному пути...";
 
         public HE(string xpath) => XPath = xpath;
-        public HE(string xpath, string description) : this(xpath) => Description = description;
-        public HE(string xpath, string description, HtmlElement htmlElement) : this(xpath, description) => Element = htmlElement;
-        public HE(string xpath, string description, List<HtmlElement> htmlElementCollection) : this(xpath, description) => Collection = htmlElementCollection;
+        public HE(string xpath, string descriptionXPath) : this(xpath) => Description = descriptionXPath;
+        public HE(string xpath, string descriptionXPath, HtmlElement htmlElement) : this(xpath, descriptionXPath) => Element = htmlElement;
+        public HE(string xpath, string descriptionXPath, List<HtmlElement> htmlElementCollection) : this(xpath, descriptionXPath) => Collection = htmlElementCollection;
 
         public static void ConfigureGlobalBrowse(DataManager manager)
         {

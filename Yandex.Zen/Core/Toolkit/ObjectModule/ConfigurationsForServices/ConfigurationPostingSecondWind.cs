@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Yandex.Zen.Core.ServiceModules.ObjectModule.Interfaces;
+using Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces;
 using Yandex.Zen.Core.Toolkit.Extensions;
+using Yandex.Zen.Core.Toolkit.ObjectModule;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
+namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
 {
     public class ConfigurationPostingSecondWind : ConfigurationBase, IConfigurationForService
     {
@@ -20,7 +21,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule.ConfigurationsForServices
                 if (Program.CheckObjectInWork(result)) return false;
 
                 Object.Login = result;
-                Object.Directory = new DirectoryInfo(Path.Combine(DataKeeper.SharedDirectoryOfAccounts.FullName, Object.Login));
+                Object.Directory = new DirectoryInfo(Path.Combine(DataKeeper_obsolete.SharedDirectoryOfAccounts.FullName, Object.Login));
 
                 if (Object.Directory.Exists is false) Object.Directory.Create();
 

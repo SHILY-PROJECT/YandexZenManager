@@ -1,18 +1,13 @@
 ﻿using System;
-using ZennoLab.CommandCenter;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using System.Collections.Generic;
 using ZennoLab.InterfacesLibrary.Enums.Log;
-using Yandex.Zen.Core.ServiceСomponents;
-using Yandex.Zen.Core.ServiceModules.ObjectModule;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerService
 {
     [Obsolete]
-    public class MainPublicationManagerSecondWind
+    public class MainPublicationManagerSecondWind_obsolete
     {
         #region [ВНЕШНИЕ РЕСУРСЫ]===================================================
         //private DataManager Data { get => DataManager.Data; }

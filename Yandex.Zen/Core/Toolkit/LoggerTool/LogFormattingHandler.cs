@@ -1,5 +1,5 @@
 ﻿using System;
-using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
+using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 
 namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {

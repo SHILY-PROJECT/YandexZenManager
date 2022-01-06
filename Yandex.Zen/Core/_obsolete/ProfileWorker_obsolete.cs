@@ -9,7 +9,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 namespace Yandex.Zen.Core.Toolkit
 {
     [Obsolete]
-    public class Obsolete_ProfileWorker : Obsolete_ServicesDataAndComponents
+    public class ProfileWorker_obsolete : ServicesDataAndComponents_obsolete
     {
         /// <summary>
         /// Получение и загрузка профиля (если в рабочей папке нет профиля, то он будет получен из общей папки).
@@ -137,13 +137,13 @@ namespace Yandex.Zen.Core.Toolkit
         /// <returns></returns>
         private static FileInfo GetProfileFromCommonFolder(int minSizeProfile)
         {
-            if (DataKeeper.SharedDirectoryOfProfiles == null) return null;
+            if (DataKeeper_obsolete.SharedDirectoryOfProfiles == null) return null;
 
-            var profiles = DataKeeper.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
+            var profiles = DataKeeper_obsolete.SharedDirectoryOfProfiles.EnumerateFiles("*.zpprofile", SearchOption.TopDirectoryOnly).ToList();
 
             if (profiles.Count == 0)
             {
-                Logger.Write($"[Папка с профилями: {DataKeeper.SharedDirectoryOfProfiles.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                Logger.Write($"[Папка с профилями: {DataKeeper_obsolete.SharedDirectoryOfProfiles.FullName}]\tПрофиля в папке отсутствуют", LoggerType.Warning, true, true, true, LogColor.Yellow);
                 return null;
             }
 
@@ -153,13 +153,13 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (profiles.Count == 0)
                 {
-                    Logger.Write($"[Папка с профилями: {DataKeeper.SharedDirectoryOfProfiles.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
+                    Logger.Write($"[Папка с профилями: {DataKeeper_obsolete.SharedDirectoryOfProfiles.FullName}]\t[Минимальный размер профиля: {minSizeProfile} КБ]\tНе найдено подходящих профилей", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     return null;
                 }
 
                 var firstProfile = profiles.First();
 
-                if (!DataKeeper.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
+                if (!DataKeeper_obsolete.ResourcesAllThreadsInWork.Any(x => x == firstProfile.FullName))
                 {
                     Program.AddObjectToCache(firstProfile.FullName, true, true);
                     return firstProfile;

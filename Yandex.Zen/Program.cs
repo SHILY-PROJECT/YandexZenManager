@@ -120,7 +120,7 @@ namespace Yandex.Zen
                     lock (_locker)
                     {
                         if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
-                            MainBrowserAccountManager.ThreadInWork = false;
+                            MainBrowserAccountManager_obsolete.ThreadInWork = false;
 
                         ObjectsCurrentThread.ForEach(res
                             => ObjectsAllThreadsInWork.RemoveAll(x => x == res));

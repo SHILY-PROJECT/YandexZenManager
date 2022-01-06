@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Models
+namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 {
     public class ObjectBaseModel
     {

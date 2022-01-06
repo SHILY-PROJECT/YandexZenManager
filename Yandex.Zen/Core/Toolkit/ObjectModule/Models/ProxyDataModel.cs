@@ -10,7 +10,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule
+namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 {
     /// <summary>
     /// Класс для хранения данных IP.
@@ -26,7 +26,7 @@ namespace Yandex.Zen.Core.ServiceModules.ObjectModule
         public ProxyDataModel(DataManager manager, string proxy, bool defineIpCountryInfo)
         {
             UserAgent = manager.Zenno.Profile.UserAgent;
-            this.Configure(proxy, defineIpCountryInfo);
+            Configure(proxy, defineIpCountryInfo);
         }
 
         /// <summary>

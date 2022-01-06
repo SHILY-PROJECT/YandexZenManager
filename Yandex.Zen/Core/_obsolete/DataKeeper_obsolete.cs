@@ -9,14 +9,15 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.ServiceModules.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ObjectModule;
 
 namespace Yandex.Zen.Core
 {
+    [Obsolete]
     /// <summary>
     /// Класс для хранения, инициализации данных и конфигурации проекта.
     /// </summary>
-    public class DataKeeper
+    public class DataKeeper_obsolete
     {
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
@@ -32,7 +33,7 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// SMS сервис (автоматическое заполнение свойств данных при конфигурации проекта).
         /// </summary>
-        [Obsolete] public static Obsolete_SmsService PhoneService { get; private set; }
+        [Obsolete] public static SmsService_obsolete PhoneService { get; private set; }
 
         /// <summary>
         /// Объект типа аккаунта или донора с соответствующими данными.

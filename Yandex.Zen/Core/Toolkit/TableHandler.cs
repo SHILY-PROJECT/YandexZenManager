@@ -12,7 +12,7 @@ namespace Yandex.Zen.Core.Toolkit
     /// <summary>
     /// Класс для работы с таблицей.
     /// </summary>
-    public class TableHandler : Obsolete_ServicesDataAndComponents
+    public class TableHandler : ServicesDataAndComponents_obsolete
     {
         /// <summary>
         /// Записать данные в ячейку таблицы режима и общую таблицу.

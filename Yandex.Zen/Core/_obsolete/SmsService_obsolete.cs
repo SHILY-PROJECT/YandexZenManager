@@ -13,14 +13,14 @@ using ZennoLab.InterfacesLibrary.SmsService.Enums;
 namespace Yandex.Zen.Core.Toolkit
 {
     [Obsolete]
-    public class Obsolete_SmsService : Obsolete_ServicesDataAndComponents
+    public class SmsService_obsolete : ServicesDataAndComponents_obsolete
     {
         public string Dll { get; set; }
         public string YandexService { get; set; }
         public string CountryParam { get; set; }
         public bool StatusGetCountry { get; set; }
 
-        public Obsolete_SmsService(string serviceDllAndCountry)
+        public SmsService_obsolete(string serviceDllAndCountry)
         {
             var service = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[0];
             var country = serviceDllAndCountry.Split(new[] { " - " }, StringSplitOptions.None)[1];
@@ -79,7 +79,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             while (true)
             {
-                jobId = ZennoPoster.Sms.GetNumber(DataKeeper.PhoneService.Dll, out phone, DataKeeper.PhoneService.YandexService, "any", null, DataKeeper.PhoneService.CountryParam);
+                jobId = ZennoPoster.Sms.GetNumber(DataKeeper_obsolete.PhoneService.Dll, out phone, DataKeeper_obsolete.PhoneService.YandexService, "any", null, DataKeeper_obsolete.PhoneService.CountryParam);
 
                 if (phone == "No numbers" && timeToSecondsWaitPhone < stopwatch.ElapsedMilliseconds / 60)
                 {
@@ -93,7 +93,7 @@ namespace Yandex.Zen.Core.Toolkit
                 }
                 else
                 {
-                    phoneLog = $"[Sms service dll: {DataKeeper.PhoneService.Dll}]\t[Sms job id: {jobId}]\t[Phone: {phone}]\t";
+                    phoneLog = $"[Sms service dll: {DataKeeper_obsolete.PhoneService.Dll}]\t[Sms job id: {jobId}]\t[Phone: {phone}]\t";
                     break;
                 }
             }
@@ -127,7 +127,7 @@ namespace Yandex.Zen.Core.Toolkit
 
             while (true)
             {
-                sms_code = ZennoPoster.Sms.GetStatus(DataKeeper.PhoneService.Dll, job_id, "", minutesWaitSmsCode);
+                sms_code = ZennoPoster.Sms.GetStatus(DataKeeper_obsolete.PhoneService.Dll, job_id, "", minutesWaitSmsCode);
 
                 if (string.IsNullOrWhiteSpace(sms_code))
                 {
@@ -169,7 +169,7 @@ namespace Yandex.Zen.Core.Toolkit
             {
                 if (job_id != "-1")
                 {
-                    var responseCancel = ZennoPoster.Sms.SetStatus(DataKeeper.PhoneService.Dll, job_id, SmsServiceStatus.Cancel);
+                    var responseCancel = ZennoPoster.Sms.SetStatus(DataKeeper_obsolete.PhoneService.Dll, job_id, SmsServiceStatus.Cancel);
                     Logger.Write($"{phoneLog}[Response cancel: {responseCancel}]\tНомер отменен", LoggerType.Info, true, false, true);
                 }
             }

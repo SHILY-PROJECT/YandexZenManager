@@ -1,6 +1,6 @@
 ﻿using ZennoLab.InterfacesLibrary.ProjectModel;
 
-namespace Yandex.Zen.Core.ServiceModules.ObjectModule.Interfaces
+namespace Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces
 {
     public interface IConfigurationForService
     {

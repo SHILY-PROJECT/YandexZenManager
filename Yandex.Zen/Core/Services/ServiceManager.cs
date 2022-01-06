@@ -16,12 +16,12 @@ namespace Yandex.Zen.Core.Services
         {
             switch (mode)
             {
-                case ProgramModeEnum.AccounRegisterService: RunService(new MainAccounRegister_new(manager)); break;
-                case ProgramModeEnum.BrowserAccountManagerService: RunService(new MainBrowserAccountManager_new(manager)); break;
-                case ProgramModeEnum.ChannelManagerService: RunService(new MainChannelManager_new(manager)); break;
-                case ProgramModeEnum.PublicationManagerService: RunService(new MainPublicationManager_new(manager)); break;
-                case ProgramModeEnum.ActivityManagerService: RunService(new MainActivityManager_new(manager)); break;
-                case ProgramModeEnum.WalkerOnZenService: RunService(new MainWalkerOnZen_new(manager)); break;
+                case ProgramModeEnum.AccounRegisterService: RunService(new MainAccounRegister(manager)); break;
+                case ProgramModeEnum.BrowserAccountManagerService: RunService(new MainBrowserAccountManager(manager)); break;
+                case ProgramModeEnum.ChannelManagerService: RunService(new MainChannelManager(manager)); break;
+                case ProgramModeEnum.PublicationManagerService: RunService(new MainPublicationManager(manager)); break;
+                case ProgramModeEnum.ActivityManagerService: RunService(new MainActivityManager(manager)); break;
+                case ProgramModeEnum.WalkerOnZenService: RunService(new MainWalkerOnZen(manager)); break;
             }
         }
 
