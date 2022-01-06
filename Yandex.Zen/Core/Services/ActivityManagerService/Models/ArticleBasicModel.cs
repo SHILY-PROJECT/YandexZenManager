@@ -32,7 +32,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
         {
             var zenno = ServicesDataAndComponents_obsolete.Zenno;
 
-            Login = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Login, row);
+            Login = table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Login, row);
             Login = !string.IsNullOrWhiteSpace(Login) ? Login : null;
 
             if (Login == null) return;
@@ -40,7 +40,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
             Directory = new DirectoryInfo(Path.Combine(zenno.Directory, "Accounts", Login));
             _actionsFile = new FileInfo(Path.Combine(Directory.FullName, "_logger", $"actions.log"));
 
-            ArticleUrl = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.ArticleUrl, row);
+            ArticleUrl = table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.ArticleUrl, row);
             ArticleUrl = !string.IsNullOrWhiteSpace(ArticleUrl) ? ArticleUrl : null;
 
             if (ArticleUrl == null) return;
@@ -51,8 +51,8 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 
             // Настройка и получение задачи
             ActionState = new ActionStateModel();
-            TaskHandler.ConfigureTaskHandler(this, totalGoToArticleSettings, secondsWatchArticleSettings, totalLikesSettings, totalCommentsSettings);
-            Task = TaskHandler.GetTask();
+            TaskHandler_obsolete.ConfigureTaskHandler(this, totalGoToArticleSettings, secondsWatchArticleSettings, totalLikesSettings, totalCommentsSettings);
+            Task = TaskHandler_obsolete.GetTask();
         }
 
         private ArticleTableStatisticsModel GetStatisticsFromTable(IZennoTable table, int row)
@@ -60,7 +60,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
             var statistics = new ArticleTableStatisticsModel();
 
             var sumSeconds = 0;
-            var watchTime = table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.WatchTime, row);
+            var watchTime = table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.WatchTime, row);
             var statusMin = int.TryParse(watchTime.Split(new[] { " min" }, StringSplitOptions.None)[0], out int min);
             var statusSec = int.TryParse(watchTime.Split(new[] { " min" }, StringSplitOptions.None)[1].Split(new[] { " sec" }, StringSplitOptions.None)[0], out int sec);
 
@@ -69,16 +69,16 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 
             statistics.TotalSecondsWatchArticle = sumSeconds;
 
-            var statusTransitions = int.TryParse(table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Transitions, row), out int transitions);
+            var statusTransitions = int.TryParse(table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Transitions, row), out int transitions);
             statistics.TotalGoToArticle = statusTransitions ? transitions : 0;
 
-            var statusLikes = int.TryParse(table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Likes, row), out int likes);
+            var statusLikes = int.TryParse(table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Likes, row), out int likes);
             statistics.TotalLikes = statusLikes ? likes : 0;
 
-            var statusComments = int.TryParse(table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Comments, row), out int comments);
+            var statusComments = int.TryParse(table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Comments, row), out int comments);
             statistics.TotalComments = statusComments ? comments : 0;
 
-            var statusArticleState = Enum.TryParse(table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.ArticleUrl, row), out ArticleProcessStatusEnum articleState);
+            var statusArticleState = Enum.TryParse(table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.ArticleUrl, row), out ArticleProcessStatusEnum articleState);
             statistics.ArticleProcessStatus = statusArticleState ? articleState : ArticleProcessStatusEnum.InProcess;
 
             return statistics;
@@ -90,11 +90,11 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
             {
                 for (int row = 0; row < table.RowCount;)
                 {
-                    if (Login == table.GetCell((int)TableColumnEnum.StatisticsCheatActivity.Login, row))
+                    if (Login == table.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Login, row))
                     {
                         // Обновляем данные
                         var statistics = GetStatisticsFromTable(table, row);
-                        var allTasks = TaskHandler.GetTasksList();
+                        var allTasks = TaskHandler_obsolete.GetTasksList();
 
                         var totalLikes = allTasks.Where(x => x.Like == true).Count();
                         var totalComments = allTasks.Where(x => x.Comment == true).Count();
@@ -108,19 +108,19 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 
                         // Сохранение времени просмотра
                         var time = TimeSpan.FromSeconds(statistics.TotalSecondsWatchArticle);
-                        table.SetCell((int)TableColumnEnum.StatisticsCheatActivity.WatchTime, row, $"{time.Minutes} min {time.Seconds} sec");
+                        table.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.WatchTime, row, $"{time.Minutes} min {time.Seconds} sec");
 
                         // Сохранение количества переходов по ссылке
-                        table.SetCell((int)TableColumnEnum.StatisticsCheatActivity.Transitions, row, statistics.TotalGoToArticle.ToString());
+                        table.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Transitions, row, statistics.TotalGoToArticle.ToString());
 
                         // Сохранение количества лайков
-                        table.SetCell((int)TableColumnEnum.StatisticsCheatActivity.Likes, row, statistics.TotalLikes.ToString());
+                        table.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Likes, row, statistics.TotalLikes.ToString());
 
                         // Сохранение количества комментариев
-                        table.SetCell((int)TableColumnEnum.StatisticsCheatActivity.Comments, row, statistics.TotalComments.ToString());
+                        table.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.Comments, row, statistics.TotalComments.ToString());
 
                         // Сохранение состояния
-                        table.SetCell((int)TableColumnEnum.StatisticsCheatActivity.ProcessStatus, row,
+                        table.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.ProcessStatus, row,
                             statistics.TotalLikes >= totalLikes && statistics.TotalComments >= totalComments && statistics.TotalGoToArticle >= totalGoToArticle ?
                             ArticleProcessStatusEnum.Done.ToString() : ArticleProcessStatusEnum.InProcess.ToString());
 

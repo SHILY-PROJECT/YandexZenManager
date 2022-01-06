@@ -337,10 +337,10 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     switch (CurrentObjectAtWork)
                     {
                         case ObjectTypeEnum.Donor:
-                            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.InstaUrl, InstagramUrl, new InstDataItem(TableColumnEnum.Inst.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
+                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
                         case ObjectTypeEnum.Account:
-                            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.Login, Login, new InstDataItem(TableColumnEnum.Inst.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
+                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
                     }
 
@@ -851,8 +851,8 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
 
                 for (int row = 0; row < accountsCount; row++)
                 {
-                    var login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
-                    var donor = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
+                    var login = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row);
+                    var donor = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, row);
 
                     // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
                     if (!string.IsNullOrWhiteSpace(login))
@@ -867,7 +867,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                         if (!TableGeneralAndTableModeIsSame)
                         {
                             // Получаем логин яндекс из общей для проверки
-                            login = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, donor, (int)TableColumnEnum.Inst.Login, false);
+                            login = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, donor, (int)TableColumnEnum_obsolete.Inst_obsolete.Login, false);
 
                             // Подключаем аккаунт в работу, если он найден в общей таблице
                             if (!string.IsNullOrWhiteSpace(login))
@@ -932,7 +932,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     if (CurrentObjectAtWork == ObjectTypeEnum.Account)
                     {
                         // Получение пароля
-                        Password = AccountsTable.GetCell((int)TableColumnEnum.Inst.Password, row);
+                        Password = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Password, row);
 
                         if (string.IsNullOrWhiteSpace(Password))
                         {
@@ -942,7 +942,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                                 continue;
                             }
 
-                            Password = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, Login, (int)TableColumnEnum.Inst.Password);
+                            Password = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, Login, (int)TableColumnEnum_obsolete.Inst_obsolete.Password);
 
                             if (string.IsNullOrWhiteSpace(Password))
                             {
@@ -952,7 +952,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                         }
 
                         // Получение ответа на секретный вопрос
-                        Answer = AccountsTable.GetCell((int)TableColumnEnum.Inst.Answer, row);
+                        Answer = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Answer, row);
 
                         if (string.IsNullOrWhiteSpace(Answer))
                         {
@@ -962,7 +962,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                                 continue;
                             }
 
-                            Answer = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, Login, (int)TableColumnEnum.Inst.Answer);
+                            Answer = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, Login, (int)TableColumnEnum_obsolete.Inst_obsolete.Answer);
 
                             if (string.IsNullOrWhiteSpace(Answer))
                             {
@@ -976,7 +976,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     if (!ProfileWorker_obsolete.LoadProfile(true)) continue;
 
                     // Получение прокси
-                    if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                    if (!SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true)) continue;
 
                     //var additionalLog = IpInfo != null ? $" | proxy country: {IpInfo.CountryShortName} — {IpInfo.CountryFullName}" : "";
 

@@ -12,10 +12,10 @@ namespace Yandex.Zen.Core.Models.TableHandler
     /// </summary>
     public class InstDataItem
     {
-        public TableColumnEnum.Inst SetToColumn { get; set; }
+        public TableColumnEnum_obsolete.Inst_obsolete SetToColumn { get; set; }
         public string SetValue { get; set; }
 
-        public InstDataItem(TableColumnEnum.Inst setToColumn, string setValue)
+        public InstDataItem(TableColumnEnum_obsolete.Inst_obsolete setToColumn, string setValue)
         {
             SetToColumn = setToColumn;
             SetValue = setValue;

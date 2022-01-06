@@ -12,7 +12,8 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 
 namespace Yandex.Zen.Core.Toolkit
 {
-    public static class TaskHandler
+    [Obsolete]
+    public static class TaskHandler_obsolete
     {
         [ThreadStatic]
         public static FileInfo TaskFile;

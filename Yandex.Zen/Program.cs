@@ -12,6 +12,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
+using Yandex.Zen.Core.Toolkit;
 
 namespace Yandex.Zen
 {

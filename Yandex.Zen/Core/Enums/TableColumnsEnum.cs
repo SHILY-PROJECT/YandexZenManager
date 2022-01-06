@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Yandex.Zen.Core.Enums
 {
-    public enum MainTableColumnsEnum
+    public enum TableColumnsEnum
     {
         Login,
         Password,

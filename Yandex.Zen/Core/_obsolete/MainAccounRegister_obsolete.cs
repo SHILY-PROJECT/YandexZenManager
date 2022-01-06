@@ -185,7 +185,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                 "https://yandex.com/"
             };
 
-            var key = MainWalkerProfile.GetKeysForSearchService(_sourceSearchKeysType).GetLine(LineOptions.RandomWithRemoved);
+            var key = MainWalkerProfile_obsolete.GetKeysForSearchService(_sourceSearchKeysType).GetLine(LineOptions.RandomWithRemoved);
 
             var xpathFieldSearch = new[] { "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]", "Поле - Поиск" };
             var xpathItemsPage = new[] { "//li[@class='serp-item']/descendant::h2/a[@href!='']", "" };
@@ -482,13 +482,13 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
             false);
 
             // Сохранение результата в таблицу режима и общую таблицу
-            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.InstaUrl, InstagramUrl, new List<InstDataItem>
+            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new List<InstDataItem>
             {
-                new InstDataItem(TableColumnEnum.Inst.Profile, countryProfileAndProxy),
-                new InstDataItem(TableColumnEnum.Inst.Login, Login),
-                new InstDataItem(TableColumnEnum.Inst.Password, Password),
-                new InstDataItem(TableColumnEnum.Inst.Answer, Answer),
-                new InstDataItem(TableColumnEnum.Inst.AccountDatetimeCreated, datetime)
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Profile, countryProfileAndProxy),
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Login, Login),
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Password, Password),
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Answer, Answer),
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.AccountDatetimeCreated, datetime)
             });
 
             // Сохранение профиля
@@ -558,7 +558,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                 for (int row = 0; row < accountsCount; row++)
                 {
                     // Получение аккаунта, информация о директории и файле описания аккаунта
-                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
+                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, row);
                     ObjectDirectory = new DirectoryInfo(Path.Combine(_generalFolderDonors.FullName, $@"{Regex.Match(InstagramUrl, @"(?<=com/).*?(?=/)").Value}"));
 
 
@@ -566,7 +566,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     if (!ResourceIsAvailable(InstagramUrl, row)) continue;
 
                     // Проверка актуальности донора
-                    if (string.IsNullOrWhiteSpace(AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row)) is false)
+                    if (string.IsNullOrWhiteSpace(AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row)) is false)
                     {
                         Logger.Write($"[Row: {row + 2}]\tУже использовался для регистрации yandex аккаунта", LoggerType.Info, false, false, false);
                         continue;
@@ -590,7 +590,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     }
 
                     // Получение имени и фамилии для регистрации
-                    var nameAndSurname = AccountsTable.GetCell((int)TableColumnEnum.Inst.FirstAndLastName, row);
+                    var nameAndSurname = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.FirstAndLastName, row);
                     var recommendation = "Варианты заполнения ИФ: \"Имя Фамили\", \"Имя:Фамилия\", \"Имя;Фамилия\"";
 
                     if (string.IsNullOrWhiteSpace(nameAndSurname) is false)
@@ -626,7 +626,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
                     if (ProfileWorker_obsolete.LoadProfile(true) is false) return false;
 
                     // Получение прокси
-                    if (SetProxy((int)TableColumnEnum.Inst.Proxy, row, true) is false) continue;
+                    if (SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true) is false) continue;
 
                     // Генерация пароля и ответа на контрольный вопрос
                     Password = TextMacros.GenerateString(15, "abcd");

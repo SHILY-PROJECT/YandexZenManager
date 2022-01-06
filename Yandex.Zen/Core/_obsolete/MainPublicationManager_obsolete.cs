@@ -459,7 +459,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                 for (int row = 0; row < accountsCount; row++)
                 {
                     // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
-                    Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
+                    Login = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row);
 
                     ObjectDirectory = new DirectoryInfo(Path.Combine(Zenno.Directory, "Accounts", Login));
                     ChannelDescription = new FileInfo(Path.Combine(ObjectDirectory.FullName, channelDescriptionFileName));
@@ -470,7 +470,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     if (!ResourceIsAvailable(Login, row)) continue;
 
                     // Получение инстаграм ссылки
-                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum.Inst.InstaUrl, row);
+                    InstagramUrl = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, row);
 
                     if (string.IsNullOrWhiteSpace(InstagramUrl))
                     {
@@ -494,7 +494,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     }
 
                     // Проверка наличия zen канала
-                    ZenChannel = AccountsTable.GetCell((int)TableColumnEnum.Inst.ZenChannel, row);
+                    ZenChannel = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, row);
 
                     if (string.IsNullOrWhiteSpace(ZenChannel))
                     {
@@ -571,7 +571,7 @@ namespace Yandex.Zen.Core.Services.PublicationManagerService
                     if (!ProfileWorker_obsolete.LoadProfile(true)) return false;
 
                     // Получение прокси для регистрации
-                    if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                    if (!SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true)) continue;
 
                     //ProfileRetrievedFromSharedFolder
 

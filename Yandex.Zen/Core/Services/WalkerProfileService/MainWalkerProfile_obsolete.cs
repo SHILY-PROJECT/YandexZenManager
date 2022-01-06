@@ -14,12 +14,11 @@ using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 using Yandex.Zen.Core.Services.WalkerProfileService.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
-using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.Services.WalkerProfileService
 {
-    public class MainWalkerProfile : ServicesDataAndComponents_obsolete
+    [Obsolete]
+    public class MainWalkerProfile_obsolete : ServicesDataAndComponents_obsolete
     {
         private static readonly object _locker = new object();
 
@@ -32,7 +31,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
         /// <summary>
         /// Конструктор для скрипта (настройка лога).
         /// </summary>
-        public MainWalkerProfile()
+        public MainWalkerProfile_obsolete()
         {
             // Нагуливание профилей - Конвертация режима обработки профилей
             var statusProfileWalkingMode = new Dictionary<string, ProfileWalkerMode>()
@@ -50,10 +49,10 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             // Нагуливание профилей - Конвертация источника ключевиков
             var statusSourceSearchKeysType = new Dictionary<string, SourceSearchKeysTypeEnum>()
-                {
-                    {"Ключевики из файла", SourceSearchKeysTypeEnum.FromFile},
-                    {"Ключевики из настроек", SourceSearchKeysTypeEnum.FromSettings}
-                }
+            {
+                {"Ключевики из файла", SourceSearchKeysTypeEnum.FromFile},
+                {"Ключевики из настроек", SourceSearchKeysTypeEnum.FromSettings}
+            }
             .TryGetValue(Zenno.Variables["cfgTypeSourceSearchKeys"].Value, out _sourceSearchKeysType);
 
             if (!statusSourceSearchKeysType)
@@ -306,7 +305,7 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                 if (Instance.AllTabs.Count() != 0) Instance.AllTabs.ToList().ForEach(x => x.Close());
 
                 // Переходим к поисковой системе
-                Instance.ActiveTab.Navigate(url, DictionariesAndLists.ReferenceLinks.GetLine(LineOptions.Random), true);
+                Instance.ActiveTab.Navigate(url, ReferenceLinks.GetLine(LineOptions.Random), true);
 
                 var heFieldSearch = Instance.FindFirstElement(xpathFieldSearch, "Поле - Поиск", false, false);
 
@@ -405,6 +404,41 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
                 }
             }
         }
+
+        /// <summary>
+        /// Получить случайную реферальную ссылку
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> ReferenceLinks => new List<string>
+        {
+            "https://www.youtube.com/",
+            "https://www.figma.com/files/recent",
+            "https://yandex.ru/news/",
+            "https://www.petshop.ru/catalog/cats/syxkor/",
+            "https://nutram.spb.ru/advantages_nutram.html",
+            "https://www.wildberries.ru/catalog/tovary-dlya-zhivotnyh/dlya-koshek/korm-i-lakomstva",
+            "https://zen.yandex.ru/",
+            "https://vk.com/",
+            "https://www.avito.ru/rossiya/avtomobili",
+            "https://www.drive2.ru/",
+            "https://www.wildberries.ru/",
+            "https://mail.ru/",
+            "https://my.mail.ru/",
+            "https://www.rambler.ru/",
+            "https://music.yandex.ru/",
+            "https://ruv.hotmo.org/",
+            "https://zaycev.net/",
+            "https://catalog-aktsiy.ru/tovary-dlia-doma-katalog/kartiny-katalog.html",
+            "https://www.spotify.com/",
+            "https://twitter.com/",
+            "https://www.dns-shop.ru/catalog/",
+            "https://www.citilink.ru/catalog/",
+            "https://www.ozon.ru/",
+            "https://en.wikipedia.org/wiki/Main_Page",
+            "https://aliexpress.ru/",
+            "https://price.ru/",
+            "https://www.e-katalog.ru/"
+        };
 
     }
 }

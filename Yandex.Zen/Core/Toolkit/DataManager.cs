@@ -4,7 +4,6 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Models;
 using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
-using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -13,7 +12,7 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.ObjectModule;
 
-namespace Yandex.Zen.Core
+namespace Yandex.Zen.Core.Toolkit
 {
     public class DataManager
     {
@@ -47,8 +46,8 @@ namespace Yandex.Zen.Core
                 Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
                 Logger.ConfigureGlobalLog(this);
                 HE.ConfigureGlobalBrowse(this);
-                this.SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
-                this.Configure();
+                SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
+                Configure();
                 configurationStatus = true;
             }
             catch (Exception ex)
@@ -63,7 +62,7 @@ namespace Yandex.Zen.Core
         /// </summary>
         private void Configure()
         {
-            Table = new TableModel(this.Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
+            Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
             Object = new ObjectBase(this)
             {

@@ -1,14 +1,18 @@
-﻿namespace Yandex.Zen.Core.Toolkit.TableTool.Enums
+﻿using System;
+
+namespace Yandex.Zen.Core.Toolkit.TableTool.Enums
 {
+    [Obsolete]
     /// <summary>
     /// Столбцы.
     /// </summary>
-    public static class TableColumnEnum
+    public static class TableColumnEnum_obsolete
     {
+        [Obsolete]
         /// <summary>
         /// Столбцы для инстаграмной имплементации.
         /// </summary>
-        public enum Inst
+        public enum Inst_obsolete
         {
             Profile = 0,
             StatusAll = 1,
@@ -27,10 +31,11 @@
             DatetimeLastPublicationArticle = 14
         }
 
+        [Obsolete]
         /// <summary>
         /// Столбцы для статистики накрутки.
         /// </summary>
-        public enum StatisticsCheatActivity
+        public enum StatisticsCheatActivity_obsolete
         {
             Login = 0,
             ArticleUrl = 1,
@@ -42,10 +47,11 @@
             ProcessStatus = 7
         }
 
+        [Obsolete]
         /// <summary>
         /// Столбцы для таблицы режима PostingSecondWind.
         /// </summary>
-        public enum PostingSecondWind
+        public enum PostingSecondWind_obsolete
         {
             Profile,
             Login,

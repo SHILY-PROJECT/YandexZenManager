@@ -4,6 +4,7 @@ using System.Linq;
 using Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
 
 namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
 {

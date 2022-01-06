@@ -11,12 +11,12 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
 {
     public class ConfigurationBase
     {
-        protected int ColLogin = (int)MainTableColumnsEnum.Login;
-        protected int ColPassword = (int)MainTableColumnsEnum.Password;
-        protected int ColProxy = (int)MainTableColumnsEnum.Proxy;
-        protected int ColAnswerQuestion = (int)MainTableColumnsEnum.AnswerQuestion;
-        protected int ColAccountPhone = (int)MainTableColumnsEnum.AccountNumberPhone;
-        protected int ColChannelPhone = (int)MainTableColumnsEnum.ChannelNumberPhone;
+        protected int ColLogin = (int)TableColumnsEnum.Login;
+        protected int ColPassword = (int)TableColumnsEnum.Password;
+        protected int ColProxy = (int)TableColumnsEnum.Proxy;
+        protected int ColAnswerQuestion = (int)TableColumnsEnum.AnswerQuestion;
+        protected int ColAccountPhone = (int)TableColumnsEnum.AccountNumberPhone;
+        protected int ColChannelPhone = (int)TableColumnsEnum.ChannelNumberPhone;
 
         protected ObjectBase Object { get; set; }
         protected DataManager DataManager { get; set; }

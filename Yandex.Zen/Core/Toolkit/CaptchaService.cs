@@ -36,7 +36,7 @@ namespace Yandex.Zen.Core.Toolkit
         /// <summary>
         /// Отправка капчи на распознание.
         /// </summary>
-        public string Recognizing(HtmlElement htmlElementImgCaptcha)
+        public string Recognize(HtmlElement htmlElementImgCaptcha)
         {
             TryRecognize(htmlElementImgCaptcha, out var result);
             return result;

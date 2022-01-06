@@ -6,13 +6,15 @@ using Yandex.Zen.Core.Models.TableHandler;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.TableTool.Enums;
+using System;
 
 namespace Yandex.Zen.Core.Toolkit
 {
+    [Obsolete]
     /// <summary>
     /// Класс для работы с таблицей.
     /// </summary>
-    public class TableHandler : ServicesDataAndComponents_obsolete
+    public class TableHandler_obsolete : ServicesDataAndComponents_obsolete
     {
         /// <summary>
         /// Записать данные в ячейку таблицы режима и общую таблицу.
@@ -21,7 +23,7 @@ namespace Yandex.Zen.Core.Toolkit
         /// <param name="searchByValue"></param>
         /// <param name="setToColumn"></param>
         /// <param name="setValue"></param>
-        public static void WriteToCellInSharedAndMode(TableColumnEnum.Inst searchByColumn, string searchByValue, InstDataItem data)
+        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, InstDataItem data)
         {
             var logModeTable = TableGeneralAndTableModeIsSame ? $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу" : $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу режима";
 
@@ -85,7 +87,7 @@ namespace Yandex.Zen.Core.Toolkit
         /// <param name="searchByValue"></param>
         /// <param name="setToColumn"></param>
         /// <param name="setValue"></param>
-        public static void WriteToCellInSharedAndMode(TableColumnEnum.Inst searchByColumn, string searchByValue, List<InstDataItem> data)
+        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, List<InstDataItem> data)
         {
             var logModeTable = TableGeneralAndTableModeIsSame ? $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу" : $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу режима";
 

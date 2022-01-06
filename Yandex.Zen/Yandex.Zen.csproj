@@ -81,7 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\Toolkit\DataManager.cs" />
     <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\ConfigurationsForServices\ConfigurationBase.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
@@ -94,7 +94,6 @@
     <Compile Include="Core\Interfaces\IService.cs" />
     <Compile Include="Core\Interfaces\IServiceManager.cs" />
     <Compile Include="Core\Interfaces\Services\IWalkerOnZenService.cs" />
-    <Compile Include="Core\Toolkit\ObjectModule\Models\ColumnsModel.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ObjectBaseModel.cs" />
     <Compile Include="Core\Services\AccounRegisterService\MainAccounRegister.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
@@ -185,9 +184,9 @@
     <Compile Include="Core\Toolkit\Extensions\ListExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\VariableExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoListExtensions.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\MainWalkerProfile.cs" />
+    <Compile Include="Core\Services\WalkerProfileService\MainWalkerProfile_obsolete.cs" />
     <Compile Include="Core\_obsolete\MainAccounRegister_obsolete.cs" />
-    <Compile Include="Core\Toolkit\TableTool\Enums\TableColumnEnum.cs" />
+    <Compile Include="Core\_obsolete\TableColumnEnum_obsolete.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
     <Compile Include="Core\_obsolete\ServicesDataAndComponents_obsolete.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceDataModel.cs" />
@@ -195,12 +194,10 @@
     <Compile Include="Core\Toolkit\SmsServiceTool\SmsService.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceParamsDataModel.cs" />
     <Compile Include="Core\_obsolete\ProfileWorker_obsolete.cs" />
-    <Compile Include="Core\Toolkit\TableHandler.cs" />
-    <Compile Include="Core\Enums\MainTableColumnsEnum.cs" />
-    <Compile Include="Core\Toolkit\TableTool\Enums\ModeTableColumnsEnum.cs" />
-    <Compile Include="Core\Toolkit\TableTool\TableManager.cs" />
-    <Compile Include="Core\Toolkit\TaskHandler.cs" />
-    <Compile Include="Core\DictionariesAndLists.cs" />
+    <Compile Include="Core\_obsolete\TableHandler_obsolete.cs" />
+    <Compile Include="Core\Enums\TableColumnsEnum.cs" />
+    <Compile Include="Core\_obsolete\TaskHandler_obsolete.cs" />
+    <Compile Include="Core\Toolkit\DictionariesAndLists.cs" />
     <Compile Include="Core\_obsolete\DataKeeper_obsolete.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -217,9 +214,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Toolkit\TableTool\Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="ValidateZennoPosterDllPath" BeforeTargets="BeforeBuild">
     <Error Text="Environment variable ZennoPosterDllPath must be set to ZennoPoster installation folder, try to launch ProjectMaker or ZennoPoster" Condition="'$(ZennoPosterDllPath)' == ''" />

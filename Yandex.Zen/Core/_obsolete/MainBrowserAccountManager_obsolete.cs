@@ -220,7 +220,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
 
                 for (int row = 0; row < accountsCount; row++)
                 {
-                    var loginFromTabel = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, row);
+                    var loginFromTabel = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row);
 
                     if (login == loginFromTabel)
                     {
@@ -231,7 +231,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
                         // Проверка наличия zen канала
                         if (_startPageInstance == StartPageInstanceEnum.ZenChannelAccount || _startPageInstance == StartPageInstanceEnum.ZenChannelProfileEditor)
                         {
-                            ZenChannel = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.ZenChannel, row);
+                            ZenChannel = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, row);
 
                             if (string.IsNullOrWhiteSpace(ZenChannel))
                             {
@@ -247,7 +247,7 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
                         if (!ResourceDirectoryExists()) return false;
 
                         // Получение прокси
-                        if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                        if (!SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true)) continue;
 
                         // Преобразование ссылки дзен канала в ссылку профиля канала
                         if (_startPageInstance == StartPageInstanceEnum.ZenChannelAccount || _startPageInstance == StartPageInstanceEnum.ZenChannelProfileEditor)

@@ -23,7 +23,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
         {
             lock (_locker)
             {
-                var taskList = TaskHandler.GetTasksList();
+                var taskList = TaskHandler_obsolete.GetTasksList();
 
                 for (int i = 0; i < taskList.Count; i++)
                 {
@@ -33,7 +33,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
                     }
                 }
 
-                File.WriteAllText(TaskHandler.TaskFile.FullName, JsonConvert.SerializeObject(taskList, Formatting.Indented), Encoding.UTF8);
+                File.WriteAllText(TaskHandler_obsolete.TaskFile.FullName, JsonConvert.SerializeObject(taskList, Formatting.Indented), Encoding.UTF8);
             }
         }
 

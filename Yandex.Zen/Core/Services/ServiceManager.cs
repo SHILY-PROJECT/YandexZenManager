@@ -7,6 +7,7 @@ using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.Toolkit;
 
 namespace Yandex.Zen.Core.Services
 {

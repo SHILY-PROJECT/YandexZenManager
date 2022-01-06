@@ -281,10 +281,10 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             true);
 
             // Сохранение результата в таблицу режима и общую таблицу
-            TableHandler.WriteToCellInSharedAndMode(TableColumnEnum.Inst.Login, Login, new List<InstDataItem>
+            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new List<InstDataItem>
             {
-                new InstDataItem(TableColumnEnum.Inst.ZenChannel, ZenChannel),
-                new InstDataItem(TableColumnEnum.Inst.ChannelDatetimeCreated, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss))
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, ZenChannel),
+                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.ChannelDatetimeCreated, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss))
             });
 
             // Сохранение профиля
@@ -1488,7 +1488,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             for (int row = 0; row < accountsCount; row++)
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
-                Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
+                Login = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row);
                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
 
@@ -1496,7 +1496,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 if (!ResourceIsAvailable(Login, row)) continue;
 
                 // Получение пароля
-                Password = AccountsTable.GetCell((int)TableColumnEnum.Inst.Password, row);
+                Password = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Password, row);
 
                 if (string.IsNullOrWhiteSpace(Password))
                 {
@@ -1506,7 +1506,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                         continue;
                     }
 
-                    Password = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, Login, (int)TableColumnEnum.Inst.Password);
+                    Password = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, Login, (int)TableColumnEnum_obsolete.Inst_obsolete.Password);
 
                     if (string.IsNullOrWhiteSpace(Password))
                     {
@@ -1516,7 +1516,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Получение ответа на секретный вопрос
-                Answer = AccountsTable.GetCell((int)TableColumnEnum.Inst.Answer, row);
+                Answer = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Answer, row);
 
                 if (string.IsNullOrWhiteSpace(Answer))
                 {
@@ -1526,7 +1526,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                         continue;
                     }
 
-                    Answer = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, Login, (int)TableColumnEnum.Inst.Answer);
+                    Answer = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, Login, (int)TableColumnEnum_obsolete.Inst_obsolete.Answer);
 
                     if (string.IsNullOrWhiteSpace(Answer))
                     {
@@ -1536,11 +1536,11 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 }
 
                 // Проверка наличия zen канала
-                ZenChannel = AccountsTable.GetCell((int)TableColumnEnum.Inst.ZenChannel, row);
+                ZenChannel = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, row);
 
                 if (string.IsNullOrWhiteSpace(ZenChannel))
                 {
-                    ZenChannel = AccountsGeneralTable.GetCell((int)TableColumnEnum.Inst.Login, Login, (int)TableColumnEnum.Inst.ZenChannel);
+                    ZenChannel = AccountsGeneralTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, Login, (int)TableColumnEnum_obsolete.Inst_obsolete.ZenChannel);
 
                     if (!string.IsNullOrWhiteSpace(ZenChannel))
                     {
@@ -1574,7 +1574,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
                 if (!ProfileWorker_obsolete.LoadProfile(true)) continue;
 
                 // Получение прокси
-                if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                if (!SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
                 Program.AddObjectToCache(Login, true, true);

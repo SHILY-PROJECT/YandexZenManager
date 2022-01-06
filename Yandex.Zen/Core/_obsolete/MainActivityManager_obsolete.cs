@@ -364,7 +364,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                         commentsPathFile = _fileNameIndividualForAllArticlesOfAccount;
                         break;
                     case CommentsSourceEnum.IndividualForEachArticle:
-                        commentsPathFile = _articlesAndStatisticsTable.GetCell((int)TableColumnEnum.StatisticsCheatActivity.IndividualComments, row);
+                        commentsPathFile = _articlesAndStatisticsTable.GetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.IndividualComments, row);
                         break;
                 }
 
@@ -403,7 +403,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
 
                 // Успешное получение ресурса
                 Logger.Write(_article.Directory, $"[Row: {row + 2}]\tСтатья для обработки успешно получена", LoggerType.Info, true, false, true);
-                _articlesAndStatisticsTable.SetCell((int)TableColumnEnum.StatisticsCheatActivity.ProcessStatus, row, _article.ArticleProcessStatus.ToString());
+                _articlesAndStatisticsTable.SetCell((int)TableColumnEnum_obsolete.StatisticsCheatActivity_obsolete.ProcessStatus, row, _article.ArticleProcessStatus.ToString());
                 break;
             }
 
@@ -413,7 +413,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
             for (int row = 0; row < accountsCount; row++)
             {
                 // Получение аккаунта, настройка до.лога, информация о директории и файле описания аккаунта
-                Login = AccountsTable.GetCell((int)TableColumnEnum.Inst.Login, row);
+                Login = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Login, row);
                 ObjectDirectory = new DirectoryInfo($@"{Zenno.Directory}\Accounts\{Login}");
 
 
@@ -421,7 +421,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                 if (!ResourceIsAvailable(Login, row)) continue;
 
                 // Получение пароля
-                Password = AccountsTable.GetCell((int)TableColumnEnum.Inst.Password, row);
+                Password = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Password, row);
 
                 if (string.IsNullOrWhiteSpace(Password))
                 {
@@ -432,7 +432,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                 // Получение ответа на секретный вопрос
                 if (BindingPhoneToAccountIfRequaid)
                 {
-                    Answer = AccountsTable.GetCell((int)TableColumnEnum.Inst.Answer, row);
+                    Answer = AccountsTable.GetCell((int)TableColumnEnum_obsolete.Inst_obsolete.Answer, row);
 
                     if (string.IsNullOrWhiteSpace(Answer))
                     {
@@ -457,7 +457,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService
                 if (!ProfileWorker_obsolete.LoadProfile(true)) continue;
 
                 // Получение прокси
-                if (!SetProxy((int)TableColumnEnum.Inst.Proxy, row, true)) continue;
+                if (!SetProxy((int)TableColumnEnum_obsolete.Inst_obsolete.Proxy, row, true)) continue;
 
                 // Успешное получение ресурса
                 Program.AddObjectToCache(Login, true, true);
