@@ -92,8 +92,10 @@ namespace Yandex.Zen
                 {
                     Logger.Write(ex.FormatException(), LoggerType.Error, false, true, true, LogColor.Red);
                 }
-               
-                CleanUpObjectsFromCache();
+                finally
+                {
+                    CleanUpObjectsFromCache();
+                }
             }
 
             return 0;
@@ -114,23 +116,16 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpObjectsFromCache()
         {
-            try
+            if (ObjectsCurrentThread.Any())
             {
-                if (ObjectsCurrentThread.Any())
+                lock (_locker)
                 {
-                    lock (_locker)
-                    {
-                        if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
-                            MainBrowserAccountManager_obsolete.ThreadInWork = false;
+                    if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
+                        MainBrowserAccountManager_obsolete.ThreadInWork = false;
 
-                        ObjectsCurrentThread.ForEach(res
-                            => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
-                    }
+                    ObjectsCurrentThread.ForEach(res
+                        => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(ex.FormatException("Во время очистки ресурсов что-то пошло не так..."), LoggerType.Error, false, true, true, LogColor.Yellow);
             }
         }
 
