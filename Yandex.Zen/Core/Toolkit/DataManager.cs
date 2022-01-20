@@ -43,7 +43,8 @@ namespace Yandex.Zen.Core.Toolkit
         {
             try
             {
-                Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
+                //Program.CurrentMode = DictionariesAndLists.ProgramModes[Zenno.Variables["cfgTemplateMode"].Value];
+                Program.CurrentService = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
                 Logger.ConfigureGlobalLog(this);
                 HE.ConfigureGlobalBrowse(this);
                 SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
@@ -86,7 +87,7 @@ namespace Yandex.Zen.Core.Toolkit
                 Channel = new ChannelDataModel()
             };
 
-            Object.SetObject(Program.CurrentMode);
+            Object.SetObject(Program.CurrentService);
         }
 
         /// <summary>

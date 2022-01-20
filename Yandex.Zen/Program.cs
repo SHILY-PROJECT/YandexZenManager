@@ -25,7 +25,7 @@ namespace Yandex.Zen
 
         private static List<string> _objectsAllThreadsInWork;
         [ThreadStatic] private static List<string> _objectsCurrentThread;
-        [ThreadStatic] private static ProgramModeEnum _currentMode;
+        [ThreadStatic] private static Type _currentService;
         [ThreadStatic] private static DirectoryInfo _commonAccountDirectory;
         [ThreadStatic] private static DirectoryInfo _commonProfileDirectory;
 
@@ -66,9 +66,9 @@ namespace Yandex.Zen
         }
 
         /// <summary>
-        /// Текущий режим работы шаблона.
+        /// Текущий сервис (текущий режим работы шаблона).
         /// </summary>
-        public static ProgramModeEnum CurrentMode { get => _currentMode; set => _currentMode = value; }
+        public static Type CurrentService { get => _currentService; set => _currentService = value; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -86,7 +86,8 @@ namespace Yandex.Zen
                 {
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
-                    new ServiceManager().RunService(manager, CurrentMode);
+
+                    ServiceLocator.GetInstanceOfService(CurrentService, manager).Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -120,7 +121,7 @@ namespace Yandex.Zen
             {
                 lock (_locker)
                 {
-                    if (CurrentMode == ProgramModeEnum.BrowserAccountManagerService)
+                    if (CurrentService == typeof(BrowserAccountManager))
                         MainBrowserAccountManager_obsolete.ThreadInWork = false;
 
                     ObjectsCurrentThread.ForEach(res

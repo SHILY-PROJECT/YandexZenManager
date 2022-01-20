@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         /// <summary>
         /// Режим работы шаблона (автоматически заполняемое).
         /// </summary>
-        public ProgramModeEnum TemplateMode { get; set; }
+        public Type TemplateMode { get; set; }
 
         /// <summary>
         /// Данные о текущим ресурсе в работе (автоматически заполняемое).
@@ -44,7 +44,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         public LogItem(string message, LoggerType loggerType)
         {
             Message = message;
-            TemplateMode = Program.CurrentMode;
+            TemplateMode = Program.CurrentService;
             LogType = loggerType.ToString().ToUpper();
             Time = new TimeData();
             Resource = new ResourceData();
@@ -53,7 +53,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         public LogItem(string message, LoggerType loggerType, ErrorAnalysisData errorAnalysisData)
         {
             Message = message;
-            TemplateMode = Program.CurrentMode;
+            TemplateMode = Program.CurrentService;
             LogType = loggerType.ToString().ToUpper();
             ErrorAnalysis = new ErrorAnalysisData(errorAnalysisData) ?? null;
             Time = new TimeData();

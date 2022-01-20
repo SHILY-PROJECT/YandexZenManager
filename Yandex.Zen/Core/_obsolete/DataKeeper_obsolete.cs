@@ -22,7 +22,7 @@ namespace Yandex.Zen.Core
         [ThreadStatic] private static IZennoPosterProjectModel _zenno;
         [ThreadStatic] private static Instance _browser;
         [ThreadStatic] private static ObjectBase _resourceBaseModel;
-        [ThreadStatic] private static ProgramModeEnum _programMode;
+        [ThreadStatic] private static ProgramModeEnum_obsolete _programMode;
         [ThreadStatic] private static TableModel _mainTable;
         [ThreadStatic] private static TableModel _modeTable;
         [ThreadStatic] private static List<string> _resourcesCurrentThread = new List<string>();
@@ -87,7 +87,7 @@ namespace Yandex.Zen.Core
         /// <summary>
         /// Режим работы скрипта (программы).
         /// </summary>
-        public static ProgramModeEnum CurrentProgramMode { get => _programMode; }
+        public static ProgramModeEnum_obsolete CurrentProgramMode { get => _programMode; }
 
         /// <summary>
         /// Текущие объекты потока.

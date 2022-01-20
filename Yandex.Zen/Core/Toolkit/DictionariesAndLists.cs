@@ -1,24 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Yandex.Zen.Core.Enums;
 
 namespace Yandex.Zen.Core.Toolkit
 {
     public class DictionariesAndLists
     {
-        /// <summary>
-        /// Режимы работы шаблона.
-        /// </summary>
-        public static Dictionary<string, ProgramModeEnum> ProgramModes => new Dictionary<string, ProgramModeEnum>()
-        {
-            ["Управление каналом"] = ProgramModeEnum.ChannelManagerService,
-            ["Постинг"] = ProgramModeEnum.PublicationManagerService,
-            ["Ручное управление в браузере"] = ProgramModeEnum.BrowserAccountManagerService,
-            ["Нагуливание по дзен"] = ProgramModeEnum.WalkerOnZenService,
-            ["Регистрация аккаунтов"] = ProgramModeEnum.AccounRegisterService,
-            ["Накручивание активности"] = ProgramModeEnum.ActivityManagerService,
-            ["Нагуливание профилей"] = ProgramModeEnum.WalkerProfilesService
-        };
-
         /// <summary>
         /// Список Русских городов.
         /// </summary>

@@ -46,7 +46,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule
         /// <summary>
         /// Установка ресурса.
         /// </summary>
-        public void SetObject(ProgramModeEnum mode)
+        public void SetObject(Type serviceType)
         {
             var tb = DataManager.Table;
 
@@ -59,7 +59,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule
                 {
                     try
                     {
-                        switch (mode)
+                        switch (serviceType)
                         {
 
                         }

@@ -1,6 +1,9 @@
-﻿namespace Yandex.Zen.Core.Enums
+﻿using System;
+
+namespace Yandex.Zen.Core.Enums
 {
-    public enum ProgramModeEnum
+    [Obsolete]
+    public enum ProgramModeEnum_obsolete
     {
         WalkerProfilesService,
         WalkerOnZenService,

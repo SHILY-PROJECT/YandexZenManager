@@ -26,7 +26,7 @@ namespace Yandex.Zen.Core
 
         public static IZennoPosterProjectModel Zenno { get => DataKeeper_obsolete.Zenno; }
         public static Instance Instance { get => DataKeeper_obsolete.Browser; }
-        public static ProgramModeEnum ProgramMode { get => DataKeeper_obsolete.CurrentProgramMode; }
+        public static ProgramModeEnum_obsolete ProgramMode { get => DataKeeper_obsolete.CurrentProgramMode; }
         public static Random Rnd { get; set; } = new Random();
         public static ObjectBase Object { get => _objectModel; set { _objectModel = value; } }
 

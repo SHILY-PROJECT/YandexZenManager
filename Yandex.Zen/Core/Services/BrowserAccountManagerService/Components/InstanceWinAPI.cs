@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Yandex.Zen.Core.Services.BrowseArccountManagerService
+namespace Yandex.Zen.Core.Services.BrowserAccountManagerService.Components
 {
     internal class InstanceWinAPI
     {
