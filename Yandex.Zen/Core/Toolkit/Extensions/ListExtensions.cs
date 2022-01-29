@@ -1,16 +1,13 @@
-﻿using Global.ZennoExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.Extensions.Enums;
 
 namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class ListExtensions
     {
+        private static readonly Random _rnd = new Random();
+
         /// <summary>
         /// Получение элемента из списка.
         /// </summary>
@@ -29,8 +26,8 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
 
             switch (lineGetType)
             {
-                case LineOptions.Random: return list.GetRandomLine(new Random().Next(list.Count));
-                case LineOptions.RandomWithRemoved: return list.GetRandomLineWithRemoved(new Random().Next(list.Count));
+                case LineOptions.Random: return list.GetRandomLine(_rnd.Next(list.Count));
+                case LineOptions.RandomWithRemoved: return list.GetRandomLineWithRemoved(_rnd.Next(list.Count));
                 case LineOptions.First: return list.GetFirstLine();
                 case LineOptions.FirstWithRemoved: return list.GetFirstLineWithRemoved();
                 case LineOptions.FirstWithMoveToEnd: return list.GetFirstLineWithMoveToEnd();
