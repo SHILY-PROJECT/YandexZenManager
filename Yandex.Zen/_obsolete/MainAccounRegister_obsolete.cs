@@ -482,13 +482,13 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
             false);
 
             // Сохранение результата в таблицу режима и общую таблицу
-            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new List<InstDataItem>
+            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new List<InstDataItem_obsolete>
             {
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Profile, countryProfileAndProxy),
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Login, Login),
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Password, Password),
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.Answer, Answer),
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.AccountDatetimeCreated, datetime)
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.Profile, countryProfileAndProxy),
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.Login, Login),
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.Password, Password),
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.Answer, Answer),
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.AccountDatetimeCreated, datetime)
             });
 
             // Сохранение профиля

@@ -281,10 +281,10 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
             true);
 
             // Сохранение результата в таблицу режима и общую таблицу
-            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new List<InstDataItem>
+            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new List<InstDataItem_obsolete>
             {
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, ZenChannel),
-                new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.ChannelDatetimeCreated, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss))
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.ZenChannel, ZenChannel),
+                new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.ChannelDatetimeCreated, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss))
             });
 
             // Сохранение профиля

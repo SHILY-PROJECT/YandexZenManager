@@ -16,7 +16,7 @@ using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.SmsService.Enums;
 
-namespace Yandex.Zen.Core.ServiceСomponents
+namespace Yandex.Zen.Core.ServicesModules
 {
     public class UnBindingPhoneAccount : ServicesDataAndComponents_obsolete
     {

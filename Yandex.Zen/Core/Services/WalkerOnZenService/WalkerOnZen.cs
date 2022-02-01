@@ -17,7 +17,7 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
 
         public void Start()
         {
-            Logger.Write("Тест сервиса: MainWalkerOnZen_new", LoggerType.Info, false, false, true, LogColor.Green);
+            Logger.Write($"Тест сервиса: {nameof(WalkerOnZen)}", LoggerType.Info, false, false, true, LogColor.Green);
         }
     }
 }

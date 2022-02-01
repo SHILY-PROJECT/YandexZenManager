@@ -169,8 +169,8 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
             }
 
             // Добавляем поисковые сисемы по которым гулять
-            if (searchServicesToUse.Contains("google.com")) searchServices.Add(SearchServiceEnum.Google);
-            if (searchServicesToUse.Contains("rambler.ru")) searchServices.Add(SearchServiceEnum.Rambler);
+            if (searchServicesToUse.Contains("google.com")) searchServices.Add(SearchServiceEnum.GoogleCom);
+            if (searchServicesToUse.Contains("rambler.ru")) searchServices.Add(SearchServiceEnum.RamblerRu);
             if (searchServicesToUse.Contains("yandex.ru")) searchServices.Add(SearchServiceEnum.YandexRu);
             if (searchServicesToUse.Contains("yandex.com")) searchServices.Add(SearchServiceEnum.YandexCom);
 
@@ -250,8 +250,8 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
         {
             new Dictionary<SearchServiceEnum, string>
             {
-                {SearchServiceEnum.Google, "https://www.google.com/" },
-                {SearchServiceEnum.Rambler, "https://www.rambler.ru/" },
+                {SearchServiceEnum.GoogleCom, "https://www.google.com/" },
+                {SearchServiceEnum.RamblerRu, "https://www.rambler.ru/" },
                 {SearchServiceEnum.YandexRu, "https://yandex.ru/" },
                 {SearchServiceEnum.YandexCom, "https://yandex.com/" }
             }
@@ -259,8 +259,8 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             new Dictionary<SearchServiceEnum, string>
             {
-                { SearchServiceEnum.Google, "//div[@jscontroller!='']/input[@aria-label!='']" },
-                { SearchServiceEnum.Rambler, "//form[@action!='']/input[@name='query']" },
+                { SearchServiceEnum.GoogleCom, "//div[@jscontroller!='']/input[@aria-label!='']" },
+                { SearchServiceEnum.RamblerRu, "//form[@action!='']/input[@name='query']" },
                 { SearchServiceEnum.YandexRu, "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]" },
                 { SearchServiceEnum.YandexCom, "//span[contains(@class, 'search input')]/descendant::input[contains(@class,'input__control')]" }
             }
@@ -268,8 +268,8 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             new Dictionary<SearchServiceEnum, string>
             {
-                { SearchServiceEnum.Google, "//a[@href!='']/h3[text()!='']" },
-                { SearchServiceEnum.Rambler, "//h2[contains(@class, 'item')]/a[@href!='']" },
+                { SearchServiceEnum.GoogleCom, "//a[@href!='']/h3[text()!='']" },
+                { SearchServiceEnum.RamblerRu, "//h2[contains(@class, 'item')]/a[@href!='']" },
                 { SearchServiceEnum.YandexRu, "//li[@class='serp-item']/descendant::h2/a[@href!='']" },
                 { SearchServiceEnum.YandexCom, "//li[@class='serp-item']/descendant::h2/a[@href!='']" }
             }
@@ -277,8 +277,8 @@ namespace Yandex.Zen.Core.Services.WalkerProfileService
 
             new Dictionary<SearchServiceEnum, string>
             {
-                { SearchServiceEnum.Google, "//tr/descendant::td/span[@class!='']/../following-sibling::td/a[@href!='']" },
-                { SearchServiceEnum.Rambler, "//span[contains(@class, 'Paging')]/following-sibling::a[@href!='']" },
+                { SearchServiceEnum.GoogleCom, "//tr/descendant::td/span[@class!='']/../following-sibling::td/a[@href!='']" },
+                { SearchServiceEnum.RamblerRu, "//span[contains(@class, 'Paging')]/following-sibling::a[@href!='']" },
                 { SearchServiceEnum.YandexRu, "//span[contains(@class, 'pager')]/following-sibling::a[@href!='']" },
                 { SearchServiceEnum.YandexCom, "//span[contains(@class, 'pager')]/following-sibling::a[@href!='']" }
             }

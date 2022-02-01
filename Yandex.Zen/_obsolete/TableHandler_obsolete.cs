@@ -23,7 +23,7 @@ namespace Yandex.Zen.Core.Toolkit
         /// <param name="searchByValue"></param>
         /// <param name="setToColumn"></param>
         /// <param name="setValue"></param>
-        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, InstDataItem data)
+        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, InstDataItem_obsolete data)
         {
             var logModeTable = TableGeneralAndTableModeIsSame ? $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу" : $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу режима";
 
@@ -87,7 +87,7 @@ namespace Yandex.Zen.Core.Toolkit
         /// <param name="searchByValue"></param>
         /// <param name="setToColumn"></param>
         /// <param name="setValue"></param>
-        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, List<InstDataItem> data)
+        public static void WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete searchByColumn, string searchByValue, List<InstDataItem_obsolete> data)
         {
             var logModeTable = TableGeneralAndTableModeIsSame ? $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу" : $"[Table mode and table shared is same: {TableGeneralAndTableModeIsSame}]\tРезультат сохранен в таблицу режима";
 

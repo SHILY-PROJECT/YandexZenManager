@@ -29,6 +29,8 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private readonly string _backupObjectData = @"_logger\backup_data.txt";
         private string _infoAboutCurrentObject;
 
+        private Logger() { }
+
         private DataManager DataManager { get; set; }
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
@@ -36,12 +38,12 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private ObjectBase Object { get => DataManager.Object; }
         private DirectoryInfo CurrentObjectDirectory { get => Object.Directory; }
         private FileInfo ModeLog { get; set; }
-
         private string InfoAboutCurrentObject
         {
             get
             {
                 if (_instance._infoAboutCurrentObject != null) return _instance._infoAboutCurrentObject;
+
                 if (Object != null)
                 {
                     switch (Object.Type)
@@ -60,10 +62,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 
         public static void ConfigureGlobalLog(DataManager manager)
         {
-            _instance = new Logger
-            {
-                DataManager = manager
-            };
+            _instance = new Logger { DataManager = manager };
             _instance.ModeLog = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
         }
 

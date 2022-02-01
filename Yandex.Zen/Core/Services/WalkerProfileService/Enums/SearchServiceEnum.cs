@@ -2,8 +2,8 @@
 {
     public enum SearchServiceEnum
     {
-        Google = 0,
-        Rambler = 1,
+        GoogleCom = 0,
+        RamblerRu = 1,
         YandexRu = 2,
         YandexCom = 3
     }

@@ -337,10 +337,10 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
                     switch (CurrentObjectAtWork)
                     {
                         case ObjectTypeEnum.Donor:
-                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
+                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.InstaUrl, InstagramUrl, new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
                         case ObjectTypeEnum.Account:
-                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new InstDataItem(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
+                            TableHandler_obsolete.WriteToCellInSharedAndMode(TableColumnEnum_obsolete.Inst_obsolete.Login, Login, new InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete.DatetimeLastWalkingOnZen, Logger.GetDateTime(DateTimeFormat.yyyyMMddThreeSpaceHHmmss)));
                             break;
                     }
 

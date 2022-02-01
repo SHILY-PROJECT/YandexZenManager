@@ -7,7 +7,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
     {
         public static string FormatException(this Exception ex, string additionalMessage = "")
             => $"[Exception message:{ex.Message}]{Environment.NewLine}" +
-            $"[{ex.StackTrace}]{Environment.NewLine}{additionalMessage}";
+               $"[{ex.StackTrace}]{Environment.NewLine}{additionalMessage}";
 
         public static string FormatXPathForLog(this string[] xpathHeAndNameHe) =>
            $"[{xpathHeAndNameHe[0]}]\t[{xpathHeAndNameHe[1]}]\tНе найден элемент по заданному пути...";

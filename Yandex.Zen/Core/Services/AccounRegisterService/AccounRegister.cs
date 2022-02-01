@@ -17,7 +17,7 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 
         public void Start()
         {
-            Logger.Write("Тест сервиса: MainAccounRegister_new", LoggerType.Info, false, false, true, LogColor.Green);
+            Logger.Write($"Тест сервиса: {nameof(AccounRegister)}", LoggerType.Info, false, false, true, LogColor.Green);
         }
     }
 }

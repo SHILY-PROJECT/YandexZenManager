@@ -16,8 +16,9 @@ using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Toolkit.ObjectModule;
+using Yandex.Zen.Core.ServiceСomponents;
 
-namespace Yandex.Zen.Core.ServiceСomponents
+namespace Yandex.Zen.Core.ServicesModules
 {
     public class AuthorizationModule : IAuthorizationModule
     {

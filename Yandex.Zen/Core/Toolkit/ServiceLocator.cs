@@ -13,30 +13,30 @@ namespace Yandex.Zen.Core.Toolkit
     {
         private readonly DataManager _manager;
 
-        public static Dictionary<string, Type> TypesOfServices = new Dictionary<string, Type>
-        {
-            { "Управление каналом", typeof(ChannelManager)},
-            { "Постинг", typeof(PublicationManager)},
-            { "Ручное управление в браузере", typeof(BrowserAccountManager)},
-            { "Нагуливание по дзен", typeof(WalkerOnZen)},
-            { "Регистрация аккаунтов", typeof(AccounRegister)},
-            { "Накручивание активности", typeof(MainActivityManager)},
-        };
-
-        private Dictionary<Type, Action> InstancesOfServices => new Dictionary<Type, Action>
-        {
-            { typeof(ChannelManager), new ChannelManager(_manager).Start},
-            { typeof(PublicationManager), new PublicationManager(_manager).Start},
-            { typeof(BrowserAccountManager), new BrowserAccountManager(_manager).Start},
-            { typeof(WalkerOnZen), new WalkerOnZen(_manager).Start},
-            { typeof(AccounRegister), new AccounRegister(_manager).Start},
-            { typeof(MainActivityManager), new MainActivityManager(_manager).Start},
-        };
-
         public ServiceLocator(DataManager manager)
         {
             _manager = manager;
         }
+
+        public static Dictionary<string, Type> TypesOfServices => new Dictionary<string, Type>
+        {
+            { "Управление каналом",             typeof(ChannelManager) },
+            { "Постинг",                        typeof(PublicationManager) },
+            { "Ручное управление в браузере",   typeof(BrowserAccountManager) },
+            { "Нагуливание по дзен",            typeof(WalkerOnZen) },
+            { "Регистрация аккаунтов",          typeof(AccounRegister) },
+            { "Накручивание активности",        typeof(ActivityManager) },
+        };
+
+        public Dictionary<Type, Action> InstancesOfServices => new Dictionary<Type, Action>
+        {
+            { typeof(ChannelManager),           new ChannelManager(_manager).Start },
+            { typeof(PublicationManager),       new PublicationManager(_manager).Start },
+            { typeof(BrowserAccountManager),    new BrowserAccountManager(_manager).Start },
+            { typeof(WalkerOnZen),              new WalkerOnZen(_manager).Start },
+            { typeof(AccounRegister),           new AccounRegister(_manager).Start },
+            { typeof(ActivityManager),          new ActivityManager(_manager).Start },
+        };
 
         public static Action GetInstanceOfService(Type serviceType, DataManager manager)
         {

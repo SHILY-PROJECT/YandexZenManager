@@ -7,15 +7,16 @@ using Yandex.Zen.Core.Toolkit.TableTool.Enums;
 
 namespace Yandex.Zen.Core.Models.TableHandler
 {
+    [Obsolete]
     /// <summary>
     /// Модель для соханения ячейки.
     /// </summary>
-    public class InstDataItem
+    public class InstDataItem_obsolete
     {
         public TableColumnEnum_obsolete.Inst_obsolete SetToColumn { get; set; }
         public string SetValue { get; set; }
 
-        public InstDataItem(TableColumnEnum_obsolete.Inst_obsolete setToColumn, string setValue)
+        public InstDataItem_obsolete(TableColumnEnum_obsolete.Inst_obsolete setToColumn, string setValue)
         {
             SetToColumn = setToColumn;
             SetValue = setValue;

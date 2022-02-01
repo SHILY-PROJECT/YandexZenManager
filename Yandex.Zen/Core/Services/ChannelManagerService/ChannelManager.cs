@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core.Services.ChannelManagerService
 
         public void Start()
         {
-            Logger.Write("Тест сервиса: MainChannelManager_new", LoggerType.Info, false, false, true, LogColor.Green);
+            Logger.Write($"Тест сервиса: {nameof(ChannelManager)}", LoggerType.Info, false, false, true, LogColor.Green);
         }
     }
 }
