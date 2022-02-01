@@ -29,12 +29,15 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private readonly string _backupObjectData = @"_logger\backup_data.txt";
         private string _infoAboutCurrentObject;
 
-        private Logger() { }
+        private Logger()
+        {
+        
+        }
 
         private DataManager DataManager { get; set; }
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
-        private Type CurrentMode { get => Program.CurrentService; }
+        private Type CurrentService { get => Program.CurrentService; }
         private ObjectBase Object { get => DataManager.Object; }
         private DirectoryInfo CurrentObjectDirectory { get => Object.Directory; }
         private FileInfo ModeLog { get; set; }
@@ -63,7 +66,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         public static void ConfigureGlobalLog(DataManager manager)
         {
             _instance = new Logger { DataManager = manager };
-            _instance.ModeLog = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentMode]}");
+            _instance.ModeLog = new FileInfo($@"{_instance.Zenno.Directory}\_logger\{ModeLogFileName[_instance.CurrentService]}");
         }
 
         /// <summary>
@@ -320,7 +323,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
                     [typeof(PublicationManager)] = $"[{nameof(PublicationManager)}]           ",
                     //[ProgramModeEnum.WalkerProfilesService] = $"[{_instance.CurrentMode}]                  " ,
                 }
-                .TryGetValue(_instance.CurrentMode, out string modeForAccountLog);
+                .TryGetValue(_instance.CurrentService, out string modeForAccountLog);
 
                 WriteToResourceLog(resourceDirectory, $"{modeForAccountLog}{_instance.InfoAboutCurrentObject}{textToLog}", loggerType, dateTime);
             }
@@ -331,7 +334,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 
             // Отправка сообщения в zp/pm
             if (_instance.Zenno != null)
-                _instance.Zenno.SendToLog($"[{ProgramModeEnum_obsolete.WalkerProfilesService}]\t{_instance.InfoAboutCurrentObject}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
+                _instance.Zenno.SendToLog($"[{_instance.CurrentService}]\t{_instance.InfoAboutCurrentObject}{textToLog}", (LogType)Enum.Parse(typeof(LogType), ((int)loggerType).ToString()), sendToZennoPosterLog, logColor);
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ using ZennoLab.InterfacesLibrary.Enums.Log;
 
 namespace Yandex.Zen.Core.Services.PublicationManagerService.Models
 {
-    public class Article : ServicesDataAndComponents_obsolete
+    public class Article
     {
         public bool IsVoid { get; private set; }
         public List<FileInfo> SimpleImagesList { get; set; }

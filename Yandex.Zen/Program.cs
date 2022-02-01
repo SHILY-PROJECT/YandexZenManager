@@ -13,6 +13,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen
 {
@@ -87,7 +88,7 @@ namespace Yandex.Zen
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
 
-                    ServiceLocator.GetInstanceOfService(CurrentService, manager).Invoke();
+                    ServiceLocator.GetInstanceOfService(CurrentService, manager)?.Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -121,8 +122,8 @@ namespace Yandex.Zen
             {
                 lock (_locker)
                 {
-                    if (CurrentService == typeof(BrowserAccountManager))
-                        MainBrowserAccountManager_obsolete.ThreadInWork = false;
+                    //if (CurrentService == typeof(BrowserAccountManager))
+                    //    MainBrowserAccountManager_obsolete.ThreadInWork = false;
 
                     ObjectsCurrentThread.ForEach(res
                         => ObjectsAllThreadsInWork.RemoveAll(x => x == res));

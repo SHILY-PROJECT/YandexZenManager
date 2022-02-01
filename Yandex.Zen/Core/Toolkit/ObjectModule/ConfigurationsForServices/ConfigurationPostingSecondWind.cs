@@ -22,7 +22,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
                 if (Program.CheckObjectInWork(result)) return false;
 
                 Object.Login = result;
-                Object.Directory = new DirectoryInfo(Path.Combine(DataKeeper_obsolete.SharedDirectoryOfAccounts.FullName, Object.Login));
+                Object.Directory = new DirectoryInfo(Path.Combine(Program.CommonAccountDirectory.FullName, Object.Login));
 
                 if (Object.Directory.Exists is false) Object.Directory.Create();
 

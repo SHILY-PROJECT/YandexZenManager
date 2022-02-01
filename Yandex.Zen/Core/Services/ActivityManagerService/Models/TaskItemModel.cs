@@ -23,17 +23,17 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
         {
             lock (_locker)
             {
-                var taskList = TaskHandler_obsolete.GetTasksList();
+                //var taskList = TaskHandler_obsolete.GetTasksList();
 
-                for (int i = 0; i < taskList.Count; i++)
-                {
-                    if (TaskId == taskList[i].TaskId)
-                    {
-                        taskList[i] = this;
-                    }
-                }
+                //for (int i = 0; i < taskList.Count; i++)
+                //{
+                //    if (TaskId == taskList[i].TaskId)
+                //    {
+                //        taskList[i] = this;
+                //    }
+                //}
 
-                File.WriteAllText(TaskHandler_obsolete.TaskFile.FullName, JsonConvert.SerializeObject(taskList, Formatting.Indented), Encoding.UTF8);
+                //File.WriteAllText(TaskHandler_obsolete.TaskFile.FullName, JsonConvert.SerializeObject(taskList, Formatting.Indented), Encoding.UTF8);
             }
         }
 

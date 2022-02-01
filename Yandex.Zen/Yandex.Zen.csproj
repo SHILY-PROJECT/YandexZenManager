@@ -118,11 +118,7 @@
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
     <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\StartPageWalkerOnZenEnum.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\Enums\ProfileWalkerMode.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\Enums\SaveProfileModeEnum.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\Enums\SourceSearchKeysTypeEnum.cs" />
     <Compile Include="Core\Services\AccounRegisterService\Enums\RegistrationStartPageEnum.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Enums\StartPageCreateChannelEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ActionModel.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ArticleBasicModel.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ArticleTableStatisticsModel.cs" />
@@ -131,67 +127,34 @@
     <Compile Include="Core\Services\ActivityManagerService\Models\CommentData.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ChannelDataModel.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ProxyDataModel.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\AcceptTermsOfUserAgreementData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\AddUrlToSocialNetworkData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\AgreeToReceiveZenNewsletterData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\BindingPhoneToChannelData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\ChangeChannelDescriptionData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\ChangeChannelImageData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\ChangeChannelNameData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\ConnectMetricData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\EnablePrivateMessagesData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\SetMailData.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\DataModels\SetSiteData.cs" />
     <Compile Include="Core\Toolkit\ServiceLocator.cs" />
-    <Compile Include="_obsolete\MainActivityManager_obsolete.cs" />
-    <Compile Include="Core\ServicesModules\UnBindingPhoneAccount.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Enums\ChannelSettingsEnum.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\ObjectBase.cs" />
-    <Compile Include="Core\Services\ChannelManagerService\Models\ChannelSettings\SettingsBaseModel.cs" />
-    <Compile Include="_obsolete\InstDataItem_obsolete.cs" />
-    <Compile Include="Core\Models\ProxyInfo.cs" />
+    <Compile Include="Core\Models\ProxyModel.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
-    <Compile Include="_obsolete\MainPublicationManagerSecondWind_obsolete.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ErrorAnalysisData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\LogItem.cs" />
-    <Compile Include="Core\ServicesModules\LogSettings.cs" />
+    <Compile Include="Core\Toolkit\LoggerTool\Models\LogSettings.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ResourceData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\TimeData.cs" />
-    <Compile Include="_obsolete\SmsService_obsolete.cs" />
-    <Compile Include="_obsolete\ProgramModeEnum_obsolete.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\Enums\SearchServiceEnum.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\RefreshTypeEnum.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoTableExtensions.cs" />
     <Compile Include="Core\Toolkit\Macros\DirectoryMacros.cs" />
-    <Compile Include="_obsolete\MainChannelManager_obsolete.cs" />
-    <Compile Include="_obsolete\MainBrowserAccountManager_obsolete.cs" />
     <Compile Include="Core\Services\PublicationManagerService\Models\Article.cs" />
-    <Compile Include="_obsolete\InstanceSettings_obsolete.cs" />
-    <Compile Include="_obsolete\MainWalkerOnZen_obsolete.cs" />
-    <Compile Include="_obsolete\MainPublicationManager_obsolete.cs" />
     <Compile Include="Core\Toolkit\Macros\TextMacros.cs" />
     <Compile Include="Core\Toolkit\Extensions\FileExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ListExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\VariableExtensions.cs" />
     <Compile Include="Core\Toolkit\Extensions\ZennoListExtensions.cs" />
-    <Compile Include="Core\Services\WalkerProfileService\MainWalkerProfile_obsolete.cs" />
-    <Compile Include="_obsolete\MainAccounRegister_obsolete.cs" />
-    <Compile Include="_obsolete\TableColumnEnum_obsolete.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
-    <Compile Include="_obsolete\ServicesDataAndComponents_obsolete.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceDataModel.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceSettingsModel.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\SmsService.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceParamsDataModel.cs" />
-    <Compile Include="_obsolete\ProfileWorker_obsolete.cs" />
-    <Compile Include="_obsolete\TableHandler_obsolete.cs" />
     <Compile Include="Core\Enums\TableColumnsEnum.cs" />
-    <Compile Include="_obsolete\TaskHandler_obsolete.cs" />
     <Compile Include="Core\Toolkit\DictionariesAndLists.cs" />
-    <Compile Include="_obsolete\DataKeeper_obsolete.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -207,7 +170,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\Services\ChannelManagerService\Enums\" />
+    <Folder Include="Core\Services\ChannelManagerService\Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="ValidateZennoPosterDllPath" BeforeTargets="BeforeBuild">
     <Error Text="Environment variable ZennoPosterDllPath must be set to ZennoPoster installation folder, try to launch ProjectMaker or ZennoPoster" Condition="'$(ZennoPosterDllPath)' == ''" />
