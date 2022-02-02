@@ -23,9 +23,9 @@ namespace Yandex.Zen
     public class Program : IZennoExternalCode
     {
         private static readonly object _locker = new object();
-
         private static List<string> _objectsAllThreadsInWork;
         [ThreadStatic] private static List<string> _objectsCurrentThread;
+        [ThreadStatic] private static IService _service;
         [ThreadStatic] private static Type _currentService;
         [ThreadStatic] private static DirectoryInfo _commonAccountDirectory;
         [ThreadStatic] private static DirectoryInfo _commonProfileDirectory;
@@ -72,6 +72,11 @@ namespace Yandex.Zen
         public static Type CurrentService { get => _currentService; set => _currentService = value; }
 
         /// <summary>
+        /// Экземпляр текущего сервиса.
+        /// </summary>
+        public static IService Service { get => _service; }
+
+        /// <summary>
         /// Метод для запуска выполнения скрипта
         /// </summary>
         /// <param name="instance">Объект инстанса выделеный для данного скрипта</param>
@@ -88,7 +93,10 @@ namespace Yandex.Zen
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
 
-                    ServiceLocator.GetInstanceOfService(CurrentService, manager)?.Invoke();
+                    var startAction = ServiceLocator.GetStartOfService(CurrentService, manager);
+                    _service = startAction.GetInvocationList().First().Target as IService;
+
+                    startAction?.Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -122,8 +130,8 @@ namespace Yandex.Zen
             {
                 lock (_locker)
                 {
-                    //if (CurrentService == typeof(BrowserAccountManager))
-                    //    MainBrowserAccountManager_obsolete.ThreadInWork = false;
+                    if (Service is BrowserAccountManager)
+                        BrowserAccountManager.IsInProcess = false;
 
                     ObjectsCurrentThread.ForEach(res
                         => ObjectsAllThreadsInWork.RemoveAll(x => x == res));

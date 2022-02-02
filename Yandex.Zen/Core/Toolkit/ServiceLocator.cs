@@ -38,7 +38,7 @@ namespace Yandex.Zen.Core.Toolkit
             { typeof(ActivityManager),          new ActivityManager(_manager).Start },
         };
 
-        public static Action GetInstanceOfService(Type serviceType, DataManager manager)
+        public static Action GetStartOfService(Type serviceType, DataManager manager)
         {
             var locator = new ServiceLocator(manager);
             locator.InstancesOfServices.TryGetValue(serviceType, out var service);

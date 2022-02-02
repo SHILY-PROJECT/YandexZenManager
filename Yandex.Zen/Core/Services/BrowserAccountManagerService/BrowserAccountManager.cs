@@ -13,9 +13,10 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
             DataManager = manager;
         }
 
+        public static bool IsInProcess { get; set; }
+
         public DataManager DataManager { get; set; }
 
-        public bool IsInProcess { get; private set; }
 
         public void Start()
         {
