@@ -81,11 +81,11 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule
         /// </summary>
         public void SaveToTable(params TableColumnsEnum[] tableColumns)
         {
-            var mapper = ColumnValueMapper;
+            var columnMapper = ColumnValueMapper;
             var values = new List<Tuple<TableColumnsEnum, string>>();
             //var values = Enumerable.Range(0, tableColumns.Length).Select((value, index) => Tuple.Create(tableColumns[index], mapper[tableColumns[index]])).ToList();
 
-            Array.ForEach(tableColumns, x => values.Add(Tuple.Create(x, mapper[x])));
+            Array.ForEach(tableColumns, x => values.Add(Tuple.Create(x, columnMapper[x])));
             SaveToTable(values);
         }
 

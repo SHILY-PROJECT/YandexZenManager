@@ -15,7 +15,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
     /// <summary>
     /// Класс для хранения данных IP.
     /// </summary>
-    public partial class ProxyDataModel
+    public partial class ProxyModel
     {
         public string CountryFullName { get; set; }
         public string CountryShortName { get; set; }
@@ -23,7 +23,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 
         private string UserAgent { get; set; }
 
-        public ProxyDataModel(DataManager manager, string proxy, bool defineIpCountryInfo)
+        public ProxyModel(DataManager manager, string proxy, bool defineIpCountryInfo)
         {
             UserAgent = manager.Zenno.Profile.UserAgent;
             Configure(proxy, defineIpCountryInfo);

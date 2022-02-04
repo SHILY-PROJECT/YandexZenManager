@@ -8,7 +8,7 @@ using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
 
 namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
 {
-    public class ConfigurationPostingSecondWind : ConfigurationBase, IConfigurationForService
+    public class ConfigurationPostingSecondWind : ConfigurationBase, IConfiguration
     {
         public ConfigurationPostingSecondWind(DataManager manager, ObjectModel obj) : base(manager, obj) { }
 
@@ -47,7 +47,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
             // прокси
             if (table.ParseValueFromCell(ColProxy, row, out result))
             {
-                Object.ProxyData = new ProxyDataModel(DataManager, result, true);
+                Object.ProxyData = new ProxyModel(DataManager, result, true);
             }
             else throw new Exception($"'{nameof(ColProxy)}' - value is void or null");
 

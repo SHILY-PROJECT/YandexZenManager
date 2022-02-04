@@ -83,8 +83,8 @@ namespace Yandex.Zen.Core.Toolkit
                     Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
                 },
                 CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                Settings = new ObjectSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
-                Channel = new ChannelDataModel()
+                Settings = new TemplateSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+                Channel = new ChannelModel()
             };
 
             CurrentObject.SetObject(Program.CurrentService);

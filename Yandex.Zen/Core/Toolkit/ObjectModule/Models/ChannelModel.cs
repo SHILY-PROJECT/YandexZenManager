@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 {
-    public class ChannelDataModel
+    public class ChannelModel
     {
         public Uri Url { get; set; }
         public Uri ProfileEditor { get; set; }
