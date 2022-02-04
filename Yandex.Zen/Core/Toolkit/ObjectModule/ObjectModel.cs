@@ -11,12 +11,12 @@ using System.Collections.Generic;
 
 namespace Yandex.Zen.Core.Toolkit.ObjectModule
 {
-    public class ObjectBase : ObjectBaseModel
+    public class ObjectModel : ObjectBase
     {
         private static readonly object _locker = new object();
         private DataManager DataManager { get; set; }
 
-        public ObjectBase(DataManager manager)
+        public ObjectModel(DataManager manager)
         {
             DataManager = manager;
         }
@@ -94,7 +94,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule
         /// </summary>
         public void SaveToTable(List<Tuple<TableColumnsEnum, string>> values)
         {
-            var obj = DataManager.Object;
+            var obj = DataManager.CurrentObject;
             var tableModel = DataManager.Table;
             var table = DataManager.Table.Instance;
 

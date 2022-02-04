@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core.Toolkit
     {
         public Instance Browser { get; set; }
         public IZennoPosterProjectModel Zenno { get; set; }
-        public ObjectBase Object { get; private set; }
+        public ObjectModel CurrentObject { get; private set; }
         public TableModel Table { get; set; }
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)
@@ -65,7 +65,7 @@ namespace Yandex.Zen.Core.Toolkit
         {
             Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
-            Object = new ObjectBase(this)
+            CurrentObject = new ObjectModel(this)
             {
                 ProfileData = new ProfileDataModel(this)
                 {
@@ -87,7 +87,7 @@ namespace Yandex.Zen.Core.Toolkit
                 Channel = new ChannelDataModel()
             };
 
-            Object.SetObject(Program.CurrentService);
+            CurrentObject.SetObject(Program.CurrentService);
         }
 
         /// <summary>

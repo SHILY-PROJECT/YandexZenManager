@@ -87,7 +87,8 @@
     <Compile Include="Core\Toolkit\ObjectModule\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Interfaces\IConfigurationForService.cs" />
     <Compile Include="Core\Interfaces\IService.cs" />
-    <Compile Include="Core\Toolkit\ObjectModule\Models\ObjectBaseModel.cs" />
+    <Compile Include="Core\Toolkit\ObjectModule\Interfaces\IProfile.cs" />
+    <Compile Include="Core\Toolkit\ObjectModule\Models\ObjectBase.cs" />
     <Compile Include="Core\Services\AccounRegisterService\AccounRegister.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\AccountActionTypeEnum.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="Core\Services\PublicationManagerService\PublicationManager.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\WalkerOnZen.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\HE.cs" />
-    <Compile Include="Core\Enums\UseObjectTypeInWorkEnum.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ObjectSettingsModel.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ProfileDataModel.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
-    <Compile Include="Core\Enums\ObjectTypeEnum.cs" />
+    <Compile Include="Core\Enums\ObjectType.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\StartPageWalkerOnZenEnum.cs" />
     <Compile Include="Core\Services\AccounRegisterService\Enums\RegistrationStartPageEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ActionModel.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Core\Toolkit\ObjectModule\Models\ChannelDataModel.cs" />
     <Compile Include="Core\Toolkit\ObjectModule\Models\ProxyDataModel.cs" />
     <Compile Include="Core\Toolkit\ServiceLocator.cs" />
-    <Compile Include="Core\Toolkit\ObjectModule\ObjectBase.cs" />
+    <Compile Include="Core\Toolkit\ObjectModule\ObjectModel.cs" />
     <Compile Include="Core\Models\ProxyModel.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />

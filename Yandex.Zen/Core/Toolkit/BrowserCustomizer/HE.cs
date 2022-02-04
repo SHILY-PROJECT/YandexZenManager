@@ -17,6 +17,12 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         [ThreadStatic] private static Instance _browser;
         [ThreadStatic] private static DataManager _dataManager;
 
+        public HE(string xpath) => XPath = xpath;
+        public HE(string xpath, string descriptionXPath) : this(xpath) => Description = descriptionXPath;
+        public HE(string xpath, string descriptionXPath, HtmlElement htmlElement) : this(xpath, descriptionXPath) => Element = htmlElement;
+        public HE(string xpath, string descriptionXPath, List<HtmlElement> htmlElementCollection)
+            : this(xpath, descriptionXPath) => Collection = htmlElementCollection;
+
         /// <summary>
         /// XPath путь к элементу.
         /// </summary>
@@ -40,12 +46,18 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         /// <summary>
         /// Информация для логирования. 'XPath' и 'Info' в форматированном виде.
         /// </summary>
-        public string InformationForLog => $"'{nameof(XPath)}:{XPath} | {Description}' - Не найден элемент по заданному пути...";
+        public string InformationForLog
+        {
+            get
+            {
+                var text = "Element not found.";
 
-        public HE(string xpath) => XPath = xpath;
-        public HE(string xpath, string descriptionXPath) : this(xpath) => Description = descriptionXPath;
-        public HE(string xpath, string descriptionXPath, HtmlElement htmlElement) : this(xpath, descriptionXPath) => Element = htmlElement;
-        public HE(string xpath, string descriptionXPath, List<HtmlElement> htmlElementCollection) : this(xpath, descriptionXPath) => Collection = htmlElementCollection;
+                text += !string.IsNullOrWhiteSpace(XPath) ? $"{nameof(XPath)}: {XPath}" : "";
+                text += !string.IsNullOrWhiteSpace(Description) ? $"{nameof(Description)}: {Description}" : "";
+
+                return text;
+            }
+        }
 
         public static void ConfigureGlobalBrowse(DataManager manager)
         {
@@ -61,6 +73,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         {
             if (Element.IsNullOrVoid() && autoFindElement)
                 FindElement(attemptsFindElement, exceptionIfNotFind, log);
+
             Element.SetValue(_browser.ActiveTab, value, levelEmulation, msTimeoutAfterAction);
         }
 
@@ -72,6 +85,7 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         {
             if (Element.IsNullOrVoid() && autoFindElement)
                 FindElement(attemptsFindElement, exceptionIfNotFind, log);
+
             Element.Click(_browser.ActiveTab, msTimeoutAfterAction, waitPageLoad);
         }
 
@@ -84,8 +98,12 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         public bool TryFindElement(int attemptsFindElement = 3, LogSettings log = null)
         {
             Element = _browser.FindFirstElement(this, false, false, attemptsFindElement);
+
             if (Element.IsNullOrVoid() is false) return true;
-            if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
+            if (log != null && log.IsOn)
+                Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
             return false;
         }
 
@@ -98,8 +116,12 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
         public bool TryFindElements(int attemptsFindElement = 3, LogSettings log = null)
         {
             Collection = _browser.FindElements(this, false, false, attemptsFindElement).ToList();
+
             if (Collection.Any() is false) return true;
-            if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
+            if (log != null && log.IsOn)
+                Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
             return false;
         }
 
@@ -115,8 +137,11 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
             if (Element.IsNullOrVoid())
             {
-                if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
-                if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
+                if (log != null && log.IsOn)
+                    Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
+                if (throwExceptionIfNotFind)
+                    throw new Exception(InformationForLog);
             }
         }
 
@@ -132,8 +157,11 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
 
             if (Collection.Any() is false)
             {
-                if (log != null && log.IsNeedful) Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
-                if (throwExceptionIfNotFind) throw new Exception(InformationForLog);
+                if (log != null && log.IsOn)
+                    Logger.Write(InformationForLog, LoggerType.Warning, log.Resource, log.General, log.ZennoPoster, LogColor.Yellow);
+
+                if (throwExceptionIfNotFind)
+                    throw new Exception(InformationForLog);
             }
         }
     }

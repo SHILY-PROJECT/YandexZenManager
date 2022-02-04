@@ -1,6 +1,6 @@
 ﻿namespace Yandex.Zen.Core.Enums
 {
-    public enum ObjectTypeEnum
+    public enum ObjectType
     {
         Account = 0,
         Donor = 1,

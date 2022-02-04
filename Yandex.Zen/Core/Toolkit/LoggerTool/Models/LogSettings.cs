@@ -27,7 +27,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool.Models
         /// <summary>
         /// Получение состояние, нужно писать в лог.
         /// </summary>
-        public bool IsNeedful => General || Resource || ZennoPoster;
+        public bool IsOn => General || Resource || ZennoPoster;
 
         public LogSettings() { }
 

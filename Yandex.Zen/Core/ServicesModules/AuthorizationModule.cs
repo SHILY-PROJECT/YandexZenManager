@@ -21,7 +21,7 @@ namespace Yandex.Zen.Core.ServicesModules
     {
         private readonly Random _rnd = new Random();
         private BrowserBusySettingsModel _settingsMode;
-        private bool _endExecution;
+        private bool _endOfAuthProcess;
         private bool _isSuccess;
 
         public bool IsSuccesss { get => _isSuccess; }
@@ -40,19 +40,9 @@ namespace Yandex.Zen.Core.ServicesModules
         /// <summary>
         /// Авторизация.
         /// </summary>
-        /// <param name="isSuccessful"></param>
-        public void Authorization(out bool isSuccessful)
+        /// <param name="isSuccess"></param>
+        public void Authorization(out bool isSuccess)
         {
-            var browser = DataManager.Browser;
-            var account = DataManager.Object;
-
-            _settingsMode = DataManager.Browser.BrowserGetCurrentBusySettings();
-
-            var log = new LogSettings(false, true, true);
-            var firstStart = true;
-            var counterAttempts = 0;
-
-            #region ====[XPATH]=============================================================
             HE xAvatar = new HE("//div[contains(@class, 'desk-notif-card')]/descendant::a[contains(@class, 'avatar')]", "Аватар пользователя");
             HE xFieldLogin = new HE("//input[@name='login']", "Логин");
             HE xFieldPass = new HE("//input[contains(@type, 'password')]", "Пароль");
@@ -61,7 +51,15 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xButtonChangePassNext = new HE("//div[contains(@data-t, 'submit-change-pwd')]/descendant::button[contains(@data-t, 'action')]", "Подтвердить смену пароля");
             HE xFieldAnswer = new HE("//input[contains(@name, 'answer')]", "Ответа на контрольный вопрос");
             HE xButtonAnswer = new HE("//div[contains(@data-t, 'submit-check-answer')]/button", "Подтвердить ввод ответа на контрольный вопрос");
-            #endregion =====================================================================
+
+            _settingsMode = DataManager.Browser.BrowserGetCurrentBusySettings();
+
+            var browser = DataManager.Browser;
+            var account = DataManager.CurrentObject;
+
+            var log = new LogSettings(false, true, true);
+            var firstStart = true;
+            var counterAttempts = 0;
 
             while (true)
             {
@@ -72,7 +70,7 @@ namespace Yandex.Zen.Core.ServicesModules
                     if (xAvatar.TryFindElement(3))
                     {
                         Logger.Write("Аккаунт уже авторизирован", LoggerType.Info, true, false, false);
-                        isSuccessful = _isSuccess = true;
+                        isSuccess = _isSuccess = true;
                         break;
                     }
                     else firstStart = false;
@@ -82,7 +80,7 @@ namespace Yandex.Zen.Core.ServicesModules
                 {
                     Logger.Write("Слишком много ошибок в время авторизации", LoggerType.Warning, true, true, true, LogColor.Yellow);
                     Logger.ErrorAnalysis(true, true, true, new List<string> { browser.ActiveTab.URL });
-                    isSuccessful = _isSuccess = false;
+                    isSuccess = _isSuccess = false;
                     return;
                 }
 
@@ -123,13 +121,13 @@ namespace Yandex.Zen.Core.ServicesModules
                     #region ====[ПРИВЯЗКА НОМЕРА К АККАУНТУ]===========
                     if (!TryBindNumberPhone())
                     {
-                        if (_endExecution is false) continue;
-                        isSuccessful = _isSuccess = false;
+                        if (_endOfAuthProcess is false) continue;
+                        isSuccess = _isSuccess = false;
                         return;
                     }
                     else
                     {
-                        isSuccessful = _isSuccess = true;
+                        isSuccess = _isSuccess = true;
                         break;
                     }
                     #endregion ========================================
@@ -151,7 +149,7 @@ namespace Yandex.Zen.Core.ServicesModules
             if (string.IsNullOrWhiteSpace(account.PhoneNumber) && !(phoneBilded = CheckPhoneNumberBinding()))
             {
                 Logger.Write("К аккаунту не привязан номер", LoggerType.Info, true, false, true, LogColor.Yellow);
-                isSuccessful = _isSuccess = false;
+                isSuccess = _isSuccess = false;
 
                 /* 
                  * TODO: -Временно помечать аккаунты, что они авторизированы, но требуется привязка номера.
@@ -167,7 +165,7 @@ namespace Yandex.Zen.Core.ServicesModules
             else if (string.IsNullOrWhiteSpace(account.PhoneNumber) && phoneBilded)
             {
                 Logger.Write("К аккаунту привязан номер, но сам номер отсутствует в таблице", LoggerType.Info, true, false, true);
-                isSuccessful = _isSuccess = false;
+                isSuccess = _isSuccess = false;
                 /* 
                  * TODO: Нужно реализовать поиск по файлу лога аккаунта и внести этот номер в таблицу
                  *       Пока мы не реализовали эту логику - вносить в таблицу: 'Search'
@@ -187,12 +185,12 @@ namespace Yandex.Zen.Core.ServicesModules
         /// <returns></returns>
         private bool TryRecognizeCaptcha()
         {
-            var browser = DataManager.Browser;
-            var captchaService = DataManager.Object.CaptchaService;
-
             HE xFieldCaptcha = new HE("//input[contains(@name, 'captcha_answer')]", "Поле капчи");
             HE xImgCaptcha = new HE("//div[@class='captcha__container']/descendant::img[@src!='']", "Изображение капчи");
             HE xButtonCaptchaNext = new HE("//div[contains(@data-t, 'submit-captcha')]/button", "Подтвердить ввод капчи");
+
+            var browser = DataManager.Browser;
+            var captchaService = DataManager.CurrentObject.CaptchaService;
 
             var log = new LogSettings(false, true, true);
             var attempts = 0;
@@ -259,13 +257,6 @@ namespace Yandex.Zen.Core.ServicesModules
         /// <returns></returns>
         private bool TryBindNumberPhone()
         {
-            var account = DataManager.Object;
-            var smsService = account.SmsService;
-
-            _endExecution = false;
-            var log = new LogSettings(false, true, true);
-
-            #region ====[XPATH]=============================================================
             HE xFieldPhone = new HE("//input[contains(@name, 'phone')]", "Номер телефона");
             HE xButtonPhoneNext = new HE("//div[contains(@data-t, 'submit-send-code')]/button", "Подтвердить ввод телефона");
 
@@ -278,7 +269,12 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xButtonNewPassNext = new HE("//div[contains(@data-t, 'commit-password')]/descendant::button[contains(@data-t, 'action')]", "Пдтвердить новый пароль");
             HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
             HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
-            #endregion ======================================================================
+
+            var account = DataManager.CurrentObject;
+            var smsService = account.SmsService;
+
+            _endOfAuthProcess = false;
+            var log = new LogSettings(false, true, true);
 
             if (!xFieldPhone.TryFindElement(3, log) || !xButtonPhoneNext.TryFindElement(3, log)) return false;
 
@@ -286,7 +282,7 @@ namespace Yandex.Zen.Core.ServicesModules
             if (!smsService.TryGetPhoneNumber())
             {
                 Logger.Write(smsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
-                _endExecution = true;
+                _endOfAuthProcess = true;
                 return false;
             }
             else Logger.Write(smsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
@@ -301,7 +297,7 @@ namespace Yandex.Zen.Core.ServicesModules
             {
                 smsService.CancelPhoneNumber();
                 Logger.Write(smsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
-                _endExecution = true;
+                _endOfAuthProcess = true;
                 return false;
             }
             #endregion =======================================================
@@ -312,7 +308,7 @@ namespace Yandex.Zen.Core.ServicesModules
                 Logger.Write(smsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
                 smsService.CancelPhoneNumber();
                 Logger.Write(smsService.LogMessage, LoggerType.Warning, true, false, true, LogColor.Yellow);
-                _endExecution = true;
+                _endOfAuthProcess = true;
                 return false;
             }
             xFieldSmsCode.SetValue(smsService.Data.SmsCodeOrStatus, LevelEmulation.SuperEmulation, _rnd.Next(1500, 3000));
@@ -323,7 +319,7 @@ namespace Yandex.Zen.Core.ServicesModules
                 !xFieldNewPassConfirm.TryFindElement(3, log) ||
                 !xButtonNewPassNext.TryFindElement(3, log))
             {
-                _endExecution = true;
+                _endOfAuthProcess = true;
                 return false;
             }
 
@@ -335,7 +331,7 @@ namespace Yandex.Zen.Core.ServicesModules
             if (!xButtonFinish.TryFindElement(3, log))
             {
                 account.SaveProfile();
-                _endExecution = true;
+                _endOfAuthProcess = true;
                 Logger.Write("Не удалось определить успешность завершения смены пароля", LoggerType.Info, true, false, true, LogColor.Yellow);
                 return false;
             }

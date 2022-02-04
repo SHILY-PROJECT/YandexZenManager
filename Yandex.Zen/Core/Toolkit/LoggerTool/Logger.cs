@@ -38,8 +38,8 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private Type CurrentService { get => Program.CurrentService; }
-        private ObjectBase Object { get => DataManager.Object; }
-        private DirectoryInfo CurrentObjectDirectory { get => Object.Directory; }
+        private ObjectModel CurrentObject { get => DataManager.CurrentObject; }
+        private DirectoryInfo CurrentObjectDirectory { get => CurrentObject.Directory; }
         private FileInfo ModeLog { get; set; }
         private string InfoAboutCurrentObject
         {
@@ -47,16 +47,16 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 if (_instance._infoAboutCurrentObject != null) return _instance._infoAboutCurrentObject;
 
-                if (Object != null)
+                if (CurrentObject != null)
                 {
-                    switch (Object.Type)
+                    switch (CurrentObject.Type)
                     {
-                        case ObjectTypeEnum.Account:
-                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {Object.Login}]\t") : null;
-                        case ObjectTypeEnum.Donor:
-                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {Object.Login}]\t") : null;
-                        case ObjectTypeEnum.Profile:
-                            return Object.Login != null ? (_instance._infoAboutCurrentObject = $"[{Object.Login}]\t") : null;
+                        case ObjectType.Account:
+                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {CurrentObject.Login}]\t") : null;
+                        case ObjectType.Donor:
+                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {CurrentObject.Login}]\t") : null;
+                        case ObjectType.Profile:
+                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[{CurrentObject.Login}]\t") : null;
                     }
                 }
                 return null;

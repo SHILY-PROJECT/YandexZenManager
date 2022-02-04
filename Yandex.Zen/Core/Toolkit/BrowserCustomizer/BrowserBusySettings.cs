@@ -6,22 +6,26 @@ namespace Yandex.Zen.Core.Toolkit.BrowserCustomizer
     public static class BrowserBusySettings
     {
         public static BrowserBusySettingsModel ExtractBusySettingsFromVariable(string variable)
-            => new BrowserBusySettingsModel
+        {
+            return new BrowserBusySettingsModel
             {
                 IgnoreAdditionalRequests = variable.Contains("Игнорировать Post/Get-запросы"),
                 IgnoreAjaxRequests = variable.Contains("Игнорировать Ajax-запросы"),
                 IgnoreFrameRequests = variable.Contains("Игнорировать Frame-запросы"),
                 IgnoreFlashRequests = variable.Contains("Игнорировать Flash-запросы")
             };
+        }
 
         public static BrowserBusySettingsModel BrowserGetCurrentBusySettings(this Instance browser)
-            => new BrowserBusySettingsModel
+        {
+            return new BrowserBusySettingsModel
             {
                 IgnoreAdditionalRequests = browser.IgnoreAdditionalRequests,
                 IgnoreAjaxRequests = browser.IgnoreAjaxRequests,
                 IgnoreFrameRequests = browser.IgnoreFrameRequests,
                 IgnoreFlashRequests = browser.IgnoreFlashRequests
             };
+        }
 
         public static void BrowserSetBusySettings(this Instance browser, BrowserBusySettingsModel busySettings)
         {

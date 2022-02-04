@@ -10,7 +10,7 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
 {
     public class ConfigurationPostingSecondWind : ConfigurationBase, IConfigurationForService
     {
-        public ConfigurationPostingSecondWind(DataManager manager, ObjectBase obj) : base(manager, obj) { }
+        public ConfigurationPostingSecondWind(DataManager manager, ObjectModel obj) : base(manager, obj) { }
 
         public bool TryConfigure(int row)
         {

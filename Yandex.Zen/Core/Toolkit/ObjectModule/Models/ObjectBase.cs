@@ -5,9 +5,9 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 
 namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
 {
-    public class ObjectBaseModel
+    public class ObjectBase
     {
-        public ObjectTypeEnum Type { get; set; }
+        public ObjectType Type { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string AnswerQuestion { get; set; }
