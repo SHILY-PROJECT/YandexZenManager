@@ -5,7 +5,7 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
     public interface IProfile : IObject
     {
-        FileInfo File { get; }
+        FileInfo File { get; set; }
 
         void Save();
         void Load(bool createVariables = true);

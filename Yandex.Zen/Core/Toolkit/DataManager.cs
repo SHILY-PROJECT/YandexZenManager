@@ -65,29 +65,29 @@ namespace Yandex.Zen.Core.Toolkit
         {
             Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
-            CurrentObject = new ObjectBase(this)
-            {
-                ProfileData = new ProfileDataModel(this)
-                {
-                    UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
-                    MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
-                },
-                SmsService = new SmsService
-                {
-                    Settings = new SmsServiceSettingsModel
-                    {
-                        TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
-                        MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
-                        AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
-                    },
-                    Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
-                },
-                CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                Settings = new TemplateSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
-                Channel = new ChannelModel()
-            };
+            //CurrentObject = new ObjectBase(this)
+            //{
+            //    ProfileData = new ProfileDataModel(this)
+            //    {
+            //        UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
+            //        MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
+            //    },
+            //    SmsService = new SmsService
+            //    {
+            //        Settings = new SmsServiceSettingsModel
+            //        {
+            //            TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
+            //            MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
+            //            AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
+            //        },
+            //        Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
+            //    },
+            //    CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
+            //    Settings = new TemplateSettingsModel { CreateFolderResourceIfNoExist = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+            //    Channel = new ChannelModel()
+            //};
 
-            CurrentObject.SetObject(Program.CurrentService);
+            //CurrentObject.SetObject(Program.CurrentService);
         }
 
         /// <summary>
