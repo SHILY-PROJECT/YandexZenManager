@@ -15,8 +15,7 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject
             Manager = manager;
         }
 
-        public string Name { get; private set; }
-        public DirectoryInfo Directory { get; private set; }
+        public DirectoryInfo Directory { get; protected set; }
         public ProxyModel ProxyData { get; set; }
         public SmsService SmsService { get; set; }
         public CaptchaService CaptchaService { get; set; }

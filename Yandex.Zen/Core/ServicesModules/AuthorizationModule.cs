@@ -14,6 +14,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.ServicesModules
 {
@@ -55,7 +56,7 @@ namespace Yandex.Zen.Core.ServicesModules
             _settingsMode = DataManager.Browser.BrowserGetCurrentBusySettings();
 
             var browser = DataManager.Browser;
-            var account = DataManager.CurrentObject;
+            var account = (IAccount)DataManager.CurrentObject;
 
             var log = new LogSettings(false, true, true);
             var firstStart = true;
@@ -270,7 +271,7 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
             HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
 
-            var account = DataManager.CurrentObject;
+            var account = (IAccount)DataManager.CurrentObject;
             var smsService = account.SmsService;
 
             _endOfAuthProcess = false;

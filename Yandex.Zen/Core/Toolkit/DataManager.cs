@@ -11,6 +11,7 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.ResourceObject;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.Toolkit
 {
@@ -18,7 +19,7 @@ namespace Yandex.Zen.Core.Toolkit
     {
         public Instance Browser { get; set; }
         public IZennoPosterProjectModel Zenno { get; set; }
-        public ResourceObjectBase CurrentObject { get; private set; }
+        public IResourceObject CurrentObject { get; private set; }
         public TableModel Table { get; set; }
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)

@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
+using System.Linq;
+using System.Drawing;
 using System.Text.RegularExpressions;
-using Yandex.Zen.Core.Enums;
+using System.Collections.Generic;
+using ZennoLab.CommandCenter;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.ResourceObject;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
-using ZennoLab.CommandCenter;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
@@ -48,15 +46,13 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 if (_instance._currentObjInfoForLog != null) return _instance._currentObjInfoForLog;
 
-                if (CurrentObject != null)
-                {
-                    if (CurrentObject is IProfile profile)
-                        return profile.File != null ? (_instance._currentObjInfoForLog = $"[{profile.File.Name}]\t") : null;
-                    if (CurrentObject is IAccount account)
-                        return account.Login != null ? (_instance._currentObjInfoForLog = $"[Login: {account.Login}]\t") : null;
-                    if (CurrentObject is IDonor donor)
-                        return donor.Login != null ? (_instance._currentObjInfoForLog = $"[Donor: {donor.Login}]\t") : null;
-                }
+                if (CurrentObject != null && CurrentObject is IProfile profile)
+                    return profile.File != null ? (_instance._currentObjInfoForLog = $"[{profile.File.Name}]\t") : null;
+                if (CurrentObject != null && CurrentObject is IAccount account)
+                    return account.Login != null ? (_instance._currentObjInfoForLog = $"[Login: {account.Login}]\t") : null;
+                if (CurrentObject != null && CurrentObject is IDonor donor)
+                    return donor.Login != null ? (_instance._currentObjInfoForLog = $"[Donor: {donor.Login}]\t") : null;
+
                 return null;
             }
         }
