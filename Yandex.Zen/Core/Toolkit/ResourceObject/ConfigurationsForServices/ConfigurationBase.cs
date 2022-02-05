@@ -17,10 +17,10 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
         protected int ColAccountPhone = (int)TableColumnsEnum.AccountNumberPhone;
         protected int ColChannelPhone = (int)TableColumnsEnum.ChannelNumberPhone;
 
-        protected ObjectBase Object { get; set; }
+        protected ResourceObjectBase Object { get; set; }
         protected DataManager DataManager { get; set; }
 
-        public ConfigurationBase(DataManager manager, ObjectBase obj)
+        public ConfigurationBase(DataManager manager, ResourceObjectBase obj)
         {
             DataManager = manager;
             Object = obj;

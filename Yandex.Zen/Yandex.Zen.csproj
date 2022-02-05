@@ -88,10 +88,10 @@
     <Compile Include="Core\Toolkit\ResourceObject\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\DonorModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IAccount.cs" />
-    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IConfiguration.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IResourceObjectConfiguration.cs" />
     <Compile Include="Core\Interfaces\IService.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IDonor.cs" />
-    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IObject.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IResourceObject.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IProfile.cs" />
     <Compile Include="Core\Services\AccounRegisterService\AccounRegister.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Core\Services\WalkerOnZenService\WalkerOnZen.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\HE.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Models\ResourceObjectConfiguration.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Models\TemplateSettingsModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Models\ProfileDataModel.cs" />
     <Compile Include="Core\ServicesModules\AuthorizationModule.cs" />
@@ -132,8 +133,9 @@
     <Compile Include="Core\Toolkit\ResourceObject\Models\ChannelModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Models\ProxyModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\ProfileModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\ResourceObjectConfigurator.cs" />
     <Compile Include="Core\Toolkit\ServiceLocator.cs" />
-    <Compile Include="Core\Toolkit\ResourceObject\ObjectBase.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\ResourceObjectBase.cs" />
     <Compile Include="Core\Models\ProxyModel.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />

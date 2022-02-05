@@ -2,7 +2,7 @@
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject
 {
-    public class DonorModel : AccountModel, IDonor
+    public sealed class DonorModel : AccountModel, IDonor
     {
         public DonorModel(DataManager manager) : base(manager)
         {

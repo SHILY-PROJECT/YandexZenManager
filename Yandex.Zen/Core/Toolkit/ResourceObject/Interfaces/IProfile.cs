@@ -3,7 +3,7 @@ using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
-    public interface IProfile : IObject
+    public interface IProfile : IResourceObject
     {
         FileInfo File { get; set; }
 

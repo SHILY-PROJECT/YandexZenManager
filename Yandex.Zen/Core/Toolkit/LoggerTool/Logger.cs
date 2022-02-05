@@ -13,6 +13,7 @@ using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.ResourceObject;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -27,7 +28,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 
         private readonly string _logAccountFileName = @"_logger\account.log";
         private readonly string _backupObjectData = @"_logger\backup_data.txt";
-        private string _infoAboutCurrentObject;
+        private string _currentObjInfoForLog;
 
         private Logger()
         {
@@ -38,26 +39,23 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private Type CurrentService { get => Program.CurrentService; }
-        private ObjectBase CurrentObject { get => DataManager.CurrentObject; }
+        private IResourceObject CurrentObject { get => DataManager.CurrentObject; }
         private DirectoryInfo CurrentObjectDirectory { get => CurrentObject.Directory; }
         private FileInfo ModeLog { get; set; }
         private string InfoAboutCurrentObject
         {
             get
             {
-                if (_instance._infoAboutCurrentObject != null) return _instance._infoAboutCurrentObject;
+                if (_instance._currentObjInfoForLog != null) return _instance._currentObjInfoForLog;
 
                 if (CurrentObject != null)
                 {
-                    switch (CurrentObject.Type)
-                    {
-                        case ObjectType.Account:
-                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[Login: {CurrentObject.Login}]\t") : null;
-                        case ObjectType.Donor:
-                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[Donor: {CurrentObject.Login}]\t") : null;
-                        case ObjectType.Profile:
-                            return CurrentObject.Login != null ? (_instance._infoAboutCurrentObject = $"[{CurrentObject.Login}]\t") : null;
-                    }
+                    if (CurrentObject is IProfile profile)
+                        return profile.File != null ? (_instance._currentObjInfoForLog = $"[{profile.File.Name}]\t") : null;
+                    if (CurrentObject is IAccount account)
+                        return account.Login != null ? (_instance._currentObjInfoForLog = $"[Login: {account.Login}]\t") : null;
+                    if (CurrentObject is IDonor donor)
+                        return donor.Login != null ? (_instance._currentObjInfoForLog = $"[Donor: {donor.Login}]\t") : null;
                 }
                 return null;
             }

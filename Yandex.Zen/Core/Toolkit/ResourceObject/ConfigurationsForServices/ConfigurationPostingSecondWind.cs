@@ -9,9 +9,9 @@ using Yandex.Zen.Core.Toolkit.ResourceObject;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
 {
-    public class ConfigurationPostingSecondWind : ConfigurationBase, IConfiguration
+    public class ConfigurationPostingSecondWind : ConfigurationBase, IResourceObjectConfiguration
     {
-        public ConfigurationPostingSecondWind(DataManager manager, ObjectBase obj) : base(manager, obj) { }
+        public ConfigurationPostingSecondWind(DataManager manager, ResourceObjectBase obj) : base(manager, obj) { }
 
         public bool TryConfigure(int row)
         {

@@ -2,11 +2,10 @@
 using System.IO;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject
 {
-    public class AccountModel : ObjectBase, IAccount
+    public class AccountModel : ResourceObjectBase, IAccount
     {
         public AccountModel(DataManager manager) : base(manager)
         {

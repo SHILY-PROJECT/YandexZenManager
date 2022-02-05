@@ -4,11 +4,10 @@ using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
-    public interface IAccount : IObject
+    public interface IAccount : IResourceObject
     {
         IProfile Profile { get; set; }
         TemplateSettingsModel Settings { get; set; }
-        DirectoryInfo Directory { get; set; }      
         string Login { get; set; }
         string Password { get; set; }
         string AnswerQuestion { get; set; }

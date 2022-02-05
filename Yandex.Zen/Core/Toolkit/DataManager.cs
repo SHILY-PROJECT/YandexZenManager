@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core.Toolkit
     {
         public Instance Browser { get; set; }
         public IZennoPosterProjectModel Zenno { get; set; }
-        public ObjectBase CurrentObject { get; private set; }
+        public ResourceObjectBase CurrentObject { get; private set; }
         public TableModel Table { get; set; }
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)

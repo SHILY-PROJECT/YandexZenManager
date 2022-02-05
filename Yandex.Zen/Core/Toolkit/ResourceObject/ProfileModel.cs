@@ -6,7 +6,7 @@ using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject
 {
-    public class ProfileModel : ObjectBase, IProfile
+    public sealed class ProfileModel : ResourceObjectBase, IProfile
     {
         public ProfileModel(DataManager manager) : base(manager)
         {
@@ -30,13 +30,13 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject
 
         public void Load(bool createVariables = true)
         {
-            if (File.Exists) DataManager.Zenno.Profile.Load(File.FullName, createVariables);
+            if (File.Exists) Manager.Zenno.Profile.Load(File.FullName, createVariables);
             else Logger.Write($"Profile load: 'File not found'.", LoggerType.Info, true, false, false);
         }
 
         public void Save()
         {
-            DataManager.Zenno.Profile.Save
+            Manager.Zenno.Profile.Save
             (
                 path: File.FullName,
                 saveProxy: true,
