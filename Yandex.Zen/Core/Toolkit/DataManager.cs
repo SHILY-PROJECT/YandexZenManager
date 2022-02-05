@@ -3,14 +3,14 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Models;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.Toolkit.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ResourceObject;
 
 namespace Yandex.Zen.Core.Toolkit
 {
@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core.Toolkit
     {
         public Instance Browser { get; set; }
         public IZennoPosterProjectModel Zenno { get; set; }
-        public ObjectModel CurrentObject { get; private set; }
+        public ObjectBase CurrentObject { get; private set; }
         public TableModel Table { get; set; }
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)
@@ -65,7 +65,7 @@ namespace Yandex.Zen.Core.Toolkit
         {
             Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
-            CurrentObject = new ObjectModel(this)
+            CurrentObject = new ObjectBase(this)
             {
                 ProfileData = new ProfileDataModel(this)
                 {

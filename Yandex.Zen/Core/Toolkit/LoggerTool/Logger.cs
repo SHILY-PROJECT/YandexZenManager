@@ -12,7 +12,7 @@ using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ResourceObject;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -38,7 +38,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private Instance Browser { get => DataManager.Browser; }
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private Type CurrentService { get => Program.CurrentService; }
-        private ObjectModel CurrentObject { get => DataManager.CurrentObject; }
+        private ObjectBase CurrentObject { get => DataManager.CurrentObject; }
         private DirectoryInfo CurrentObjectDirectory { get => CurrentObject.Directory; }
         private FileInfo ModeLog { get; set; }
         private string InfoAboutCurrentObject

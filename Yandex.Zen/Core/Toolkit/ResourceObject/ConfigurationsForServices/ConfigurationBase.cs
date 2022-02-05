@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.Toolkit.ObjectModule;
+using Yandex.Zen.Core.Toolkit.ResourceObject;
 
-namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
 {
     public class ConfigurationBase
     {
@@ -17,10 +17,10 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
         protected int ColAccountPhone = (int)TableColumnsEnum.AccountNumberPhone;
         protected int ColChannelPhone = (int)TableColumnsEnum.ChannelNumberPhone;
 
-        protected ObjectModel Object { get; set; }
+        protected ObjectBase Object { get; set; }
         protected DataManager DataManager { get; set; }
 
-        public ConfigurationBase(DataManager manager, ObjectModel obj)
+        public ConfigurationBase(DataManager manager, ObjectBase obj)
         {
             DataManager = manager;
             Object = obj;

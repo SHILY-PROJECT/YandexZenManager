@@ -10,7 +10,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 
-namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
 {
     /// <summary>
     /// Класс для хранения данных IP.

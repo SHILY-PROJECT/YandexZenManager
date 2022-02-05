@@ -1,4 +1,4 @@
-﻿namespace Yandex.Zen.Core.Toolkit.ObjectModule.Models
+﻿namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
 {
     public class TemplateSettingsModel
     {

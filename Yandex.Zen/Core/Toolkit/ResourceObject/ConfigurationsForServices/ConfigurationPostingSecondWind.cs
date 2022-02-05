@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 using Yandex.Zen.Core.Toolkit.Extensions;
-using Yandex.Zen.Core.Toolkit.ObjectModule;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices;
+using Yandex.Zen.Core.Toolkit.ResourceObject;
 
-namespace Yandex.Zen.Core.Toolkit.ObjectModule.ConfigurationsForServices
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
 {
     public class ConfigurationPostingSecondWind : ConfigurationBase, IConfiguration
     {
-        public ConfigurationPostingSecondWind(DataManager manager, ObjectModel obj) : base(manager, obj) { }
+        public ConfigurationPostingSecondWind(DataManager manager, ObjectBase obj) : base(manager, obj) { }
 
         public bool TryConfigure(int row)
         {

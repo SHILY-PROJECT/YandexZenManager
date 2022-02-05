@@ -4,30 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 
-namespace Yandex.Zen.Core.Toolkit.ObjectModule
+namespace Yandex.Zen.Core.Toolkit.ResourceObject
 {
-    public class ProfileModel : IProfile
+    public class ProfileModel : ObjectBase, IProfile
     {
-        public ProfileModel()
+        public ProfileModel(DataManager manager) : base(manager)
         {
 
         }
 
         public ProfileDataModel ProfileData { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ProxyModel ProxyData { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public FileInfo File => throw new NotImplementedException();
-
-        public string Path => throw new NotImplementedException();
-
-        public string Name => throw new NotImplementedException();
-
-        public SmsService SmsService { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public CaptchaService CaptchaService { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public FileInfo File { get; }
 
         public void Delete()
         {
@@ -43,22 +35,6 @@ namespace Yandex.Zen.Core.Toolkit.ObjectModule
         {
             throw new NotImplementedException();
         }
-
-        public bool TryConfigure(int row)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-
-
-
-
-
-
-
-
 
         //private FileInfo _profile;
 

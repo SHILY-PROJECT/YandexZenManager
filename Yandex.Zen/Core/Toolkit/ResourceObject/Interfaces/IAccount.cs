@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Yandex.Zen.Core.Toolkit.ObjectModule.Models;
-using Yandex.Zen.Core.Toolkit.SmsServiceTool;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
-namespace Yandex.Zen.Core.Toolkit.ObjectModule.Interfaces
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
     public interface IAccount : IObject
     {
