@@ -1,13 +1,8 @@
-﻿using Global.ZennoExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
+using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Toolkit.Extensions
 {
@@ -27,9 +22,12 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         {
             if (UseThreadLocker) Monitor.Enter(_locker);
 
-            for (int i = 0; i < table.RowCount; i++)
+            for (var row = 0; row < table.RowCount; row++)
             {
-                if (table.GetCell(searchByColumn, i).Equals(searchedValue, StringComparison.Ordinal)) table.SetCell(setToColumn, i, setValue);
+                if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.OrdinalIgnoreCase))
+                {
+                    table.SetCell(setToColumn, row, setValue);
+                }
             }
 
             if (UseThreadLocker) Monitor.Exit(_locker);
@@ -42,9 +40,9 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         {
             if (UseThreadLocker) Monitor.Enter(_locker);
 
-            for (int i = 0; i < table.RowCount; i++)
+            for (var row = 0; row < table.RowCount; row++)
             {
-                if (table.GetCell(searchByColumn, i) is string r && r.Equals(searchedValue, StringComparison.OrdinalIgnoreCase))
+                if (table.GetCell(searchByColumn, row) is string r && r.Equals(searchedValue, StringComparison.OrdinalIgnoreCase))
                 {
                     return r;
                 }
@@ -64,12 +62,12 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
 
             if (UseThreadLocker) Monitor.Enter(_locker);
 
-            for (int i = 0; i < table.RowCount; i++)
+            for (var row = 0; row < table.RowCount; row++)
             {
-                if (table.GetCell(searchByColumn, i).Equals(searchedValue, StringComparison.Ordinal))
+                if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.Ordinal))
                 {
-                    numbRow = i;
-                    return table.GetCell(getColumn, i);
+                    numbRow = row;
+                    return table.GetCell(getColumn, row);
                 }
             }
 
