@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.Toolkit.ResourceObject
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
 {
     public sealed class ProfileModel : ResourceObjectBase, IProfile
     {

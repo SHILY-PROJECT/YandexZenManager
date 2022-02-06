@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+﻿using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.Toolkit.ResourceObject
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
 {
     public class AccountModel : ResourceObjectBase, IAccount
     {
@@ -13,13 +11,12 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject
         }
 
         public IProfile Profile { get; set; }
-        public DirectoryInfo Directory { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string AnswerQuestion { get; set; }
         public string PhoneNumber { get; set; }
         public string CurrentMessageInTable { get; set; }
-        public Uri WebSite { get; set; }
+        public string WebSite { get; set; }
         public ChannelModel Channel { get; set; }
         public TemplateSettingsModel Settings { get; set; }
 

@@ -7,14 +7,13 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using Yandex.Zen.Core.Interfaces;
-using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.ServicesModules
 {

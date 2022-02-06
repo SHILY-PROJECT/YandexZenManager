@@ -14,7 +14,7 @@ using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
@@ -46,12 +46,13 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             {
                 if (_instance._currentObjInfoForLog != null) return _instance._currentObjInfoForLog;
 
-                if (CurrentObject != null && CurrentObject is IProfile profile)
-                    return profile.File != null ? (_instance._currentObjInfoForLog = $"[{profile.File.Name}]\t") : null;
-                if (CurrentObject != null && CurrentObject is IAccount account)
-                    return account.Login != null ? (_instance._currentObjInfoForLog = $"[Login: {account.Login}]\t") : null;
-                if (CurrentObject != null && CurrentObject is IDonor donor)
-                    return donor.Login != null ? (_instance._currentObjInfoForLog = $"[Donor: {donor.Login}]\t") : null;
+                if (CurrentObject != null)
+                    switch (CurrentObject)
+                    {
+                        case IProfile profile: return profile.File != null ? (_instance._currentObjInfoForLog = $"[{profile.File.Name}]\t") : null;
+                        case IDonor donor: return donor.Login != null ? (_instance._currentObjInfoForLog = $"[Donor: {donor.Login}]\t") : null;
+                        case IAccount account: return account.Login != null ? (_instance._currentObjInfoForLog = $"[Login: {account.Login}]\t") : null;
+                    }
 
                 return null;
             }

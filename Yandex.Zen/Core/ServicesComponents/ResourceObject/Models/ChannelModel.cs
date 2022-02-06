@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
-namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Models
 {
     public class ChannelModel
     {
-        public Uri Url { get; set; }
-        public Uri ProfileEditor { get; set; }
+        public string Url { get; set; }
+        public string ProfileEditorUrl { get; set; }
         public string IndexationAndBanStatus { get; set; }
         public string NumberPhone { get; set; }
         public string Description { get; set; }

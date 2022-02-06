@@ -7,11 +7,11 @@ using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 
-namespace Yandex.Zen.Core.Toolkit
+namespace Yandex.Zen.Core.ServicesComponents
 {
     public class ServiceLocator
     {
-        [ThreadStatic] private static ServiceLocator _locator;
+        //[ThreadStatic] private static ServiceLocator _locator;
 
         private readonly DataManager _manager;
 
@@ -42,14 +42,9 @@ namespace Yandex.Zen.Core.Toolkit
 
         public static Action GetStartOfService(Type serviceType, DataManager manager)
         {
-            var loc = (_locator is null ? (_locator = new ServiceLocator(manager)) : _locator);
+            var loc = new ServiceLocator(manager);
             loc.InstancesOfServices.TryGetValue(serviceType, out var service);
             return service;
-        }
-
-        public static void ConfigureService()
-        {
-
         }
     }
 }

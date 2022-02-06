@@ -14,6 +14,7 @@ using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.ServicesComponents;
 
 namespace Yandex.Zen
 {

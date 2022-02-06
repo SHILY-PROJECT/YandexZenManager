@@ -1,6 +1,6 @@
-﻿using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+﻿using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.Toolkit.ResourceObject
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
 {
     public sealed class DonorModel : AccountModel, IDonor
     {

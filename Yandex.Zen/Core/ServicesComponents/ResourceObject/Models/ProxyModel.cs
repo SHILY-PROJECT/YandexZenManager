@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Yandex.Zen.Core.Toolkit.LoggerTool;
-using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using ZennoLab.InterfacesLibrary.Enums.Log;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 
-namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Models
 {
     /// <summary>
     /// Класс для хранения данных IP.

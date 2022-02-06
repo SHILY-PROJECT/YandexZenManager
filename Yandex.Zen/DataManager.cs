@@ -11,9 +11,11 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.ResourceObject;
-using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+using Yandex.Zen.Core.ServicesComponents;
+using Yandex.Zen.Core.Toolkit;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.Toolkit
+namespace Yandex.Zen
 {
     public class DataManager
     {
@@ -88,31 +90,31 @@ namespace Yandex.Zen.Core.Toolkit
                 MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
             };
 
-            CurrentResourceObject = 
+            CurrentResourceObject = new ServiceConfigurator(Program.Service, this, templateSettings, captchaService, smsService).Configure();
 
-            CurrentResourceObject = new ObjectBase(this)
-            {
-                ProfileData = new ProfileModel(this)
-                {
-                    UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
-                    MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
-                },
-                SmsService = new SmsService
-                {
-                    Settings = new SmsServiceSettingsModel
-                    {
-                        TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
-                        MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
-                        AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
-                    },
-                    Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
-                },
-                CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-                Settings = new TemplateSettingsModel { CreateFoldersAndFiles = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
-                Channel = new ChannelModel()
-            };
+            //CurrentResourceObject = new ObjectBase(this)
+            //{
+            //    ProfileData = new ProfileModel(this)
+            //    {
+            //        UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
+            //        MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
+            //    },
+            //    SmsService = new SmsService
+            //    {
+            //        Settings = new SmsServiceSettingsModel
+            //        {
+            //            TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
+            //            MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
+            //            AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
+            //        },
+            //        Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
+            //    },
+            //    CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
+            //    Settings = new TemplateSettingsModel { CreateFoldersAndFiles = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
+            //    Channel = new ChannelModel()
+            //};
 
-            CurrentResourceObject.SetObject(Program.CurrentService);
+            //CurrentResourceObject.SetObject(Program.CurrentService);
         }
 
         private void ConfigureResObjForService()
