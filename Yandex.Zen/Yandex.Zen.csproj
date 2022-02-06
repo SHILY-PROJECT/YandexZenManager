@@ -132,7 +132,6 @@
     <Compile Include="Core\ServicesComponents\ServiceConfigurator.cs" />
     <Compile Include="Core\ServicesComponents\ServiceLocator.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\ResourceObjectBase.cs" />
-    <Compile Include="Core\Models\ProxyModel.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />

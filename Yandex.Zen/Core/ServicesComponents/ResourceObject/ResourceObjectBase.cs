@@ -17,7 +17,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
         }
 
         public DirectoryInfo Directory { get; protected set; }
-        public ProxyModel ProxyData { get; set; }
+        public ProxyModel Proxy { get; set; }
         public SmsService SmsService { get; set; }
         public CaptchaService CaptchaService { get; set; }
     }

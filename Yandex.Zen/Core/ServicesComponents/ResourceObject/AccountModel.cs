@@ -1,10 +1,21 @@
-﻿using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Collections.Generic;
+using ZennoLab.InterfacesLibrary.Enums.Log;
+using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Toolkit.Macros;
+using Yandex.Zen.Core.Toolkit.LoggerTool;
+using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
 {
     public class AccountModel : ResourceObjectBase, IAccount
     {
+        private readonly object _locker = new object();
+
         public AccountModel(DataManager manager) : base(manager)
         {
 
@@ -20,111 +31,77 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
         public ChannelModel Channel { get; set; }
         public TemplateSettingsModel Settings { get; set; }
 
-        ///// <summary>
-        ///// Генерация нового пароля (автоматически вставляется в свойство 'Password')
-        ///// </summary>
-        //public void GenerateNewPassword()
-        //{
-        //    Password = TextMacros.GenerateString(12, 16, "abcd");
-        //    Logger.Write($"[{nameof(Password)}:{Password}]\tСгенерирован новый пароль (на момент записи в лог, этот пароль не установлен)", LoggerType.Info, true, false, false);
-        //}
+        public void GenerateNewPassword()
+        {
+            Password = TextMacros.GenerateString(12, 16, "abcd");
+            Logger.Write($"[{nameof(Password)}:{Password}]\tСгенерирован новый пароль (на момент записи в лог, этот пароль не установлен).", LoggerType.Info, true, false, false);
+        }
 
-        ///// <summary>
-        ///// Установка ресурса.
-        ///// </summary>
-        //public void SetObject(Type serviceType)
-        //{
-        //    var tb = DataManager.Table;
+        /// <summary>
+        /// Сохранение значений в таблицу.
+        /// </summary>
+        public void SaveToTable(params TableColumnsEnum[] tableColumns)
+        {
+            var map = ColumnValueMapper;
 
-        //    if (tb.Instance.RowCount == 0)
-        //        throw new Exception($"Таблица пуста: {tb.FileName}");
+            //SaveToTable(Enumerable.Range(0, tableColumns.Length)
+            //    .Select((value, index) => Tuple.Create(tableColumns[index], map[tableColumns[index]])).ToList());
 
-        //    lock (_locker)
-        //    {
-        //        for (int row = 0; row < tb.Instance.RowCount; row++)
-        //        {
-        //            try
-        //            {
-        //                switch (serviceType)
-        //                {
+            var values = new List<Tuple<TableColumnsEnum, string>>();
+            Array.ForEach(tableColumns, col => values.Add(Tuple.Create(col, map[col])));
+            SaveToTable(values);
+        }
 
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Logger.Write(ex.Message, LoggerType.Warning, Directory.Exists, true, true, LogColor.Yellow);
-        //            }
-        //        }
-        //    }
+        /// <summary>
+        /// Сохранение значений в таблицу.
+        /// </summary>
+        public void SaveToTable(List<Tuple<TableColumnsEnum, string>> values)
+        {
+            var obj = (IAccount)Manager.CurrentResourceObject;
+            var tableModel = Manager.Table;
+            var table = Manager.Table.Obj;
 
-        //    return;
+            Monitor.Enter(_locker);
+            for (int row = 0; row < table.RowCount; row++)
+            {
+                if (table.GetRow(row).Any(x => x.Equals(obj.Login, StringComparison.OrdinalIgnoreCase)))
+                {
+                    foreach (var value in values)
+                    {
+                        var column = (int)value.Item1;
 
-        //    throw new Exception($"Отсутствуют свободные/подходящие аккаунты: {tb.FileName}");
-        //}
+                        table.SetCell(column, row, value.Item2);
+                        Thread.Sleep(300);
 
-        ///// <summary>
-        ///// Сохранение значений в таблицу.
-        ///// </summary>
-        //public void SaveToTable(params TableColumnsEnum[] tableColumns)
-        //{
-        //    var columnMapper = ColumnValueMapper;
-        //    var values = new List<Tuple<TableColumnsEnum, string>>();
-        //    //var values = Enumerable.Range(0, tableColumns.Length).Select((value, index) => Tuple.Create(tableColumns[index], mapper[tableColumns[index]])).ToList();
+                        if (table.GetCell(column, row).Equals(value.Item2) is false)
+                            Logger.Write($"[{row}|{column}|{value.Item1}]\t[Строка:{row + 2}]\tНе удалось сохранить значение",
+                                LoggerType.Warning, true, false, true, LogColor.Yellow);
+                    }
+                    return;
+                }
+            }
+            Monitor.Exit(_locker);
+        }
 
-        //    Array.ForEach(tableColumns, x => values.Add(Tuple.Create(x, columnMapper[x])));
-        //    SaveToTable(values);
-        //}
+        /// <summary>
+        /// Сохранение значения в таблицу.
+        /// </summary>
+        public void SaveToTable(TableColumnsEnum tableColumn, string value)
+            => SaveToTable(new List<Tuple<TableColumnsEnum, string>> { Tuple.Create(tableColumn, value) });
 
-        ///// <summary>
-        ///// Сохранение значений в таблицу.
-        ///// </summary>
-        //public void SaveToTable(List<Tuple<TableColumnsEnum, string>> values)
-        //{
-        //    var obj = DataManager.CurrentObject;
-        //    var tableModel = DataManager.Table;
-        //    var table = DataManager.Table.Instance;
-
-        //    lock (_locker)
-        //    {
-        //        for (int row = 0; row < table.RowCount; row++)
-        //        {
-        //            if (table.GetRow(row).Any(x => x.Equals(obj.Login, StringComparison.OrdinalIgnoreCase)))
-        //            {
-        //                foreach (var value in values)
-        //                {
-        //                    var column = (int)value.Item1;
-
-        //                    table.SetCell(column, row, value.Item2);
-        //                    Thread.Sleep(300);
-
-        //                    if (table.GetCell(column, row).Equals(value.Item2) is false)
-        //                        Logger.Write($"[{row}|{column}|{value.Item1}]\t[Строка:{row + 2}]\tНе удалось сохранить значение", LoggerType.Warning, true, false, true, LogColor.Yellow);
-        //                }
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Сохранение значения в таблицу.
-        ///// </summary>
-        //public void SaveToTable(TableColumnsEnum tableColumn, string value)
-        //    => SaveToTable(new List<Tuple<TableColumnsEnum, string>> { Tuple.Create(tableColumn, value) });
-
-        //private Dictionary<TableColumnsEnum, string> ColumnValueMapper => new Dictionary<TableColumnsEnum, string>
-        //{
-        //    { TableColumnsEnum.Login,                   Login },
-        //    { TableColumnsEnum.Password,                Password },
-        //    { TableColumnsEnum.AnswerQuestion,          AnswerQuestion },
-        //    { TableColumnsEnum.AccountNumberPhone,      PhoneNumber },
-        //    { TableColumnsEnum.ChannelNumberPhone,      Channel.NumberPhone },
-        //    { TableColumnsEnum.Proxy,                   ProxyData.Proxy },
-        //    { TableColumnsEnum.ChannelUrl,              Channel.Url.AbsoluteUri },
-        //    { TableColumnsEnum.IndexationAndBanStatus,  Channel.IndexationAndBanStatus },
-        //    { TableColumnsEnum.ProfileAndIPCountry,     $"{DataManager.Zenno.Profile.Country}/{ProxyData.CountryFullName}" },
-        //    { TableColumnsEnum.MessageFromSettings,     CurrentMessageInTable }
-        //};
+        private Dictionary<TableColumnsEnum, string> ColumnValueMapper => new Dictionary<TableColumnsEnum, string>
+        {
+            { TableColumnsEnum.Login,                   Login },
+            { TableColumnsEnum.Password,                Password },
+            { TableColumnsEnum.AnswerQuestion,          AnswerQuestion },
+            { TableColumnsEnum.AccountNumberPhone,      PhoneNumber },
+            { TableColumnsEnum.ChannelNumberPhone,      Channel.NumberPhone },
+            { TableColumnsEnum.Proxy,                   Proxy.Proxy },
+            { TableColumnsEnum.ChannelUrl,              Channel.Url },
+            { TableColumnsEnum.IndexationAndBanStatus,  Channel.IndexationAndBanStatus },
+            { TableColumnsEnum.ProfileAndIPCountry,     $"{Manager.Zenno.Profile.Country}/{Proxy.CountryFullName}" },
+            { TableColumnsEnum.MessageFromSettings,     CurrentMessageInTable }
+        };
 
     }
 }

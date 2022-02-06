@@ -8,7 +8,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces
     public interface IResourceObject
     {
         DirectoryInfo Directory { get; }
-        ProxyModel ProxyData { get; set; }
+        ProxyModel Proxy { get; set; }
         SmsService SmsService { get; set; }
         CaptchaService CaptchaService { get; set; }
     }
