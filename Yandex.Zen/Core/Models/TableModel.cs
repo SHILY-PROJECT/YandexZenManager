@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using ZennoLab.InterfacesLibrary.ProjectModel;
-using ZennoLab.InterfacesLibrary.ProjectModel.Collections;
 
 namespace Yandex.Zen.Core.Models
 {

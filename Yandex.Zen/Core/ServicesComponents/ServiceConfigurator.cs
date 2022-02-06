@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.ActivityManagerService;
@@ -7,15 +9,15 @@ using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
-using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+using Yandex.Zen.Core.ServicesComponents.Configurations;
 
 namespace Yandex.Zen.Core.ServicesComponents
 {
     public class ServiceConfigurator
     {
-        delegate IResourceObject ResourceObjectConfiguration(DataManager manager);
+        delegate void ResourceObjectConfiguration(DataManager manager, IService service);
 
         private readonly IService _service;
         private readonly DataManager _manager;
@@ -32,10 +34,20 @@ namespace Yandex.Zen.Core.ServicesComponents
             _smsService = smsService;
         }
 
-        //private Dictionary<Type, > 
+        private Dictionary<Type, ResourceObjectConfiguration> _mapperConfiguration = new Dictionary<Type, ResourceObjectConfiguration>
+        {
+            { typeof(AccounRegister), AccounRegisterConfiguration.Configure },
+            { typeof(ActivityManager), ActivityManagerConfiguration.Configure },
+            { typeof(BrowserAccountManager), BrowserAccountManagerConfiguration.Configure },
+            { typeof(ChannelManager), ChannelManagerConfiguration.Configure },
+            { typeof(PublicationManager), PublicationManagerConfiguration.Configure },
+            { typeof(WalkerOnZen), WalkerOnZenConfiguration.Configure }
+        };
 
         public IResourceObject Configure()
         {
+            _mapperConfiguration[Program.CurrentService].Invoke(_manager, _service);
+            
             switch (_service)
             {
                 case AccounRegister accounRegister:

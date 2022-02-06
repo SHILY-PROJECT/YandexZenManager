@@ -81,6 +81,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ServicesComponents\Configurations\AccounRegisterConfiguration.cs" />
+    <Compile Include="Core\ServicesComponents\Configurations\ActivityManagerConfiguration.cs" />
+    <Compile Include="Core\ServicesComponents\Configurations\BrowserAccountManagerConfiguration.cs" />
+    <Compile Include="Core\ServicesComponents\Configurations\ChannelManagerConfiguration.cs" />
+    <Compile Include="Core\ServicesComponents\Configurations\PublicationManagerConfiguration.cs" />
+    <Compile Include="Core\ServicesComponents\Configurations\WalkerOnZenConfiguration.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\AccountModel.cs" />
