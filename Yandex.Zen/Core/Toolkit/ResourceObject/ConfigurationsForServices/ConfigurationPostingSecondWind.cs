@@ -18,7 +18,7 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
             var table = DataManager.Table.Obj;
 
             // логин
-            if (table.ParseValueFromCell(ColLogin, row, out var result))
+            if (table.TryParseValueFromCell(ColLogin, row, out var result))
             {
                 if (Program.CheckObjectInWork(result)) return false;
 
@@ -32,34 +32,34 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
             else throw new Exception($"'{nameof(ColLogin)}' - value is void or null");
 
             // пароль
-            if (table.ParseValueFromCell(ColPassword, row, out result))
+            if (table.TryParseValueFromCell(ColPassword, row, out result))
             {
                 Object.Password = result;
             }
             else throw new Exception($"'{nameof(ColPassword)}' - value is void or null");
 
             // ответ на контрольный вопрос
-            if (table.ParseValueFromCell(ColAnswerQuestion, row, out result))
+            if (table.TryParseValueFromCell(ColAnswerQuestion, row, out result))
             {
                 Object.AnswerQuestion = result;
             }
             else throw new Exception($"'{nameof(ColAnswerQuestion)}' - value is void or null");
 
             // прокси
-            if (table.ParseValueFromCell(ColProxy, row, out result))
+            if (table.TryParseValueFromCell(ColProxy, row, out result))
             {
                 Object.ProxyData = new ProxyModel(DataManager, result, true);
             }
             else throw new Exception($"'{nameof(ColProxy)}' - value is void or null");
 
             // номер телефона аккаунта
-            if (table.ParseValueFromCell(ColAccountPhone, row, out result))
+            if (table.TryParseValueFromCell(ColAccountPhone, row, out result))
             {
                 Object.PhoneNumber = result;
             }
 
             // номер телефона канала
-            if (table.ParseValueFromCell(ColChannelPhone, row, out result))
+            if (table.TryParseValueFromCell(ColChannelPhone, row, out result))
             {
                 Object.Channel.NumberPhone = result;
             }
