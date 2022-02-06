@@ -2,17 +2,8 @@
 {
     public class TemplateSettingsModel
     {
-        public bool CreateFolderResourceIfNoExist { get; set; }
-
-        /// <summary>
-        /// Использовать нагуленные профиля.
-        /// </summary>
+        public bool CreateFoldersAndFiles { get; set; }
         public bool UseWalkedProfileFromSharedFolder { get; set; }
-
-        /// <summary>
-        /// Минимальный размер нагуленного профиля.
-        /// </summary>
         public int MinProfileSizeToUse { get; set; }
-
     }
 }

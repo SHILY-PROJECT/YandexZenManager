@@ -56,7 +56,7 @@ namespace Yandex.Zen.Core.ServicesModules
             _settingsMode = DataManager.Browser.BrowserGetCurrentBusySettings();
 
             var browser = DataManager.Browser;
-            var account = (IAccount)DataManager.CurrentObject;
+            var account = (IAccount)DataManager.CurrentResourceObject;
 
             var log = new LogSettings(false, true, true);
             var firstStart = true;
@@ -191,7 +191,7 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xButtonCaptchaNext = new HE("//div[contains(@data-t, 'submit-captcha')]/button", "Подтвердить ввод капчи");
 
             var browser = DataManager.Browser;
-            var captchaService = DataManager.CurrentObject.CaptchaService;
+            var captchaService = DataManager.CurrentResourceObject.CaptchaService;
 
             var log = new LogSettings(false, true, true);
             var attempts = 0;
@@ -271,7 +271,7 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
             HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
 
-            var account = (IAccount)DataManager.CurrentObject;
+            var account = (IAccount)DataManager.CurrentResourceObject;
             var smsService = account.SmsService;
 
             _endOfAuthProcess = false;

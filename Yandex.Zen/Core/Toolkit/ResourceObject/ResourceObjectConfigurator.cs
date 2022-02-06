@@ -4,23 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 
 namespace Yandex.Zen.Core.Toolkit.ResourceObject
 {
-    public class ResourceObjectConfigurator : IResourceObjectConfiguration
+    public class ResourceObjectConfigurator
     {
-        private bool _isSuccess;
-        private string _message;
+        private readonly DataManager _manager;
+        private readonly TemplateSettingsModel _templateSettings;
+        private readonly CaptchaService _captchaService;
+        private readonly SmsService _smsService;
 
-        public bool IsSuccess { get => _isSuccess; }
-        public string Message { get => _message; }
-
-        public void Configure(IResourceObject res)
+        public ResourceObjectConfigurator(DataManager manager, TemplateSettingsModel templateSettings, CaptchaService captchaService, SmsService smsService)
         {
-            throw new NotImplementedException();
+            _manager = manager;
+            _templateSettings = templateSettings;
+            _captchaService = captchaService;
+            _smsService = smsService;
         }
 
-        public bool TryConfigure(IResourceObject res)
+        public IResourceObject Configure()
         {
             throw new NotImplementedException();
         }

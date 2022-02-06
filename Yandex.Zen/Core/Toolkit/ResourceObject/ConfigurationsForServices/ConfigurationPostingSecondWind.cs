@@ -15,7 +15,7 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.ConfigurationsForServices
 
         public bool TryConfigure(int row)
         {
-            var table = DataManager.Table.Instance;
+            var table = DataManager.Table.Obj;
 
             // логин
             if (table.ParseValueFromCell(ColLogin, row, out var result))

@@ -11,6 +11,8 @@ namespace Yandex.Zen.Core.Toolkit
 {
     public class ServiceLocator
     {
+        [ThreadStatic] private static ServiceLocator _locator;
+
         private readonly DataManager _manager;
 
         public ServiceLocator(DataManager manager)
@@ -40,9 +42,14 @@ namespace Yandex.Zen.Core.Toolkit
 
         public static Action GetStartOfService(Type serviceType, DataManager manager)
         {
-            var locator = new ServiceLocator(manager);
-            locator.InstancesOfServices.TryGetValue(serviceType, out var service);
+            var loc = (_locator is null ? (_locator = new ServiceLocator(manager)) : _locator);
+            loc.InstancesOfServices.TryGetValue(serviceType, out var service);
             return service;
+        }
+
+        public static void ConfigureService()
+        {
+
         }
     }
 }

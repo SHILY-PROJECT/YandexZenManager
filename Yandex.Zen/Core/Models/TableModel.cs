@@ -13,7 +13,7 @@ namespace Yandex.Zen.Core.Models
     {
         public TableModel(IZennoPosterProjectModel zenno, string nameTable, string path)
         {
-            Instance = zenno.Tables[nameTable];
+            Obj = zenno.Tables[nameTable];
             TableName = nameTable;
             File = new FileInfo(zenno.ExecuteMacro(path));
         }
@@ -24,7 +24,7 @@ namespace Yandex.Zen.Core.Models
         /// <summary>
         /// Экземпляр таблицы.
         /// </summary>
-        public IZennoTable Instance { get; private set; }
+        public IZennoTable Obj { get; private set; }
 
         /// <summary>
         /// Файл таблицы.
