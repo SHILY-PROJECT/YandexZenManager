@@ -8,7 +8,6 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces
     public interface IAccount : IResourceObject
     {
         IProfile Profile { get; set; }
-        TemplateSettingsModel Settings { get; set; }
         ChannelModel Channel { get; set; }
         string Login { get; set; }
         string Password { get; set; }

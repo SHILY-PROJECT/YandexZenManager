@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Enums;
+using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -16,7 +17,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
     {
         private readonly object _locker = new object();
 
-        public AccountModel(DataManager manager) : base(manager)
+        public AccountModel(IDataManager manager) : base(manager)
         {
 
         }
@@ -28,8 +29,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
         public string PhoneNumber { get; set; }
         public string CurrentMessageInTable { get; set; }
         public string WebSite { get; set; }
-        public ChannelModel Channel { get; set; }
-        public TemplateSettingsModel Settings { get; set; }
+        public ChannelModel Channel { get; set; } 
 
         public void GenerateNewPassword()
         {

@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Interfaces\IDataManager.cs" />
     <Compile Include="Core\ServicesComponents\Configurations\AccounRegisterConfiguration.cs" />
     <Compile Include="Core\ServicesComponents\Configurations\ActivityManagerConfiguration.cs" />
     <Compile Include="Core\ServicesComponents\Configurations\BrowserAccountManagerConfiguration.cs" />

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Services.AccounRegisterService;
 using Yandex.Zen.Core.Services.ActivityManagerService;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
@@ -11,11 +13,9 @@ namespace Yandex.Zen.Core.ServicesComponents
 {
     public class ServiceLocator
     {
-        //[ThreadStatic] private static ServiceLocator _locator;
+        private readonly IDataManager _manager;
 
-        private readonly DataManager _manager;
-
-        public ServiceLocator(DataManager manager)
+        public ServiceLocator(IDataManager manager)
         {
             _manager = manager;
         }
@@ -40,10 +40,11 @@ namespace Yandex.Zen.Core.ServicesComponents
             { typeof(ActivityManager),          new ActivityManager(_manager).Start },
         };
 
-        public static Action GetStartOfService(Type serviceType, DataManager manager)
+        public static Action GetStartOfService(Type serviceType, IDataManager manager)
         {
             var loc = new ServiceLocator(manager);
             loc.InstancesOfServices.TryGetValue(serviceType, out var service);
+            manager.Service = service.GetInvocationList().First().Target as IService;
             return service;
         }
     }

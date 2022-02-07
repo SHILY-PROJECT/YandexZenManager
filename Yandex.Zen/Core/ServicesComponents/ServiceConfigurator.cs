@@ -17,24 +17,7 @@ namespace Yandex.Zen.Core.ServicesComponents
 {
     public class ServiceConfigurator
     {
-        delegate void ResourceObjectConfiguration(DataManager manager, IService service);
-
-        private readonly IService _service;
-        private readonly DataManager _manager;
-        private readonly TemplateSettingsModel _templateSettings;
-        private readonly CaptchaService _captchaService;
-        private readonly SmsService _smsService;
-
-        public ServiceConfigurator(IService service, DataManager manager, TemplateSettingsModel templateSettings, CaptchaService captchaService, SmsService smsService)
-        {
-            _service = service;
-            _manager = manager;
-            _templateSettings = templateSettings;
-            _captchaService = captchaService;
-            _smsService = smsService;
-        }
-
-        private Dictionary<Type, ResourceObjectConfiguration> _mapperConfiguration = new Dictionary<Type, ResourceObjectConfiguration>
+        private static readonly Dictionary<Type, Func<IDataManager, IResourceObject>> _mapperConfiguration = new Dictionary<Type, Func<IDataManager, IResourceObject>>
         {
             { typeof(AccounRegister), AccounRegisterConfiguration.Configure },
             { typeof(ActivityManager), ActivityManagerConfiguration.Configure },
@@ -44,67 +27,14 @@ namespace Yandex.Zen.Core.ServicesComponents
             { typeof(WalkerOnZen), WalkerOnZenConfiguration.Configure }
         };
 
-        public IResourceObject Configure()
+        public static void Configure(IDataManager manager, TemplateSettingsModel templateSettings, CaptchaService captchaService, SmsService smsService)
         {
-            _mapperConfiguration[Program.CurrentService].Invoke(_manager, _service);
+            var res = _mapperConfiguration[manager.CurrentServiceType]?.Invoke(manager);
+
+            res.CaptchaService = captchaService;
+            res.SmsService = smsService;
             
-            switch (_service)
-            {
-                case AccounRegister accounRegister:
 
-                    break;
-
-                case ActivityManager activityManager:
-
-                    break;
-
-                case BrowserAccountManager browserAccountManager:
-
-                    break;
-
-                case ChannelManager channelManager:
-
-                    break;
-
-                case PublicationManager publicationManager:
-
-                    break;
-
-                case WalkerOnZen walkerOnZen:
-
-                    break;
-
-                default: throw new InvalidOperationException();
-            }
-
-            //switch (serviceType)
-            //{
-            //    case Type _ when serviceType == typeof(AccounRegister):
-
-            //        break;
-
-            //    case Type _ when serviceType == typeof(ActivityManager):
-
-            //        break;
-
-            //    case Type _ when serviceType == typeof(BrowserAccountManager):
-
-            //        break;
-
-            //    case Type _ when serviceType == typeof(ChannelManager):
-
-            //        break;
-
-            //    case Type _ when serviceType == typeof(PublicationManager):
-
-            //        break;
-
-            //    case Type _ when serviceType == typeof(WalkerOnZen):
-
-            //        break;
-            //}
-
-            throw new NotImplementedException();
         }
     }
 }

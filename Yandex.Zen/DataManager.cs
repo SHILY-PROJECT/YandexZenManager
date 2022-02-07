@@ -3,6 +3,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Models;
+using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Toolkit.Extensions;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
@@ -12,15 +13,19 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.ServicesComponents;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
 
 namespace Yandex.Zen
 {
-    public class DataManager
+    public class DataManager : IDataManager
     {
-        public Instance Browser { get; set; }
-        public IZennoPosterProjectModel Zenno { get; set; }
-        public IResourceObject CurrentResourceObject { get; private set; }
-        public TableModel Table { get; set; }
+        public Type CurrentServiceType { get; private set; }
+        public IService Service { get; set; }
+        public IZennoPosterProjectModel Zenno { get; private set; }
+        public IResourceObject CurrentResourceObject { get; set; }
+        public Instance Browser { get; private set; }
+        public TableModel Table { get; private set; }
+        
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)
         {
@@ -59,7 +64,7 @@ namespace Yandex.Zen
         /// </summary>
         private void Configure()
         {
-            Program.CurrentService = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
+            CurrentServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
             Logger.ConfigureGlobalLog(this);
             HE.ConfigureGlobalBrowse(this);
             SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
@@ -88,7 +93,7 @@ namespace Yandex.Zen
                 MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
             };
 
-            CurrentResourceObject = new ServiceConfigurator(Program.Service, this, templateSettings, captchaService, smsService).Configure();
+            new ServiceConfigurator(this, templateSettings, captchaService, smsService).Configure();
 
             //CurrentResourceObject = new ObjectBase(this)
             //{

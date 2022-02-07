@@ -25,9 +25,9 @@ namespace Yandex.Zen
     {
         private static readonly object _locker = new object();
         private static List<string> _objectsAllThreadsInWork;
+
+        [ThreadStatic] private static IDataManager _manager;
         [ThreadStatic] private static List<string> _objectsCurrentThread;
-        [ThreadStatic] private static IService _service;
-        [ThreadStatic] private static Type _currentService;
         [ThreadStatic] private static DirectoryInfo _commonAccountDirectory;
         [ThreadStatic] private static DirectoryInfo _commonProfileDirectory;
 
@@ -70,12 +70,12 @@ namespace Yandex.Zen
         /// <summary>
         /// Текущий сервис (текущий режим работы шаблона).
         /// </summary>
-        public static Type CurrentService { get => _currentService; set => _currentService = value; }
+        public static Type CurrentServiceType { get => _manager.CurrentServiceType; }
 
         /// <summary>
-        /// Экземпляр текущего сервиса.
+        /// Инстанс сервиса.
         /// </summary>
-        public static IService Service { get => _service; }
+        public static IService Service { get => _manager.Service; }
 
         /// <summary>
         /// Метод для запуска выполнения скрипта
@@ -85,7 +85,7 @@ namespace Yandex.Zen
         /// <returns>Код выполнения скрипта</returns>		
         public int Execute(Instance instance, IZennoPosterProjectModel zenno)
         {
-            var manager = new DataManager(instance, zenno);
+            var manager = _manager = new DataManager(instance, zenno);
 
             if (manager.TryConfigureProjectSettings())
             {
@@ -94,10 +94,7 @@ namespace Yandex.Zen
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
 
-                    var startAction = ServiceLocator.GetStartOfService(CurrentService, manager);
-                    _service = startAction.GetInvocationList().First().Target as IService;
-
-                    startAction?.Invoke();
+                    ServiceLocator.GetStartOfService(CurrentServiceType, manager)?.Invoke();
                 }
                 catch (Exception ex)
                 {
@@ -127,16 +124,17 @@ namespace Yandex.Zen
         /// </summary>
         public static void CleanUpObjectsFromCache()
         {
-            if (ObjectsCurrentThread.Any())
-            {
-                lock (_locker)
-                {
-                    if (Service is BrowserAccountManager)
-                        BrowserAccountManager.IsInProcess = false;
+            if (ObjectsCurrentThread.Any() is false) return;
 
-                    ObjectsCurrentThread.ForEach(res
-                        => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
+            lock (_locker)
+            {
+                if (Service != null && Service is BrowserAccountManager)
+                {
+                    BrowserAccountManager.IsInProcess = false;
                 }
+
+                ObjectsCurrentThread.ForEach(res
+                    => ObjectsAllThreadsInWork.RemoveAll(x => x == res));
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -8,7 +9,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
 {
     public sealed class ProfileModel : ResourceObjectBase, IProfile
     {
-        public ProfileModel(DataManager manager) : base(manager)
+        public ProfileModel(IDataManager manager) : base(manager)
         {
 
         }
