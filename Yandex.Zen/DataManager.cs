@@ -25,7 +25,6 @@ namespace Yandex.Zen
         public IResourceObject CurrentResourceObject { get; set; }
         public Instance Browser { get; private set; }
         public TableModel Table { get; private set; }
-        
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)
         {
@@ -64,19 +63,23 @@ namespace Yandex.Zen
         /// </summary>
         private void Configure()
         {
-            CurrentServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
+            this.CurrentServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
+
             Logger.ConfigureGlobalLog(this);
             HE.ConfigureGlobalBrowse(this);
-            SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
 
-            Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
+            this.SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
+            this.Service.Configuration.Configure();
+            this.Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
-            var captchaService = new CaptchaService
+            // CaptchaService
+            this.Service.ResourceObject.CaptchaService = new CaptchaService
             {
                 ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value
             };
 
-            var smsService = new SmsService
+            // SmsService
+            this.Service.ResourceObject.SmsService = new SmsService
             {
                 Settings = new SmsServiceSettingsModel
                 {
@@ -87,42 +90,13 @@ namespace Yandex.Zen
                 Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
             };
 
-            var templateSettings = new TemplateSettingsModel
+            // TemplateSettingsModel
+            this.Service.ResourceObject.TemplateSettings = new TemplateSettingsModel
             {
+                CreateFoldersAndFiles = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value),
                 UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
                 MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
             };
-
-            new ServiceConfigurator(this, templateSettings, captchaService, smsService).Configure();
-
-            //CurrentResourceObject = new ObjectBase(this)
-            //{
-            //    ProfileData = new ProfileModel(this)
-            //    {
-            //        UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
-            //        MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
-            //    },
-            //    SmsService = new SmsService
-            //    {
-            //        Settings = new SmsServiceSettingsModel
-            //        {
-            //            TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
-            //            MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
-            //            AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
-            //        },
-            //        Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
-            //    },
-            //    CaptchaService = new CaptchaService { ServiceDll = Zenno.Variables["cfgCaptchaServiceDll"].Value },
-            //    Settings = new TemplateSettingsModel { CreateFoldersAndFiles = bool.Parse(Zenno.Variables["cfgIfFolderErrorThenCreateIt"].Value) },
-            //    Channel = new ChannelModel()
-            //};
-
-            //CurrentResourceObject.SetObject(Program.CurrentService);
-        }
-
-        private void ConfigureResObjForService()
-        {
-
         }
 
         /// <summary>

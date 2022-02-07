@@ -8,13 +8,15 @@ namespace Yandex.Zen.Core.Services.BrowserAccountManagerService
 {
     public class BrowserAccountManager : IService
     {
-        public BrowserAccountManager(IDataManager manager)
+        public BrowserAccountManager(IDataManager manager, IServiceConfiguration configuration)
         {
             DataManager = manager;
+            Configuration = configuration;
         }
 
         public IDataManager DataManager { get; set; }
-        public IAccount Account { get; set; }
+        public IResourceObject ResourceObject { get; set; }
+        public IServiceConfiguration Configuration { get; }
         public static bool IsInProcess { get; set; }
 
         public void Start()

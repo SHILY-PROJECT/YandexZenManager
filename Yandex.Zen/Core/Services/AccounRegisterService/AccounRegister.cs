@@ -8,13 +8,15 @@ namespace Yandex.Zen.Core.Services.AccounRegisterService
 {
     public class AccounRegister : IService
     {
-        public AccounRegister(IDataManager manager)
+        public AccounRegister(IDataManager manager, IServiceConfiguration configuration)
         {
             DataManager = manager;
+            Configuration = configuration;
         }
 
         public IDataManager DataManager { get; set; }
-        public IAccount Account { get; set; }
+        public IResourceObject ResourceObject { get; set; }
+        public IServiceConfiguration Configuration { get; private set; }
 
         public void Start()
         {

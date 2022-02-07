@@ -8,13 +8,15 @@ namespace Yandex.Zen.Core.Services.WalkerOnZenService
 {
     public class WalkerOnZen : IService
     {
-        public WalkerOnZen(IDataManager manager)
+        public WalkerOnZen(IDataManager manager, IServiceConfiguration configuration)
         {
             DataManager = manager;
+            Configuration = configuration;
         }
 
         public IDataManager DataManager { get; set; }
-        public IAccount Account { get; set; }
+        public IResourceObject ResourceObject { get; set; }
+        public IServiceConfiguration Configuration { get; }
 
         public void Start()
         {

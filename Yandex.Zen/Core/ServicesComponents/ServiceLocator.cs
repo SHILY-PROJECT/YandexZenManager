@@ -8,6 +8,7 @@ using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.ServicesConfigurations;
 
 namespace Yandex.Zen.Core.ServicesComponents
 {
@@ -32,12 +33,12 @@ namespace Yandex.Zen.Core.ServicesComponents
 
         public Dictionary<Type, Action> InstancesOfServices => new Dictionary<Type, Action>
         {
-            { typeof(ChannelManager),           new ChannelManager(_manager).Start },
-            { typeof(PublicationManager),       new PublicationManager(_manager).Start },
-            { typeof(BrowserAccountManager),    new BrowserAccountManager(_manager).Start },
-            { typeof(WalkerOnZen),              new WalkerOnZen(_manager).Start },
-            { typeof(AccounRegister),           new AccounRegister(_manager).Start },
-            { typeof(ActivityManager),          new ActivityManager(_manager).Start },
+            { typeof(AccounRegister),           new AccounRegister(_manager, new AccounRegisterServiceConfiguration(_manager)).Start },
+            { typeof(ActivityManager),          new ActivityManager(_manager, new ActivityManagerServiceConfiguration(_manager)).Start },
+            { typeof(BrowserAccountManager),    new BrowserAccountManager(_manager, new BrowserAccountManagerServiceConfiguration(_manager)).Start },
+            { typeof(ChannelManager),           new ChannelManager(_manager, new ChannelManagerServiceConfiguration(_manager)).Start },
+            { typeof(PublicationManager),       new PublicationManager(_manager, new PublicationManagerServiceConfiguration(_manager)).Start },
+            { typeof(WalkerOnZen),              new WalkerOnZen(_manager, new WalkerOnZenServiceConfiguration(_manager)).Start },
         };
 
         public static Action GetStartOfService(Type serviceType, IDataManager manager)

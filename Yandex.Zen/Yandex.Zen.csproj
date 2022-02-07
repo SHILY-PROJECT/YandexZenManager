@@ -82,17 +82,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Interfaces\IDataManager.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\AccounRegisterConfiguration.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\ActivityManagerConfiguration.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\BrowserAccountManagerConfiguration.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\ChannelManagerConfiguration.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\PublicationManagerConfiguration.cs" />
-    <Compile Include="Core\ServicesComponents\Configurations\WalkerOnZenConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\AccounRegisterServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\ActivityManagerServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\BrowserAccountManagerServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\ChannelManagerServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\PublicationManagerServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\WalkerOnZenServiceConfiguration.cs" />
+    <Compile Include="Core\Interfaces\IServiceConfiguration.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\AccountModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\ConfigurationsForServices\ConfigurationPostingSecondWind.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\DonorModel.cs" />
+    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\AccountModel.cs" />
+    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\DonorModel.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IAccount.cs" />
     <Compile Include="Core\Interfaces\IService.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IDonor.cs" />
@@ -135,10 +135,9 @@
     <Compile Include="Core\Services\ActivityManagerService\Models\CommentData.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\Models\ChannelModel.cs" />
     <Compile Include="Core\ServicesComponents\ResourceObject\Models\ProxyModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\ProfileModel.cs" />
-    <Compile Include="Core\ServicesComponents\ServiceConfigurator.cs" />
+    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\ProfileModel.cs" />
     <Compile Include="Core\ServicesComponents\ServiceLocator.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\ResourceObjectBase.cs" />
+    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\ResourceObjectBase.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />

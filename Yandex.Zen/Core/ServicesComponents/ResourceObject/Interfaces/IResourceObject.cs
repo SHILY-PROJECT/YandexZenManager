@@ -7,7 +7,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces
 {
     public interface IResourceObject
     {
-        TemplateSettingsModel Settings { get; set; }
+        TemplateSettingsModel TemplateSettings { get; set; }
         DirectoryInfo Directory { get; set; }
         ProxyModel Proxy { get; set; }
         SmsService SmsService { get; set; }

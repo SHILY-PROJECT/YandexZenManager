@@ -38,7 +38,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
         private IZennoPosterProjectModel Zenno { get => DataManager.Zenno; }
         private Type CurrentService { get => Program.CurrentServiceType; }
         private IResourceObject CurrentObject { get => DataManager.CurrentResourceObject; }
-        private DirectoryInfo CurrentObjectDirectory { get => CurrentObject.Directory; }
+        private DirectoryInfo CurrentObjectDirectory { get => CurrentObject?.Directory; }
         private FileInfo ModeLog { get; set; }
         private string InfoAboutCurrentObject
         {

@@ -1,7 +1,20 @@
-﻿namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.ConfigurationsForServices
+﻿using Yandex.Zen.Core.Interfaces;
+
+namespace Yandex.Zen.Core.ServicesConfigurations
 {
-    public class ConfigurationPostingSecondWind
+    public sealed class ChannelManagerServiceConfiguration : IServiceConfiguration
     {
+        public ChannelManagerServiceConfiguration(IDataManager manager)
+        {
+
+        }
+
+        public void Configure()
+        {
+
+        }
+
+
         //public ConfigurationPostingSecondWind(DataManager manager, ResourceObjectBase obj) : base(manager, obj) { }
 
         //public bool TryConfigure(int row)
@@ -60,5 +73,6 @@
 
         //    return true;
         //}
+
     }
 }

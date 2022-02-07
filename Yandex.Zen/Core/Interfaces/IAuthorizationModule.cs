@@ -5,6 +5,5 @@
         bool IsSuccesss { get; }
         void Authorization();
         void Authorization(out bool isSuccessful);
-
     }
 }

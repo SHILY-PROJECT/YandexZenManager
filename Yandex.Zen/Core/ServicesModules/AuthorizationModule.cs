@@ -330,7 +330,7 @@ namespace Yandex.Zen.Core.ServicesModules
 
             if (!xButtonFinish.TryFindElement(3, log))
             {
-                account.SaveProfile();
+                account.Profile.Save();
                 _endOfAuthProcess = true;
                 Logger.Write("Не удалось определить успешность завершения смены пароля", LoggerType.Info, true, false, true, LogColor.Yellow);
                 return false;
@@ -340,7 +340,7 @@ namespace Yandex.Zen.Core.ServicesModules
                 xButtonFinish.Click(_rnd.Next(4000, 5000));
                 if (xButtonConfirmAccountDetails.TryFindElement(3, log))
                     xButtonConfirmAccountDetails.Click(_rnd.Next(1500, 3000));
-                account.SaveProfile();
+                account.Profile.Save();
                 /*
                  * TODO: Сохранить номер аккаунта в таблицу и новый пароль
                  */

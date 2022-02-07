@@ -11,7 +11,7 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
+namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Objects
 {
     public class AccountModel : ResourceObjectBase, IAccount
     {
@@ -29,7 +29,7 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject
         public string PhoneNumber { get; set; }
         public string CurrentMessageInTable { get; set; }
         public string WebSite { get; set; }
-        public ChannelModel Channel { get; set; } 
+        public ChannelModel Channel { get; set; }
 
         public void GenerateNewPassword()
         {
