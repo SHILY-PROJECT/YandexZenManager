@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yandex.Zen.Core.Enums;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
     public interface IAccount : IResourceObject
     {

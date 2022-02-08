@@ -14,7 +14,7 @@ using Yandex.Zen.Core.Services.ChannelManagerService;
 using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {

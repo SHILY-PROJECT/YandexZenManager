@@ -13,7 +13,7 @@ using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.ServicesModules
 {

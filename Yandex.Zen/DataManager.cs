@@ -11,18 +11,17 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.ServicesComponents;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
 using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen
 {
     public class DataManager : IDataManager
     {
-        public Type CurrentServiceType { get; private set; }
         public IService Service { get; set; }
         public IZennoPosterProjectModel Zenno { get; private set; }
         public IResourceObject CurrentResourceObject { get; set; }
+        public Type ServiceType { get; private set; }
         public Instance Browser { get; private set; }
         public TableModel Table { get; private set; }
 
@@ -63,14 +62,14 @@ namespace Yandex.Zen
         /// </summary>
         private void Configure()
         {
-            this.CurrentServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
+            this.Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
+            this.ServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
 
             Logger.ConfigureGlobalLog(this);
             HE.ConfigureGlobalBrowse(this);
 
             this.SetBrowserSettings(Zenno.Variables["cfgInstanceWindowSize"].Value);
             this.Service.Configuration.Configure();
-            this.Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
 
             // CaptchaService
             this.Service.ResourceObject.CaptchaService = new CaptchaService
@@ -81,13 +80,10 @@ namespace Yandex.Zen
             // SmsService
             this.Service.ResourceObject.SmsService = new SmsService
             {
-                Settings = new SmsServiceSettingsModel
-                {
-                    TimeToSecondsWaitPhone = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
-                    MinutesWaitSmsCode = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
-                    AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
-                },
-                Params = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value)
+                ServiceParams = new SmsServiceParamsDataModel(Zenno.Variables["cfgSmsServiceAndCountry"].Value),
+                WaitPhoneTimeOfSeconds = Zenno.Variables["cfgNumbAttempsGetPhone"].Value.ExtractNumber(),
+                WaitSmsCodeOfMinutes = Zenno.Variables["cfgNumbMinutesWaitSmsCode"].Value.Split(' ')[0].ExtractNumber(),
+                AttemptsReSendSmsCode = Zenno.Variables["cfgNumbAttemptsRequestSmsCode"].Value.Split(' ')[0].ExtractNumber()
             };
 
             // TemplateSettingsModel

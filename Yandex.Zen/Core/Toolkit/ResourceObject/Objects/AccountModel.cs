@@ -8,10 +8,10 @@ using Yandex.Zen.Core.Interfaces;
 using Yandex.Zen.Core.Toolkit.Macros;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Objects
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Objects
 {
     public class AccountModel : ResourceObjectBase, IAccount
     {

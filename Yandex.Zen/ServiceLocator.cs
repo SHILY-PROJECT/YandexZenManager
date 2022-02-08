@@ -10,7 +10,7 @@ using Yandex.Zen.Core.Services.PublicationManagerService;
 using Yandex.Zen.Core.Services.WalkerOnZenService;
 using Yandex.Zen.Core.ServicesConfigurations;
 
-namespace Yandex.Zen.Core.ServicesComponents
+namespace Yandex.Zen
 {
     public class ServiceLocator
     {

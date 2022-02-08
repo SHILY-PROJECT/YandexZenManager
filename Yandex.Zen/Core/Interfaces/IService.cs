@@ -1,4 +1,4 @@
-﻿using Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces;
+﻿using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 
 namespace Yandex.Zen.Core.Interfaces
 {

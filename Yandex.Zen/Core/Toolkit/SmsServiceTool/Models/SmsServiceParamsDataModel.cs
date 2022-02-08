@@ -9,6 +9,18 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool.Models
         private string _serviceDllAndCountry;
 
         /// <summary>
+        /// Модель с параметрами для сервиса.
+        /// </summary>
+        /// <param name="serviceDllAndCountry">
+        /// Название dll сервиса и страны, через разделитель (" - ").
+        /// Пример: SmsActivate.dll - Россия
+        /// </param>
+        public SmsServiceParamsDataModel(string serviceDllAndCountry)
+        {
+            ServiceDllAndCountry = serviceDllAndCountry;
+        }
+
+        /// <summary>
         /// Название сервиса dll.
         /// </summary>
         public string Dll { get; private set; }
@@ -43,18 +55,6 @@ namespace Yandex.Zen.Core.Toolkit.SmsServiceTool.Models
                     throw new Exception("Sms service is not formatted correctly");
                 SetOtherParams(value);
             }
-        }
-
-        /// <summary>
-        /// Модель с параметрами для сервиса.
-        /// </summary>
-        /// <param name="serviceDllAndCountry">
-        /// Название dll сервиса и страны, через разделитель (" - ").
-        /// Пример: SmsActivate.dll - Россия
-        /// </param>
-        public SmsServiceParamsDataModel(string serviceDllAndCountry)
-        {
-            ServiceDllAndCountry = serviceDllAndCountry;
         }
 
         /// <summary>

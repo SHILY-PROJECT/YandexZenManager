@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Interfaces
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces
 {
     public interface IProfile : IResourceObject
     {

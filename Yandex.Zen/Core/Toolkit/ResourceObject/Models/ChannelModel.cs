@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Models
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
 {
     public class ChannelModel
     {

@@ -91,13 +91,13 @@
     <Compile Include="Core\Interfaces\IServiceConfiguration.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="Core\Interfaces\IAuthorizationModule.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\AccountModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\DonorModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IAccount.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Objects\AccountModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Objects\DonorModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IAccount.cs" />
     <Compile Include="Core\Interfaces\IService.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IDonor.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IResourceObject.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Interfaces\IProfile.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IDonor.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IResourceObject.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Interfaces\IProfile.cs" />
     <Compile Include="Core\Services\AccounRegisterService\AccounRegister.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\ArticleProcessStatusEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Enums\AccountActionTypeEnum.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Core\Services\WalkerOnZenService\WalkerOnZen.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\HE.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\ActionOnItemEnum.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Models\TemplateSettingsModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Models\TemplateSettingsModel.cs" />
     <Compile Include="Core\ServicesModules\AuthorizationModule.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserBusySettings.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\BrowserOtherSettings.cs" />
@@ -133,11 +133,11 @@
     <Compile Include="Core\Services\ActivityManagerService\Models\TaskItemModel.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ActionStateModel.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\CommentData.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Models\ChannelModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Models\ProxyModel.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\ProfileModel.cs" />
-    <Compile Include="Core\ServicesComponents\ServiceLocator.cs" />
-    <Compile Include="Core\ServicesComponents\ResourceObject\Objects\ResourceObjectBase.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Models\ChannelModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Models\ProxyModel.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Objects\ProfileModel.cs" />
+    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="Core\Toolkit\ResourceObject\Objects\ResourceObjectBase.cs" />
     <Compile Include="Core\Models\TableModel.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
@@ -158,7 +158,6 @@
     <Compile Include="Core\Toolkit\Extensions\ZennoListExtensions.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Logger.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceDataModel.cs" />
-    <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceSettingsModel.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\SmsService.cs" />
     <Compile Include="Core\Toolkit\SmsServiceTool\Models\SmsServiceParamsDataModel.cs" />
     <Compile Include="Core\Enums\TableColumnsEnum.cs" />
@@ -179,6 +178,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\ServicesComponents\" />
     <Folder Include="Core\Services\ChannelManagerService\Enums\" />
     <Folder Include="Core\Services\ChannelManagerService\Models\" />
   </ItemGroup>

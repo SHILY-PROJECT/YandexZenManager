@@ -5,7 +5,7 @@ using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Http;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 
-namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Models
+namespace Yandex.Zen.Core.Toolkit.ResourceObject.Models
 {
     public class ProxyModel
     {
@@ -27,27 +27,27 @@ namespace Yandex.Zen.Core.ServicesComponents.ResourceObject.Models
             if (string.IsNullOrWhiteSpace(proxy) || proxy.Contains(":") is false)
             {
                 ErrorMessage = $"'{nameof(proxy)}:{proxy}' - Invalid proxy.";
-                return (IsValid = false);
+                return IsValid = false;
             }
             else Proxy = proxy;
 
             if (string.IsNullOrWhiteSpace(IP = Regex.Match(Proxy, @"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}").Value))
             {
                 ErrorMessage = $"'{nameof(proxy)}:{proxy}' - Invalid IP.";
-                return (IsValid = false);
+                return IsValid = false;
             }
 
-            if (defineCountry is false) return (IsValid = true);
+            if (defineCountry is false) return IsValid = true;
 
             try
             {
                 DefineCountry(_manager.Zenno.Profile.UserAgent);
-                return (IsValid = true);
+                return IsValid = true;
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"{LogFormattingHandler.FormatException(ex)}";
-                return (IsValid = false);
+                ErrorMessage = $"{ex.FormatException()}";
+                return IsValid = false;
             }
         }
 
