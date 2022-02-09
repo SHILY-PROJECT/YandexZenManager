@@ -15,8 +15,6 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 {
     public class ArticleBasicModel
     {
-        private static readonly object _locker = new object();
-
         private readonly FileInfo _actionsFile;
 
         public string Login { get; set; }

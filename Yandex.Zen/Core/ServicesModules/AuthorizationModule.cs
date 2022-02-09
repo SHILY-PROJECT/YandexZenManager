@@ -24,13 +24,13 @@ namespace Yandex.Zen.Core.ServicesModules
         private bool _endOfAuthProcess;
         private bool _isSuccess;
 
-        public bool IsSuccesss { get => _isSuccess; }
-        private DataManager DataManager { get; set; }
-
         public AuthorizationModule(DataManager manager)
         {
-            DataManager = manager;
+            Manager = manager;
         }
+
+        public bool IsSuccess { get => _isSuccess; }
+        private DataManager Manager { get; set; }
 
         /// <summary>
         /// Авторизация.
@@ -43,6 +43,8 @@ namespace Yandex.Zen.Core.ServicesModules
         /// <param name="isSuccess"></param>
         public void Authorization(out bool isSuccess)
         {
+            _settingsMode = Manager.Browser.BrowserGetCurrentBusySettings();
+
             HE xAvatar = new HE("//div[contains(@class, 'desk-notif-card')]/descendant::a[contains(@class, 'avatar')]", "Аватар пользователя");
             HE xFieldLogin = new HE("//input[@name='login']", "Логин");
             HE xFieldPass = new HE("//input[contains(@type, 'password')]", "Пароль");
@@ -52,10 +54,8 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xFieldAnswer = new HE("//input[contains(@name, 'answer')]", "Ответа на контрольный вопрос");
             HE xButtonAnswer = new HE("//div[contains(@data-t, 'submit-check-answer')]/button", "Подтвердить ввод ответа на контрольный вопрос");
 
-            _settingsMode = DataManager.Browser.BrowserGetCurrentBusySettings();
-
-            var browser = DataManager.Browser;
-            var account = (IAccount)DataManager.CurrentResourceObject;
+            var browser = Manager.Browser;
+            var account = (IAccount)Manager.CurrentResourceObject;
 
             var log = new LogSettings(false, true, true);
             var firstStart = true;
@@ -142,7 +142,7 @@ namespace Yandex.Zen.Core.ServicesModules
             }
 
             /* TODO: Добавить условие, если пароль был только что привязан
-                     Если есть номер в таблице, то не проверять его в настройках
+             *       Если есть номер в таблице, то не проверять его в настройках
              */
             var phoneBilded = default(bool);
 
@@ -189,8 +189,8 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xImgCaptcha = new HE("//div[@class='captcha__container']/descendant::img[@src!='']", "Изображение капчи");
             HE xButtonCaptchaNext = new HE("//div[contains(@data-t, 'submit-captcha')]/button", "Подтвердить ввод капчи");
 
-            var browser = DataManager.Browser;
-            var captchaService = DataManager.CurrentResourceObject.CaptchaService;
+            var browser = Manager.Browser;
+            var captchaService = Manager.CurrentResourceObject.CaptchaService;
 
             var log = new LogSettings(false, true, true);
             var attempts = 0;
@@ -227,21 +227,42 @@ namespace Yandex.Zen.Core.ServicesModules
                     var responseBody = Encoding.UTF8.GetString(btBody, 0, btBody.Length);
                     var body = Regex.Match(responseBody, "(?<=\"status\":\").*?(?=\")").Value;
 
-                    if (body.Equals("ok", StringComparison.OrdinalIgnoreCase))
+                    switch (body)
                     {
-                        Logger.Write("Капча успешно разгадана", LoggerType.Info, true, false, true);
+                        case string b when "ok".Equals(b, StringComparison.OrdinalIgnoreCase):
+                        {
+                            Logger.Write("Капча успешно разгадана", LoggerType.Info, true, false, true);
+                        }
                         return true;
-                    }
-                    else if (body.Equals("error", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Logger.Write("Капча разгадана неверно", LoggerType.Warning, true, false, true);
+
+                        case string b when "error".Equals(b, StringComparison.OrdinalIgnoreCase):
+                        {
+                            Logger.Write("Капча разгадана неверно", LoggerType.Warning, true, false, true);
+                        }
                         continue;
-                    }
-                    else
-                    {
-                        Logger.Write($"Неизвестная ошибка: '{nameof(responseBody)}:{responseBody}'", LoggerType.Warning, true, false, true);
+
+                        default:
+                        {
+                            Logger.Write($"Неизвестная ошибка: '{nameof(responseBody)}:{responseBody}'", LoggerType.Warning, true, false, true);
+                        }
                         return false;
                     }
+
+                    //if (body.Equals("ok", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    Logger.Write("Капча успешно разгадана", LoggerType.Info, true, false, true);
+                    //    return true;
+                    //}
+                    //else if (body.Equals("error", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    Logger.Write("Капча разгадана неверно", LoggerType.Warning, true, false, true);
+                    //    continue;
+                    //}
+                    //else
+                    //{
+                    //    Logger.Write($"Неизвестная ошибка: '{nameof(responseBody)}:{responseBody}'", LoggerType.Warning, true, false, true);
+                    //    return false;
+                    //}
                 }
                 else
                 {
@@ -268,9 +289,9 @@ namespace Yandex.Zen.Core.ServicesModules
             HE xFieldNewPassConfirm = new HE("//input[contains(@data-t, 'input-password_confirm')]", "Новый пароль");
             HE xButtonNewPassNext = new HE("//div[contains(@data-t, 'commit-password')]/descendant::button[contains(@data-t, 'action')]", "Пдтвердить новый пароль");
             HE xButtonFinish = new HE("//div[contains(@data-t, 'submit-finish')]/descendant::*[contains(@data-t, 'action')]", "Финиш");
-            HE xButtonConfirmAccountDetails = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
+            HE xButtonAccountDetailsConfirm = new HE("//div[contains(@data-t, 'check-data-submit')]/descendant::*[contains(@data-t, 'action')]", "Подтвердить данные аккаунта");
 
-            var account = (IAccount)DataManager.CurrentResourceObject;
+            var account = (IAccount)Manager.CurrentResourceObject;
             var smsService = account.SmsService;
 
             _endOfAuthProcess = false;
@@ -287,7 +308,6 @@ namespace Yandex.Zen.Core.ServicesModules
             }
             else Logger.Write(smsService.LogMessage, LoggerType.Info, true, false, true, LogColor.Blue);
 
-            // 
             xFieldPhone.SetValue(smsService.Data.NumberPhone, LevelEmulation.SuperEmulation, _rnd.Next(250, 500));
             xButtonPhoneNext.Click(_rnd.Next(250, 500));
 
@@ -338,8 +358,8 @@ namespace Yandex.Zen.Core.ServicesModules
             else
             {
                 xButtonFinish.Click(_rnd.Next(4000, 5000));
-                if (xButtonConfirmAccountDetails.TryFindElement(3, log))
-                    xButtonConfirmAccountDetails.Click(_rnd.Next(1500, 3000));
+                if (xButtonAccountDetailsConfirm.TryFindElement(3, log))
+                    xButtonAccountDetailsConfirm.Click(_rnd.Next(1500, 3000));
                 account.Profile.Save();
                 /*
                  * TODO: Сохранить номер аккаунта в таблицу и новый пароль
@@ -356,9 +376,9 @@ namespace Yandex.Zen.Core.ServicesModules
         /// <returns>true - номер привязан; иначе - false.</returns>
         public bool CheckPhoneNumberBinding()
         {
-            var userAgent = DataManager.Zenno.Profile.UserAgent;
-            var proxy = DataManager.Browser.GetProxy();
-            var cookie = DataManager.Zenno.Profile.CookieContainer;
+            var userAgent = Manager.Zenno.Profile.UserAgent;
+            var proxy = Manager.Browser.GetProxy();
+            var cookies = Manager.Zenno.Profile.CookieContainer;
 
             var httpResponse = ZennoPoster.HTTP.Request
             (
@@ -366,7 +386,7 @@ namespace Yandex.Zen.Core.ServicesModules
                 UserAgent: userAgent,
                 proxy: proxy,
                 respType: ResponceType.BodyOnly,
-                cookieContainer: cookie
+                cookieContainer: cookies
             );
             return !string.IsNullOrWhiteSpace(Regex.Match(httpResponse, "(?<=\"number\":\").*?(?=\")").Value);
         }

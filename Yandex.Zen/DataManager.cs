@@ -11,8 +11,8 @@ using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool;
 using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
-using Yandex.Zen.Core.ServicesComponents.ResourceObject.Models;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
+using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
 
 namespace Yandex.Zen
 {

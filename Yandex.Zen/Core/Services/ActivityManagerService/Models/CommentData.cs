@@ -1,22 +1,18 @@
-﻿using Global.ZennoLab.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using Global.ZennoLab.Json;
+using Global.ZennoExtensions;
+using ZennoLab.Macros;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Models;
-using ZennoLab.InterfacesLibrary.Enums.Log;
-using ZennoLab.Macros;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 {
     public class CommentData
     {
-        private static readonly object _locker = new object();
-
         private readonly FileInfo _usedCommentsFile;
 
         public string Login { get; private set; }
@@ -67,7 +63,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 
             var comment = JsonConvert.SerializeObject(this, Formatting.None);
 
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
                 File.AppendAllLines(_usedCommentsFile.FullName, new[] { comment }, Encoding.UTF8);
         }
     }

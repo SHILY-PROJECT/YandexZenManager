@@ -14,6 +14,7 @@ using Yandex.Zen.Core.Services.BrowserAccountManagerService;
 using Yandex.Zen.Core.Services;
 using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Interfaces;
+using Global.ZennoExtensions;
 
 namespace Yandex.Zen
 {
@@ -22,7 +23,6 @@ namespace Yandex.Zen
     /// </summary>
     public class Program : IZennoExternalCode
     {
-        private static readonly object _locker = new object();
         private static List<string> _objectsAllThreadsInWork;
 
         [ThreadStatic] private static IDataManager _manager;
@@ -125,7 +125,7 @@ namespace Yandex.Zen
         {
             if (ObjectsCurrentThread.Any() is false) return;
 
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
             {
                 if (Service != null && Service is BrowserAccountManager)
                 {
@@ -160,7 +160,7 @@ namespace Yandex.Zen
         /// <param name="zenno"></param>
         public static void ResetExecutionCounter(IZennoPosterProjectModel zenno)
         {
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
             {
                 ZennoPoster.SetTries(new Guid(zenno.TaskId), ZennoPoster.GetThreadsCount(new Guid(zenno.TaskId)));
                 Thread.Sleep(2000);
@@ -173,7 +173,7 @@ namespace Yandex.Zen
         /// <param name="zenno"></param>
         public static void StopTemplate(IZennoPosterProjectModel zenno)
         {
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
             {
                 ZennoPoster.SetTries(new Guid(zenno.TaskId), 0);
                 ZennoPoster.StopTask(new Guid(zenno.TaskId));

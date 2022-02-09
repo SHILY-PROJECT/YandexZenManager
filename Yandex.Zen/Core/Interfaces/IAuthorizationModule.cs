@@ -2,7 +2,7 @@
 {
     public interface IAuthorizationModule
     {
-        bool IsSuccesss { get; }
+        bool IsSuccess { get; }
         void Authorization();
         void Authorization(out bool isSuccessful);
     }

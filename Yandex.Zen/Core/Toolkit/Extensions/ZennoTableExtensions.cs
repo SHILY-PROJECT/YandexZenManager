@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Global.ZennoExtensions;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
@@ -8,8 +9,6 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class ZennoTableExtensions
     {
-        private static readonly object _locker = new object();
-
         /// <summary>
         /// Записать значение в таблицу (в заданную ячейку).
         /// </summary>
@@ -20,17 +19,17 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// <param name="setToColumn">Столбец в который записать.</param>
         public static void WriteToCell(this IZennoTable table, int searchByColumn, string searchedValue, int setToColumn, string setValue, bool UseThreadLocker = false)
         {
-            if (UseThreadLocker) Monitor.Enter(_locker);
-
-            for (var row = 0; row < table.RowCount; row++)
+            if (UseThreadLocker) Monitor.Enter(FileSyncObjects.TableSyncer);
             {
-                if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.OrdinalIgnoreCase))
+                for (var row = 0; row < table.RowCount; row++)
                 {
-                    table.SetCell(setToColumn, row, setValue);
+                    if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.OrdinalIgnoreCase))
+                    {
+                        table.SetCell(setToColumn, row, setValue);
+                    }
                 }
             }
-
-            if (UseThreadLocker) Monitor.Exit(_locker);
+            if (UseThreadLocker) Monitor.Exit(FileSyncObjects.TableSyncer);
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// </summary>
         public static string GetCell(this IZennoTable table, int searchByColumn, string searchedValue, int getColumn, bool UseThreadLocker = false)
         {
-            if (UseThreadLocker) Monitor.Enter(_locker);
+            if (UseThreadLocker) Monitor.Enter(FileSyncObjects.TableSyncer);
 
             for (var row = 0; row < table.RowCount; row++)
             {
@@ -48,7 +47,7 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
                 }
             }
 
-            if (UseThreadLocker) Monitor.Exit(_locker);
+            if (UseThreadLocker) Monitor.Exit(FileSyncObjects.TableSyncer);
 
             return null;
         }
@@ -60,18 +59,18 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         {
             numbRow = -1;
 
-            if (UseThreadLocker) Monitor.Enter(_locker);
-
-            for (var row = 0; row < table.RowCount; row++)
+            if (UseThreadLocker) Monitor.Enter(FileSyncObjects.TableSyncer);
             {
-                if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.Ordinal))
+                for (var row = 0; row < table.RowCount; row++)
                 {
-                    numbRow = row;
-                    return table.GetCell(getColumn, row);
+                    if (table.GetCell(searchByColumn, row).Equals(searchedValue, StringComparison.Ordinal))
+                    {
+                        numbRow = row;
+                        return table.GetCell(getColumn, row);
+                    }
                 }
             }
-
-            if (UseThreadLocker) Monitor.Exit(_locker);
+            if (UseThreadLocker) Monitor.Exit(FileSyncObjects.TableSyncer);
 
             return null;
         }

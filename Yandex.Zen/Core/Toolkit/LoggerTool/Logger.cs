@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Global.ZennoExtensions;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -20,8 +21,6 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
 {
     public class Logger
     {
-        private static readonly object _locker = new object();
-
         [ThreadStatic] private static Logger _instance;
 
         private readonly string _logAccountFileName = @"_logger\account.log";
@@ -360,7 +359,7 @@ namespace Yandex.Zen.Core.Toolkit.LoggerTool
             dateTime = !string.IsNullOrWhiteSpace(dateTime) ? dateTime : $"{DateTime.Now:yyyy-MM-dd   HH-mm-ss}";
             textToLog = GetTextLogByType(dateTime, loggerType, textToLog);
 
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
                 File.AppendAllLines(_instance.ModeLog.FullName, new[] { $"{textToLog}" }, Encoding.UTF8);
         }
 

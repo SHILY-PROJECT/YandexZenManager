@@ -1,35 +1,34 @@
-﻿using Global.ZennoExtensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
+using Global.ZennoExtensions;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Toolkit.Extensions
 {
     public static class ZennoListExtensions
     {
+        private static readonly Random _rnd = new Random();
+
         /// <summary>
         /// Получить первую строку с переносом в конец списка.
         /// </summary>
-        public static string GetFirstLineWithMoveToEnd(this IZennoList zennoList, bool throwNewException = false)
+        public static string GetFirstLineWithMoveToEnd(this IZennoList zennoList, bool useThreadsLock = false, bool throwNewException = false)
         {
             if (zennoList.Count == 0)
             {
-                if (throwNewException) throw new Exception("Список пуст");
-
-                return string.Empty;
+                if (throwNewException)
+                    throw new Exception("List is empty");
+                return null;
             }
 
-            lock (SyncObjects.ListSyncer)
-            {
-                var str = zennoList[0];
-                zennoList.RemoveAt(0);
-                zennoList.Add(str);
-
-                return str;
-            }
+            if (useThreadsLock)
+                Monitor.Enter(FileSyncObjects.ListSyncer);
+            
+            var value = zennoList[0];
+            zennoList.RemoveAt(0);
+            zennoList.Add(value);
+            return value;
         }
 
         /// <summary>
@@ -37,124 +36,112 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// </summary>
         public static string GetRandLine(this IZennoList zennoList, bool throwNewException = false)
         {
-            if (zennoList.Count == 0)
+            if (zennoList.Any() is false)
             {
-                if (throwNewException) throw new Exception("Список пуст");
-
-                return string.Empty;
+                if (throwNewException)
+                    throw new Exception("List is empty");
+                return null;
             }
 
-            return zennoList[new Random().Next(zennoList.Count)];
+            return zennoList[_rnd.Next(zennoList.Count)];
         }
 
         /// <summary>
         /// Получить первую строку с удалением из списка.
         /// </summary>
-        public static string GetFirstLineWithToRemoved(this IZennoList zennoList, bool throwNewException = false)
+        public static string GetFirstLineWithToRemoved(this IZennoList zennoList, bool useThreadsLock = false, bool throwNewException = false)
         {
-            if (zennoList.Count == 0)
+            if (zennoList.Any() is false)
             {
-                if (throwNewException) throw new Exception("Список пуст");
-
-                return string.Empty;
+                if (throwNewException)
+                    throw new Exception("List is empty");
+                return null;
             }
 
-            lock (SyncObjects.ListSyncer)
-            {
-                var str = zennoList[0];
-                zennoList.RemoveAt(0);
-
-                return str;
-            }
+            if (useThreadsLock)
+                Monitor.Enter(FileSyncObjects.ListSyncer);
+            
+            var value = zennoList[0];
+            zennoList.RemoveAt(0);
+            return value;
         }
 
         /// <summary>
         /// Получить случайную строку с удалением из списка.
         /// </summary>
         /// <param name="zennoList">Зенно список (IZennoList).</param>
-        /// <param name="throwNewException">Бросить исключение, если список пуст (true - да; false - нет; по умолчанию - false).</param>
+        /// <param name="throwException">Бросить исключение, если список пуст (true - да; false - нет; по умолчанию - false).</param>
         /// <returns>Возвращает случайную строку из списка (взятая строка удаляется из списка).</returns>
-        public static string GetRandLineWithToRemoved(this IZennoList zennoList, bool throwNewException = false)
+        public static string GetRandLineWithToRemoved(this IZennoList zennoList, bool useThreadsLock = false, bool throwException = false)
         {
-            if (zennoList.Count == 0)
+            if (zennoList.Any() is false)
             {
-                if (throwNewException) throw new Exception("Список пуст");
-
-                return string.Empty;
+                if (throwException)
+                    throw new Exception("List is empty");
+                return null;
             }
-            lock (SyncObjects.ListSyncer)
-            {
-                var index = new Random().Next(zennoList.Count);
-                var str = zennoList[index];
-                zennoList.RemoveAt(index);
 
-                return str;
-            }
+            if (useThreadsLock)
+                Monitor.Enter(FileSyncObjects.ListSyncer);
+            
+            var index = _rnd.Next(zennoList.Count);
+            var value = zennoList[index];
+            zennoList.RemoveAt(index);
+            return value;
         }
 
         /// <summary>
         /// Добавить элемент в список используя SyncObjects.ListSyncer.
         /// </summary>
-        public static void AddUseLock(this IZennoList zennoList, string str)
+        public static void Add(this IZennoList zennoList, string value, bool useThreadsLock = false)
         {
-            if (string.IsNullOrWhiteSpace(str)) return;
+            if (string.IsNullOrWhiteSpace(value)) return;
 
-            lock (SyncObjects.ListSyncer)
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
             {
-                zennoList.Add(str);
+                zennoList.Add(value);
             }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
         }
 
         /// <summary>
         /// Удалить все строки из списка по заданному шаблону (не точное совпадение/удаляет все строки которые содержат заданный текст).
         /// </summary>
-        public static void RemoveAllLinesContainsTrue(this IZennoList zennoList, string stringPattern)
+        public static void RemoveAllLinesContainsTrue(this IZennoList zennoList, string deletedValue, bool useThreadsLock = false)
         {
-            lock (SyncObjects.ListSyncer)
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
             {
-                for (int i = 0; i < zennoList.Count;)
+                for (var row = 0; row < zennoList.Count;)
                 {
-                    if (zennoList[i].Contains(stringPattern))
+                    if (zennoList[row].Contains(deletedValue))
                     {
-                        zennoList.RemoveAt(i);
+                        zennoList.RemoveAt(row);
                     }
-                    else i++;
+                    else row++;
                 }
             }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
         }
 
         /// <summary>
         /// Удалить все строки из списка по заданному шаблону (точное совпадение/регистр учитывается).
         /// </summary>
         /// <param name="zennoList">Зенно список из которого нужно удалять (IZennoList).</param>
-        /// <param name="stringPattern">Шаблон по которому удалять.</param>
-        public static void RemoveAllLinesEqualsOrdinalTrue(this IZennoList zennoList, string stringPattern, bool useSyncObjectsListSyncer = true)
+        /// <param name="deletedValue">Шаблон по которому удалять.</param>
+        public static void RemoveAllLinesEqualsOrdinalTrue(this IZennoList zennoList, string deletedValue, bool useThreadsLock = false)
         {
-            if (useSyncObjectsListSyncer)
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
             {
-                lock (SyncObjects.ListSyncer)
+                for (var row = 0; row < zennoList.Count;)
                 {
-                    for (int i = 0; i < zennoList.Count;)
+                    if (zennoList[row].Equals(deletedValue, StringComparison.Ordinal))
                     {
-                        if (zennoList[i].Equals(stringPattern, StringComparison.Ordinal))
-                        {
-                            zennoList.RemoveAt(i);
-                        }
-                        else i++;
+                        zennoList.RemoveAt(row);
                     }
+                    else row++;
                 }
             }
-            else
-            {
-                for (int i = 0; i < zennoList.Count;)
-                {
-                    if (zennoList[i].Equals(stringPattern, StringComparison.Ordinal))
-                    {
-                        zennoList.RemoveAt(i);
-                    }
-                    else i++;
-                }
-            }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿using System.IO;
-using System.Text;
-using Global.ZennoLab.Json;
-using Yandex.Zen.Core.Toolkit;
+﻿using Global.ZennoExtensions;
 
 namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
 {
     public class TaskItemModel
     {
-        private readonly object _locker = new object();
-
         public string TaskId { get; set; }
         public bool GoToArticle { get; set; }
         public int SecondsWatchArticle { get; set; }
@@ -21,7 +16,7 @@ namespace Yandex.Zen.Core.Services.ActivityManagerService.Models
         /// </summary>
         public void SaveState()
         {
-            lock (_locker)
+            lock (SyncObjects.InputSyncer)
             {
                 //var taskList = TaskHandler_obsolete.GetTasksList();
 

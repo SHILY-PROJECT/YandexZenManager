@@ -1,4 +1,5 @@
-﻿using Yandex.Zen.Core.Interfaces;
+﻿using Global.ZennoExtensions;
+using Yandex.Zen.Core.Interfaces;
 
 namespace Yandex.Zen.Core.ServicesConfigurations
 {
@@ -11,7 +12,10 @@ namespace Yandex.Zen.Core.ServicesConfigurations
 
         public void Configure()
         {
+            lock (SyncObjects.InputSyncer)
+            {
 
+            }
         }
 
 

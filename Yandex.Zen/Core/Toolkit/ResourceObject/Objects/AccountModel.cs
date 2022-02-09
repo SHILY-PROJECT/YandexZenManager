@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
+using Global.ZennoExtensions;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Interfaces;
@@ -15,8 +16,6 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.Objects
 {
     public class AccountModel : ResourceObjectBase, IAccount
     {
-        private readonly object _locker = new object();
-
         public AccountModel(IDataManager manager) : base(manager)
         {
 
@@ -61,26 +60,27 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.Objects
             var tableModel = Manager.Table;
             var table = Manager.Table.Obj;
 
-            Monitor.Enter(_locker);
-            for (int row = 0; row < table.RowCount; row++)
+            lock (FileSyncObjects.TableSyncer)
             {
-                if (table.GetRow(row).Any(x => x.Equals(obj.Login, StringComparison.OrdinalIgnoreCase)))
+                for (int row = 0; row < table.RowCount; row++)
                 {
-                    foreach (var value in values)
+                    if (table.GetRow(row).Any(x => x.Equals(obj.Login, StringComparison.OrdinalIgnoreCase)))
                     {
-                        var column = (int)value.Item1;
+                        foreach (var value in values)
+                        {
+                            var column = (int)value.Item1;
 
-                        table.SetCell(column, row, value.Item2);
-                        Thread.Sleep(300);
+                            table.SetCell(column, row, value.Item2);
+                            Thread.Sleep(300);
 
-                        if (table.GetCell(column, row).Equals(value.Item2) is false)
-                            Logger.Write($"[{row}|{column}|{value.Item1}]\t[Строка:{row + 2}]\tНе удалось сохранить значение",
-                                LoggerType.Warning, true, false, true, LogColor.Yellow);
+                            if (table.GetCell(column, row).Equals(value.Item2) is false)
+                                Logger.Write($"[{row}|{column}|{value.Item1}]\t[Строка:{row + 2}]\tНе удалось сохранить значение",
+                                    LoggerType.Warning, true, false, true, LogColor.Yellow);
+                        }
+                        return;
                     }
-                    return;
                 }
             }
-            Monitor.Exit(_locker);
         }
 
         /// <summary>

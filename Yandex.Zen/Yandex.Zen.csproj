@@ -178,7 +178,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\ServicesComponents\" />
     <Folder Include="Core\Services\ChannelManagerService\Enums\" />
     <Folder Include="Core\Services\ChannelManagerService\Models\" />
   </ItemGroup>

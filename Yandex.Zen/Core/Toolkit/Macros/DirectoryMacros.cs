@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Yandex.Zen.Core.Toolkit.Macros
 {
@@ -20,7 +15,7 @@ namespace Yandex.Zen.Core.Toolkit.Macros
         public static void DirectoryCopy(DirectoryInfo source, DirectoryInfo target)
         {
             // Если директория для копирования файлов не существует, то создаем ее
-            if (Directory.Exists(target.FullName) == false) Directory.CreateDirectory(target.FullName);
+            if (Directory.Exists(target.FullName) is false) Directory.CreateDirectory(target.FullName);
 
             // Копируем все файлы в новую директорию
             foreach (var fi in source.GetFiles()) fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
