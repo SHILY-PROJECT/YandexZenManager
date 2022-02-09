@@ -15,6 +15,8 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// </summary>
         public static string GetFirstLineWithMoveToEnd(this IZennoList zennoList, bool useThreadsLock = false, bool throwNewException = false)
         {
+            string value;
+
             if (zennoList.Count == 0)
             {
                 if (throwNewException)
@@ -22,12 +24,14 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
                 return null;
             }
 
-            if (useThreadsLock)
-                Monitor.Enter(FileSyncObjects.ListSyncer);
-            
-            var value = zennoList[0];
-            zennoList.RemoveAt(0);
-            zennoList.Add(value);
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
+            {
+                value = zennoList[0];
+                zennoList.RemoveAt(0);
+                zennoList.Add(value);
+            }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
+
             return value;
         }
 
@@ -51,6 +55,8 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// </summary>
         public static string GetFirstLineWithToRemoved(this IZennoList zennoList, bool useThreadsLock = false, bool throwNewException = false)
         {
+            string value;
+
             if (zennoList.Any() is false)
             {
                 if (throwNewException)
@@ -58,11 +64,13 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
                 return null;
             }
 
-            if (useThreadsLock)
-                Monitor.Enter(FileSyncObjects.ListSyncer);
-            
-            var value = zennoList[0];
-            zennoList.RemoveAt(0);
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
+            {
+                value = zennoList[0];
+                zennoList.RemoveAt(0);
+            }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
+
             return value;
         }
 
@@ -74,6 +82,9 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
         /// <returns>Возвращает случайную строку из списка (взятая строка удаляется из списка).</returns>
         public static string GetRandLineWithToRemoved(this IZennoList zennoList, bool useThreadsLock = false, bool throwException = false)
         {
+            int index;
+            string value;
+
             if (zennoList.Any() is false)
             {
                 if (throwException)
@@ -81,12 +92,14 @@ namespace Yandex.Zen.Core.Toolkit.Extensions
                 return null;
             }
 
-            if (useThreadsLock)
-                Monitor.Enter(FileSyncObjects.ListSyncer);
-            
-            var index = _rnd.Next(zennoList.Count);
-            var value = zennoList[index];
-            zennoList.RemoveAt(index);
+            if (useThreadsLock) Monitor.Enter(FileSyncObjects.ListSyncer);
+            {
+                index = _rnd.Next(zennoList.Count);
+                value = zennoList[index];
+                zennoList.RemoveAt(index);
+            }
+            if (useThreadsLock) Monitor.Exit(FileSyncObjects.ListSyncer);
+
             return value;
         }
 
