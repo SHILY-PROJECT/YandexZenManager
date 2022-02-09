@@ -41,13 +41,9 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.Objects
         /// </summary>
         public void SaveToTable(params TableColumnsEnum[] tableColumns)
         {
-            var map = ColumnValueMapper;
-
-            //SaveToTable(Enumerable.Range(0, tableColumns.Length)
-            //    .Select((value, index) => Tuple.Create(tableColumns[index], map[tableColumns[index]])).ToList());
-
+            var mapper = ColumnValueMapper;
             var values = new List<Tuple<TableColumnsEnum, string>>();
-            Array.ForEach(tableColumns, col => values.Add(Tuple.Create(col, map[col])));
+            Array.ForEach(tableColumns, col => values.Add(Tuple.Create(col, mapper[col])));
             SaveToTable(values);
         }
 
