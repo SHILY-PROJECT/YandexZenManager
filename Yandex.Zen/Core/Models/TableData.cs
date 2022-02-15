@@ -3,22 +3,22 @@ using ZennoLab.InterfacesLibrary.ProjectModel;
 
 namespace Yandex.Zen.Core.Models
 {
-    public class TableModel
+    public class TableData
     {
-        public TableModel(IZennoPosterProjectModel zenno, string nameTable, string path)
+        public TableData(IZennoPosterProjectModel zenno, string nameTable, string path)
         {
-            Obj = zenno.Tables[nameTable];
+            Table = zenno.Tables[nameTable];
             TableName = nameTable;
             File = new FileInfo(zenno.ExecuteMacro(path));
         }
 
-        public TableModel(IZennoPosterProjectModel zenno, string nameTable, ILocalVariable path)
+        public TableData(IZennoPosterProjectModel zenno, string nameTable, ILocalVariable path)
             : this(zenno, nameTable, path.Value) { }
 
         /// <summary>
         /// Экземпляр таблицы.
         /// </summary>
-        public IZennoTable Obj { get; private set; }
+        public IZennoTable Table { get; private set; }
 
         /// <summary>
         /// Файл таблицы.

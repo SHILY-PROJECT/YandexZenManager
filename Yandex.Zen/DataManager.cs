@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ZennoLab.CommandCenter;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
@@ -13,23 +14,39 @@ using Yandex.Zen.Core.Toolkit.SmsServiceTool.Models;
 using Yandex.Zen.Core.Toolkit.BrowserCustomizer;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Interfaces;
 using Yandex.Zen.Core.Toolkit.ResourceObject.Models;
+using Yandex.Zen.Core.Services.ChannelManagerService;
+using Yandex.Zen.Core.Services.PublicationManagerService;
+using Yandex.Zen.Core.Services.BrowserAccountManagerService;
+using Yandex.Zen.Core.Services.WalkerOnZenService;
+using Yandex.Zen.Core.Services.AccounRegisterService;
+using Yandex.Zen.Core.Services.ActivityManagerService;
 
 namespace Yandex.Zen
 {
     public class DataManager : IDataManager
     {
-        public IService Service { get; set; }
-        public IZennoPosterProjectModel Zenno { get; private set; }
-        public IResourceObject CurrentResourceObject { get; set; }
-        public Type ServiceType { get; private set; }
-        public Instance Browser { get; private set; }
-        public TableModel Table { get; private set; }
+        private static readonly Dictionary<string, Type> _serviceMapper = new Dictionary<string, Type>
+        {
+            { "Управление каналом",             typeof(ChannelManager) },
+            { "Постинг",                        typeof(PublicationManager) },
+            { "Ручное управление в браузере",   typeof(BrowserAccountManager) },
+            { "Нагуливание по дзен",            typeof(WalkerOnZen) },
+            { "Регистрация аккаунтов",          typeof(AccounRegister) },
+            { "Накручивание активности",        typeof(ActivityManager) },
+        };
 
         public DataManager(Instance instance, IZennoPosterProjectModel zenno)
         {
             Zenno = zenno;
             Browser = instance;
         }
+
+        public IService Service { get; set; }
+        public IZennoPosterProjectModel Zenno { get; private set; }
+        public IResourceObject CurrentResourceObject { get; set; }
+        public Type ServiceType { get; private set; }
+        public Instance Browser { get; private set; }
+        public TableData TableData { get; private set; }
 
         /// <summary>
         /// Конфигурация проекта.
@@ -62,8 +79,8 @@ namespace Yandex.Zen
         /// </summary>
         private void Configure()
         {
-            this.Table = new TableModel(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
-            this.ServiceType = ServiceLocator.TypesOfServices[Zenno.Variables["cfgTemplateMode"].Value];
+            this.TableData = new TableData(Zenno, "AccountsShared", Zenno.Variables["cfgPathFileAccounts"]);
+            SetService(Zenno.Variables["cfgTemplateMode"].Value);
 
             Logger.ConfigureGlobalLog(this);
             HE.ConfigureGlobalBrowse(this);
@@ -93,6 +110,16 @@ namespace Yandex.Zen
                 UseWalkedProfileFromSharedFolder = bool.Parse(Zenno.Variables["cfgUseWalkedProfileFromSharedFolder"].Value),
                 MinProfileSizeToUse = int.Parse(Zenno.Variables["cfgMinSizeProfileUseInModes"].Value)
             };
+        }
+
+        private void SetService(string serviceKey)
+        {
+            if (_serviceMapper.TryGetValue(serviceKey, out var serviceType))
+            {
+                ServiceType = serviceType;
+                Service = (IService)serviceType.GetConstructor(new[] { typeof(IDataManager) })?.Invoke(new[] { this });
+            }
+            else throw new InvalidOperationException("Service not defined.");
         }
 
         /// <summary>

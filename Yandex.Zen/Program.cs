@@ -3,18 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Collections.Generic;
+using Global.ZennoExtensions;
 using ZennoLab.CommandCenter;
+using Yandex.Zen.Core.Interfaces;
 using ZennoLab.InterfacesLibrary.Enums.Log;
 using ZennoLab.InterfacesLibrary.ProjectModel;
 using Yandex.Zen.Core;
+using Yandex.Zen.Core.Services;
+using Yandex.Zen.Core.Toolkit;
 using Yandex.Zen.Core.Enums;
 using Yandex.Zen.Core.Toolkit.LoggerTool;
 using Yandex.Zen.Core.Toolkit.LoggerTool.Enums;
 using Yandex.Zen.Core.Services.BrowserAccountManagerService;
-using Yandex.Zen.Core.Services;
-using Yandex.Zen.Core.Toolkit;
-using Yandex.Zen.Core.Interfaces;
-using Global.ZennoExtensions;
 
 namespace Yandex.Zen
 {
@@ -93,7 +93,11 @@ namespace Yandex.Zen
                     _ = _commonAccountDirectory ?? (_commonAccountDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\accounts"));
                     _ = _commonProfileDirectory ?? (_commonProfileDirectory = new DirectoryInfo($@"{manager.Zenno.Directory}\profiles"));
 
-                    ServiceLocator.GetStartOfService(CurrentServiceType, manager)?.Invoke();
+                    manager.Service.Start();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Logger.Write(ex.FormatException(), LoggerType.Warning, false, true, true, LogColor.Yellow);
                 }
                 catch (Exception ex)
                 {

@@ -53,8 +53,8 @@ namespace Yandex.Zen.Core.Toolkit.ResourceObject.Objects
         public void SaveToTable(List<Tuple<TableColumnsEnum, string>> values)
         {
             var obj = (IAccount)Manager.CurrentResourceObject;
-            var tableModel = Manager.Table;
-            var table = Manager.Table.Obj;
+            var tableModel = Manager.TableData;
+            var table = Manager.TableData.Table;
 
             lock (FileSyncObjects.TableSyncer)
             {

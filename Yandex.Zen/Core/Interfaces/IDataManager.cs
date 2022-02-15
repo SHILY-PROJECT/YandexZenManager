@@ -13,7 +13,7 @@ namespace Yandex.Zen.Core.Interfaces
         IResourceObject CurrentResourceObject { get; set; }
         IZennoPosterProjectModel Zenno { get; }
         Instance Browser { get; }
-        TableModel Table { get; }
+        TableData TableData { get; }
 
         void ConfigureProjectSettings(out bool configurationStatus);
         bool TryConfigureProjectSettings();

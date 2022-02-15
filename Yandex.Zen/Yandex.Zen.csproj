@@ -84,6 +84,7 @@
     <Compile Include="Core\Interfaces\IDataManager.cs" />
     <Compile Include="Core\ServicesConfigurations\AccounRegisterServiceConfiguration.cs" />
     <Compile Include="Core\ServicesConfigurations\ActivityManagerServiceConfiguration.cs" />
+    <Compile Include="Core\ServicesConfigurations\Base\BaseAccountConfiguration.cs" />
     <Compile Include="Core\ServicesConfigurations\BrowserAccountManagerServiceConfiguration.cs" />
     <Compile Include="Core\ServicesConfigurations\ChannelManagerServiceConfiguration.cs" />
     <Compile Include="Core\ServicesConfigurations\PublicationManagerServiceConfiguration.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Core\Toolkit\LoggerTool\Enums\DateTimeFormat.cs" />
     <Compile Include="Core\Toolkit\BrowserCustomizer\Enums\LevelEmulation.cs" />
     <Compile Include="Core\Toolkit\Extensions\Enums\LineOptions.cs" />
-    <Compile Include="Core\Enums\ObjectType.cs" />
     <Compile Include="Core\Services\WalkerOnZenService\Enums\StartPageWalkerOnZenEnum.cs" />
     <Compile Include="Core\Services\AccounRegisterService\Enums\RegistrationStartPageEnum.cs" />
     <Compile Include="Core\Services\ActivityManagerService\Models\ActionModel.cs" />
@@ -136,9 +136,8 @@
     <Compile Include="Core\Toolkit\ResourceObject\Models\ChannelModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Models\ProxyModel.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Objects\ProfileModel.cs" />
-    <Compile Include="ServiceLocator.cs" />
     <Compile Include="Core\Toolkit\ResourceObject\Objects\ResourceObjectBase.cs" />
-    <Compile Include="Core\Models\TableModel.cs" />
+    <Compile Include="Core\Models\TableData.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LogFilter.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Enums\LoggerType.cs" />
     <Compile Include="Core\Toolkit\LoggerTool\Models\ErrorAnalysisData.cs" />

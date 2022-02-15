@@ -1,23 +1,26 @@
-﻿using Global.ZennoExtensions;
+﻿using System;
 using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.ServicesConfigurations.Base;
+using System.Collections.Generic;
 
 namespace Yandex.Zen.Core.ServicesConfigurations
 {
-    public sealed class ChannelManagerServiceConfiguration : IServiceConfiguration
+    public sealed class ChannelManagerServiceConfiguration : BaseAccountConfiguration, IServiceConfiguration
     {
-        public ChannelManagerServiceConfiguration(IDataManager manager)
+        public ChannelManagerServiceConfiguration(IDataManager manager) : base(manager)
         {
-
+            
         }
 
-        public void Configure()
+        protected override void ServiceConfigure()
         {
-            lock (SyncObjects.InputSyncer)
-            {
-
-            }
+            throw new NotImplementedException();
         }
 
+        protected override void SetUpAccount(IEnumerable<string> columns)
+        {
+            throw new NotImplementedException();
+        }
 
         //public ConfigurationPostingSecondWind(DataManager manager, ResourceObjectBase obj) : base(manager, obj) { }
 

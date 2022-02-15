@@ -1,17 +1,24 @@
-﻿using Yandex.Zen.Core.Interfaces;
+﻿using System.Collections.Generic;
+using Yandex.Zen.Core.Interfaces;
+using Yandex.Zen.Core.ServicesConfigurations.Base;
 
 namespace Yandex.Zen.Core.ServicesConfigurations
 {
-    public sealed class PublicationManagerServiceConfiguration : IServiceConfiguration
+    public sealed class PublicationManagerServiceConfiguration : BaseAccountConfiguration, IServiceConfiguration
     {
-        public PublicationManagerServiceConfiguration(IDataManager manager)
+        public PublicationManagerServiceConfiguration(IDataManager manager) : base(manager)
         {
 
         }
 
-        public void Configure()
+        protected override void ServiceConfigure()
         {
+            throw new System.NotImplementedException();
+        }
 
+        protected override void SetUpAccount(IEnumerable<string> columns)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
